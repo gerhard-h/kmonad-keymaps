@@ -23,10 +23,10 @@
   num  (layer-toggle numbers) ;; Bind num to a button that switches to a layer
   kil  C-A-del                ;; Bind kil to a button that Ctrl-Alt-deletes
   ;;fsf (tap-next-release f lsft)  ;; long release does F 
-  nsf (tap-hold-next-release 140 n rsft) ;; 200 was a good timing too
+  nsf (tap-hold-next-release 140 j rsft) ;; 200 was a good timing too
   fsf (tap-hold-next-release 140 f lsft)
   dct (tap-hold-next-release 140 d lctl)
-  tct (tap-hold-next-release 140 t rctl)
+  tct (tap-hold-next-release 140 k rctl)
 )
 
 (defsrc
@@ -45,11 +45,14 @@
 ;; bug remap hash can be done by remapp ey (left of rsft)
 ;; woraround define a win eymap with  at the right place
 ;; woraround ue=k sometimes
+;; tjklönm,.-
+;; nmjlk,.-ö
+
 (deflayer qwerty
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
-  tab  q    w    e    r    j    y    u    i    o    p    f    n    _
+  tab  q    w    e    r    t    y    u    i    o    p    f    n    _
   @num a    s    @dct @fsf g    h    @nsf @tct l    k    ret       ret
-  lsft z    x    c    v    b    m    ,    .    -    @num rsft
+  lsft z    x    c    v    b    n    m    ,    .    @num rsft
   lctl lmet lalt           spc            ralt rmet rctl
 )
 ;; bug using caps as num eats one öey in the layer definition
