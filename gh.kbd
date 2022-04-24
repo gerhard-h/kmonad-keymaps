@@ -23,16 +23,16 @@
   num  (layer-toggle numbers) ;; Bind num to a button that switches to a layer
   kil  C-A-del                ;; Bind kil to a button that Ctrl-Alt-deletes
   ;;fsf (tap-next-release f lsft)  ;; long release does F 
-  nsf (tap-hold-next-release 120 n rsft) ;; 200 was a good timing too
-  fsf (tap-hold-next-release 120 f lsft)
+  nsf (tap-hold-next-release 140 n rsft) ;; 200 was a good timing too
+  fsf (tap-hold-next-release 140 f lsft)
   dct (tap-hold-next-release 140 d lctl)
   tct (tap-hold-next-release 140 t rctl)
 )
 
 (defsrc
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
-  tab  q    w    e    r    t    y    u    i    o    p    [    ]    
-  caps a    s    d    f    g    h    j    k    l    ;    '    \    ret
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  caps a    s    d    f    g    h    j    k    l    ;    '         ret
   lsft z    x    c    v    b    n    m    ,    .    /    rsft
   lctl lmet lalt           spc            ralt rmet rctl
 )
@@ -40,21 +40,21 @@
 ;; bug n/@num = - 
 ;; bug ralt won't release ctrl 
 ;; bug mapping lmet to a layer still triggers the corresponding lmet+l = loc sreen
-;; bug <> key gets ignored
-;; bug ö ue + cannot be remapped
-;; bug remap hash can br done by remapp ey left of rsft
+;; bug <>| key gets ignored when iso hash (left of ret) is defined
+;; bug ö ue + <>| (left of rsft) cannot be remapped
+;; bug remap hash can be done by remapp ey (left of rsft)
 (deflayer qwerty
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
-  tab  q    w    e    r    j    y    u    i    o    p    a    b    
-  @num a    s    @dct @fsf g    h    @nsf @tct l    [    ret  c    ret
+  tab  q    w    e    r    j    y    u    i    o    p    f    n    _
+  @num a    s    @dct @fsf g    h    @nsf @tct l    k    ret       ret
   lsft z    x    c    v    b    m    ,    .    -    @num rsft
-  lctl @num lalt           spc            ralt rmet rctl
+  lctl lmet lalt           spc            ralt rmet rctl
 )
 ;; bug using caps as num eats one öey in the layer definition
 (deflayer numbers
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    -    1    2    3    spc  esc  home up   end  _    _    _    _   
-       .    4    5    6    0    tab  left down rght _    _    _        _
+  _    -    1    2    3    spc  esc  home up   end  _    _    _    _   _
+       .    4    5    6    0    tab  left down rght _    _             _
   _    ,    7    8    9    1    ret  bspc del  ret  _    _
   _    _    _              _              _    _    _
 )
