@@ -1,9 +1,8 @@
 #|
-Status
+Status  RALT still not working
 - homerow mods
 - leer als num
 - caps als sym (- als sym ?)
-- Umlaute
 
 TODO
 - key hold
@@ -33,6 +32,25 @@ TODO
   allow-cmd false
 )
 
+(defalias
+  num  (layer-toggle numbers) ;; Bind num to a button that switches to a layer
+  sym  (layer-toggle symbols) ;; Bind num to a button that switches to a layer
+  qwj (layer-toggle qwertj)
+  kil  C-A-del                ;; Bind kil to a button that Ctrl-Alt-deletes
+  ;;fsf (tap-next-release f lsft)  ;; long release does F 
+  nsf (tap-hold-next-release 140 n rsft) ;; 200 was a good timing too
+  fsf (tap-hold-next-release 140 f lsft)
+  dct (tap-hold-next-release 140 d lctl)
+  tct (tap-hold-next-release 140 t rctl)
+  lat (tap-hold-next-release 240 l alt)
+  bsl A-C-[
+  rcb A-C-0
+  lcb (around ralt #(P30 7 P30))   ;;C-A-7 11
+  rsb A-C-9
+  lsb A-C-8 
+  mc2 #( P50 A-tab P50 )
+  mus (tap-hold-next-release 500 spc @num)
+)
 #|
 define 	; as  grv 
 	ß as  [ 
@@ -56,7 +74,7 @@ bug ditto wont allow enter and must be restarted
   tab  q    w    e    r    t    z    u    i    o    p    ;    =    ret   del  end  pgdn  kp7  kp8  kp9  kp+
   caps a    s    d    f    g    h    j    k    l    grv  '    /                          kp4  kp5  kp6
   lsft 102d y    x    c    v    b    n    m    ,    .    -    rsft            up         kp1  kp2  kp3  kprt
-  lctl lmet lalt           spc                      ralt rctl            left down rght  kp0  kp.
+  lctl lmet lalt           spc                      
 )
 ;; with german keymap "[" = "k" but "y" = "z" "-" = "-" but also "-" = "ß"
 ;; bug n/@num = - 
@@ -96,37 +114,22 @@ lö efeöööl
 )
 -------------------------------------------------------------------------- 
 |#
-(defalias
-  num  (layer-toggle numbers) ;; Bind num to a button that switches to a layer
-  sym  (layer-toggle symbols) ;; Bind num to a button that switches to a layer
-  qwj (layer-toggle qwertj)
-  kil  C-A-del                ;; Bind kil to a button that Ctrl-Alt-deletes
-  ;;fsf (tap-next-release f lsft)  ;; long release does F 
-  nsf (tap-hold-next-release 140 n rsft) ;; 200 was a good timing too
-  fsf (tap-hold-next-release 140 f lsft)
-  dct (tap-hold-next-release 140 d lctl)
-  tct (tap-hold-next-release 140 t rctl)
-  lat (tap-hold-next-release 240 l alt)
-  bsl A-C-[
-  rcb A-C-0
-  uue (tap-hold 200 u ;)
-  ooe (tap-hold 200 o grv)
-  aae (tap-hold 200 a ')
-  ssz (tap-hold 200 s [)
-  
-  lcb (around ralt #(P30 7 P30))   ;;C-A-7 11
-  rsb A-C-9
-  lsb A-C-8 
-  mc2 #( P50 A-tab P50 )
-  mus (tap-hold-next-release 500 spc @num)
-)
+
 (deflayer qwerty
+  esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12        ssrq slck pause
+  grv  1    2    3    4    5    6    7    8    9    0    [    ]    bspc  ins  home pgup  nlck kp/  kp*  kp-
+  tab  q    w    e    r    j    z    u    i    o    p    ;    =    ret   del  end  pgdn  kp7  kp8  kp9  kp+
+  @sym a    s    @dct @fsf g    h    @nsf @tct @lat k    '    /                          kp4  kp5  kp6
+  lsft 102d y    x    c    v    b    n    m    ,    .    -    rsft            up         kp1  kp2  kp3  kprt
+  lctl lmet lalt           @mus                     
+#|
   _    _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    del  _     _    _    _    _    _    _    _
-  _    _    _    _    _    j    _    @uue _    @ooe _    bspc del  _     _    _    _    _    _    _    _
-  @sym @aae @ssz @dct @fsf _    _    @nsf @tct @lat k    ret  @bsl                      _    _    _
+  _    _    _    _    _    j    _    _    _    _    _    bspc del  _     _    _    _    _    _    _    _
+  @sym _    _    @dct @fsf _    _    @nsf @tct @lat k    ret  @bsl                      _    _    _
   _    @qwj _    _    _    _    _    m    ,    .    -    -    _                    _         _    _    _    _
-  _    _    _              @mus                     _    _               _    _    _    _    _
+  _    _    _              @mus                     
+|#
 )
 (deflayer qwertj
   _    _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
@@ -134,7 +137,7 @@ lö efeöööl
   _    _    _    _    _    j    _    _    _    _    _    _    del  _     _    _    _    _    _    _    _
   _    _    _    @dct @fsf _    _    @nsf @tct _    k    ret  e                         _    _    _
   _    _    _    _    _    _    _    m    ,    .    -    a    _                    _         _    _    _    _
-  _    _    _              @mus                     _    _               _    _    _    _    _
+  _    _    _              @mus                     
 )
 ;; bug using caps as num eats one key in the layer definition
 (deflayer numbers
@@ -143,13 +146,13 @@ lö efeöööl
   _    -    1    2    3    spc  esc  home up   end  _    _    _    _     _    _    _    _    _    _    _
   _    .    4    5    6    0    tab  left down rght _    _    _                         _    _    _
   _    ;    ,    7    8    9    1    ret  bspc del  ret  _    _               _         _    _    _    _
-  _    _    _              _                        _    _               _    _    _    _    _
+  _    _    _              _                        
 )
 (deflayer symbols
   _    _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _     _    _    _    _    _    _    _
-  _    _    _    _    _    _    _    _    @bsl /    S-[  _    _    _     _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    @bsl  _    _    _    _    _     _    _    _    _    _    _    _
   _    _    _    @lsb @rsb _    _    _    _    _    _    _    _                         _    _    _
   _    _    _    @lcb @rcb _    _    _    _    _    _    _    _               _         _    _    _    _
-  _    _    _              _                        _    _               _    _    _    _    _
+  _    _    _              _                        
 )
