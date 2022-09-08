@@ -1,3 +1,14 @@
+#|
+Status
+- homerow mods
+- leer als num
+- caps als sym (- als sym ?)
+
+TODO
+- key hold
+- full symlayer
+
+|#
 (defcfg
   ;; For Linux
 ;;  input  (device-file "/dev/input/by-id/usb-04d9_daskeyboard-event-kbd")
@@ -11,6 +22,8 @@
   ;; For Windows
      input  (low-level-hook)
      output (send-event-sink)
+     ;;output (send-event-keysink 500 20 ) 
+     ;; 500 20 now requires 2 arguments, both in milliseconds. The first defining how long before key-repeat starts, the second how long between each repeat event.
 
   ;; Comment this is you want unhandled events not to be emitted
   fallthrough true
@@ -20,7 +33,8 @@
 )
 
 (defalias
-  ;;num  (layer-toggle numbers) ;; Bind num to a button that switches to a layer
+  num  (layer-toggle numbers) ;; Bind num to a button that switches to a layer
+  sym  (layer-toggle symbols) ;; Bind num to a button that switches to a layer
   qwj (layer-toggle qwertj)
   kil  C-A-del                ;; Bind kil to a button that Ctrl-Alt-deletes
   ;;fsf (tap-next-release f lsft)  ;; long release does F 
@@ -28,24 +42,39 @@
   fsf (tap-hold-next-release 140 f lsft)
   dct (tap-hold-next-release 140 d lctl)
   tct (tap-hold-next-release 140 t rctl)
+  lat (tap-hold-next-release 240 l alt)
   bsl A-C-[
+  rcb A-C-0
+  lcb (around ralt #(P30 7 P30))   ;;C-A-7 11
+  rsb A-C-9
+  lsb A-C-8 
+  mc2 #( P50 A-tab P50 )
+  mus (tap-hold-next-release 500 spc @num)
 )
 #|
-define ; as grv bc jo br able to map it
+define 	; as  grv 
+	ß as  [ 
+	tick  ]
+        ue as ;
+	+  as =
+to be able to map them on de keymap
 
 Received event: Release <`>
 Running hooks
 Emitting: Release <k>
 
-
+bug do not put backslash on defsrc
+bug ralt won't release ctrl
+bug mapping lmet to a layer still triggers the corresponding lmet+l = lock screen
+bug ditto wont allow enter and must be restarted
 |#
 (defsrc
   esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12        ssrq slck pause
   grv  1    2    3    4    5    6    7    8    9    0    [    ]    bspc  ins  home pgup  nlck kp/  kp*  kp-
-  tab  q    w    e    r    t    y    u    i    o    p    ;    =    ret   del  end  pgdn  kp7  kp8  kp9  kp+
+  tab  q    w    e    r    t    z    u    i    o    p    ;    =    ret   del  end  pgdn  kp7  kp8  kp9  kp+
   caps a    s    d    f    g    h    j    k    l    grv  '    /                          kp4  kp5  kp6
-  lsft 102d z    x    c    v    b    n    m    ,    .    -    rsft            up         kp1  kp2  kp3  kprt
-  lctl lmet lalt           spc                      ralt rmet rctl       left down rght  kp0  kp.
+  lsft 102d y    x    c    v    b    n    m    ,    .    -    rsft            up         kp1  kp2  kp3  kprt
+  lctl lmet lalt           spc                      ralt rctl            left down rght  kp0  kp.
 )
 ;; with german keymap "[" = "k" but "y" = "z" "-" = "-" but also "-" = "ß"
 ;; bug n/@num = - 
@@ -81,7 +110,7 @@ lö efeöööl
   _    _    _    _    _    _    _    _    _    _    _    _    _    _     _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _                         _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _               _         _    _    _    _
-  _    _    _              _                        _    _    _          _    _    _    _    _
+  _    _    _              _                        _    _               _    _    _    _    _
 )
 -------------------------------------------------------------------------- 
 |#
@@ -90,9 +119,9 @@ lö efeöööl
   _    _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    del  _     _    _    _    _    _    _    _
   _    _    _    _    _    j    _    _    _    _    _    bspc del  _     _    _    _    _    _    _    _
-  _    _    _    @dct @fsf _    _    @nsf @tct _    k    ret  @bsl                      _    _    _
-  _    @qwj _    _    _    _    _    m    ,    .    -    a    _                    _         _    _    _    _
-  _    _    _              _                        _    _    _          _    _    _    _    _
+  @sym _    _    @dct @fsf _    _    @nsf @tct @lat k    ret  @bsl                      _    _    _
+  _    @qwj _    _    _    _    _    m    ,    .    -    -    _                    _         _    _    _    _
+  _    _    _              @mus                     _    _               _    _    _    _    _
 )
 (deflayer qwertj
   _    _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
@@ -100,16 +129,22 @@ lö efeöööl
   _    _    _    _    _    j    _    _    _    _    _    _    del  _     _    _    _    _    _    _    _
   _    _    _    @dct @fsf _    _    @nsf @tct _    k    ret  e                         _    _    _
   _    _    _    _    _    _    _    m    ,    .    -    a    _                    _         _    _    _    _
-  _    _    _              _                        _    _    _          _    _    _    _    _
+  _    _    _              @mus                     _    _               _    _    _    _    _
 )
-;; bug using caps as num eats one öey in the layer definition
-#|
-
+;; bug using caps as num eats one key in the layer definition
 (deflayer numbers
   _    _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _     _    _    _    _    _    _    _
   _    -    1    2    3    spc  esc  home up   end  _    _    _    _     _    _    _    _    _    _    _
   _    .    4    5    6    0    tab  left down rght _    _    _                         _    _    _
-  _    ,    7    8    9    1    ret  bspc del  ret  _    _    _               _         _    _    _    _
-  _    _    _              _                        _    _    _          _    _    _    _    _
-)|#
+  _    ;    ,    7    8    9    1    ret  bspc del  ret  _    _               _         _    _    _    _
+  _    _    _              _                        _    _               _    _    _    _    _
+)
+(deflayer symbols
+  _    _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _     _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    @bsl  _    _    _    _    _     _    _    _    _    _    _    _
+  _    _    _    @lsb @rsb _    _    _    _    _    _    _    _                         _    _    _
+  _    _    _    @lcb @rcb _    _    _    _    _    _    _    _               _         _    _    _    _
+  _    _    _              _                        _    _               _    _    _    _    _
+)
