@@ -97,26 +97,37 @@ lö efeöööl
 -------------------------------------------------------------------------- 
 |#
 (defalias
+  ;; layers
   num  (layer-toggle numbers) ;; Bind num to a button that switches to a layer
   sym  (layer-toggle symbols) ;; Bind num to a button that switches to a layer
-  qwj (layer-toggle qwertj)
   kil  C-A-del                ;; Bind kil to a button that Ctrl-Alt-deletes
   ;;fsf (tap-next-release f lsft)  ;; long release does F 
+  
+  ;; home row mods
   nsf (tap-hold-next-release 140 n rsft) ;; 200 was a good timing too
   fsf (tap-hold-next-release 140 f lsft)
   dct (tap-hold-next-release 140 d lctl)
   tct (tap-hold-next-release 140 t rctl)
   lat (tap-hold-next-release 240 l alt)
-  bsl A-C-[
-  rcb A-C-0
+  
+  ;; hold symbols
   uue (tap-hold 200 u ;)
   ooe (tap-hold 200 o grv)
   aae (tap-hold 200 a ')
   ssz (tap-hold 200 s [)
   
+  ;; symbols
+  bsl A-C-[
+  rcb A-C-0
   lcb (around ralt #(P30 7 P30))   ;;C-A-7 11
   rsb A-C-9
-  lsb A-C-8 
+  lsb A-C-8
+  pip A-C-102d
+  lth 102d
+  gth S-102d
+  til A-C-= ;; A-C-+
+  tck #( ] spc )
+  btk #( S-] spc )
   mc2 #( P50 A-tab P50 )
   mus (tap-hold-next-release 500 spc @num)
 )
@@ -125,17 +136,17 @@ lö efeöööl
   _    _    _    _    _    _    _    _    _    _    _    _    del  _     _    _    _    _    _    _    _
   _    _    _    _    _    j    _    @uue _    @ooe _    bspc del  _     _    _    _    _    _    _    _
   @sym @aae @ssz @dct @fsf _    _    @nsf @tct @lat k    ret  @bsl                      _    _    _
-  _    @qwj _    _    _    _    _    m    ,    .    -    -    _                    _         _    _    _    _
+  _ _  _    _    _    _    _    m    ,    .    -    @sym _                    _         _    _    _    _
   _    _    _              @mus                     _    _               _    _    _    _    _
 )
-(deflayer qwertj
-  _    _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
-  _    _    _    _    _    _    _    _    _    _    _    t    bspc bspc  _    _    _    _    _    _    _
-  _    _    _    _    _    j    _    _    _    _    _    _    del  _     _    _    _    _    _    _    _
-  _    _    _    @dct @fsf _    _    @nsf @tct _    k    ret  e                         _    _    _
-  _    _    _    _    _    _    _    m    ,    .    -    a    _                    _         _    _    _    _
-  _    _    _              @mus                     _    _               _    _    _    _    _
-)
+;;(deflayer qwerty
+;;  _    _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
+;;  _    _    _    _    _    _    _    _    _    _    _    _    del  _     _    _    _    _    _    _    _
+;;  _    _    _    _    _    j    _    @uue _    @ooe _    bspc del  _     _    _    _    _    _    _    _
+;;  @sym @aae @ssz @dct @fsf _    _    @nsf @tct @lat k    ret  @bsl                      _    _    _
+;;  _ _  _    _    _    _    _    m    ,    .    -    @sym _                    _         _    _    _    _
+;;  _    _    _              @mus                     _    _               _    _    _    _    _
+;;)
 ;; bug using caps as num eats one key in the layer definition
 (deflayer numbers
   _    _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
@@ -148,8 +159,8 @@ lö efeöööl
 (deflayer symbols
   _    _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _     _    _    _    _    _    _    _
-  _    _    _    _    _    _    _    _    @bsl /    S-[  _    _    _     _    _    _    _    _    _    _
-  _    _    _    @lsb @rsb _    _    _    _    _    _    _    _                         _    _    _
-  _    _    _    @lcb @rcb _    _    _    _    _    _    _    _               _         _    _    _    _
+  _    S-1  S-2  S-8  S-9  S-4  S-6  S-5  @bsl /    S-[  _    _    _     _    _    _    _    _    _    _
+  _    @btk @pip @lsb @rsb S-0  S-7  _    _    _    _    _    _                         _    _    _
+  _ _  @tck S-/  @lcb @rcb =    S-=  @lth @gth @til _    _               _         _    _    _    _
   _    _    _              _                        _    _               _    _    _    _    _
 )
