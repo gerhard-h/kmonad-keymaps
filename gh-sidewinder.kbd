@@ -128,6 +128,8 @@ lö efeöööl
   til A-C-= ;; A-C-+
   tck #( ] spc )
   btk #( S-] spc )
+  
+  ral #( lctl P50 F24 )
   mc2 #( P50 A-tab P50 )
   mus (tap-hold-next-release 500 spc @num)
 )
@@ -137,7 +139,7 @@ lö efeöööl
   _    _    _    _    _    j    _    @uue _    @ooe _    bspc del  _     _    _    _    _    _    _    _
   @sym @aae @ssz @dct @fsf _    _    @nsf @tct @lat k    ret  @sym                      _    _    _
   _ _  _    _    _    _    _    m    ,    .    -    @sym _                    _         _    _    _    _
-  _    _    @sym           @mus                     _    @sym _          _    _    _    _    _
+  _    _    @sym           @mus                     @ral @sym _          _    _    _    _    _
 )
 ;;(deflayer qwerty
 ;;  _    _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
