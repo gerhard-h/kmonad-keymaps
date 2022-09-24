@@ -2,12 +2,12 @@
 Status
 - homerow mods
 - leer als num
-- caps als sym (- als sym ?)
+- full symlayer
+- caps/ö als sym (- als sym ?)
 - Umlaute
 
 TODO
-- key hold
-- full symlayer
+- complete key hold
 
 |#
 (defcfg
@@ -22,8 +22,8 @@ TODO
 
   ;; For Windows
      input  (low-level-hook)
-     output (send-event-sink)
-     ;;output (send-event-keysink 500 20 ) 
+     output (send-event-sink 800 20)
+     ;;output (send-event-sink 500 20 ) 
      ;; 500 20 now requires 2 arguments, both in milliseconds. The first defining how long before key-repeat starts, the second how long between each repeat event.
 
   ;; Comment this is you want unhandled events not to be emitted
@@ -37,22 +37,25 @@ TODO
 define 	; as  grv 
 	ß as  [ 
 	tick  ]
-        ue as ;
+    ue as ;
 	+  as =
+	^  as \
 to be able to map them on de keymap
 
 Received event: Release <`>
 Running hooks
 Emitting: Release <k>
 
-bug do not put backslash on defsrc
-bug ralt won't release ctrl
+bug ralt won't release ctrl -> use alias
 bug mapping lmet to a layer still triggers the corresponding lmet+l = lock screen
-bug ditto wont allow enter and must be restarted
+bug ditto wont allow enter and must be restarted - don't  remap lctl/lalt and it works
+bug autohotkey hotstrings will not work most of the time.
+bug not putting a key on the keymap will not prevent it gets handeld by kmonad anyway.
+bug qmt  (multi-tap 300 (tap-next q !) A-C-q) not working
 |#
 (defsrc
-  esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12        ssrq slck pause
-  grv  1    2    3    4    5    6    7    8    9    0    [    ]    bspc  ins  home pgup  nlck kp/  kp*  kp-
+  esc  F1   F2   F3   F4   F5   F6   F7   F8   F9   F10  F11  F12        ssrq slck pause
+  \    1    2    3    4    5    6    7    8    9    0    [    ]    bspc  ins  home pgup  nlck kp/  kp*  kp-
   tab  q    w    e    r    t    z    u    i    o    p    ;    =    ret   del  end  pgdn  kp7  kp8  kp9  kp+
   caps a    s    d    f    g    h    j    k    l    grv  '    /                          kp4  kp5  kp6
   lsft 102d y    x    c    v    b    n    m    ,    .    -    rsft            up         kp1  kp2  kp3  kprt
@@ -100,23 +103,23 @@ lö efeöööl
   ;; layers
   num  (layer-toggle numbers) ;; Bind num to a button that switches to a layer
   sym  (layer-toggle symbols) ;; Bind num to a button that switches to a layer
+  rsy  (layer-toggle rsymbols) ;; Bind num to a button that switches to a layer
   kil  C-A-del                ;; Bind kil to a button that Ctrl-Alt-deletes
   ;;fsf (tap-next-release f lsft)  ;; long release does F 
   
   ;; home row mods
-  nsf (tap-hold-next-release 140 n rsft) ;; 200 was a good timing too
+  nsf (tap-hold-next-release 140 j rsft) ;; 200 was a good timing too
   fsf (tap-hold-next-release 140 f lsft)
   dct (tap-hold-next-release 240 d lctl)
-  tct (tap-hold-next-release 240 t lctl) ;; left ctl resolves DITTO issues
+  tct (tap-hold-next-release 240 k lctl) ;; left ctl resolves DITTO issues
   lat (tap-hold-next-release 240 l alt)
-  
-  ;; hold symbols
-  uue (tap-hold 200 u ;)
-  ooe (tap-hold 200 o grv)
-  aae (tap-hold 200 a ')
-  ssz (tap-hold 200 s [)
-  
-  ;; symbols
+  rsd (tap-hold-next-release 240 del rsft)
+  sf6 (tap-hold-next-release 240 6 lsft)
+  ct5 (tap-hold-next-release 240 5 lctl)
+  al4 (tap-hold-next-release 340 4 lalt)
+  wn0 (tap-hold-next-release 240 0 rmet)
+  wnd (tap-hold-next-release 340 . lmet)
+  ;; symbols ii
   bsl A-C-[
   rcb A-C-0
   lcb (around ralt #(P30 7 P30))   ;;C-A-7 11
@@ -128,17 +131,45 @@ lö efeöööl
   til A-C-= ;; A-C-+
   tck #( ] spc )
   btk #( S-] spc )
+  cir #( \ spc)
   
-  ral #( lctl P50 F24 ) ;; #( lctl C-lalt ) to get working ralt
+  ;; hold symbols
+  qex (tap-hold 200 q S-1)
+  wdq (tap-hold 200 w S-2)
+  pal (tap-hold 200 e S-8)
+  par (tap-hold 200 r S-9)
+  tdo (tap-hold 200 t S-4)
+  zam (tap-hold 200 z S-6)
+  uue (tap-hold 200 u ;)
+  ibl (tap-hold 200 i @bsl)
+  ooe (tap-hold 200 o grv)
+  pqe (tap-hold 200 p S-[)
+  
+  aae (tap-hold 200 a ')
+  ssz (tap-hold 200 s [)
+  geq (tap-hold 200 g S-0)
+  hsl (tap-hold 200 h S-7)
+  
+  xpi (tap-hold 200 x S-/)
+  ccb (tap-hold 200 c C-A-7)
+  vcb (tap-hold 200 v @rsy)
+  beq (tap-hold 200 b =)
+  nat (tap-hold 200 n @sym)
+  mas (tap-hold 200 m S-=)
+  sem (tap-hold 200 , S-,)
+  dpp (tap-hold 200 . S-.)
+  usc (tap-hold 200 - S--)
+  
+  ral #( lctl P50 F24 ) ;; #( lctl C-lalt ) to get working ralt 
   mc2 #( P50 A-tab P50 )
   mus (tap-hold-next-release 500 spc @num)
 )
 (deflayer qwerty
   _    _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
-  _    _    _    _    _    _    _    _    _    _    _    _    del  _     _    _    _    _    _    _    _
-  _    _    _    _    _    j    _    @uue _    @ooe _    bspc del  _     _    _    _    _    _    _    _
-  @sym @aae @ssz @dct @fsf _    _    @nsf @tct @lat k    ret  @sym                      _    _    _
-  _ @sym _  _    _    _    _    m    ,    .    -    @sym _                    _         _    _    _    _
+  @cir _    _    _    _    _    _    _    _    _    _    _    del  _     _    _    _    _    _    _    _
+  _    @qex @wdq @pal @par @tdo @zam @uue @ibl @ooe @pqe bspc del  _     _    _    _    _    _    _    _
+  @rsy @aae @ssz @dct @fsf @geq @hsl @nsf @tct @lat bspc ret  del                    _    _    _
+  _ @sym _  @xpi @ccb @vcb @beq @nat @mas @sem @dpp @usc @rsd                 _      _    _    _    _
   _    _    _              @mus                     @ral @sym lctl       _    _    _    _    _
 )
 ;;(deflayer qwerty
@@ -153,16 +184,24 @@ lö efeöööl
 (deflayer numbers
   _    _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _     _    _    _    _    _    _    _
-  _    -    1    2    3    spc  esc  home up   end  _    _    _    _     _    _    _    _    _    _    _
-  _    .    4    5    6    0    tab  left down rght _    _    _                         _    _    _
-  _    ;    ,    7    8    9    1    ret  bspc del  ret  _    _               _         _    _    _    _
-  _    _    @sym           _                        _    _    _          _    _    _    _    _
+  _    @usc 1    2    3    bspc esc  home up   end  _    _    _    _     _    _    _    _    _    _    _
+  _    @wnd @al4 @ct5 @sf6 @wn0 ret  left down rght del  _    _                         _    _    _
+  _  _ @sem 7    8    9    del  bspc ret  del  ret  _    _               _         _    _    _    _
+  _    _    @rsy           _                        _    _    _          _    _    _    _    _
 )
 (deflayer symbols
   _    _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _     _    _    _    _    _    _    _
   _    S-1  S-2  S-8  S-9  S-4  S-6  S-5  @bsl /    S-[  _    _    _     _    _    _    _    _    _    _
-  _    @btk @pip @lsb @rsb S-0  S-7  _    _    _    _    _    _                         _    _    _
-  _ _  @tck S-/  @lcb @rcb =    S-=  @lth @gth @til _    _               _         _    _    _    _
+  _    @btk @pip @lsb @rsb S-0  S-7  S-2  S-/  S-1  _    _    _                         _    _    _
+  _ _  @tck S-/  @lcb @rcb =    _    S-=  @lth @gth @til _               _         _    _    _    _
+  _    _    _              _                        _    _    _          _    _    _    _    _
+)
+(deflayer rsymbols
+  _    _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _     _    _    _    _    _    _    _
+  _    S-1  S-2  S-8  S-9  S-4  S-6  S-5  @bsl /    S-[  _    _    _     _    _    _    _    _    _    _
+  _    @btk @pip @lsb @rsb S-0  S-7  S-2  S-/  S-1 A-C-e _    _                         _    _    _
+  _ _  @tck S-/  @lcb _    =   A-C-q S-=  @lth @gth @til _               _         _    _    _    _
   _    _    _              _                        _    _    _          _    _    _    _    _
 )
