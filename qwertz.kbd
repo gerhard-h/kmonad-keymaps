@@ -94,7 +94,7 @@ lö efeöööl
   _    _    _    _    _    _    _    _    _    _    _    _    _    _     _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _     _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _                         _    _    _
-  _    _    _    _    _    _    _    _    _    _    _    _    _               _         _    _    _    _
+  _ _  _    _    _    _    _    _    _    _    _    _    _    _               _         _    _    _    _
   _    _    _              _                        _    _               _    _    _    _    _
 )
 -------------------------------------------------------------------------- 
@@ -104,6 +104,7 @@ lö efeöööl
   num  (layer-toggle numbers) ;; Bind num to a button that switches to a layer
   sym  (layer-toggle symbols) ;; Bind num to a button that switches to a layer
   rsy  (layer-toggle rsymbols) ;; Bind num to a button that switches to a layer
+  mou  (layer-toggle mouse)    ;; relies on windows numpad mouse but dont work under kmonad
   kil  C-A-del                ;; Bind kil to a button that Ctrl-Alt-deletes
   ;;fsf (tap-next-release f lsft)  ;; long release does F 
   
@@ -135,6 +136,7 @@ lö efeöööl
   
   ;; hold symbols
   qex (tap-hold 200 q S-1)
+  qmt (multi-tap 300 q A-C-q) 
   wdq (tap-hold 200 w S-2)
   pal (tap-hold 200 e S-8)
   par (tap-hold 200 r S-9)
@@ -162,14 +164,14 @@ lö efeöööl
   
   ral #( lctl P50 F24 ) ;; #( lctl C-lalt ) to get working ralt 
   mc2 #( P50 A-tab P50 )
-  mus (tap-hold-next-release 500 spc @num)
+  mus (tap-hold-next-release 500 spc @num) 
 )
 (deflayer qwerty
   _    _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
   @cir _    _    _    _    _    _    _    _    _    _    _    del  _     _    _    _    _    _    _    _
-  _    @qex @wdq @pal @par @tdo @zam @uue @ibl @ooe @pqe bspc del  _     _    _    _    _    _    _    _
+  _    q    @wdq @pal @par @tdo @zam @uue @ibl @ooe @pqe bspc del  _     _    _    _    _    _    _    _
   @rsy @aae @ssz @dct @fsf @geq @hsl @nsf @tct @lat bspc ret  del                    _    _    _
-  _ @sym _  @xpi @ccb @vcb @beq @nat @mas @sem @dpp @usc @rsd                 _      _    _    _    _
+  _ F23  _  @xpi @ccb @vcb @beq @nat @mas @sem @dpp @usc @rsd                 _      _    _    _    _
   _    _    _              @mus                     @ral @sym lctl       _    _    _    _    _
 )
 ;;(deflayer qwerty
@@ -204,4 +206,12 @@ lö efeöööl
   _    @btk @pip @lsb @rsb S-0  S-7  S-2  S-/  S-1 A-C-e _    _                         _    _    _
   _ _  @tck S-/  @lcb _    =   A-C-q S-=  @lth @gth @til _               _         _    _    _    _
   _    _    _              _                        _    _    _          _    _    _    _    _
+)
+(deflayer mouse
+  _    _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _     _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    kp7  kp8  kp9  kp+  _    _    _     _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    kp4  kp5  kp6  _    _    _                         _    _    _
+  _ _  _    _    _    _    _    _    kp1  kp2  kp3  kprt _    _               _         _    _    _    _
+  _    _    _              _                        _    _               _    _    _    _    _
 )
