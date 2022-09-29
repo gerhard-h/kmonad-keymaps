@@ -49,7 +49,7 @@ Emitting: Release <k>
 bug ralt won't release ctrl -> use alias
 bug mapping lmet to a layer still triggers the corresponding lmet+l = lock screen
 bug ditto wont allow enter and must be restarted - don't  remap lctl/lalt and it works
-bug autohotkey hotstrings will not work most of the time.
+bug autohotkey hotstrings will not work most of the time. -> workaround start kmonad after ahk 
 bug not putting a key on the keymap will not prevent it gets handeld by kmonad anyway.
 bug qmt  (multi-tap 300 (tap-next q !) A-C-q) not working
 |#
@@ -106,7 +106,6 @@ lö efeöööl
   rsy  (layer-toggle rsymbols) ;; Bind num to a button that switches to a layer
   mou  (layer-toggle mouse)    ;; relies on windows numpad mouse but dont work under kmonad
   kil  C-A-del                ;; Bind kil to a button that Ctrl-Alt-deletes
-  ;;fsf (tap-next-release f lsft)  ;; long release does F 
   
   ;; home row mods
   nsf (tap-hold-next-release 140 j rsft) ;; 200 was a good timing too
@@ -121,18 +120,18 @@ lö efeöööl
   wn0 (tap-hold-next-release 240 0 rmet)
   wnd (tap-hold-next-release 340 . lmet)
   ;; symbols ii
-  bsl A-C-[
-  rcb A-C-0
-  lcb (around ralt #(P30 7 P30))   ;;C-A-7 11
-  rsb A-C-9
-  lsb A-C-8
-  pip A-C-102d
-  lth 102d
-  gth S-102d
-  til A-C-= ;; A-C-+
-  tck #( ] spc )
-  btk #( S-] spc )
-  cir #( \ spc)
+  bsl A-C-[							;; \
+  rcb A-C-0							;; }
+  lcb (around ralt #(P30 7 P30))   	;; { C-A-7 11
+  rsb A-C-9							;; ]
+  lsb A-C-8							;; [
+  pip A-C-102d						;; |
+  lth 102d							;; <	
+  gth S-102d						;; >
+  til A-C-= ;; A-C-+				;; 	~
+  tck #( ] spc )					;; ´	
+  btk #( S-] spc )					;; `
+  cir #( \ spc)						;; ^
   
   ;; hold symbols
   qex (tap-hold 200 q S-1)
@@ -142,25 +141,25 @@ lö efeöööl
   par (tap-hold 200 r S-9)
   tdo (tap-hold 200 t S-4)
   zam (tap-hold 200 z S-6)
-  uue (tap-hold 200 u ;)
-  ibl (tap-hold 200 i @bsl)
-  ooe (tap-hold 200 o grv)
-  pqe (tap-hold 200 p S-[)
+  uue (tap-hold 140 u ;)			;; ü
+  ibl (tap-hold 200 i @bsl)			;; \
+  ooe (tap-hold 140 o grv)			;; ö
+  pqe (tap-hold 200 p S-[)			;; ?
   
-  aae (tap-hold 200 a ')
-  ssz (tap-hold 200 s [)
+  aae (tap-hold 140 a ')			;; ä
+  ssz (tap-hold 140 s [)			;; ß
   geq (tap-hold 200 g S-0)
   hsl (tap-hold 200 h S-7)
   
-  xpi (tap-hold 200 x S-/)
-  ccb (tap-hold 200 c C-A-7)
+  xpi (tap-hold 200 x S-/)			;; '
+  ccb (tap-hold 200 c C-A-7)		;; {
   vcb (tap-hold 200 v @rsy)
-  beq (tap-hold 200 b =)
+  beq (tap-hold 200 b =)			;; +
   nat (tap-hold 200 n @sym)
-  mas (tap-hold 200 m S-=)
-  sem (tap-hold 200 , S-,)
-  dpp (tap-hold 200 . S-.)
-  usc (tap-hold 200 - S--)
+  mas (tap-hold 200 m S-=)			;; *
+  sem (tap-hold 200 , S-,)			;; ;
+  dpp (tap-hold 200 . S-.)			;; :
+  usc (tap-hold 200 - S--)			;; _
   
   ral #( lctl P50 F24 ) ;; #( lctl C-lalt ) to get working ralt 
   mc2 #( P50 A-tab P50 )
