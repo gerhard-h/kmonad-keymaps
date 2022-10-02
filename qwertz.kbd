@@ -1,30 +1,23 @@
 #|
-Status
+Features
 - homerow mods
-- leer als num
+- Umlaute as key hold
+- complete key hold autosymbol pseudo layer
+- key repeat timings to be make ke hold work
+- space als number & navigation layer
 - full symlayer
-- caps/ö als sym (- als sym ?)
-- Umlaute
+- caps/v/n to enter symlayer
 
-TODO
-- complete key hold
+TODOs
+Numpad number keys
 
 |#
 (defcfg
-  ;; For Linux
-;;  input  (device-file "/dev/input/by-id/usb-04d9_daskeyboard-event-kbd")
-;;  output (uinput-sink "My KMonad output"
-    ;; To understand the importance of the following line, see the section on
-    ;; Compose-key sequences at the near-bottom of this file.
-;;    "/run/current-system/sw/bin/sleep 1 && /run/current-system/sw/bin/setxkbmap -option compose:ralt")
-;;  cmp-seq ralt    ;; Set the compose key to `RightAlt'
-;;  cmp-seq-delay 5 ;; 5ms delay between each compose-key sequence press
 
   ;; For Windows
      input  (low-level-hook)
-     output (send-event-sink 800 20)
-     ;;output (send-event-sink 500 20 ) 
-     ;; 500 20 now requires 2 arguments, both in milliseconds. The first defining how long before key-repeat starts, the second how long between each repeat event.
+     output (send-event-sink 500 30)
+     ;; output now has two more arguments, both in milliseconds. The first defining how long before key-repeat starts, the second how long between each repeat event.
 
   ;; Comment this is you want unhandled events not to be emitted
   fallthrough true
@@ -34,68 +27,48 @@ TODO
 )
 
 #|
-define 	; as  grv 
+when using a german keymap in windows make this mappings in defsrc 
+ 	; as  grv 
 	ß as  [ 
 	tick  ]
-    ue as ;
+    ü as ;
 	+  as =
 	^  as \
-to be able to map them on de keymap
+	ä  as '
+    #  as / 
+	-  as -
+to be able to remap them later
 
+use -l debug to track the keys
 Received event: Release <`>
 Running hooks
-Emitting: Release <k>
+Emitting: Release <bks>
 
-bug ralt won't release ctrl -> use alias
-bug mapping lmet to a layer still triggers the corresponding lmet+l = lock screen
-bug ditto wont allow enter and must be restarted - don't  remap lctl/lalt and it works
+bug ralt won't release lctrl -> use alias
+bug mapping lmet to l key a layer still triggers the corresponding lmet+l = lock screen, or  g = 0 lmet on numlayer ... holding g trigger s lmet + g 
+bug ditto wont allow enter -> don't  remap lctl/lalt
 bug autohotkey hotstrings will not work most of the time. -> workaround start kmonad after ahk 
 bug not putting a key on the keymap will not prevent it gets handeld by kmonad anyway.
-bug qmt  (multi-tap 300 (tap-next q !) A-C-q) not working
+bug combining multi tap and key hold is not working  (multi-tap 300 (tap-next q !) A-C-q) , ahk workaround is not robust either
 |#
+
 (defsrc
-  esc  F1   F2   F3   F4   F5   F6   F7   F8   F9   F10  F11  F12        ssrq slck pause
-  \    1    2    3    4    5    6    7    8    9    0    [    ]    bspc  ins  home pgup  nlck kp/  kp*  kp-
-  tab  q    w    e    r    t    z    u    i    o    p    ;    =    ret   del  end  pgdn  kp7  kp8  kp9  kp+
-  caps a    s    d    f    g    h    j    k    l    grv  '    /                          kp4  kp5  kp6
-  lsft 102d y    x    c    v    b    n    m    ,    .    -    rsft            up         kp1  kp2  kp3  kprt
-  lctl lmet lalt           spc                      ralt cmp  rctl       left down rght  kp0  kp.
+  esc       F1   F2   F3   F4   F5   F6   F7   F8   F9   F10  F11  F12        ssrq slck pause
+  \         1    2    3    4    5    6    7    8    9    0    [    ]    bspc  ins  home pgup  nlck kp/  kp*  kp-
+  tab       q    w    e    r    t    z    u    i    o    p    ;    =    ret   del  end  pgdn  kp7  kp8  kp9  kp+
+  caps      a    s    d    f    g    h    j    k    l    grv  '    /                          kp4  kp5  kp6
+  lsft 102d y    x    c    v    b    n    m    ,    .    -    rsft                 up         kp1  kp2  kp3  kprt
+  lctl      lmet lalt           spc                      ralt cmp  rctl       left down rght  kp0  kp.
 )
-;; with german keymap "[" = "k" but "y" = "z" "-" = "-" but also "-" = "ß"
-;; bug n/@num = - 
-;; bug ralt won't release ctrl 
-;; bug mapping lmet to a layer still triggers the corresponding lmet+l = loc sreen
-;; bug <>| key gets ignored when iso hash (left of ret) is defined
-;; bug ö ue + <>| (left of rsft) cannot be remapped
-;; bug remap hash can be done by remapp ey (left of rsft)
-;; woraround define a win eymap with  at the right place
-;; woraround ue=k sometimes
 
 #|
-90tftft tf are the mappings from below
-opücüc  ü=unmapped c=mapping from top
-ntl ö ret a ö=unmapped fine a=mapping from below
-d nush woröed
-bm,.-b = mapping from 3 rows above
-remove bacslash from base layer activates mapping
-
-9 0 ß del ß is overwrijitg map 
-o p k del is unmapped [
-l ö ret e ö is overwrijitg map
-m , . - b from 3 rows above
-
-90ß bsp ß is overwrijitg map bsp is flipped
-opkdel
-löf
-.-t from 3 rows above
-lö efeöööl
 (deflayer name
-  _    _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _     _    _    _    _    _    _    _
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _     _    _    _    _    _    _    _
-  _    _    _    _    _    _    _    _    _    _    _    _    _                         _    _    _
-  _ _  _    _    _    _    _    _    _    _    _    _    _    _               _         _    _    _    _
-  _    _    _              _                        _    _               _    _    _    _    _
+  _         _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
+  _         _    _    _    _    _    _    _    _    _    _    _    _    _     _    _    _    _    _    _    _
+  _         _    _    _    _    _    _    _    _    _    _    _    _    _     _    _    _    _    _    _    _
+  _         _    _    _    _    _    _    _    _    _    _    _    _                         _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _               _         _    _    _    _
+  _         _    _              _                        _    _    _          _    _    _    _    _
 )
 -------------------------------------------------------------------------- 
 |#
@@ -104,7 +77,7 @@ lö efeöööl
   num  (layer-toggle numbers) ;; Bind num to a button that switches to a layer
   sym  (layer-toggle symbols) ;; Bind num to a button that switches to a layer
   rsy  (layer-toggle rsymbols) ;; Bind num to a button that switches to a layer
-  mou  (layer-toggle mouse)    ;; relies on windows numpad mouse but dont work under kmonad
+  mou  (layer-toggle mouse)    ;; relies on windows numpad mouse but mouse dont work under kmonad might be reporposed as numpad layer
   kil  C-A-del                ;; Bind kil to a button that Ctrl-Alt-deletes
   
   ;; home row mods
@@ -115,9 +88,9 @@ lö efeöööl
   lat (tap-hold-next-release 240 l alt)
   rsd (tap-hold-next-release 240 del rsft)
   sf6 (tap-hold-next-release 240 6 lsft)
-  ct5 (tap-hold-next-release 240 5 lctl)
+  ct5 (tap-hold-next-release 300 5 lctl)
   al4 (tap-hold-next-release 340 4 lalt)
-  wn0 (tap-hold-next-release 240 0 rmet)
+  wn2 (tap-hold-next-release 240 2 rmet)
   wnd (tap-hold-next-release 340 . lmet)
   ;; symbols ii
   bsl A-C-[							;; \
@@ -128,19 +101,19 @@ lö efeöööl
   pip A-C-102d						;; |
   lth 102d							;; <	
   gth S-102d						;; >
-  til A-C-= ;; A-C-+				;; 	~
+  til A-C-=			            	;; 	~
   tck #( ] spc )					;; ´	
   btk #( S-] spc )					;; `
   cir #( \ spc)						;; ^
   
   ;; hold symbols
-  qex (tap-hold 200 q S-1)
-  qmt (multi-tap 300 q A-C-q) 
-  wdq (tap-hold 200 w S-2)
-  pal (tap-hold 200 e S-8)
-  par (tap-hold 200 r S-9)
-  tdo (tap-hold 200 t S-4)
-  zam (tap-hold 200 z S-6)
+  qex (tap-hold 240 q S-1)          ;; ! #(q f20) S-1) handling ends in an infinite loop ää
+  qmt (multi-tap 300 q A-C-q)       ;; @ 
+  wdq (tap-hold 200 w S-2)          ;; "
+  pal (tap-hold 200 e S-8)          ;; (
+  par (tap-hold 200 r S-9)          ;; )
+  tdo (tap-hold 200 t S-4)          ;; $
+  zam (tap-hold 200 z S-6)          ;; &
   uue (tap-hold 140 u ;)			;; ü
   ibl (tap-hold 200 i @bsl)			;; \
   ooe (tap-hold 140 o grv)			;; ö
@@ -148,8 +121,8 @@ lö efeöööl
   
   aae (tap-hold 140 a ')			;; ä
   ssz (tap-hold 140 s [)			;; ß
-  geq (tap-hold 200 g S-0)
-  hsl (tap-hold 200 h S-7)
+  geq (tap-hold 200 g S-0)          ;; =
+  hsl (tap-hold 200 h S-7)          ;; / 
   
   xpi (tap-hold 200 x S-/)			;; '
   ccb (tap-hold 200 c C-A-7)		;; {
@@ -166,51 +139,42 @@ lö efeöööl
   mus (tap-hold-next-release 500 spc @num) 
 )
 (deflayer qwerty
-  _    _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
-  @cir _    _    _    _    _    _    _    _    _    _    _    del  _     _    _    _    _    _    _    _
-  _    q    @wdq @pal @par @tdo @zam @uue @ibl @ooe @pqe bspc del  _     _    _    _    _    _    _    _
-  @rsy @aae @ssz @dct @fsf @geq @hsl @nsf @tct @lat bspc ret  del                    _    _    _
-  _ F23  _  @xpi @ccb @vcb @beq @nat @mas @sem @dpp @usc @rsd                 _      _    _    _    _
-  _    _    _              @mus                     @ral @sym lctl       _    _    _    _    _
+  _         _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
+  @cir      _    _    _    _    _    _    _    _    _    _    _    del  _     _    _    _    _    _    _    _
+  _         @qex @wdq @pal @par @tdo @zam @uue @ibl @ooe @pqe bspc del  _     _    _    _    _    _    _    _
+  @rsy      @aae @ssz @dct @fsf @geq @hsl @nsf @tct @lat bspc ret  del                    _    _    _
+  _    F23  _    @xpi @ccb @vcb @beq @nat @mas @sem @dpp @usc @rsd                 _      _    _    _    _
+  _         _    _              @mus                     @ral @sym lctl       _    _    _    _    _
 )
-;;(deflayer qwerty
-;;  _    _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
-;;  _    _    _    _    _    _    _    _    _    _    _    _    del  _     _    _    _    _    _    _    _
-;;  _    _    _    _    _    j    _    @uue _    @ooe _    bspc del  _     _    _    _    _    _    _    _
-;;  @sym @aae @ssz @dct @fsf _    _    @nsf @tct @lat k    ret  @bsl                      _    _    _
-;;  _ _  _    _    _    _    _    m    ,    .    -    @sym _                    _         _    _    _    _
-;;  _    _    _              @mus                     _    _               _    _    _    _    _
-;;)
-;; bug using caps as num eats one key in the layer definition
 (deflayer numbers
-  _    _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _     _    _    _    _    _    _    _
-  _    @usc 1    2    3    bspc esc  home up   end  _    _    _    _     _    _    _    _    _    _    _
-  _    @wnd @al4 @ct5 @sf6 @wn0 ret  left down rght del  _    _                         _    _    _
-  _  _ @sem 7    8    9    del  bspc ret  del  ret  _    _               _         _    _    _    _
-  _    _    @rsy           _                        _    _    _          _    _    _    _    _
+  _         _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
+  _         _    _    _    _    _    _    _    _    _    _    _    _    _     _    _    _    _    _    _    _
+  _         @usc 1    @wn2 3    bspc esc  home up   end  _    _    _    _     _    _    _    _    _    _    _
+  _         @dpp @al4 @ct5 @sf6 0    ret  left down rght del  _    _                         _    _    _
+  _    @sem @sem 7    8    9    del  bspc ret  del  ret  _    _               _         _    _    _    _
+  _         _    @rsy           _                        _    _    _          _    _    _    _    _
 )
 (deflayer symbols
-  _    _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _     _    _    _    _    _    _    _
-  _    S-1  S-2  S-8  S-9  S-4  S-6  S-5  @bsl /    S-[  _    _    _     _    _    _    _    _    _    _
-  _    @btk @pip @lsb @rsb S-0  S-7  S-2  S-/  S-1  _    _    _                         _    _    _
-  _ _  @tck S-/  @lcb @rcb =    _    S-=  @lth @gth @til _               _         _    _    _    _
-  _    _    _              _                        _    _    _          _    _    _    _    _
+  _         _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
+  _         _    _    _    _    _    _    _    _    _    _    _    _    _     _    _    _    _    _    _    _
+  _         S-1  S-2  S-8  S-9  S-4  S-6  S-5  @bsl /    S-[  _    _    _     _    _    _    _    _    _    _
+  _         @btk @pip @lsb @rsb S-0  S-7  S-2  S-/  S-1  _    _    _                         _    _    _
+  _    @cir @tck S-/  @lcb @rcb =    _    S-=  @lth @gth @til _                    _         _    _    _    _
+  _         _    _              _                        _    _    _          _    _    _    _    _
 )
 (deflayer rsymbols
-  _    _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _     _    _    _    _    _    _    _
-  _    S-1  S-2  S-8  S-9  S-4  S-6  S-5  @bsl /    S-[  _    _    _     _    _    _    _    _    _    _
-  _    @btk @pip @lsb @rsb S-0  S-7  S-2  S-/  S-1 A-C-e _    _                         _    _    _
-  _ _  @tck S-/  @lcb _    =   A-C-q S-=  @lth @gth @til _               _         _    _    _    _
-  _    _    _              _                        _    _    _          _    _    _    _    _
+  _         _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
+  _         _    _    _    _    _    _    _    _    _    _    _    _    _     _    _    _    _    _    _    _
+  _         S-1  S-2  S-8  S-9  S-4  S-6  S-5  @bsl /    S-[  _    _    _     _    _    _    _    _    _    _
+  _         @btk @pip @lsb @rsb S-0  S-7  S-2  S-/  S-1 A-C-e _    _                         _    _    _
+  _    @cir @tck S-/  @lcb _    =   A-C-q S-=  @lth @gth @til _                    _         _    _    _    _
+  _         _    _              _                        _    _    _          _    _    _    _    _
 )
 (deflayer mouse
-  _    _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _     _    _    _    _    _    _    _
-  _    _    _    _    _    _    _    kp7  kp8  kp9  kp+  _    _    _     _    _    _    _    _    _    _
-  _    _    _    _    _    _    _    kp4  kp5  kp6  _    _    _                         _    _    _
-  _ _  _    _    _    _    _    _    kp1  kp2  kp3  kprt _    _               _         _    _    _    _
-  _    _    _              _                        _    _               _    _    _    _    _
+  _         _    _    _    _    _    _    _    _    _    _    _    _          _    _    _
+  _         _    _    _    _    _    _    _    _    _    _    _    _    _     _    _    _    _    _    _    _
+  _         _    _    _    _    _    _    kp7  kp8  kp9  kp+  _    _    _     _    _    _    _    _    _    _
+  _         _    _    _    _    _    _    kp4  kp5  kp6  _    _    _                         _    _    _
+  _    _    _    _    _    _    _    _    kp1  kp2  kp3  kprt _    _               _         _    _    _    _
+  _         _    _              _                        _    _               _    _    _    _    _
 )
