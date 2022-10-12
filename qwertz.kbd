@@ -85,13 +85,14 @@ bug combining multi tap and key hold is not working  (multi-tap 300 (tap-next q 
   fsf (tap-hold-next-release 140 f lsft)
   dct (tap-hold-next-release 240 d lctl)
   tct (tap-hold-next-release 240 k lctl) ;; left ctl resolves DITTO issues
-  lat (tap-hold-next-release 240 l alt)
+  lat (tap-hold-next-release 340 l alt)
   rsd (tap-hold-next-release 240 del rsft)
   sf6 (tap-hold-next-release 240 6 lsft)
   ct5 (tap-hold-next-release 300 5 lctl)
   al4 (tap-hold-next-release 340 4 lalt)
   wn2 (tap-hold-next-release 240 2 rmet)
-  wnd (tap-hold-next-release 340 . lmet)
+  wn0 (tap-hold-next-release 340 0 rmet)
+  ;;ght (tap-hold-next-release 240 rght rmet)  ;;works
   ;; symbols ii
   bsl A-C-[							;; \
   rcb A-C-0							;; }
