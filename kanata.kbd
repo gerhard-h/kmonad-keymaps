@@ -90,7 +90,7 @@
 (deflayer qwerty
   @cir      1    2    3    4    5    6    7    8    9    0    [    ]    bspc
   tab       @qex @wdq @ptl @ptr @tdo @zam @uue @ibl @ooe @pqe bspc del  del
-  @num      @aae @ssz @dct @fsf @geq @hsl @jsf @tct @lat bspc ret  ret
+  @sy1      @aae @ssz @dct @fsf @geq @hsl @jsf @tct @lat bspc ret  ret
   lsft f23  y    @xpi @ccb @vcb @beq @nat @mas @sem @dpp @usc @rsd
   lctl      lmet lalt           @mus           f24 rmet rctl
 )
@@ -106,13 +106,20 @@
   _         @usc 1    @wn2 3    bspc esc  home up   end  _    _    _    _     
   _         @dpp @al4 @ct5 @sf6 0    ret  left down rght del  _    _          
   _    @sem @sem 7    8    9    del  bspc ret  del  ret  _    _               
-  _         _    @rsy           _                        _    _    _          
+  _         _    @sym           _                        _    _    _          
+)
+(deflayer lsymbols
+  _         _    _    _    _    _    _    _    _    _    _    _    _    _     
+  _         S-1  S-2  S-8  S-9  S-4  S-6  S-5  @bsl /    S-[  _    _    _     
+  _         @btk @pip @lsb @rsb S-0  S-7  S-2  S-/  S-1  _    _    _          
+  _    @cir @tck S-/  @lcb @rcb =    _    S-=  @lth @gth @til _               
+  _         _    _              _                        _    _    _          
 )
 (deflayer symbols
   _         _    _    _    _    _    _    _    _    _    _    _    _    _     
   _         S-1  S-2  S-8  S-9  S-4  S-6  S-5  @bsl /    S-[  _    _    _     
   _         @btk @pip @lsb @rsb S-0  S-7  S-2  S-/  S-1  _    _    _          
-  _    @cir @tck S-/  @lcb @rcb =    _    S-=  @lth @gth @til _               
+  _    @cir @tck S-/  @lcb @rcb =   A-C-q S-=  @lth @gth @til _               
   _         _    _              _                        _    _    _          
 )
 (deflayer rsymbols
@@ -130,9 +137,6 @@
 ;; e.g. in the `anm` alias. However, an alias can only refer to another alias
 ;; that has been defined before it in the file.
 (defalias
-  ;; aliases to change the base layer to qwerty or dvorak
-  ;; dvk (layer-switch dvorak)
-  ;; qwr (layer-switch qwerty)
 
   ;; Aliases for layer "toggling". It's not quite toggling because the layer
   ;; will be active while the key is held and deactivated when the key is
@@ -141,6 +145,8 @@
   num (layer-toggle numbers)
   sym  (layer-toggle symbols)
   rsy  (layer-toggle rsymbols)
+  lsy  (layer-toggle lsymbols)
+  sy1  (one-shot 500 (layer-toggle symbols))
   ;; chr (layer-toggle chords)
   ;; arr (layer-toggle arrows)
   ;; msc (layer-toggle misc)
@@ -237,7 +243,7 @@
   vcb (tap-hold 200 200 v @rsy)
   + (unicode +)
   beq (tap-hold 200 200 b @+)			;; + = =
-  nat (tap-hold 200 200 n @sym)
+  nat (tap-hold 200 200 n @lsy)
   mas (tap-hold 200 200 m S-=)			;; *
   semi (unicode ;)
   sem (tap-hold 200 200 , @semi)			;; ;
