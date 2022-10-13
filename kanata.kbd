@@ -102,7 +102,7 @@
 ;;   lctl lmet lalt           @mus           f24 rmet rctl
 ;; )
 (deflayer numbers
-  _         _    _    _    _    _    _    _    _    _    _    _    _    _     
+  _         _    _    _    _    _    _    _    _    _    _    _    lrld     _     
   _         @usc 1    @wn2 3    bspc esc  home up   end  _    _    _    _     
   _         @dpp @al4 @ct5 @sf6 0    ret  left down rght del  _    _          
   _    @sem @sem 7    8    9    del  bspc ret  del  ret  _    _               
@@ -210,7 +210,9 @@
   cir (macro \ spc)						;; ^
   
   ;; hold symbols
-  qex (tap-hold 200 240 q S-1)          ;; !
+  ! (unicode ! )
+  qex (tap-dance 140 ((tap-hold 10 100 q @!)  A-C-q))
+  ;;qex (tap-hold 200 240 q @!)          ;; !   S-1 
   ;;qmt (multi-tap 300 q A-C-q)         ;; @ 
   wdq (tap-hold 200 200 w S-2)          ;; "
   ptl (tap-hold 200 200 e S-8)          ;; (
@@ -218,13 +220,13 @@
   tdo (tap-hold 200 200 t S-4)          ;; $
   zam (tap-hold 200 200 z S-6)          ;; &
   ü (unicode ü)
-  uue (tap-hold 140 140 u @ü)			;; ü = ;
+  uue (tap-hold 140 140 u (tap-dance 10 (; S-5)))			;; ü = ; 
   ibl (tap-hold 200 200 i @bsl)			;; \
   ö (unicode ö)
-  ooe (tap-hold 200 140 o @ö )			;; ö = grv
+  ooe (tap-hold 200 140 o (tap-dance 10 (grv)) )	    ;; ö = grv
   pqe (tap-hold 200 200 p S-[)			;; ?
   ä (unicode ä)
-  aae (tap-hold 200 140 a @ä)			;; ä = '
+  aae (tap-hold 200 140 a (tap-dance 10 (')))			;; ä = '
   ß (unicode ß)
   ssz (tap-hold 200 140 s @ß)			;; ß = [
   geq (tap-hold 200 200 g S-0)          ;; =
@@ -237,16 +239,16 @@
   beq (tap-hold 200 200 b @+)			;; + = =
   nat (tap-hold 200 200 n @sym)
   mas (tap-hold 200 200 m S-=)			;; *
-  kma (unicode ;)
-  sem (tap-hold 200 200 , @kma)			;; ;
-  🙁 (unicode :)
-  dpp (tap-hold 200 200 . @🙁)	;; : S-. (multi lsft . )
+  semi (unicode ;)
+  sem (tap-hold 200 200 , @semi)			;; ;
+  : (unicode :)
+  dpp (tap-hold 200 200 . @:)	;; : S-. (multi lsft . )
   uso (unicode _)
   usc (tap-hold 200 200 - @uso)			;; _ S--
   
   ;;ral (macro lctl P50 F24 ) ;; (macro lctl C-lalt ) to get working ralt 
   mc2 (macro 50 A-tab 50 )
-  mus (tap-hold  200 500 spc @num) 
+  mus (tap-dance 120 ((tap-hold  200 200 spc @num) (tap-hold  200 200 spc @sym) spc spc spc))
   
   
   
@@ -276,7 +278,7 @@
   ;; shifted keys
   { S-[
   } S-]
-  : S-;
+  ;; : S-;
 
   ;; alias numbers as themselves for use in macro
   8 8
@@ -306,12 +308,12 @@
 
   ;; macro accepts keys, chords, and numbers (a delay in ms). Note that numbers
   ;; will be parsed as delays, so they will need to be aliased to be used.
-  lch (macro h t t p @: / / 100 l o c a l h o s t @: @8 @0 @8 @0)
+  ;; lch (macro h t t p @: / / 100 l o c a l h o s t @: @8 @0 @8 @0)
 
   ;; unicode accepts a single unicode character. The unicode character will
   ;; not be automatically repeated by holding the key down. The alias name
   ;; is the unicode character itself and is referenced by @🙁 in deflayer.
-  ;; 🙁 (unicode 🙁)
+  🙁 (unicode 🙁)
 
   ;; Having a cmd action in your configuration without explicitly enabling
   ;; `danger-enable-cmd` **and** using the cmd-enabled executable will make
@@ -405,7 +407,7 @@
 
 (deflayer chords      ;; you can put list actions directly in deflayer but it's ugly, so prefer aliases.
   _    _    _    _    _    _    _    _    _    _    @🙁  (unicode 😀) _    _
-  _    _    _    _    _    _    _    _    @csc _    @lch _            _    _
+  _    _    _    _    _    _    _    _    @csc _    _    _            _    _
   _    @alp _    _    _    _    _    _    _    _    _    _            _
   _ _  _    _    _    _    _    _    _    _    @csv _    _
   _    _    _              _              _    _    _
