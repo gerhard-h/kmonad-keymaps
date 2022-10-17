@@ -90,9 +90,9 @@
 (deflayer qwerty
   @cir      1    2    3    4    5    6    7    8    9    0    [    ]    bspc
   tab       @qex @wdq @ptl @ptr @tdo @zam @uue @ibl @ooe @pqe bspc del  del
-  @sy1      @aae @ssz @dct @fsf @geq @hsl @jsf @tct @lat bspc ret  ret
+  @sy1      @aae @ssz @dct @fsf @geq @hsl @jsf @tct @lat @sy1 ret  ret
   lsft f23  y    @xpi @ccb @vcb @beq @nat @mas @sem @dpp @usc @rsd
-  lctl      lmet lalt           @mus           f24 rmet rctl
+  lctl      lmet lalt           @mus           f24 rmet @rcl 
 )
 ;; (deflayer qwerty
 ;;   \    1    2    3    4    5    6    7    8    9    0    [    ]    bspc
@@ -108,6 +108,7 @@
   _    @sem @sem 7    8    9    del  bspc ret  del  ret  _    _               
   _         _    @sym           _                        _    _    _          
 )
+;; lsymbols and rsymbols are only usefull if activated by letter keys like v/n
 (deflayer lsymbols
   _         _    _    _    _    _    _    _    _    _    _    _    _    _     
   _         S-1  S-2  S-8  S-9  S-4  S-6  S-5  @bsl /    S-[  _    _    _     
@@ -118,8 +119,8 @@
 (deflayer symbols
   _         _    _    _    _    _    _    _    _    _    _    _    _    _     
   _         S-1  S-2  S-8  S-9  S-4  S-6  S-5  @bsl /    S-[  _    _    _     
-  _         @btk @pip @lsb @rsb S-0  S-7  S-2  S-/  S-1  _    _    _          
-  _    @cir @tck S-/  @lcb @rcb =   A-C-q S-=  @lth @gth @til _               
+  _         @btk @pip @lsb @rsb S-0  S-7  S-2  S-/  S-1  -         _    _          
+  _    @cir @tck S-/  @lcb @rcb =    S-- S-=  @lth @gth @til _               
   _         _    _              _                        _    _    _          
 )
 (deflayer rsymbols
@@ -188,7 +189,7 @@
   ;; the underlying keyberon crate, tap-hold-press is the HoldOnOtherKeyPress
   ;; and tap-hold-release is the PermissiveHold configuration.
   fsf (tap-hold-release 140 140 f lsft)
-  jsf (tap-hold-release 140 140 j rsft)
+  jsf (tap-hold-release 140 140 j lsft)
   
     ;; home row mods
   dct (tap-hold-release 200 240 d lctl)
@@ -211,39 +212,38 @@
   lth 102d							;; <	
   gth S-102d						;; >
   til A-C-=			            	;; 	~
-  tck (macro ] spc )					;; ´	
-  btk (macro S-] spc )					;; `
-  cir (macro \ spc)						;; ^
+  tck (macro ] spc )				;; ´	
+  btk (macro S-] spc )				;; `
+  cir (macro \ spc )				;; ^
   
   ;; hold symbols
   ! (unicode ! )
   qex (tap-dance 140 ((tap-hold 10 100 q @!)  A-C-q))
-  ;;qex (tap-hold 200 240 q @!)          ;; !   S-1 
-  ;;qmt (multi-tap 300 q A-C-q)         ;; @ 
+  ;;qex (tap-dance 140 ((tap-hold 10 100 q @!) A-C-q sldr)) ;; tripple tap is not possible in time
   wdq (tap-hold 200 200 w S-2)          ;; "
   ptl (tap-hold 200 200 e S-8)          ;; (
   ptr (tap-hold 200 200 r S-9)          ;; )
   tdo (tap-hold 200 200 t S-4)          ;; $
   zam (tap-hold 200 200 z S-6)          ;; &
   ü (unicode ü)
-  uue (tap-hold 140 140 u (tap-dance 10 (; S-5)))			;; ü = ; 
-  ibl (tap-hold 200 200 i @bsl)			;; \
+  uue (tap-hold 140 140 u (tap-dance 10 (; S-5)))		;; ü = ; 
+  ibl (tap-hold 200 200 i @bsl)			                ;; \
   ö (unicode ö)
   ooe (tap-hold 200 140 o (tap-dance 10 (grv)) )	    ;; ö = grv
-  pqe (tap-hold 200 200 p S-[)			;; ?
+  pqe (tap-hold 200 200 p S-[)			                ;; ?
   ä (unicode ä)
   aae (tap-hold 200 140 a (tap-dance 10 (')))			;; ä = '
   ß (unicode ß)
-  ssz (tap-hold 200 140 s @ß)			;; ß = [
+  ssz (tap-hold 200 140 s @ß)			                ;; ß = [
   geq (tap-hold 200 200 g S-0)          ;; =
   hsl (tap-hold 200 200 h S-7)          ;; / 
   
   xpi (tap-hold 200 200 x S-/)			;; '
-  ccb (tap-hold 200 200 c C-A-7)		;; {{}
-  vcb (tap-hold 200 200 v @rsy)
+  ccb (tap-hold 200 200 c C-A-7)		;; {
+  vcb (tap-hold 200 200 v C-A-0)         ;; } @rsy
   + (unicode +)
   beq (tap-hold 200 200 b @+)			;; + = =
-  nat (tap-hold 200 200 n @lsy)
+  nat (tap-hold 200 200 n S--)          ;; _ @lsy
   mas (tap-hold 200 200 m S-=)			;; *
   semi (unicode ;)
   sem (tap-hold 200 200 , @semi)			;; ;
@@ -253,8 +253,7 @@
   usc (tap-hold 200 200 - @uso)			;; _ S--
   
   ;;ral (macro lctl P50 F24 ) ;; (macro lctl C-lalt ) to get working ralt 
-  mc2 (macro 50 A-tab 50 )
-  mus (tap-dance 120 ((tap-hold  200 200 spc @num) (tap-hold  200 200 spc @sym) spc spc spc))
+  mus (tap-dance 120 ((tap-hold  200 200 spc @num) (tap-hold  200 200 spc @sym) spc spc spc))  ;; DBL tap Hold is not realy good for this frequent layer
   
   
   
@@ -582,5 +581,5 @@
 ;; You can add an entry to defcfg to change the sequence timeout (default is 1000):
 ;;     sequence-timeout <number(ms)>
 (defseq git-status (g s t))
-(deffakekeys git-status (macro g i t spc s t a t u s))
-(defalias rcl (tap-hold-release 200 200 sldr rctl))
+(deffakekeys git-status (macro g i t spc s t a t u s ret))
+(defalias rcl (tap-hold-release 200 200 sldr rctl)) ;; sldr is hard coded leader key fake key 
