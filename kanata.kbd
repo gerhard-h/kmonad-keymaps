@@ -1,28 +1,5 @@
-;; This is a sample configuration file that showcases every feature in kanata.
-;; If anything is confusing or hard to discover, please file an issue or
-;; contribute a pull request to help improve the document.
-;;
-;; Comments are prefixed by double-semicolon. A single semicolon is parsed as the
-;; keyboard key. Comments are ignored for the configuration file.
-;;
-;; This configuration language is Lisp-like and uses S-Expression syntax.
-;; If you're unfamiliar with Lisp, don't be alarmed. The maintainer jtroo is
-;; also unfamiliar with Lisp. You don't need to know Lisp in-depth to
-;; be able to configure kanata.
-;;
-;; If you follow along with the examples, you should be fine. Kanata should
-;; also hopefully have helpful error messages in case something goes wrong.
-;; If you need help, you are welcome to ask.
-
 ;; Exactly one defcfg entry is required. This is used for configuration key-pairs.
 (defcfg
-  ;; Your keyboard device will likely differ from this. I believe /dev/input/by-id/
-  ;; is preferable; I recall reading that it's less likely to change names on you,
-  ;; but I didn't find any keyboard device in there in my VM.
-  linux-dev /dev/input/by-path/platform-i8042-serio-0-event-kbd
-  ;; If you want to read from multiple devices, separate them by `:`.
-  ;; linux-dev /dev/input/<dev1>:/dev/input/<dev2>
-
   ;; Windows doesn't need any input/output configuration entries; however, there
   ;; must still be a defcfg entry.
   ;;
@@ -64,76 +41,61 @@
 ;; provide some insight.
 
 
-;; 102d missing
-;; personal layers missing
-;; cording and combos not tested
-;; z and y not flipped 
-
+;; defsrc for iso german qwertz layout  
+;; z and y are not flipped
+;; positioning the /-key at the ansi or iso position both work
 (defsrc
-;;  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
-;;  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
-;;  caps a    s    d    f    g    h    j    k    l    grv  '    ret
-;;  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+
   \         1    2    3    4    5    6    7    8    9    0    [    ]    bspc
-  tab       q    w    e    r    t    z    u    i    o    p    ;    =    /
-  caps      a    s    d    f    g    h    j    k    l    grv  '    ret
-  lsft 102d     y    x    c    v    b    n    m    ,    .    -    rsft
+  tab       q    w    e    r    t    z    u    i    o    p    ;    =
+  caps      a    s    d    f    g    h    j    k    l    grv  '    /    ret
+  lsft 102d y    x    c    v    b    n    m    ,    .    -    rsft
   lctl lmet lalt           spc            ralt rmet rctl
- 
 )
 
 ;; The first layer defined is the layer that will be active by default when
-;; kanata starts up. This layer is the standard QWERTY layout except for the
-;; backtick/grave key (@grl) which is an alias for a tap-hold key.
+;; kanata starts up.
 ;;
 ;; There are currently a maximum of 25 layers allowed.
 (deflayer qwerty
   @cir      1    2    3    4    5    6    7    8    9    0    [    ]    bspc
-  tab       @qex @wdq @ptl @ptr @tdo @zam @uue @ibl @ooe @pqe bspc del  del
-  @sy1      @aae @ssz @dct @fsf @geq @hsl @jsf @tct @lat @sy1 ret  ret
+  tab       @qex @wdq @ptl @ptr @tdo @zam @uue @ibl @ooe @pqe bspc del
+  @sy1      @aae @ssz @dct @fsf @geq @hsl @jsf @tct @lat @sy1 ret  @rwi ret
   lsft f23  y    @xpi @ccb @vcb @beq @nat @mas @sem @dpp @usc @rsd
   lctl      lmet lalt           @mus           f24 rmet @rcl 
 )
-;; (deflayer qwerty
-;;   \    1    2    3    4    5    6    7    8    9    0    [    ]    bspc
-;;   tab  q    w    e    r    t    y    u    i    o    p    bspc del  del
-;;   @num @anm s    d    @fsf g    h    @jsf k    l    bspc ret  ret
-;;   lsft z    x    c    v    b    n    m    ,    .    -    rsft
-;;   lctl lmet lalt           @mus           f24 rmet rctl
-;; )
+
 (deflayer numbers
-  _         _    _    _    _    _    _    _    _    _    _    _    lrld     _     
-  _         @usc 1    @wn2 3    bspc esc  home up   end  _    _    _    _     
-  _         @dpp @al4 @ct5 @sf6 0    ret  left down rght del  _    _          
-  _    @sem @sem 7    8    9    del  bspc ret  del  ret  _    _               
+  _         _    _    _    _    _    _    _    _    _    _    _    lrld _     
+  _         @usc 1    @wn2 3    bspc esc  home up   end  _    _    _     
+  _         @dpp @al4 @ct5 @sf6 0    tab  left down rght del  _    _    _          
+  _    @sem @sem 7    8    9    del  ret bspc del  ret  _    _               
   _         _    @sym           _                        _    _    _          
 )
-;; lsymbols and rsymbols are only usefull if activated by letter keys like v/n
-(deflayer lsymbols
-  _         _    _    _    _    _    _    _    _    _    _    _    _    _     
-  _         S-1  S-2  S-8  S-9  S-4  S-6  S-5  @bsl /    S-[  _    _    _     
-  _         @btk @pip @lsb @rsb S-0  S-7  S-2  S-/  S-1  _    _    _          
-  _    @cir @tck S-/  @lcb @rcb =    _    S-=  @lth @gth @til _               
-  _         _    _              _                        _    _    _          
-)
+;; lsymbols and rsymbols are only usefull if activated by letter keys like v/n but I ditched that concept as to hard to do fast
+;; (deflayer lsymbols
+;;   _         _    _    _    _    _    _    _    _    _    _    _    _    _     
+;;   _         S-1  S-2  S-8  S-9  S-4  S-6  S-5  @bsl /    S-[  _    _    _     
+;;   _         @btk @pip @lsb @rsb S-0  S-7  S-2  S-/  S-1  _    _    _          
+;;   _    @cir @tck S-/  @lcb @rcb =    _    S-=  @lth @gth @til _               
+;;   _         _    _              _                        _    _    _          
+;; )
 (deflayer symbols
   _         _    _    _    _    _    _    _    _    _    _    _    _    _     
-  _         S-1  S-2  S-8  S-9  S-4  S-6  S-5  @bsl /    S-[  _    _    _     
-  _         @btk @pip @lsb @rsb S-0  S-7  S-2  S-/  S-1  -         _    _          
-  _    @cir @tck S-/  @lcb @rcb =    S-- S-=  @lth @gth @til _               
+  _         S-1  S-2  S-8  S-9  S-4  S-6  S-5  @bsl /    S-[  _    _         
+  _         @btk @pip @lsb @rsb S-0  S-7  @atx @at2 @at3 -    _    _    _          
+  _    @cir @tck S-/  @lcb @rcb =    S--  S-=  @lth @gth @til _               
   _         _    _              _                        _    _    _          
 )
-(deflayer rsymbols
-  _         _    _    _    _    _    _    _    _    _    _    _    _    _     
-  _         S-1  S-2  S-8  S-9  S-4  S-6  S-5  @bsl /    S-[  _    _    _     
-  _         @btk @pip @lsb @rsb S-0  S-7  S-2  S-/  S-1 A-C-e _    _          
-  _    @cir @tck S-/  @lcb _    =   A-C-q S-=  @lth @gth @til _               
-  _         _    _              _                        _    _    _          
-)
-;; defalias is used to declare a shortcut for a more complicated action to keep
-;; the deflayer declarations clean and aligned. The alignment in deflayers is not
-;; necessary, but is strongly recommended for ease of understanding visually.
-;;
+;; (deflayer rsymbols
+;;   _         _    _    _    _    _    _    _    _    _    _    _    _    _     
+;;   _         S-1  S-2  S-8  S-9  S-4  S-6  S-5  @bsl /    S-[  _    _    _     
+;;   _         @btk @pip @lsb @rsb S-0  S-7  S-2  S-/  S-1 A-C-e _    _          
+;;   _    @cir @tck S-/  @lcb _    =   A-C-q S-=  @lth @gth @til _               
+;;   _         _    _              _                        _    _    _          
+;; )
+
+
 ;; Aliases are referred to by `@<alias_name>`. Aliases can refer to each other,
 ;; e.g. in the `anm` alias. However, an alias can only refer to another alias
 ;; that has been defined before it in the file.
@@ -145,18 +107,10 @@
   ;; However, the rest of this document will use The term "toggle" for brevity.
   num (layer-toggle numbers)
   sym  (layer-toggle symbols)
-  rsy  (layer-toggle rsymbols)
-  lsy  (layer-toggle lsymbols)
+  ;; rsy  (layer-toggle rsymbols)
+  ;; lsy  (layer-toggle lsymbols)
   sy1  (one-shot 500 (layer-toggle symbols))
-  ;; chr (layer-toggle chords)
-  ;; arr (layer-toggle arrows)
-  ;; msc (layer-toggle misc)
-  ;; lay (layer-toggle layers)
-  ;; mse (layer-toggle mouse)
-  ;; fks (layer-while-held fakekeys)
 
-  ;; tap-hold aliases with tap for dvorak key, and hold for toggle layers
-  ;;
   ;; tap-hold parameter order:
   ;; 1. tap timeout
   ;; 2. hold timeout
@@ -188,21 +142,32 @@
   ;; to tap-hold-next and tap-hold-next-release, respectively. If you know
   ;; the underlying keyberon crate, tap-hold-press is the HoldOnOtherKeyPress
   ;; and tap-hold-release is the PermissiveHold configuration.
+
+  ;; home row mods
   fsf (tap-hold-release 140 140 f lsft)
   jsf (tap-hold-release 140 140 j lsft)
-  
-    ;; home row mods
   dct (tap-hold-release 200 240 d lctl)
-  tct (tap-hold-release 200 240 k lctl) ;; left ctl resolves DITTO issues
+  tct (tap-hold-release 200 240 k lctl) ;; left ctl resolves DITTO issues TODO retest
   lat (tap-hold-release 200 340 l alt)
-  rsd (tap-hold-release 200 240 del rsft)
+  
+  rsd (tap-hold-release 200 240 del rsft) ;; TODO not used ?!
+  
+  ;; number layer home row mods
   sf6 (tap-hold-release 200 240 6 lsft)
   ct5 (tap-hold-release 200 300 5 lctl)
   al4 (tap-hold-release 200 340 4 lalt)
   wn2 (tap-hold-release 200 240 2 rmet)
   wn0 (tap-hold-release 200 340 0 rmet)
   ;;ght (tap-hold-release 200 240 rght rmet)  ;;works
-  ;; symbols ii
+
+  ;; alt tab
+  at1 (multi lalt tab)
+  at2 (multi lalt tab tab)
+  at3 (multi lalt tab tab tab)
+  at4 (multi lalt tab tab tab tab)
+  atx (tap-dance 300 (@at1 @at2 @at3 @at4) )
+  
+  ;; symbols
   bsl A-C-[							;; \
   rcb A-C-0							;; }
   lcb A-C-7   	                    ;; {
@@ -215,7 +180,7 @@
   tck (macro ] spc )				;; ´	
   btk (macro S-] spc )				;; `
   cir (macro \ spc )				;; ^
-  
+
   ;; hold symbols
   ! (unicode ! )
   qex (tap-dance 140 ((tap-hold 10 100 q @!)  A-C-q))
@@ -225,72 +190,38 @@
   ptr (tap-hold 200 200 r S-9)          ;; )
   tdo (tap-hold 200 200 t S-4)          ;; $
   zam (tap-hold 200 200 z S-6)          ;; &
-  ü (unicode ü)
-  uue (tap-hold 140 140 u (tap-dance 10 (; S-5)))		;; ü = ; 
+  ;; ü (unicode ü)                                      ;; unicode does not allow shift for upper case
+  uue (tap-hold 140 140 u (macro ;) )		;; ü = ;    macro or tap-dance for anti key repeat 
   ibl (tap-hold 200 200 i @bsl)			                ;; \
-  ö (unicode ö)
-  ooe (tap-hold 200 140 o (tap-dance 10 (grv)) )	    ;; ö = grv
+  ;; ö (unicode ö)
+  ooe (tap-hold 200 140 o (macro grv) )	    ;; ö = grv
   pqe (tap-hold 200 200 p S-[)			                ;; ?
-  ä (unicode ä)
-  aae (tap-hold 200 140 a (tap-dance 10 (')))			;; ä = '
+  ;; ä (unicode ä)
+  aae (tap-hold 200 140 a (macro '))			;; ä = '
   ß (unicode ß)
   ssz (tap-hold 200 140 s @ß)			                ;; ß = [
-  geq (tap-hold 200 200 g S-0)          ;; =
+  geq (tap-hold 200 200 g (macro S-0))  ;; =
   hsl (tap-hold 200 200 h S-7)          ;; / 
   
   xpi (tap-hold 200 200 x S-/)			;; '
   ccb (tap-hold 200 200 c C-A-7)		;; {
   vcb (tap-hold 200 200 v C-A-0)         ;; } @rsy
   + (unicode +)
-  beq (tap-hold 200 200 b @+)			;; + = =
+  beq (tap-hold 200 200 b @+)			;; + = =   here unicode protects from accidental shifts and autorepeat
   nat (tap-hold 200 200 n S--)          ;; _ @lsy
   mas (tap-hold 200 200 m S-=)			;; *
   semi (unicode ;)
-  sem (tap-hold 200 200 , @semi)			;; ;
+  sem (tap-hold 200 200 , @semi)		;; ;
   : (unicode :)
-  dpp (tap-hold 200 200 . @:)	;; : S-. (multi lsft . )
+  dpp (tap-hold 200 200 . @:)	        ;; : S-.
   uso (unicode _)
   usc (tap-hold 200 200 - @uso)			;; _ S--
   
-  ;;ral (macro lctl P50 F24 ) ;; (macro lctl C-lalt ) to get working ralt 
-  mus (tap-dance 120 ((tap-hold  200 200 spc @num) (tap-hold  200 200 spc @sym) spc spc spc))  ;; DBL tap Hold is not realy good for this frequent layer
-  
-  
-  
-  
-  ;;anm (tap-hold 200 200 a @num)   ;; tap: a      hold: numbers layer
-  ;;oar (tap-hold 200 200 o @arr)   ;; tap: o      hold: arrows layer
-  ;;ech (tap-hold 200 200 e @chr)   ;; tap: e      hold: chords layer
-  ;;umc (tap-hold 200 200 u @msc)   ;; tap: u      hold: misc layer
-  ;;grl (tap-hold 200 200 grv @lay) ;; tap: grave  hold: layers layer
-  ;;.ms (tap-hold 200 200 . @mse)   ;; tap: .      hold: mouse layer
-  ;;ifk (tap-hold 200 200 i @fks)   ;; tap: i      hold: fake keys layer
-
-  ;; tap for capslk, hold for lctl
-  ;; cap (tap-hold 200 200 caps lctl)
-
-  ;; Below is an alias for the `multi` action which executes multiple actions
-  ;; in order but at the same time.
-  ;;
-  ;; It may result in some incorrect/unexpected behaviour if combining complex
-  ;; actions, so be reasonable with it. One reasonable use case is this alias:
-  ;; press right-alt while also toggling to the `ralted` layer. The utility of
-  ;; this is better revealed if you go see `ralted` and its aliases.
-  ;; ralt (multi ralt (layer-toggle ralted))
+  ;; mus (tap-dance 120 ((tap-hold  200 200 spc @num) (tap-hold  200 200 spc @sym) spc spc spc))  ;; DBL-tap-Hold is not realy good for the frequently used symbol layer
+  mus (tap-hold  200 200 spc @num)
 )
-
-(defalias
-  ;; shifted keys
-  { S-[
-  } S-]
-  ;; : S-;
-
-  ;; alias numbers as themselves for use in macro
-  8 8
-  0 0
-)
-
-(defalias
+  
+;;(defalias
   ;; For the multi action, all keys are pressed for the whole sequence
   ;; but still in the listed order which may be undesirable, particularly
   ;; for modifiers like shift. You probably want to use macro instead.
@@ -301,15 +232,15 @@
   ;; names: "Windows", "GUI", "Command", "Super".
   ;;
   ;; This use case for multi is typing an all-caps string.
-  alp (multi lsft a b c d e f g h i j k l m n o p q r s t u v w x y z)
+ ;; alp (multi lsft a b c d e f g h i j k l m n o p q r s t u v w x y z)
 
   ;; Chords using the shortcut syntax. These ones are used for copying/pasting
   ;; from some Linux terminals.
-  csv C-S-v
-  csc C-S-c
+ ;; csv C-S-v
+ ;; csc C-S-c
 
   ;; Windows shortcut for displaying all windows
-  win M-tab
+ ;; win M-tab
 
   ;; macro accepts keys, chords, and numbers (a delay in ms). Note that numbers
   ;; will be parsed as delays, so they will need to be aliased to be used.
@@ -318,7 +249,7 @@
   ;; unicode accepts a single unicode character. The unicode character will
   ;; not be automatically repeated by holding the key down. The alias name
   ;; is the unicode character itself and is referenced by @🙁 in deflayer.
-  🙁 (unicode 🙁)
+ ;; 🙁 (unicode 🙁)
 
   ;; Having a cmd action in your configuration without explicitly enabling
   ;; `danger-enable-cmd` **and** using the cmd-enabled executable will make
@@ -334,7 +265,7 @@
   ;;
   ;; cm1 (cmd bash -c "echo hello world")
   ;; cm2 (cmd rm -fr /tmp/testing)
-)
+ ;; )
 
 ;; The underscore _ means transparent. The key on the base layer will be used
 ;; instead. XX means no-op. The key will do nothing.
@@ -382,9 +313,9 @@
   ;; If a one-shot key is held then it will act as a regular key. E.g. for os1
   ;; below, holding an @os1 key will keep lsft held and holding an @os3 key
   ;; will keep the layer set to misc.
-  os1 (one-shot 500 lsft)
-  os2 (one-shot 500 C-S-lalt)
-  os3 (one-shot 500 (layer-toggle misc))
+ ;; os1 (one-shot 500 lsft)
+ ;; os2 (one-shot 500 C-S-lalt)
+ ;; os3 (one-shot 500 (layer-toggle misc))
 
   ;; Alias for tap-dance which will activate one of the actions in the action
   ;; list depending on how many taps were done. Tapping once will output the
@@ -399,23 +330,6 @@
   ;; - the tap sequence reaches the end
   ;; - a different key is pressed
   td (tap-dance 200 (a b c d spc))
-)
-
-(deflayer misc
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    _    _    _    _    _    ins  @{   @}    [    ]    _    _    _
-  _    _    _    _    C-u  _    del  bspc esc  ret  _    _    _
-  _  _ C-z  C-x  C-c  C-v  _    _    _    @td  @os1 @os2 @os3
-  _    _    _              _              _    _    _
-)
-
-
-(deflayer chords      ;; you can put list actions directly in deflayer but it's ugly, so prefer aliases.
-  _    _    _    _    _    _    _    _    _    _    @🙁  (unicode 😀) _    _
-  _    _    _    _    _    _    _    _    @csc _    _    _            _    _
-  _    @alp _    _    _    _    _    _    _    _    _    _            _
-  _ _  _    _    _    _    _    _    _    _    @csv _    _
-  _    _    _              _              _    _    _
 )
 
 (deflayer arrows
@@ -472,29 +386,12 @@
   mwl (mwheel-left 50 120)
   mwr (mwheel-right 50 120)
 )
-
-(defalias
-  lft (multi (release-key ralt) left) ;; release ralt if held and also press left
-  rgt (multi (release-key ralt) rght) ;; release ralt if held and also press rght
-  rlr (release-layer ralted)          ;; release layer-toggle of ralted
-)
-
-;; It's not clear what the practical use case is for the @rlr alias, but the
-;; combination of @ralt on the dvorak layer and this layer with @lft and @rgt
-;; results in the physical ralt key behaving mostly as ralt, **except** for
-;; holding it **then** pressing specific keys. These specific keys release the
-;; ralt because it would cause them to have undesired behaviour without the
-;; release.
-;;
-;; E.g. ralt+@lft will result in only left being pressed instead of ralt+left,
-;; while ralt(hold)+tab+tab+tab still works as intended.
-(deflayer ralted
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    _    _    _    _    _    _    @lft @rlr @rgt _    _    _
-  _ _  _    _    _    _    _    _    _    _    _    _    _
-  _    _    _              _              _    _    _
-)
+;; FAKE KEYS
+ ;; (defalias
+ ;;   lft (multi (release-key ralt) left) ;; release ralt if held and also press left
+ ;;   rgt (multi (release-key ralt) rght) ;; release ralt if held and also press rght
+ ;;   rlr (release-layer ralted)          ;; release layer-toggle of ralted
+ ;; )
 
 ;; Press and release fake keys.
 ;;
@@ -549,6 +446,7 @@
   fst (on-release-fakekey sft tap)
   fmp (on-press-fakekey met press)
   fap (on-press-fakekey alt press)
+  far (on-press-fakekey alt release)
   rma (multi
         (on-press-fakekey met release)
         (on-press-fakekey alt release)
@@ -582,4 +480,11 @@
 ;;     sequence-timeout <number(ms)>
 (defseq git-status (g s t))
 (deffakekeys git-status (macro g i t spc s t a t u s ret))
-(defalias rcl (tap-hold-release 200 200 sldr rctl)) ;; sldr is hard coded leader key fake key 
+
+(defseq web-de (w e))
+(deffakekeys web-de (macro g e r h a r d . h e i d e A-C-q w e b . d e))
+
+(defalias
+ rcl (tap-hold-release 200 200 sldr rctl) ;; !! sldr is hard coded leader key fake key  !!
+ rwi (tap-hold-release 200 200 sldr rmet)
+)

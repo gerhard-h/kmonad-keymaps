@@ -135,7 +135,8 @@ bug combining multi tap and key hold is not working  (multi-tap 300 (tap-next q 
   dpp (tap-hold 200 . S-.)			;; :
   usc (tap-hold 200 - S--)			;; _
   
-  ral #( lctl P50 F24 ) ;; #( lctl C-lalt ) to get working ralt 
+  ral #( lctl F24 ) ;; #( lctl C-lalt ) to get working ralt 
+  #ral (around lctrl C-lalt)
   mc2 #( P50 A-tab P50 )
   mus (tap-hold-next-release 500 spc @num) 
 )
