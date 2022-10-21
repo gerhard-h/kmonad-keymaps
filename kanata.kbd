@@ -1,4 +1,18 @@
+;; shift and layer switch TODO test it
+;;(defalias
+;;  oss (multi (one-shot 500 lsft) (one-shot 500 (layer-toggle customshiftlayer)))
+;;)
+
+;; y hold not used
+
+;; where to put atx
+ 
+ 
+;; (multi f24 sldr) has inconsistencies 2 (44[|`())))])
+
 ;; Exactly one defcfg entry is required. This is used for configuration key-pairs.
+
+
 (defcfg
   ;; Windows doesn't need any input/output configuration entries; however, there
   ;; must still be a defcfg entry.
@@ -60,17 +74,24 @@
 (deflayer qwerty
   @cir      1    2    3    4    5    6    7    8    9    0    [    ]    bspc
   tab       @qex @wdq @ptl @ptr @tdo @zam @uue @ibl @ooe @pqe bspc del
-  @sy1      @aae @ssz @dct @fsf @geq @hsl @jsf @tct @lat @sy1 ret  @rwi ret
-  lsft f23  y    @xpi @ccb @vcb @beq @nat @mas @sem @dpp @usc @rsd
-  lctl      lmet lalt           @mus           f24 rmet @rcl 
+  @atx      @aae @ssz @dct @fsf @geq @hsl @jsf @tct @lat @sy1 ret  @rwi ret
+  lsft f23  @yho @xpi @ccb @vcb @beq @nat @mas @sem @dpp @usc @rsd
+  lctl      lmet lalt           @mus     (multi f24 sldr)  rmet @rcl 
 )
 
 (deflayer numbers
   _         _    _    _    _    _    _    _    _    _    _    _    lrld _     
   _         @usc 1    @wn2 3    bspc esc  home up   end  _    _    _     
-  _         @dpp @al4 @ct5 @sf6 0    tab  left down rght del  _    _    _          
-  _    @sem @sem 7    8    9    del  ret bspc del  ret  _    _               
-  _         _    @sym           _                        _    _    _          
+  _         @dpp @al4 @ct5 @sf6 0    bspc left down rght del  _    _    _          
+  _    @sem @sem 7    8    9    del  ret  tab  del  ret  _    _               
+  _         _    @sy1           _                        _    _    _          
+)
+(deflayer symbols
+  _         _    _    _    _    _    _    _    _    _    _    _    _    _     
+  _         S-1  S-2  S-8  S-9  S-4  S-6  S-5  @bsl /    S-[  _    _         
+  _         @btk @pip @lsb @rsb S-0  S-7  @atx @at2 @at3 -    _    _    _          
+  _    @cir @tck S-/  @lcb @rcb =    S--  S-=  @lth @gth @til _               
+  _         _    _              _                        _    _    _          
 )
 ;; lsymbols and rsymbols are only usefull if activated by letter keys like v/n but I ditched that concept as to hard to do fast
 ;; (deflayer lsymbols
@@ -80,13 +101,6 @@
 ;;   _    @cir @tck S-/  @lcb @rcb =    _    S-=  @lth @gth @til _               
 ;;   _         _    _              _                        _    _    _          
 ;; )
-(deflayer symbols
-  _         _    _    _    _    _    _    _    _    _    _    _    _    _     
-  _         S-1  S-2  S-8  S-9  S-4  S-6  S-5  @bsl /    S-[  _    _         
-  _         @btk @pip @lsb @rsb S-0  S-7  @atx @at2 @at3 -    _    _    _          
-  _    @cir @tck S-/  @lcb @rcb =    S--  S-=  @lth @gth @til _               
-  _         _    _              _                        _    _    _          
-)
 ;; (deflayer rsymbols
 ;;   _         _    _    _    _    _    _    _    _    _    _    _    _    _     
 ;;   _         S-1  S-2  S-8  S-9  S-4  S-6  S-5  @bsl /    S-[  _    _    _     
@@ -110,7 +124,7 @@
   ;; rsy  (layer-toggle rsymbols)
   ;; lsy  (layer-toggle lsymbols)
   sy1  (one-shot 500 (layer-toggle symbols))
-
+  
   ;; tap-hold parameter order:
   ;; 1. tap timeout
   ;; 2. hold timeout
@@ -165,7 +179,8 @@
   at2 (multi lalt tab tab)
   at3 (multi lalt tab tab tab)
   at4 (multi lalt tab tab tab tab)
-  atx (tap-dance 300 (@at1 @at2 @at3 @at4) )
+  ;;atx (tap-dance 500 (@at1 @at2 @at3 @at4) )
+  atx (tap-dance 500 (A-tab (macro f24 r) (macro f24 t) (macro f24 z)) )
   
   ;; symbols
   bsl A-C-[							;; \
@@ -484,7 +499,13 @@
 (defseq web-de (w e))
 (deffakekeys web-de (macro g e r h a r d . h e i d e A-C-q w e b . d e))
 
+;; f24 macros dont work ?
+(defseq web-def (f24 w e))
+(deffakekeys web-def (macro g e r h a r d . h e i d e A-C-q w e b . d e))
+
 (defalias
  rcl (tap-hold-release 200 200 sldr rctl) ;; !! sldr is hard coded leader key fake key  !!
  rwi (tap-hold-release 200 200 sldr rmet)
+ ;; yho (tap-hold 200 200 y (multi f24 sldr))  ;; works technically f24 triggers y itselft if  must be hold for f24 ... feels bad
+ yho (tap-hold-release 200 200 y f24)  
 )
