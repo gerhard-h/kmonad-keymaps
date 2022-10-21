@@ -108,7 +108,8 @@ bug combining multi tap and key hold is not working  (multi-tap 300 (tap-next q 
   cir #( \ spc)						;; ^
   
   ;; hold symbols
-  qex (tap-hold 240 q S-1)          ;; ! #(q f20) S-1) handling ends in an infinite loop ää
+   qex (tap-hold 240 q S-1)          ;; ! #(q f20) S-1) handling ends in an infinite loop ää
+  ;;qex (tap-hold-next-release 300 (multi-tap 300 q A-C-q) !)
   qmt (multi-tap 300 q A-C-q)       ;; @ 
   wdq (tap-hold 200 w S-2)          ;; "
   pal (tap-hold 200 e S-8)          ;; (

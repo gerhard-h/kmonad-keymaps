@@ -5,10 +5,10 @@
 
 ;; y hold not used
 
-;; where to put atx
+;; where to put atx do it by layer flipping
  
  
-;; (multi f24 sldr) has inconsistencies 2 (44[|`())))])
+;; (multi f24 sldr) has inconsistencies with sldr
 
 ;; Exactly one defcfg entry is required. This is used for configuration key-pairs.
 
@@ -23,7 +23,7 @@
   ;;
   ;; For more context, see: https://github.com/jtroo/kanata/issues/55.
   ;;
-  windows-altgr cancel-lctl-press ;; remove the lctl press that comes as a combo with ralt  with F24 mapping
+  ;; windows-altgr cancel-lctl-press ;; remove the lctl press that comes as a combo with ralt  with F24 mapping
   ;; windows-altgr add-lctl-release  ;; add an lctl release when ralt is released           with standard Altgr 
   ;;
   ;; NOTE: even with these workarounds, putting lctl+ralt in your defsrc may
@@ -64,7 +64,7 @@
   tab       q    w    e    r    t    z    u    i    o    p    ;    =
   caps      a    s    d    f    g    h    j    k    l    grv  '    /    ret
   lsft 102d y    x    c    v    b    n    m    ,    .    -    rsft
-  lctl lmet lalt           spc            ralt rmet rctl
+  lctl      lmet lalt           spc                  rmet rctl
 )
 
 ;; The first layer defined is the layer that will be active by default when
@@ -73,25 +73,25 @@
 ;; There are currently a maximum of 25 layers allowed.
 (deflayer qwerty
   @cir      1    2    3    4    5    6    7    8    9    0    [    ]    bspc
-  tab       @qex @wdq @ptl @ptr @tdo @zam @uue @ibl @ooe @pqe bspc del
-  @atx      @aae @ssz @dct @fsf @geq @hsl @jsf @tct @lat @sy1 ret  @rwi ret
-  lsft f23  @yho @xpi @ccb @vcb @beq @nat @mas @sem @dpp @usc @rsd
-  lctl      lmet lalt           @mus     (multi f24 sldr)  rmet @rcl 
+(macro tab) @qex @wdq @ptl @ptr @tdo @zam @uue @ibl @ooe @pqe bspc del
+  @atx      @aae @ssz @dct @fsf @geq @hsl @jsf @tct @lat @sy1 ret  f9   ret
+  lsft f24  @yho @xpi @ccb @vcb @beq @nat @mas @sem @dpp @usc @rsd
+  lctl      lmet lalt           @mus                 rmet @rcl 
 )
 
 (deflayer numbers
   _         _    _    _    _    _    _    _    _    _    _    _    lrld _     
   _         @usc 1    @wn2 3    bspc esc  home up   end  _    _    _     
-  _         @dpp @al4 @ct5 @sf6 0    bspc left down rght del  _    _    _          
+  _         @dpp @al4 @ct5 @sf6 @wn0 bspc left down rght del  _    _    _          
   _    @sem @sem 7    8    9    del  ret  tab  del  ret  _    _               
-  _         _    @sy1           _                        _    _    _          
+  _         _    @sy1           _                            _    _          
 )
 (deflayer symbols
   _         _    _    _    _    _    _    _    _    _    _    _    _    _     
   _         S-1  S-2  S-8  S-9  S-4  S-6  S-5  @bsl /    S-[  _    _         
   _         @btk @pip @lsb @rsb S-0  S-7  @atx @at2 @at3 -    _    _    _          
   _    @cir @tck S-/  @lcb @rcb =    S--  S-=  @lth @gth @til _               
-  _         _    _              _                        _    _    _          
+  _         _    _              _                            _    _          
 )
 ;; lsymbols and rsymbols are only usefull if activated by letter keys like v/n but I ditched that concept as to hard to do fast
 ;; (deflayer lsymbols
@@ -171,7 +171,7 @@
   ct5 (tap-hold-release 200 300 5 lctl)
   al4 (tap-hold-release 200 340 4 lalt)
   wn2 (tap-hold-release 200 240 2 rmet)
-  wn0 (tap-hold-release 200 340 0 rmet)
+  wn0 (tap-hold-release 200 340 0 lmet)
   ;;ght (tap-hold-release 200 240 rght rmet)  ;;works
 
   ;; alt tab
@@ -352,7 +352,7 @@
   _    _    _    _    _    _    _    pgup up   pgdn _    _    _    _
   _    _    _    _    _    _    home left down rght end  _    _
   _  _ _    _    _    _    _    _    _    _    _    _    _
-  _    _    _              _              _    _    _
+  _    _    _              _                  _    _
 )
 
 ;; In Windows, using mouse buttons on the kanata window seems to cause it to hang.
@@ -379,7 +379,7 @@
   _    pgup bck  _    fwd  _    _    _    _    _    _    _    _    _
   _    pgdn mlft _    mrgt mmid _    _    _    _    _    _    _
   _ _  _    mltp _    mrtp mmtp _    _    _    _    _    _
-  _    _    _              _              _    _    _
+  _    _    _              _                 _    _
 )
 
 (defalias
@@ -428,7 +428,7 @@
   _    @fcr @fsr @fap @ral _    _    _    _    _    _    _    _    _
   _    @fct @fst @rma _    _    _    _    _    _    _    _    _
   _ _  _    _    _    _    _    _    _    _    _    _    _
-  _    _    _              _              _    _    _
+  _    _    _              _                  _    _
 )
 
 (deffakekeys
@@ -507,5 +507,5 @@
  rcl (tap-hold-release 200 200 sldr rctl) ;; !! sldr is hard coded leader key fake key  !!
  rwi (tap-hold-release 200 200 sldr rmet)
  ;; yho (tap-hold 200 200 y (multi f24 sldr))  ;; works technically f24 triggers y itselft if  must be hold for f24 ... feels bad
- yho (tap-hold-release 200 200 y f24)  
+ yho (tap-hold-release 200 200 y f23)  
 )
