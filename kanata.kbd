@@ -7,6 +7,8 @@
 
 ;; where to put atx do it by layer flipping
  
+;; one-shot os1 not working
+
  
 ;; (multi f24 sldr) has inconsistencies with sldr
 
@@ -64,27 +66,38 @@
   tab       q    w    e    r    t    z    u    i    o    p    ;    =
   caps      a    s    d    f    g    h    j    k    l    grv  '    /    ret
   lsft 102d y    x    c    v    b    n    m    ,    .    -    rsft
-  lctl      lmet lalt           spc                  rmet rctl
+  lctl      lmet lalt           spc                      rmet rctl
 )
 
 ;; The first layer defined is the layer that will be active by default when
 ;; kanata starts up.
 ;;
 ;; There are currently a maximum of 25 layers allowed.
+;;          tapdance / hold symbols of the base layer
+;;          1    2    3    4    5    6    7    8    9    0 
+;; 			!@   "    (    )    $    &    ü    \    ö    ?
+;;          ä    ß|   ctl[ sft] =    /    sft  ctl  alt  
+;;               '    {    }    +    _    ;<   :>   _~
 (deflayer qwerty
-  @cir      1    2    3    4    5    6    7    8    9    0    [    ]    bspc
+  @cir      @1   @2   @3   @4   @5   @6   @7   @8   @9   @0   @sz  ]    bspc
 (macro tab) @qex @wdq @ptl @ptr @tdo @zam @uue @ibl @ooe @pqe bspc del
-  @atx      @aae @ssz @dct @fsf @geq @hsl @jsf @tct @lat @sy1 ret  f9   ret
-  lsft f24  @yho @xpi @ccb @vcb @beq @nat @mas @sem @dpp @usc @rsd
-  lctl      lmet lalt           @mus                 rmet @rcl 
+  @atx      @aae @ssz @dct @fsf @geq @hsl @jsf @tct @lat @sy1 ret  sldr  ret
+  @os1  f24 @yho @xpi @ccb @vcb @beq @nat @mas @ksl @dcg @dut @rsd
+  lctl      lmet lalt           @mus                     rmet @rcl 
 )
-
+(deflayer upper
+  @cir      @1   @2   @3   @4   @5   @6   @7   @8   @9   @0   @sz  ]    bspc
+  tab      S-q   S-w  S-e  S-r  S-t  S-z  S-u  S-i  S-o  S-p  bspc del
+  caps     S-a   S-s  S-d  S-f  S-g  S-h  S-j  S-k  S-l  @sy1 ret  sldr   ret
+  lsft S-102d S-y S-x S-c  S-v  S-b  S-n  S-m  S-,  S-.  S--  rsft
+  lctl      lmet lalt           @mus                     rmet rctl
+)
 (deflayer numbers
   _         _    _    _    _    _    _    _    _    _    _    _    lrld _     
   _         @usc 1    @wn2 3    bspc esc  home up   end  _    _    _     
   _         @dpp @al4 @ct5 @sf6 @wn0 bspc left down rght del  _    _    _          
-  _    @sem @sem 7    8    9    del  ret  tab  del  ret  _    _               
-  _         _    @sy1           _                            _    _          
+  _    @sem @sem 7    8    9    del  ret  tab  del  mrgt _    _               
+  _         _    @sy1           _                             _    _          
 )
 (deflayer symbols
   _         _    _    _    _    _    _    _    _    _    _    _    _    _     
@@ -124,7 +137,8 @@
   ;; rsy  (layer-toggle rsymbols)
   ;; lsy  (layer-toggle lsymbols)
   sy1  (one-shot 500 (layer-toggle symbols))
-  
+  ;;os1 (one-shot 500 lsft)
+  os1 (one-shot 500 (layer-toggle upper))
   ;; tap-hold parameter order:
   ;; 1. tap timeout
   ;; 2. hold timeout
@@ -158,9 +172,12 @@
   ;; and tap-hold-release is the PermissiveHold configuration.
 
   ;; home row mods
-  fsf (tap-hold-release 140 140 f lsft)
+  ;;fsf (tap-hold-release 140 140 f lsft)
+  fsf (tap-dance 140 ((tap-hold-release 140 140 f lsft) (tap-hold 200 240 (macro f f) A-C-9)))
+  
   jsf (tap-hold-release 140 140 j lsft)
-  dct (tap-hold-release 200 240 d lctl)
+  ;;dct (tap-hold-release 200 240 d lctl)
+  dct (tap-dance 140 ((tap-hold-release 200 240 d lctl) (tap-hold 200 240 (macro d d) A-C-8)))
   tct (tap-hold-release 200 240 k lctl) ;; left ctl resolves DITTO issues TODO retest
   lat (tap-hold-release 200 340 l alt)
   
@@ -196,6 +213,17 @@
   btk (macro S-] spc )				;; `
   cir (macro \ spc )				;; ^
 
+    1 (tap-hold 200 300 1 (macro S-1 ))
+    2 (tap-hold 200 300 2 (macro S-2 ))
+    3 (tap-hold 200 300 3 (macro S-3 ))
+    4 (tap-hold 200 300 4 (macro S-4 ))
+    5 (tap-hold 200 300 5 (macro S-5 ))
+    6 (tap-hold 200 300 6 (macro S-6 ))
+    7 (tap-hold 200 300 7 (macro S-7 ))
+    8 (tap-hold 200 300 8 (macro S-8 ))
+    9 (tap-hold 200 300 9 (macro S-9 ))
+    0 (tap-hold 200 300 0 (macro S-0 ))
+    sz (tap-hold 200 300 [ (macro S-[ ))
   ;; hold symbols
   ! (unicode ! )
   qex (tap-dance 140 ((tap-hold 10 100 q @!)  A-C-q))
@@ -206,15 +234,19 @@
   tdo (tap-hold 200 200 t S-4)          ;; $
   zam (tap-hold 200 200 z S-6)          ;; &
   ;; ü (unicode ü)                                      ;; unicode does not allow shift for upper case
-  uue (tap-hold 140 140 u (macro ;) )		;; ü = ;    macro or tap-dance for anti key repeat 
+  ;;uue (tap-hold 140 140 u (macro ;) )		;; ü = ;    macro or tap-dance for anti key repeat 
+  uue (tap-dance 140 ((tap-hold 10 100 u (macro ;))  (tap-hold 10 100 (macro u u) (macro S-5))))
   ibl (tap-hold 200 200 i @bsl)			                ;; \
   ;; ö (unicode ö)
-  ooe (tap-hold 200 140 o (macro grv) )	    ;; ö = grv
+  ;;ooe (tap-hold 200 140 o (macro grv) )	    ;; ö = grv
+  ooe (tap-dance 140 ((tap-hold 10 100 o (macro grv))  (tap-hold 10 100 (macro o o) (macro /))))
+  
   pqe (tap-hold 200 200 p S-[)			                ;; ?
   ;; ä (unicode ä)
   aae (tap-hold 200 140 a (macro '))			;; ä = '
   ß (unicode ß)
-  ssz (tap-hold 200 140 s @ß)			                ;; ß = [
+  ;;ssz (tap-hold 200 140 s @ß)			                ;; ß = [
+  ssz (tap-dance 140 ((tap-hold 10 100 s @ß)  (tap-hold 10 100 (macro s s) @pip)))
   geq (tap-hold 200 200 g (macro S-0))  ;; =
   hsl (tap-hold 200 200 h S-7)          ;; / 
   
@@ -227,11 +259,13 @@
   mas (tap-hold 200 200 m S-=)			;; *
   semi (unicode ;)
   sem (tap-hold 200 200 , @semi)		;; ;
+  ksl (tap-dance 140 ((tap-hold 10 100 , @semi)  (tap-hold 10 100 f24 (macro @lth))))  ;; ,, = F24
   : (unicode :)
   dpp (tap-hold 200 200 . @:)	        ;; : S-.
+  dcg (tap-dance 140 ((tap-hold 10 100 . @:)  (tap-hold 10 100 (macro . .) @gth)))
   uso (unicode _)
   usc (tap-hold 200 200 - @uso)			;; _ S--
-  
+  dut (tap-dance 140 ((tap-hold 10 100 - @uso)  (tap-hold 10 100 (macro - -) @til)))
   ;; mus (tap-dance 120 ((tap-hold  200 200 spc @num) (tap-hold  200 200 spc @sym) spc spc spc))  ;; DBL-tap-Hold is not realy good for the frequently used symbol layer
   mus (tap-hold  200 200 spc @num)
 )
@@ -317,7 +351,7 @@
 ;;   _    _    _              _              _    _    _
 ;; )
 
-(defalias
+;;(defalias
   ;; Alias for one-shot which will activate an action until either the timeout
   ;; expires or a different key is pressed. The timeout is the first parameter
   ;; and the action is the second parameter.
@@ -344,16 +378,16 @@
   ;; - the timeout expires
   ;; - the tap sequence reaches the end
   ;; - a different key is pressed
-  td (tap-dance 200 (a b c d spc))
-)
+;;  td (tap-dance 200 (a b c d spc))
+;;)
 
-(deflayer arrows
-  _    f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12  _
-  _    _    _    _    _    _    _    pgup up   pgdn _    _    _    _
-  _    _    _    _    _    _    home left down rght end  _    _
-  _  _ _    _    _    _    _    _    _    _    _    _    _
-  _    _    _              _                  _    _
-)
+;;(deflayer arrows
+;;  _    f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12  _
+;;  _    _    _    _    _    _    _    pgup up   pgdn _    _    _    _
+;;  _    _    _    _    _    _    home left down rght end  _    _
+;;  _  _ _    _    _    _    _    _    _    _    _    _    _
+;;  _    _    _              _                  _    _
+;;)
 
 ;; In Windows, using mouse buttons on the kanata window seems to cause it to hang.
 ;; Using the mouse on other windows seems to be fine though.
@@ -374,33 +408,33 @@
 ;; happens on key release. The action (multi lctl mltp) will result in the
 ;; sequence below:
 ;; press key->press lctl->click left->unclick left->release key->release lctl
-(deflayer mouse
-  _    @mwu @mwd @mwl @mwr _    _    _    _    _    _    _    _    _
-  _    pgup bck  _    fwd  _    _    _    _    _    _    _    _    _
-  _    pgdn mlft _    mrgt mmid _    _    _    _    _    _    _
-  _ _  _    mltp _    mrtp mmtp _    _    _    _    _    _
-  _    _    _              _                 _    _
-)
+;;(deflayer mouse
+;;  _    @mwu @mwd @mwl @mwr _    _    _    _    _    _    _    _    _
+;;  _    pgup bck  _    fwd  _    _    _    _    _    _    _    _    _
+;;  _    pgdn mlft _    mrgt mmid _    _    _    _    _    _    _
+;;  _ _  _    mltp _    mrtp mmtp _    _    _    _    _    _
+;;  _    _    _              _                 _    _
+;;)
 
-(defalias
-  ;; Mouse wheel actions. The first number is the interval in milliseconds
-  ;; between scroll actions. The second number is the distance in some arbitrary
-  ;; unit. Play with the parameters to see what feels correct. Both numbers
-  ;; must be in the range 1-65535
-  ;;
-  ;; In both Windows and Linux, 120 distance units is equivalent to a single
-  ;; notch movement on a physical wheel. In Linux, not all desktop environments
-  ;; support the REL_WHEEL_HI_RES event so kanata just doesn't use it; instead a
-  ;; scroll happens if 120 or more distance units are accumulated. This may result
-  ;; in poor scrolling experience so in Linux it is recommended to use a distance
-  ;; value that is a multiple of 120.
-  mwu (mwheel-up 50 120)
-  mwd (mwheel-down 50 120)
-
-  ;; Horizontal mouse wheel actions. Similar story to vertical mouse wheel.
-  mwl (mwheel-left 50 120)
-  mwr (mwheel-right 50 120)
-)
+;; (defalias
+;;   ;; Mouse wheel actions. The first number is the interval in milliseconds
+;;   ;; between scroll actions. The second number is the distance in some arbitrary
+;;   ;; unit. Play with the parameters to see what feels correct. Both numbers
+;;   ;; must be in the range 1-65535
+;;   ;;
+;;   ;; In both Windows and Linux, 120 distance units is equivalent to a single
+;;   ;; notch movement on a physical wheel. In Linux, not all desktop environments
+;;   ;; support the REL_WHEEL_HI_RES event so kanata just doesn't use it; instead a
+;;   ;; scroll happens if 120 or more distance units are accumulated. This may result
+;;   ;; in poor scrolling experience so in Linux it is recommended to use a distance
+;;   ;; value that is a multiple of 120.
+;;   mwu (mwheel-up 50 120)
+;;   mwd (mwheel-down 50 120)
+;; 
+;;   ;; Horizontal mouse wheel actions. Similar story to vertical mouse wheel.
+;;   mwl (mwheel-left 50 120)
+;;   mwr (mwheel-right 50 120)
+;; )
 ;; FAKE KEYS
  ;; (defalias
  ;;   lft (multi (release-key ralt) left) ;; release ralt if held and also press left
@@ -423,13 +457,13 @@
 ;; Operations on fake keys can occur either on press (on-press-fakekey or
 ;; on release (on-release-fakekey The use cases for the on-release variant
 ;; are left up to your own creativity.
-(deflayer fakekeys
-  _    @fcp @fsp @fmp @pal _    _    _    _    _    _    _    _    _
-  _    @fcr @fsr @fap @ral _    _    _    _    _    _    _    _    _
-  _    @fct @fst @rma _    _    _    _    _    _    _    _    _
-  _ _  _    _    _    _    _    _    _    _    _    _    _
-  _    _    _              _                  _    _
-)
+;; (deflayer fakekeys
+;;   _    @fcp @fsp @fmp @pal _    _    _    _    _    _    _    _    _
+;;   _    @fcr @fsr @fap @ral _    _    _    _    _    _    _    _    _
+;;   _    @fct @fst @rma _    _    _    _    _    _    _    _    _
+;;   _ _  _    _    _    _    _    _    _    _    _    _    _
+;;   _    _    _              _                  _    _
+;; )
 
 (deffakekeys
   ctl lctl
