@@ -14,6 +14,8 @@
 
 ;; Exactly one defcfg entry is required. This is used for configuration key-pairs.
 
+;; if numtab is good make a key to flip remote desto controls
+
 
 (defcfg
   ;; Windows doesn't need any input/output configuration entries; however, there
@@ -77,7 +79,7 @@
 ;;          1    2    3    4    5    6    7    8    9    0 
 ;; 			!@   "    (    )    $    &    ü    \    ö    ?
 ;;          ä    ß|   ctl[ sft] =    /    sft  ctl  alt  
-;;               '    {    }    +    _    ;<   :>   _~
+;;               |    {    }    +    '   *    ;<    :>   _~
 (deflayer qwerty
   @cir      @1   @2   @3   @4   @5   @6   @7   @8   @9   @0   @sz  ]    bspc
 (macro tab) @qex @wdq @ptl @ptr @tdo @zam @uue @ibl @ooe @pqe bspc del
@@ -87,23 +89,30 @@
 )
 (deflayer upper
   @cir      @1   @2   @3   @4   @5   @6   @7   @8   @9   @0   @sz  ]    bspc
-  tab      S-q   S-w  S-e  S-r  S-t  S-z  S-u  S-i  S-o  S-p  bspc del
-  caps     S-a   S-s  S-d  S-f  S-g  S-h  S-j  S-k  S-l  @sy1 ret  sldr   ret
+  S-tab     S-q  S-w  S-e  S-r  S-t  S-z  S-u  S-i  S-o  S-p  bspc del
+  caps      S-a  S-s  S-d  S-f  S-g  S-h  S-j  S-k  S-l  @sy1 ret  sldr   ret
   lsft S-102d S-y S-x S-c  S-v  S-b  S-n  S-m  S-,  S-.  S--  rsft
   lctl      lmet lalt           @mus                     rmet rctl
 )
 (deflayer numbers
   _         _    _    _    _    _    _    _    _    _    _    _    lrld _     
+  _         @usc 1    @wn2 3    bspc esc  home up   end  A-pgup _    _     
+  _         @dpp @al4 @ct5 @sf6 @wn0 bspc left down rght A-pgdn _    _    _          
+  _    @sem @sem 7    8    9    del  ret  tab  del  mrgt _    _               
+  _         _    @sy1           _                             _    _          
+)
+(deflayer numberstab
+  _         _    _    _    _    _    _    _    _    _    _    _    lrld _     
   _         @usc 1    @wn2 3    bspc esc  home up   end  _    _    _     
-  _         @dpp @al4 @ct5 @sf6 @wn0 bspc left down rght del  _    _    _          
+  _         rght left rght rght @wn0 bspc left down rght del  _    _    _          
   _    @sem @sem 7    8    9    del  ret  tab  del  mrgt _    _               
   _         _    @sy1           _                             _    _          
 )
 (deflayer symbols
   _         _    _    _    _    _    _    _    _    _    _    _    _    _     
   _         S-1  S-2  S-8  S-9  S-4  S-6  S-5  @bsl /    S-[  _    _         
-  _         @btk @pip @lsb @rsb S-0  S-7  @atx @at2 @at3 -    _    _    _          
-  _    @cir @tck S-/  @lcb @rcb =    S--  S-=  @lth @gth @til _               
+  _         @btk @pip @lsb @rsb S-0  S-7  @at1 @at2 @at3 -    _    _    _          
+  _    @cir @tck @pip @lcb @rcb =    S-/  S-=  @lth @gth @til _               
   _         _    _              _                            _    _          
 )
 ;; lsymbols and rsymbols are only usefull if activated by letter keys like v/n but I ditched that concept as to hard to do fast
@@ -133,12 +142,13 @@
   ;; released. An alternate action name you can use is layer-while-held.
   ;; However, the rest of this document will use The term "toggle" for brevity.
   num (layer-toggle numbers)
+  numtab (layer-toggle numberstab)
   sym  (layer-toggle symbols)
   ;; rsy  (layer-toggle rsymbols)
   ;; lsy  (layer-toggle lsymbols)
   sy1  (one-shot 500 (layer-toggle symbols))
-  ;;os1 (one-shot 500 lsft)
-  os1 (one-shot 500 (layer-toggle upper))
+  ;; os1 (one-shot 500 lsft) not working
+  os1 (multi lsft (one-shot 500 (layer-toggle upper)))
   ;; tap-hold parameter order:
   ;; 1. tap timeout
   ;; 2. hold timeout
@@ -175,11 +185,15 @@
   ;;fsf (tap-hold-release 140 140 f lsft)
   fsf (tap-dance 140 ((tap-hold-release 140 140 f lsft) (tap-hold 200 240 (macro f f) A-C-9)))
   
-  jsf (tap-hold-release 140 140 j lsft)
+  ;;jsf (tap-hold-release 140 140 j lsft)
+  jsf (tap-dance 140 ((tap-hold-release 140 140 j lsft) (tap-hold 200 240 (macro j j) S-5)))
+  
   ;;dct (tap-hold-release 200 240 d lctl)
   dct (tap-dance 140 ((tap-hold-release 200 240 d lctl) (tap-hold 200 240 (macro d d) A-C-8)))
   tct (tap-hold-release 200 240 k lctl) ;; left ctl resolves DITTO issues TODO retest
-  lat (tap-hold-release 200 340 l alt)
+  ;,lat (tap-hold-release 200 340 l alt)
+  lat (tap-dance 140 ((tap-hold-release 200 240 l alt) (tap-hold 200 240 (macro l l) (macro /) )))
+  
   
   rsd (tap-hold-release 200 240 del rsft) ;; TODO not used ?!
   
@@ -197,7 +211,8 @@
   at3 (multi lalt tab tab tab)
   at4 (multi lalt tab tab tab tab)
   ;;atx (tap-dance 500 (@at1 @at2 @at3 @at4) )
-  atx (tap-dance 500 (A-tab (macro f24 r) (macro f24 t) (macro f24 z)) )
+  ;;atx (tap-dance 500 (A-tab (macro f24 r) (macro f24 t) (macro f24 z)) )
+  atx (tap-hold 200 100 (multi alt tab) (multi @numtab alt tab tab) )
   
   ;; symbols
   bsl A-C-[							;; \
@@ -234,28 +249,29 @@
   tdo (tap-hold 200 200 t S-4)          ;; $
   zam (tap-hold 200 200 z S-6)          ;; &
   ;; ü (unicode ü)                                      ;; unicode does not allow shift for upper case
-  ;;uue (tap-hold 140 140 u (macro ;) )		;; ü = ;    macro or tap-dance for anti key repeat 
-  uue (tap-dance 140 ((tap-hold 10 100 u (macro ;))  (tap-hold 10 100 (macro u u) (macro S-5))))
-  ibl (tap-hold 200 200 i @bsl)			                ;; \
+  uue (tap-hold 140 140 u (macro ;) )		;; ü = ;    macro or tap-dance for anti key repeat 
+  ;;uue (tap-dance 100 ((tap-hold-press 10 100 u (macro ;))  (tap-hold 10 100 (macro u u) (macro S-5))))
+  ;;ibl (tap-hold 200 200 i @bsl)			                ;; \
+  ibl (tap-dance 140 ((tap-hold 10 100 i @bsl)  (tap-hold 10 100 (macro i i) (macro @bsl @bsl) )))	
   ;; ö (unicode ö)
-  ;;ooe (tap-hold 200 140 o (macro grv) )	    ;; ö = grv
-  ooe (tap-dance 140 ((tap-hold 10 100 o (macro grv))  (tap-hold 10 100 (macro o o) (macro /))))
+  ooe (tap-hold 200 140 o (macro grv) )	    ;; ö = grv
+  ;;ooe (tap-dance 140 ((tap-hold 10 100 o (macro grv))  (tap-hold 10 100 (macro o o) (macro /))))
   
   pqe (tap-hold 200 200 p S-[)			                ;; ?
   ;; ä (unicode ä)
   aae (tap-hold 200 140 a (macro '))			;; ä = '
   ß (unicode ß)
-  ;;ssz (tap-hold 200 140 s @ß)			                ;; ß = [
-  ssz (tap-dance 140 ((tap-hold 10 100 s @ß)  (tap-hold 10 100 (macro s s) @pip)))
+  ssz (tap-hold 200 140 s @ß)			                ;; ß = [
+  ;;ssz (tap-dance 100 ((tap-hold 200 100 s @ß)  (tap-hold 10 100 (macro s s) @pip)))
   geq (tap-hold 200 200 g (macro S-0))  ;; =
   hsl (tap-hold 200 200 h S-7)          ;; / 
   
-  xpi (tap-hold 200 200 x S-/)			;; '
+  xpi (tap-hold 200 200 x A-C-102d)			;; |
   ccb (tap-hold 200 200 c C-A-7)		;; {
   vcb (tap-hold 200 200 v C-A-0)         ;; } @rsy
   + (unicode +)
   beq (tap-hold 200 200 b @+)			;; + = =   here unicode protects from accidental shifts and autorepeat
-  nat (tap-hold 200 200 n S--)          ;; _ @lsy
+  nat (tap-hold 200 140 n S-/)          ;; '
   mas (tap-hold 200 200 m S-=)			;; *
   semi (unicode ;)
   sem (tap-hold 200 200 , @semi)		;; ;
