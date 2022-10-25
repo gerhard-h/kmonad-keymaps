@@ -1,23 +1,24 @@
-;; shift and layer switch TODO test it
+;; hint shift and layer switch
 ;;(defalias
 ;;  oss (multi (one-shot 500 lsft) (one-shot 500 (layer-toggle customshiftlayer)))
 ;;)
 
 ;; y hold not used
 
-;; where to put atx do it by layer flipping
+;; where to put atx do it by layer flipping ... yes some how
  
-;; one-shot os1 not working
+;; one-shot lsft not working -> shiftlayer
 
  
-;; (multi f24 sldr) has inconsistencies with sldr
+;; (multi f24 sldr) has inconsistencies with sldr sldr not in use so far autohot key solution
+
+
+;; if numtab is good make a key to flip remote desto controls dont work bc of timings
+
 
 ;; Exactly one defcfg entry is required. This is used for configuration key-pairs.
-
-;; if numtab is good make a key to flip remote desto controls
-
-
 (defcfg
+   sequence-timeout 2000
   ;; Windows doesn't need any input/output configuration entries; however, there
   ;; must still be a defcfg entry.
   ;;
@@ -75,45 +76,51 @@
 ;; kanata starts up.
 ;;
 ;; There are currently a maximum of 25 layers allowed.
-;;          tapdance / hold symbols of the base layer
+
+;;          tapdance / hold symbols of the base layer S=shift C=ctrl A=alt
 ;;          1    2    3    4    5    6    7    8    9    0 
-;; 			!@   "    (    )    $    &    ü    \    ö    ?
-;;          ä    ß|   ctl[ sft] =    /    sft  ctl  alt  
-;;               |    {    }    +    '   *    ;<    :>   _~
+;; 			!    "    (    )    $    &    ü    \    ö    ?
+;;          ä    ß   C/[  S/]   =    /   S/%   C   A/#  
+;;               |    {    }    +    '    *   ,;<  .:>  -_~
 (deflayer qwerty
-  @cir      @1   @2   @3   @4   @5   @6   @7   @8   @9   @0   @sz  ]    bspc
-(macro tab) @qex @wdq @ptl @ptr @tdo @zam @uue @ibl @ooe @pqe bspc del
-  @atx      @aae @ssz @dct @fsf @geq @hsl @jsf @tct @lat @sy1 ret  sldr  ret
-  @os1  f24 @yho @xpi @ccb @vcb @beq @nat @mas @ksl @dcg @dut @rsd
+  @cir      @1   @2   @3   @4   @5   @6   @7   @8   @9   @0   sldr @os1  bspc
+(macro tab) @qex @wdq @ptl @ptr @tdo @zam @uue @ibl @ooe @pqe bspc bspc
+  @atx      @aae @ssz @dct @fsf @geq @hsl @jsf @tct @lat bspc @rtw del   @rtw
+  lsft  f24 @yho @xpi @ccb @vcb @beq @nat @mas @ksl @dcg @dut @rsd
   lctl      lmet lalt           @mus                     rmet @rcl 
 )
 (deflayer upper
   @cir      @1   @2   @3   @4   @5   @6   @7   @8   @9   @0   @sz  ]    bspc
-  S-tab     S-q  S-w  S-e  S-r  S-t  S-z  S-u  S-i  S-o  S-p  bspc del
-  caps      S-a  S-s  S-d  S-f  S-g  S-h  S-j  S-k  S-l  @sy1 ret  sldr   ret
+  S-tab     S-q  S-w  S-e  S-r  S-t  S-z  S-u  S-i  S-o  S-p  bspc bspc
+  caps      S-a  S-s  S-d  S-f  S-g  S-h  S-j  S-k  S-l  @sy1 @rtw del  @rtw
   lsft S-102d S-y S-x S-c  S-v  S-b  S-n  S-m  S-,  S-.  S--  rsft
   lctl      lmet lalt           @mus                     rmet rctl
 )
 (deflayer numbers
-  _         _    _    _    _    _    _    _    _    _    _    _    lrld _     
-  _         @usc 1    @wn2 3    bspc esc  home up   end  A-pgup _    _     
-  _         @dpp @al4 @ct5 @sf6 @wn0 bspc left down rght A-pgdn _    _    _          
+  _         @at1 @at2 @at3 @at4 @at5 @at6 _    _    _    @at0 lrld _    _     
+  _         @usc 1    @wn2 3    bspc esc  home up   end  pgup _    _     
+  _         @dpp @al4 @ct5 @sf6 @wn0 bspc left down rght pgdn _    _    _          
   _    @sem @sem 7    8    9    del  ret  tab  del  mrgt _    _               
   _         _    @sy1           _                             _    _          
 )
 (deflayer numberstab
   _         _    _    _    _    _    _    _    _    _    _    _    lrld _     
-  _         @usc 1    @wn2 3    bspc esc  home up   end  _    _    _     
-  _         rght left rght rght @wn0 bspc left down rght del  _    _    _          
+  _         @usc 1    @wn2 3    bspc esc  home up   end  pgup _    _     
+  _         rght left rght rght @wn0 bspc left down rght pgdn _    _    _          
   _    @sem @sem 7    8    9    del  ret  tab  del  mrgt _    _               
   _         _    @sy1           _                             _    _          
 )
+;;       ^  symbols layer (todo ß ü ö are mapped to duplicated symbols, - and _ are already on base layer)
+;;          1    2    3    4    5    6    7    8    9    0 
+;; 			!    "    (    )    $    &    %    \    #    ?
+;;          `    |    [    ]    =    /    %    _    #    -_
+;;       ^  ´    |    {    }    +    '    *    <    >    ~
 (deflayer symbols
   _         _    _    _    _    _    _    _    _    _    _    _    _    _     
   _         S-1  S-2  S-8  S-9  S-4  S-6  S-5  @bsl /    S-[  _    _         
-  _         @btk @pip @lsb @rsb S-0  S-7  @at1 @at2 @at3 -    _    _    _          
+  _         @btk @pip @lsb @rsb S-0  S-7  S-5  S--  /    @dut _    _    _          
   _    @cir @tck @pip @lcb @rcb =    S-/  S-=  @lth @gth @til _               
-  _         _    _              _                            _    _          
+  _         _    _              _                             _    _          
 )
 ;; lsymbols and rsymbols are only usefull if activated by letter keys like v/n but I ditched that concept as to hard to do fast
 ;; (deflayer lsymbols
@@ -148,7 +155,9 @@
   ;; lsy  (layer-toggle lsymbols)
   sy1  (one-shot 500 (layer-toggle symbols))
   ;; os1 (one-shot 500 lsft) not working
-  os1 (multi lsft (one-shot 500 (layer-toggle upper)))
+  ;;os1 (multi lsft (one-shot 500 (layer-toggle upper)))
+  os1 (one-shot 500 (layer-toggle upper))
+  ;; os1 (tap-dance 140 lsft  (one-shot 500 (layer-toggle upper))
   ;; tap-hold parameter order:
   ;; 1. tap timeout
   ;; 2. hold timeout
@@ -181,6 +190,18 @@
   ;; the underlying keyberon crate, tap-hold-press is the HoldOnOtherKeyPress
   ;; and tap-hold-release is the PermissiveHold configuration.
 
+  ;; alt tab
+  at1 (multi lalt tab)
+  at2 (multi lalt tab tab)
+  at3 (multi lalt tab tab tab)
+  at4 (multi lalt tab tab tab tab)
+  at5 (multi lalt tab tab tab tab tab)
+  at6 (multi lalt tab tab tab tab tab tab)
+  at0 (tap-dance 500 (@at1 @at2 @at3 @at4 @at5 @at6) )
+  ;;atx (tap-dance 500 (A-tab (macro f24 r) (macro f24 t) (macro f24 z)) )
+  aty (multi @numtab alt tab )
+  atx (tap-hold 200 100 (multi alt tab) (multi @numtab alt tab tab) )
+  
   ;; home row mods
   ;;fsf (tap-hold-release 140 140 f lsft)
   fsf (tap-dance 140 ((tap-hold-release 140 140 f lsft) (tap-hold 200 240 (macro f f) A-C-9)))
@@ -190,10 +211,12 @@
   
   ;;dct (tap-hold-release 200 240 d lctl)
   dct (tap-dance 140 ((tap-hold-release 200 240 d lctl) (tap-hold 200 240 (macro d d) A-C-8)))
-  tct (tap-hold-release 200 240 k lctl) ;; left ctl resolves DITTO issues TODO retest
-  ;,lat (tap-hold-release 200 340 l alt)
+  ;;tct (tap-hold-release 200 240 k lctl) ;; left ctl resolves DITTO issues TODO retest
+  ;;tct (tap-dance 140 ((tap-hold-release 200 240 k lctl) (tap-hold 200 240 (macro k k) (macro - S-102d) ))) ;; todo somthing better than ->
+  tct (tap-dance 140 ((tap-hold-release 200 240 k lctl) (tap-hold 200 240 (macro k k) @aty ))) 
+  ;;lat (tap-hold-release 200 340 l alt)
   lat (tap-dance 140 ((tap-hold-release 200 240 l alt) (tap-hold 200 240 (macro l l) (macro /) )))
-  
+  rtw (tap-hold-release 200 340 ret lmet)
   
   rsd (tap-hold-release 200 240 del rsft) ;; TODO not used ?!
   
@@ -205,14 +228,6 @@
   wn0 (tap-hold-release 200 340 0 lmet)
   ;;ght (tap-hold-release 200 240 rght rmet)  ;;works
 
-  ;; alt tab
-  at1 (multi lalt tab)
-  at2 (multi lalt tab tab)
-  at3 (multi lalt tab tab tab)
-  at4 (multi lalt tab tab tab tab)
-  ;;atx (tap-dance 500 (@at1 @at2 @at3 @at4) )
-  ;;atx (tap-dance 500 (A-tab (macro f24 r) (macro f24 t) (macro f24 z)) )
-  atx (tap-hold 200 100 (multi alt tab) (multi @numtab alt tab tab) )
   
   ;; symbols
   bsl A-C-[							;; \
@@ -228,7 +243,7 @@
   btk (macro S-] spc )				;; `
   cir (macro \ spc )				;; ^
 
-    1 (tap-hold 200 300 1 (macro S-1 ))
+    1 (tap-hold 200 300 1 (macro A-C-q ))
     2 (tap-hold 200 300 2 (macro S-2 ))
     3 (tap-hold 200 300 3 (macro S-3 ))
     4 (tap-hold 200 300 4 (macro S-4 ))
@@ -241,48 +256,50 @@
     sz (tap-hold 200 300 [ (macro S-[ ))
   ;; hold symbols
   ! (unicode ! )
-  qex (tap-dance 140 ((tap-hold 10 100 q @!)  A-C-q))
+  ;;qex (tap-dance 140 ((tap-hold 10 100 q @!)  A-C-q))
+  ;;qex (tap-dance 140 ((tap-hold 10 100 q S-1)  (tap-hold 10 100 (macro A-C-q) A-C-q)))
+  qex (tap-hold 140 140 q S-1)          ;; "
   ;;qex (tap-dance 140 ((tap-hold 10 100 q @!) A-C-q sldr)) ;; tripple tap is not possible in time
-  wdq (tap-hold 200 200 w S-2)          ;; "
-  ptl (tap-hold 200 200 e S-8)          ;; (
-  ptr (tap-hold 200 200 r S-9)          ;; )
-  tdo (tap-hold 200 200 t S-4)          ;; $
-  zam (tap-hold 200 200 z S-6)          ;; &
-  ;; ü (unicode ü)                                      ;; unicode does not allow shift for upper case
+  wdq (tap-hold 140 140 w S-2)          ;; "
+  ptl (tap-hold 140 140 e S-8)          ;; (
+  ptr (tap-hold 140 140 r S-9)          ;; )
+  tdo (tap-hold 140 140 t S-4)          ;; $
+  zam (tap-hold 140 140 z S-6)          ;; &
+  ü (unicode ü)                                      ;; unicode does not allow shift for upper case
   uue (tap-hold 140 140 u (macro ;) )		;; ü = ;    macro or tap-dance for anti key repeat 
   ;;uue (tap-dance 100 ((tap-hold-press 10 100 u (macro ;))  (tap-hold 10 100 (macro u u) (macro S-5))))
   ;;ibl (tap-hold 200 200 i @bsl)			                ;; \
   ibl (tap-dance 140 ((tap-hold 10 100 i @bsl)  (tap-hold 10 100 (macro i i) (macro @bsl @bsl) )))	
-  ;; ö (unicode ö)
-  ooe (tap-hold 200 140 o (macro grv) )	    ;; ö = grv
+  ö (unicode ö)
+  ooe (tap-hold 140 140 o (macro grv) )	    ;; ö = grv
   ;;ooe (tap-dance 140 ((tap-hold 10 100 o (macro grv))  (tap-hold 10 100 (macro o o) (macro /))))
   
-  pqe (tap-hold 200 200 p S-[)			                ;; ?
-  ;; ä (unicode ä)
-  aae (tap-hold 200 140 a (macro '))			;; ä = '
+  pqe (tap-hold 140 140 p S-[)			                ;; ?
+  ä (unicode ä)
+  aae (tap-hold 140 140 a (macro '))			;; ä = '
   ß (unicode ß)
-  ssz (tap-hold 200 140 s @ß)			                ;; ß = [
+  ssz (tap-hold 140 140 s @ß)			                ;; ß = [
   ;;ssz (tap-dance 100 ((tap-hold 200 100 s @ß)  (tap-hold 10 100 (macro s s) @pip)))
-  geq (tap-hold 200 200 g (macro S-0))  ;; =
-  hsl (tap-hold 200 200 h S-7)          ;; / 
+  geq (tap-hold 140 140 g (macro S-0))  ;; =
+  hsl (tap-hold 140 140 h S-7)          ;; / 
   
-  xpi (tap-hold 200 200 x A-C-102d)			;; |
-  ccb (tap-hold 200 200 c C-A-7)		;; {
-  vcb (tap-hold 200 200 v C-A-0)         ;; } @rsy
+  xpi (tap-hold 140 140 x A-C-102d)			;; |
+  ccb (tap-hold 140 140 c C-A-7)		;; {
+  vcb (tap-hold 140 140 v C-A-0)         ;; } @rsy
   + (unicode +)
-  beq (tap-hold 200 200 b @+)			;; + = =   here unicode protects from accidental shifts and autorepeat
+  beq (tap-hold 140 140 b @+)			;; + = =   here unicode protects from accidental shifts and autorepeat
   nat (tap-hold 200 140 n S-/)          ;; '
-  mas (tap-hold 200 200 m S-=)			;; *
+  mas (tap-hold 140 140 m S-=)			;; *
   semi (unicode ;)
-  sem (tap-hold 200 200 , @semi)		;; ;
+  sem (tap-hold 140 140 , @semi)		;; ;
   ksl (tap-dance 140 ((tap-hold 10 100 , @semi)  (tap-hold 10 100 f24 (macro @lth))))  ;; ,, = F24
   : (unicode :)
-  dpp (tap-hold 200 200 . @:)	        ;; : S-.
+  dpp (tap-hold 140 140 . @:)	        ;; : S-.
   dcg (tap-dance 140 ((tap-hold 10 100 . @:)  (tap-hold 10 100 (macro . .) @gth)))
   uso (unicode _)
-  usc (tap-hold 200 200 - @uso)			;; _ S--
+  usc (tap-hold 140 140 - @uso)			;; _ S--
   dut (tap-dance 140 ((tap-hold 10 100 - @uso)  (tap-hold 10 100 (macro - -) @til)))
-  ;; mus (tap-dance 120 ((tap-hold  200 200 spc @num) (tap-hold  200 200 spc @sym) spc spc spc))  ;; DBL-tap-Hold is not realy good for the frequently used symbol layer
+  ;; mus (tap-dance 120 ((tap-hold  140 140 spc @num) (tap-hold  140 140 spc @sym) spc spc spc))  ;; DBL-tap-Hold is not realy good for the frequently used symbol layer
   mus (tap-hold  200 200 spc @num)
 )
   
@@ -552,6 +569,27 @@
 ;; f24 macros dont work ?
 (defseq web-def (f24 w e))
 (deffakekeys web-def (macro g e r h a r d . h e i d e A-C-q w e b . d e))
+
+(defseq str (s t))
+(defseq ded (d e))
+(defseq wic (w i))
+(defseq wal (w a))
+(defseq mar (m a))
+(defseq m'  (m '))
+(defseq flo (f l))
+(defseq seb (s e))
+(defseq jar (j a))
+(defseq mon (m o))
+(defseq mfg (m f))
+(defseq bye (b y))
+(defseq msg (m s))
+(defseq dih (d i))
+(defseq iba (i b))
+(defseq z1  (1))
+(defseq z2  (2))
+(defseq iba (3))
+
+
 
 (defalias
  rcl (tap-hold-release 200 200 sldr rctl) ;; !! sldr is hard coded leader key fake key  !!
