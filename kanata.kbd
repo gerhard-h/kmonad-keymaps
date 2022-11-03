@@ -200,7 +200,7 @@
   j%  (tap-dance 140 ((tap-hold-release 140 140 j lsft) (tap-hold 200 240 (macro j j) (macro S-5))))
   
   ;;d[  (tap-hold-release 200 240 d lctl)
-  d[  (tap-dance 140 ((tap-hold-release 200 240 d lctl) (tap-hold 200 240 (macro d d) (macro A-C-8))))
+  d[  (tap-dance 140 ((tap-hold-release 200 240 d lctl) (tap-hold 200 240 (macro d d) (multi (macro A-C-8 ) (tap-hold 200 400 XX (macro A-C-9 ))))))
   ;;kC  (tap-hold-release 200 240 k lctl) ;; left ctl resolves DITTO issues TODO retest
   ;;kC  (tap-dance 140 ((tap-hold-release 200 240 k lctl) (tap-hold 200 240 (macro k k) (macro - S-102d) ))) ;; todo somthing better than ->
   kC  (tap-dance 140 ((tap-hold-release 200 240 k lctl) (tap-hold 200 240 (macro k k) @aty ))) 
@@ -244,7 +244,7 @@
   6 (tap-hold 200 300 6 (multi (macro S-6 ) (tap-hold 200 400 XX (macro S-6 ))))
   7 (tap-hold 200 300 7 (multi (macro S-7 ) (tap-hold 200 400 XX (macro S-7 ))))
   8 (tap-hold 200 300 8 (multi (macro S-8 ) (tap-hold 200 400 XX (macro bspc A-C-8 ))) )
-  9 (tap-hold 200 300 9 (macro S-9 ))
+  9 (tap-hold 200 300 9 (multi (macro S-9 ) (tap-hold 200 400 XX (macro bspc A-C-9 ))) )
   ;;0 (tap-hold 200 300 0 (macro S-0 )
   0 (tap-hold 10 100 0 (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 400 XX (macro S-0 ))  ))  ) )
   ;;sz (tap-hold 140 140 [ (tap-hold-release 200 300 (macro S-[ ) (macro A-C-[ )))
@@ -256,8 +256,8 @@
   ;;q! (tap-hold-press 140 140 q @!)          ;; !
   q! (tap-hold 140 140 q (multi (macro S-1 ) (tap-hold 200 400 XX (macro bspc A-C-q ))) )   ;; 1 @
   ;;q! (tap-dance 140 ((tap-hold 10 100 q @!) A-C-q sldr)) ;; tripple tap is not possible in timer
-  w'' (tap-hold 140 140 w (macro S-2))          ;; "
-  e  (tap-hold 140 140 e (macro S-8))           ;; (
+  w'' (tap-hold 140 140 w (multi (macro S-2 ) (tap-hold 200 400 XX (macro S-2 ))) )          ;; "
+  e  (tap-hold 140 140 e (multi (macro S-8 ) (tap-hold 200 400 XX (macro S-9 ))))           ;; (  ()
   r  (tap-hold 140 140 r (multi (macro S-9 ) (tap-hold 200 400 XX (macro bspc A-C-q ))) )  ;; ) todo find a better use 
   t$  (tap-hold 140 140 t (macro S-4))          ;; $
   z&  (tap-hold 140 140 z (multi (macro S-6 ) (tap-hold 200 400 XX (macro S-6 ))))          ;; &
@@ -277,7 +277,8 @@
   ß (unicode ß)
   sß  (tap-hold 140 140 s @ß)			                ;; ß = [
   ;;sß  (tap-dance 100 ((tap-hold 200 100 s @ß)  (tap-hold 10 100 (macro s s) @pip)))
-  g'  (tap-hold 140 140 g (macro S-/))  ;; '
+  ;;g'  (tap-hold 140 140 g (macro S-/))  ;; '
+  g'  (tap-hold 140 140 g (multi (macro S-/ ) (tap-hold 200 400 XX (macro S-/ ))) ) ;; '
   h/  (tap-hold 140 140 h (multi (macro S-7 ) (tap-hold 200 300 XX (macro S-7 ))) )          ;; / 
   
   x|  (tap-hold 140 140 x (multi (macro A-C-102d ) (tap-hold 200 300 XX (macro A-C-102d ))) )			;; |
@@ -585,9 +586,10 @@
 (defseq z1  (1))
 (defseq z2  (2))
 (defseq iba (3))
+(defseq gh (g h))
 
 ;; deffakekeys with S- uppercase defsrc keys spc A-C-q and kp1-kp9
-
+(deffakekeys gh (macro lalt 0 9 ret )) ;; this is not working in outlook
 (deffakekeys str (macro S-h  a l l o spc  S-h  e r r spc   S-s  t r e c k e r t , ret ret ))
 (deffakekeys ded (macro S-h  a l l o spc  S-h  e r r spc  S-d  e d e r i c h s , ret ret ))
 (deffakekeys wic (macro S-h  a l l o spc  S-h  e r r spc   S-w  i c k l m a y r , ret ret ))
