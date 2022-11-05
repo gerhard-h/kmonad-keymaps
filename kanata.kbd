@@ -1,20 +1,16 @@
-;; hint shift and layer switch
-;;(defalias
-;;  oss (multi (one-shot 500 lsft) (one-shot 500 (layer-toggle customshiftlayer)))
-;;)
 
-;; y hold not used
+;; SC06F remap altgr to f24 in sharpkeys is not recognized by kanata
 
-;; where to put atx do it by layer flipping ... yes some how
+;; y hold -> F23 mouse-layer
+
+;; where/how to put atx do it by layer flipping ... yes some how
  
-;; one-shot lsft not working -> shiftlayer
+;; one-shot lsft now working -> remove layer upper TODO new function for ´` key ?
 
- 
-;; (multi f24 sldr) has inconsistencies with sldr sldr not in use so far autohot key solution
-
-
+;; flip to rdesktop controls
 ;; if numtab is good make a key to flip remote desto controls dont work bc of timings
 
+;; (multi f24 sldr) has inconsistencies with sldr  not in use so far autohot key solution
 
 ;; Exactly one defcfg entry is required. This is used for configuration key-pairs.
 (defcfg
@@ -87,19 +83,19 @@
   @^        @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  @os1  bspc
   @tab      @q!  @w'' @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  del  del
   @atx      @aä  @sß  @d[  @f]  @g'  @h/  @j%  @kC   @lA# bspc @rtw sldr  @rtw
-  lsft  f24 @F23 @x|  @c{  @v}  @b+  @n=  @m*  @,F24 @.:> @-_~ @rsd
+  @oss  f24 @F23 @x|  @c{  @v}  @b+  @n=  @m*  @,F24 @.:> @-_~ @rsd
   lctl      lmet lalt           @mus                 f24  rmet @rcl 
 )
-;; SC06F remap altgr to f24 is not recognized by kanata
+
 (deflayer upper
   @^         @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  ]    bspc
   S-tab      S-q  S-w  S-e  S-r  S-t  S-z  S-u  S-i   S-o  S-p  bspc del
-  caps       S-a  S-s  S-d  S-f  S-g  S-h  S-j  S-k   S-l  @sy1 @rtw sldr @rtw
+  caps       @AÄ  S-s  S-d  S-f  S-g  S-h  S-j  S-k   S-l  @sy1 @rtw sldr @rtw
   lsft S-102d S-y S-x  S-c  S-v  S-b  S-n  S-m  S-,   S-.  S--  rsft
   lctl       lmet lalt           @mus                 _    rmet rctl
 )
 (deflayer numbers
-  _         @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @at0 lrld _    _     
+  _         @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld _    _     
   _         @-_~  1    @wn2 3    esc  esc  home up    end  pgup _    _     
   _         @.:>  @al4 @ct5 @sf6 @wn0 bspc left down  rght bspc _    _    _          
   _    @os1 @,F24 7    8    9    del  ret  tab  del   mrgt pgdn _               
@@ -142,6 +138,8 @@
   sym  (layer-toggle symbols)
   sy1  (one-shot 500 (layer-toggle symbols))
   os1 (one-shot 3000 (layer-toggle upper))
+  oss (one-shot 1000 lsft)
+  ;;oss (multi (one-shot 500 lsft) (one-shot 500 (layer-toggle numbers))) ;; get on shifted key fram a other layer
   ;; os1 (one-shot 500 lsft) not working
   ;; os1 (multi lsft (one-shot 500 (layer-toggle upper))) not working
   ;; os1 (tap-dance 140 lsft  (one-shot 500 (layer-toggle upper)) not working
@@ -192,7 +190,10 @@
   at0 (tap-dance 500 (A-tab (macro f24 r) (macro f24 t) (macro f24 z)) )
   aty (multi @numtab alt tab )
   atx (tap-hold 200 100 (multi alt tab) (multi @numtab alt tab tab) )
-  
+  ;;atm (tap-dance 700 (@at1 @at2 @at3 @at4) ) Sequnce now works
+  atm  (tap-dance 500 ( A-tab (macro A-(tab 90 tab )) (macro A-(tab 90 tab  90 tab )) (macro A-(tab 90 tab  90 tab  90 tab )) ))
+  ;; not working on remote desktop atp  (tap-dance 500 ( (macro A-pgup) (macro A-(pgup 90 pgup )) (macro A-(pgup 90 pgup  90 pgup )) (macro A-(pgup 90 pgup  90 pgup  90 pgup )) ))
+
   ;; home row mods
   f]  (tap-dance 140 ((tap-hold-release 140 140 f lsft) (tap-hold 200 240 (macro f f) (macro A-C-9))))
   j%  (tap-dance 140 ((tap-hold-release 140 140 j lsft) (tap-hold 200 240 (macro j j) (macro S-5))))
@@ -255,6 +256,7 @@
   oö  (tap-hold 140 140 o (multi (macro grv ) (tap-hold 400 400 XX (macro bspc / ))) )                      ;; ö = grv #=/  o ö #
   i?  (tap-hold 140 140 i (multi (macro S-[ ) (tap-hold 200 300 XX (macro S-[ ))))                          ;; ? = S-[      i ? ??
   aä (tap-hold 140 140 a (multi (macro ' ) (tap-hold 400 400 XX (macro bspc S-] spc ))))                    ;; ä = '  `=S-]
+  AÄ (tap-hold 140 140 S-a (multi (macro S-' ) (tap-hold 400 400 XX (macro bspc ] spc )))) 
   ß (unicode ß) ;; prevents ẞ use C-A-S on the real key
   sß  (tap-hold 140 140 s @ß)                                                                               ;; ß = [
   g'  (tap-hold 140 140 g (multi (macro S-/ ) (tap-hold 200 400 XX (macro S-/ ))) )                         ;; ' ''
@@ -560,8 +562,10 @@
 (defseq z2  (2))
 (defseq iba (3))
 (defseq gh (g h))
+(defseq rdtab (l))
 
 ;; deffakekeys with S- for uppercase, with defsrc keys, with  spc A-C-q and kp1-kp9, numbers in macros are pauses
+(deffakekeys rdtab (macro A-pgup ))
 (deffakekeys gh (macro lalt 80 kp0 kp9 ret )) ;; this is working in outlook
 (deffakekeys str (macro S-h  a l l o spc  S-h  e r r spc   S-s  t r e c k e r t , ret ret ))
 (deffakekeys ded (macro S-h  a l l o spc  S-h  e r r spc  S-d  e d e r i c h s , ret ret ))
