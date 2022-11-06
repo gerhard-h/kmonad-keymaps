@@ -1,16 +1,37 @@
-
+;; FEATURES  kanata                                       qmk                                              portable requirements
+;; - Home row mods                                        (y) but timing problems                          Fallback layer
+;; - Autosymbol: Tap_Hold Dbl_Tap_Hold Long_Hold          (y) but no long_hold, dbl_tap-hold on modifiers  Fallback layer
+;; - Symbol layer rarly used                              y                                                (permanent layer)
+;; - Nav/Number layer									  y plus sticky plus layerkey                      permanent layer
+;;                                                        sticky layer                                     not needed
+;; - one-shot shift,                                      y                                                (Fallback layer)
+;; - alt tap otimization                                  inprogress
+;; - F23 to Ahk mouse layer								  y and better
+;; - F24 to Ahk hotkeys									  y
+;; - leaderkey and wincompose integration                 no leaderkey better wincompose integration
+;; - AHK hotstring incompatible                           AHK hotstring someway
+;; - extra thumbkeys can be supported                     extra thumbkeys 
+;; - F-Keys as normal                                     F-Key layer
+;; - bsp on ö											  - on ö or - on , _on =
+;;                                                                                                           layers(6): normal,fallback=portable,
+;;                                                                                                                   symbol, number, mouse, F-key 
+;;      space/numbers 
+;; TODO wich thumb activates nav?
+;; dont use extra thumb key and wait what is needed 
 ;; SC06F remap altgr to f24 in sharpkeys is not recognized by kanata
 
 ;; y hold -> F23 mouse-layer
 
 ;; where/how to put atx do it by layer flipping ... yes some how
  
-;; one-shot lsft now working -> remove layer upper TODO new function for ´` key ?
+;; one-shot lsft now working -> TODO remove layer upper and @AÄ TODO new function for ´` key ?
 
 ;; flip to rdesktop controls
 ;; if numtab is good make a key to flip remote desto controls dont work bc of timings
+;; if pgup is maped by kanata Alt+PgUp will not work in RDesktop
 
 ;; (multi f24 sldr) has inconsistencies with sldr  not in use so far autohot key solution
+
 
 ;; Exactly one defcfg entry is required. This is used for configuration key-pairs.
 (defcfg
@@ -65,7 +86,7 @@
   tab       q    w    e    r    t    z    u    i    o    p    ;    =
   caps      a    s    d    f    g    h    j    k    l    grv  '    /    ret
   lsft 102d y    x    c    v    b    n    m    ,    .    -    rsft
-  lctl      lmet lalt           spc                 f24  rmet rctl
+  lctl      lmet lalt           spc                           rctl
 )
 
 ;; The first layer defined is the layer that will be active by default when
@@ -80,11 +101,11 @@
 ;;               |    {    }    +    =    *  ;<F24  :>  -_~
 ;; TODO where to put delete
 (deflayer qwerty
-  @^        @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  @os1  bspc
+  @^        @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  @ocl  bspc
   @tab      @q!  @w'' @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  del  del
   @atx      @aä  @sß  @d[  @f]  @g'  @h/  @j%  @kC   @lA# bspc @rtw sldr  @rtw
   @oss  f24 @F23 @x|  @c{  @v}  @b+  @n=  @m*  @,F24 @.:> @-_~ @rsd
-  lctl      lmet lalt           @mus                 f24  rmet @rcl 
+  @ocl      lmet @oal           @mus                           @rcl 
 )
 
 (deflayer upper
@@ -92,21 +113,21 @@
   S-tab      S-q  S-w  S-e  S-r  S-t  S-z  S-u  S-i   S-o  S-p  bspc del
   caps       @AÄ  S-s  S-d  S-f  S-g  S-h  S-j  S-k   S-l  @sy1 @rtw sldr @rtw
   lsft S-102d S-y S-x  S-c  S-v  S-b  S-n  S-m  S-,   S-.  S--  rsft
-  lctl       lmet lalt           @mus                 _    rmet rctl
+  lctl       lmet lalt           @mus                           rctl
 )
 (deflayer numbers
   _         @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld _    _     
   _         @-_~  1    @wn2 3    esc  esc  home up    end  pgup _    _     
-  _         @.:>  @al4 @ct5 @sf6 @wn0 bspc left down  rght bspc _    _    _          
+  caps      @.:>  @al4 @ct5 @sf6 @wn0 bspc left down  rght bspc _    _    _          
   _    @os1 @,F24 7    8    9    del  ret  tab  del   mrgt pgdn _               
-  _         _     @sy1           _                         _    _    _          
+  _         _     @sy1           _                              _          
 )
 (deflayer numberstab
   _         _    _    _    _    _    _    _    _    _    _    _    lrld _     
   _         @-_~ 1    @wn2 3    esc  esc  home up   end  pgup _    _     
   _         rght left rght rght @wn0 bspc left down rght bspc _    _    _          
   _   @os1 @,F24 7    8    9    del  ret  tab  del  mrgt pgdn _               
-  _         _    @sy1           _                        _    _    _          
+  _         _    @sy1           _                             _          
 )
 ;;       ^  symbols layer (todo ß ü ö are mapped to duplicated symbols, - and _ are already on base layer)
 ;;          1    2    3    4    5    6    7    8    9    0 
@@ -118,7 +139,7 @@
   _         S-1  S-2  S-8  S-9  S-4  S-6  S-5  S-[  /    @bsl _    _         
   _         @btk @pip @lsb @rsb S-/  S-7  S-5  S--  /    @-_~ _    _    _          
   _    @^   @tck @pip @lcb @rcb =    S-0  S-=  @lth @gth @til _               
-  _         _    _              _                        _    _    _          
+  _         _    _              _                             _          
 )
 ;; lsymbols and rsymbols are only usefull if activated by letter keys like v/n but I ditched that concept as to hard to do fast
 
@@ -135,10 +156,12 @@
   ;; switch layer als possible
   num (layer-toggle numbers)
   numtab (layer-toggle numberstab)
-  sym  (layer-toggle symbols)
-  sy1  (one-shot 500 (layer-toggle symbols))
+  sym (layer-toggle symbols)
+  sy1 (one-shot 1000 (layer-toggle symbols))
   os1 (one-shot 3000 (layer-toggle upper))
   oss (one-shot 1000 lsft)
+  ocl (one-shot 1000 lctl)
+  oal (one-shot 1000 lalt)
   ;;oss (multi (one-shot 500 lsft) (one-shot 500 (layer-toggle numbers))) ;; get on shifted key fram a other layer
   ;; os1 (one-shot 500 lsft) not working
   ;; os1 (multi lsft (one-shot 500 (layer-toggle upper))) not working
