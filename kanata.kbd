@@ -13,41 +13,27 @@
 ;; - extra thumbkeys can be supported                     extra thumbkeys 
 ;; - F-Keys as normal                                     F-Key layer
 ;; - bsp on ö											  - on ö or - on , _on =
+;; - y hold -> ahk F23 mouse-layer                        qmk mouse layer                                  ahk mouse highlighter in both cases 
+;; rdesktop alt-pgup controls not possible                pgdn can be mapped
 ;;                                                                                                           layers(6): normal,fallback=portable,
 ;;                                                                                                                   symbol, number, mouse, F-key 
-;;      space/numbers 
+;; retry via 
+;;     space/numbers 
 ;; TODO wich thumb activates nav?
 ;; dont use extra thumb key and wait what is needed 
 ;; SC06F remap altgr to f24 in sharpkeys is not recognized by kanata
+;; TODO remove layer upper and @AÄ TODO new function for the ´` key ocl is never used?
+;; if numtab is good make a key to flip remote destop controls dont work bc of timings
+;; double leader keying (multi f24 sldr) inconsistencies with sldr 
+;; TODO sldr key not used
+;; TODO tap hold AltGr to f24 / AltGr and remove wincompose
+;; TODO test release-key | release-layer
 
-;; y hold -> F23 mouse-layer
-
-;; where/how to put atx do it by layer flipping ... yes some how
- 
-;; one-shot lsft now working -> TODO remove layer upper and @AÄ TODO new function for ´` key ?
-
-;; flip to rdesktop controls
-;; if numtab is good make a key to flip remote desto controls dont work bc of timings
-;; if pgup is maped by kanata Alt+PgUp will not work in RDesktop
-
-;; (multi f24 sldr) has inconsistencies with sldr  not in use so far autohot key solution
-
-
-;; Exactly one defcfg entry is required. This is used for configuration key-pairs.
 (defcfg
    sequence-timeout 3000
-  ;; Windows doesn't need any input/output configuration entries; however, there
-  ;; must still be a defcfg entry.
-  ;;
-  ;; There is an optional configuration entry for Windows to help mitigate strange
-  ;; behaviour of AltGr if your layout uses that. Uncomment one of the items below
-  ;; to change what kanata does with the key.
-  ;;
-  ;; For more context, see: https://github.com/jtroo/kanata/issues/55.
-  ;;
   ;; windows-altgr cancel-lctl-press ;; remove the lctl press that comes as a combo with ralt  with F24 mapping
   ;; windows-altgr add-lctl-release  ;; add an lctl release when ralt is released           with standard Altgr 
-  ;;
+  ;; windows don't map altgr to avoid both options from above 
   ;; NOTE: even with these workarounds, putting lctl+ralt in your defsrc may
   ;; not work too well with other applications that use WH_KEYBOARD_LL.
   ;; Known applications with issues: GWSL/VcXsrv
@@ -63,25 +49,13 @@
   ;; danger-enable-cmd yes
 )
 
-;; Only one defsrc is allowed.
-;;
-;; defsrc defines the keys that will be intercepted by kanata. The order of the
-;; keys matches the deflayer declarations and all deflayer declarations must
-;; have the same number of keys as defsrc.
-;;
-;; The visual/spatial positioning is *not* mandatory; it is done by convention
-;; for visual ease. These items are parsed as a long list with newlines being
-;; ignored.
-;;
 ;; If you are looking for other keys, the file src/keys/mod.rs should hopefully
 ;; provide some insight.
-
-
 ;; defsrc for iso german qwertz layout  
 ;; z and y are not flipped
-;; positioning the /-key at the ansi or iso position both work
+;; positioning the /-key at the ansi or iso position both work > TODO retest
 (defsrc
-
+  f9
   \         1    2    3    4    5    6    7    8    9    0    [    ]    bspc
   tab       q    w    e    r    t    z    u    i    o    p    ;    =
   caps      a    s    d    f    g    h    j    k    l    grv  '    /    ret
@@ -89,71 +63,83 @@
   lctl      lmet lalt           spc                           rctl
 )
 
-;; The first layer defined is the layer that will be active by default when
-;; kanata starts up.
-;;
+;; The first layer defined is the layer that will be active by default when kanata starts up.
 ;; There are currently a maximum of 25 layers allowed.
 
 ;;          tapdance / hold symbols of the base layer s=shift c=ctrl a=alt
-;;          1@   2    3    4    5    6    7    8    9    0 
-;;          !    "    (    )    $    &    ü    ?    ö    \ 
-;;          ä    ß   c[   s]    '    /   s%    c   a#  
-;;               |    {    }    +    =    *  ;<F24  :>  -_~
+;;          1!@  2    3``` 4$   5%    6&  7/   8([  9)]  0 
+;;          !@   "    (    )[   $    &    ü%   ?    ö#   \ 
+;;          ä`   ß   c[   s]    '    /   s%    c   a#  
+;;               |    {    }]   +    =    *  ;<F24  :>  -_~
 ;; TODO where to put delete
+;; TODO (multi lrld f9) is not working lets try makro in next release
+
+(deflayer game
+  _
+  \         1    2    3    4    5    6    7    8    9    0    [    @que bspc
+  tab       q    w    e    r    t    z    u    i    o    p    ;    =
+  caps      a    s    d    f    g    h    j    k    l    grv  '    /    ret
+  lsft 102d y    x    c    v    b    n    m    ,    .    -    rsft
+  lctl      lmet lalt           spc                           rctl
+)
 (deflayer qwerty
-  @^        @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  @ocl  bspc
+  f9
+  @^        @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  @gam  bspc
   @tab      @q!  @w'' @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  del  del
-  @atx      @aä  @sß  @d[  @f]  @g'  @h/  @j%  @kC   @lA# bspc @rtw sldr  @rtw
+  @atx      @aä  @sß  @d[  @f]  @g'  @h/  @j%  @kC   @lA# bspc @rtw f20   @rtw
   @oss  f24 @F23 @x|  @c{  @v}  @b+  @n=  @m*  @,F24 @.:> @-_~ @rsd
-  @ocl      lmet @oal           @mus                           @rcl 
+  @ocl      @oml @oal           @mus                           @ocl 
 )
 
 (deflayer upper
+  _
   @^         @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  ]    bspc
   S-tab      S-q  S-w  S-e  S-r  S-t  S-z  S-u  S-i   S-o  S-p  bspc del
   caps       @AÄ  S-s  S-d  S-f  S-g  S-h  S-j  S-k   S-l  @sy1 @rtw sldr @rtw
   lsft S-102d S-y S-x  S-c  S-v  S-b  S-n  S-m  S-,   S-.  S--  rsft
-  lctl       lmet lalt           @mus                           rctl
+  @ocl       lmet lalt           @mus                           @ocl
 )
+;; IDEA instead of a numpad put diacrits and pinky hell keys here, but space is limited and shift is still needed e.g. for upper case diacrits
+;;          #     [    ]    {    }           
+;;          ä     ß    ö    ü    \        
+;;     |    <     (    )    +    *
+;; TODO esc key only once Win key bspc twice
+;; IDEA use caps for extra layer flip 
+;; 
 (deflayer numbers
-  _         @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld _    _     
-  _         @-_~  1    @wn2 3    esc  esc  home up    end  pgup _    _     
-  caps      @.:>  @al4 @ct5 @sf6 @wn0 bspc left down  rght bspc _    _    _          
-  _    @os1 @,F24 7    8    9    del  ret  tab  del   mrgt pgdn _               
-  _         _     @sy1           _                              _          
+  _
+  _         @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld _    _
+  _         @-_~  1    @wn2 3    esc  esc  home up    end  pgup pgdn _     
+  @ocl      @.:>  @al4 @ct5 @sf6 @wn0 bspc left down  rght bspc _    _    _
+  _    @os1 @,F24 7    8    9    del  ret  tab  del   lmet mrtp _
+  @ocl      _     @sy1           _                              @ocl
 )
 (deflayer numberstab
-  _         _    _    _    _    _    _    _    _    _    _    _    lrld _     
-  _         @-_~ 1    @wn2 3    esc  esc  home up   end  pgup _    _     
-  _         rght left rght rght @wn0 bspc left down rght bspc _    _    _          
-  _   @os1 @,F24 7    8    9    del  ret  tab  del  mrgt pgdn _               
-  _         _    @sy1           _                             _          
+  _
+  _         _    _    _    _    _    _    _    _    _    _    _    lrld _
+  _         @-_~ 1    @wn2 3    esc  esc  home up   end  pgup pgdn _     
+  _         rght left rght rght @wn0 bspc left down rght bspc _    _    _
+  _   @os1 @,F24 7    8    9    del  ret  tab  del  lmet mrtp _
+  @ocl      _    @sy1           _                             @ocl
 )
 ;;       ^  symbols layer (todo ß ü ö are mapped to duplicated symbols, - and _ are already on base layer)
 ;;          1    2    3    4    5    6    7    8    9    0 
-;;          !    "    (    )    $    &    %    \    #    ?
+;;          !@   "    (    )    $    &    %    \    #    ?
 ;;          `    |    [    ]    '    /    %    _    #    -_
 ;;       ^  ´    |    {    }    +    =    *    <    >    ~
 (deflayer symbols
+  _
   _         _    _    _    _    _    _    _    _    _    _    _    _    _     
   _         S-1  S-2  S-8  S-9  S-4  S-6  S-5  S-[  /    @bsl _    _         
   _         @btk @pip @lsb @rsb S-/  S-7  S-5  S--  /    @-_~ _    _    _          
   _    @^   @tck @pip @lcb @rcb =    S-0  S-=  @lth @gth @til _               
   _         _    _              _                             _          
 )
-;; lsymbols and rsymbols are only usefull if activated by letter keys like v/n but I ditched that concept as to hard to do fast
+;; There are variants of the standard mouse buttons which "tap" the button. mrgt -> mrtp
+;; IDEA lsymbols and rsymbols are only usefull if activated by letter keys like v/n but I ditched that concept as to hard to do fast
 
-
-;; Aliases are referred to by `@<alias_name>`. Aliases can refer to each other,
-;; e.g. in the `anm` alias. However, an alias can only refer to another alias
-;; that has been defined before it in the file.
 (defalias
-
-  ;; Aliases for layer "toggling". It's not quite toggling because the layer
-  ;; will be active while the key is held and deactivated when the key is
-  ;; released. An alternate action name you can use is layer-while-held.
-  ;; However, the rest of this document will use The term "toggle" for brevity.
-  ;; switch layer als possible
+  ;; switch-layer also possible for stickyness
   num (layer-toggle numbers)
   numtab (layer-toggle numberstab)
   sym (layer-toggle symbols)
@@ -161,43 +147,13 @@
   os1 (one-shot 3000 (layer-toggle upper))
   oss (one-shot 1000 lsft)
   ocl (one-shot 1000 lctl)
+  oml (one-shot 1000 lmet)
   oal (one-shot 1000 lalt)
-  ;;oss (multi (one-shot 500 lsft) (one-shot 500 (layer-toggle numbers))) ;; get on shifted key fram a other layer
-  ;; os1 (one-shot 500 lsft) not working
-  ;; os1 (multi lsft (one-shot 500 (layer-toggle upper))) not working
-  ;; os1 (tap-dance 140 lsft  (one-shot 500 (layer-toggle upper)) not working
-  ;; tap-hold parameter order:
-
-  ;; 1. tap timeout
-  ;; 2. hold timeout
-  ;; 3. tap action
-  ;; 4. hold action
-  ;;
-  ;; The hold timeout is the number of milliseconds after which the hold action
-  ;; will activate.
-  ;;
-  ;; The tap timeout is best explained in a roundabout way. When you press and
-  ;; hold a standard key on your keyboard (e.g. 'a'), your operating system will
-  ;; read that and keep sending 'a' to the active application. To be able to
-  ;; replicate this behaviour with a tap-hold key, you must press-release-press
-  ;; the key within the tap timeout window (number is milliseconds). Simply
-  ;; holding the key results in the hold action activating, which is why you
-  ;; need to double-press for the tap action to stay pressed.
-  ;;
+  gam (layer-switch game)
+  que (layer-switch qwerty)
   ;; There are two additional versions of tap-hold available:
   ;; 1. tap-hold-press: if there is a key press, the hold action is activated
-  ;; 2. tap-hold-release: if there is a press and release of another key, the
-  ;; hold action is activated
-  ;;
-  ;; These versions are useful if you don't want to wait for the whole hold
-  ;; timeout to activate, but want to activate the hold action immediately
-  ;; based on the next key press or press and release of another key. These
-  ;; versions might be great to implement home row mods.
-  ;;
-  ;; If you come from kmonad, tap-hold-press and tap-hold-release are similar
-  ;; to tap-hold-next and tap-hold-next-release, respectively. If you know
-  ;; the underlying keyberon crate, tap-hold-press is the HoldOnOtherKeyPress
-  ;; and tap-hold-release is the PermissiveHold configuration.
+  ;; 2. tap-hold-release: if there is a press and release of another key, the hold action is activated
 
   ;; alt tab
   at1 (multi lalt tab)
@@ -209,11 +165,10 @@
   at7 (multi lalt tab tab tab tab tab tab tab)
   at8 (multi lalt tab tab tab tab tab tab tab tab)
   at9 (multi lalt tab tab tab tab tab tab tab tab tab)
-  ;;at0 (tap-dance 500 (@at1 @at2 @at3 @at4 @at5 @at6) )  ;; this does not work :(
-  at0 (tap-dance 500 (A-tab (macro f24 r) (macro f24 t) (macro f24 z)) )
-  aty (multi @numtab alt tab )
-  atx (tap-hold 200 100 (multi alt tab) (multi @numtab alt tab tab) )
-  ;;atm (tap-dance 700 (@at1 @at2 @at3 @at4) ) Sequnce now works
+  ;;at0 (tap-dance 500 (A-tab (macro f24 r) (macro f24 t) (macro f24 z)) ) old verion of atm
+  aty (multi @numtab alt tab ) ;; alt tab by dbl_tap-hold k
+  atx (tap-hold 200 100 (multi alt tab) (multi @numtab alt tab tab) ) ;; alt tab by hold caps
+  ;;atm (tap-dance 700 (@at1 @at2 @at3 @at4) ) Sequence now works but is inferior to the number row mapping
   atm  (tap-dance 500 ( A-tab (macro A-(tab 90 tab )) (macro A-(tab 90 tab  90 tab )) (macro A-(tab 90 tab  90 tab  90 tab )) ))
   ;; not working on remote desktop atp  (tap-dance 500 ( (macro A-pgup) (macro A-(pgup 90 pgup )) (macro A-(pgup 90 pgup  90 pgup )) (macro A-(pgup 90 pgup  90 pgup  90 pgup )) ))
 
@@ -227,10 +182,10 @@
   ;; TODO test if Long_Tap_O or Dbl_Tap_Hold_L is used in practise
   lA# (tap-dance 140 ((tap-hold-release 200 240 l alt) (tap-hold 200 240 (macro l l) (macro /) )))
   ;; TODO test usage of WIN
-  rtw (tap-hold-release 200 340 ret lmet)
+  rtw (tap-hold-release 200 5000 ret lmet)
+  ;; rtw (tap-hold-release 200 340 (multi ret sldr) lmet) this makes ret not appear
   
-  rsd (tap-hold-release 200 240 del lsft) ;; TODO not used ?! BUG rsft get ignored on RDesktop
-  
+  rsd (tap-hold-release 200 240 - lsft) ;; TODO not used ?! BUG rsft get ignored on RDesktop??
   ;; number layer home row mods
   sf6 (tap-hold-release 200 240 6 lsft)
   ct5 (tap-hold-release 200 300 5 lctl)
@@ -266,7 +221,7 @@
   9 (tap-hold 200 300 9 (multi (macro S-9 ) (tap-hold 200 400 XX (macro bspc A-C-9 ))) )
   0 (tap-hold 10 100 0 (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 400 XX (macro S-0 ))  ))  ) )
   sz (tap-hold 200 300 [ (multi (macro S-[ ) (tap-hold 200 500 XX (macro bspc A-C-[ ))))
- 
+  ;; q (multi q sldr) eats the next key after q
   q! (tap-hold 140 140 q (multi (macro S-1 ) (tap-hold 200 400 XX (macro bspc A-C-q ))) )                   ;; q ! @
   w'' (tap-hold 140 140 w (multi (macro S-2 ) (tap-hold 200 400 XX (macro S-2 ))) )                         ;; " ""
   e  (tap-hold 140 140 e (multi (macro S-8 ) (tap-hold 200 400 XX (macro S-9 ))))                           ;; (  ()
@@ -281,6 +236,7 @@
   aä (tap-hold 140 140 a (multi (macro ' ) (tap-hold 400 400 XX (macro bspc S-] spc ))))                    ;; ä = '  `=S-]
   AÄ (tap-hold 140 140 S-a (multi (macro S-' ) (tap-hold 400 400 XX (macro bspc ] spc )))) 
   ß (unicode ß) ;; prevents ẞ use C-A-S on the real key
+  ;; panik sß  (tap-hold 140 140 s (multi @ß  (tap-hold 200 400 XX (multi bspc sldr ))))
   sß  (tap-hold 140 140 s @ß)                                                                               ;; ß = [
   g'  (tap-hold 140 140 g (multi (macro S-/ ) (tap-hold 200 400 XX (macro S-/ ))) )                         ;; ' ''
   h/  (tap-hold 140 140 h (multi (macro S-7 ) (tap-hold 200 300 XX (macro S-7 ))) )                         ;; / //
@@ -291,44 +247,18 @@
   b+  (tap-hold 140 140 b (multi (macro = ) (tap-hold 200 300 XX (macro = ))))                              ;; + = =  b + ++
   n=  (tap-hold 140 140 n (multi (macro S-0 ) (tap-hold 200 300 XX (multi (macro S-0 ) (tap-hold 200 400 XX (macro S-0 ))  ))) ) ;; n = == ===
   m*  (tap-hold 140 140 m (multi (macro S-= ) (tap-hold 200 300 XX (macro S-= S-= ))))                      ;; * *** = S-=
-  ,F24 (tap-dance 140 ((tap-hold 10 100 , (multi (macro S-, ) (tap-hold 200 400 XX (macro bspc @lth ))) )  (tap-hold 10 100 f24 (macro @lth))))  ;; ,, = F24 , ; <
+  ,F24 (tap-dance 140 ((tap-hold 10 100 , (multi (macro S-, ) (tap-hold 200 400 XX (macro bspc @lth ))) )  (tap-hold 10 100 f20 (macro @lth))))  ;; ,, = F24 , ; <
   .:> (tap-dance 140 ((tap-hold 10 100 . (multi (macro S-. ) (tap-hold 200 400 XX (macro bspc @gth ))) )  (tap-hold 10 100 (macro . .) (macro @gth))))  ;; . : >
   -_~ (tap-dance 140 ((tap-hold 10 100 - (multi (macro S-- ) (tap-hold 200 400 XX (macro bspc @til ))) )  (tap-hold 10 100 (macro - -) (macro @til))))  ;; - _ ~
   ;; DBL-tap-Hold is not realy good for the frequently used symbol layer
   ;; mus (tap-dance 120 ((tap-hold  140 140 spc @num) (tap-hold  140 140 spc @sym) spc spc spc))
+  ;; mus (tap-hold  200 200 (multi spc sldr) @num) works but would require awkward sequneces
   mus (tap-hold  200 200 spc @num)
 )
+
+  ;; (macro-release-cancel 1 300 bspc S-1 300 S-1 300 bspc bspc S-2)
   
-;;(defalias
-  ;; For the multi action, all keys are pressed for the whole sequence
-  ;; but still in the listed order which may be undesirable, particularly
-  ;; for modifiers like shift. You probably want to use macro instead.
-  ;;
-  ;; Chording can be more succinctly described by the modifier prefixes
-  ;; `C-`, `A-`, `S-`, and `M-` for lctrl, lalt, lshift, lmeta, but are possible
-  ;; by using `multi` as well. The lmeta key is also known by some other
-  ;; names: "Windows", "GUI", "Command", "Super".
-  ;;
-  ;; This use case for multi is typing an all-caps string.
- ;; alp (multi lsft a b c d e f g h i j k l m n o p q r s t u v w x y z)
-
-  ;; Chords using the shortcut syntax. These ones are used for copying/pasting
-  ;; from some Linux terminals.
- ;; csv C-S-v
- ;; csc C-S-c
-
-  ;; Windows shortcut for displaying all windows
- ;; win M-tab
-
-  ;; macro accepts keys, chords, and numbers (a delay in ms). Note that numbers
-  ;; will be parsed as delays, so they will need to be aliased to be used.
-  ;; lch (macro h t t p @: / / 100 l o c a l h o s t @: @8 @0 @8 @0)
-
-  ;; unicode accepts a single unicode character. The unicode character will
-  ;; not be automatically repeated by holding the key down. The alias name
-  ;; is the unicode character itself and is referenced by @🙁 in deflayer.
- ;; 🙁 (unicode 🙁)
-
+  ;; macro support A-() and unicode now
   ;; Having a cmd action in your configuration without explicitly enabling
   ;; `danger-enable-cmd` **and** using the cmd-enabled executable will make
   ;; kanata refuse to load your configuration. The aliases below are commented
@@ -347,80 +277,9 @@
 
 ;; The underscore _ means transparent. The key on the base layer will be used
 ;; instead. XX means no-op. The key will do nothing.
-;; (deflayer numbers
-;;   _    _    _    _    _    _    nlk  kp7  kp8  kp9  _    _    _    _
-;;   _    _    _    _    _    XX   _    kp4  kp5  kp6  -    _    _    _
-;;   _    _    C-z  _    _    XX   _    kp1  kp2  kp3  +    _    _
-;;   _  _ C-z  C-x  C-c  C-v  XX   _    kp0  kp0  .    /    _
-;;   _    _    _              _              _    _    _
-;; )
 
 ;; The `lrld` action stands for "live reload". This will re-parse everything
-;; except for linux-dev. So in Linux, you cannot live reload and switch keyboard
-;; devices at the time of writing.
-;;
-;; Upon a successful reload, the kanata state will begin on the default base layer
-;; in the configuration. E.g. in this example configuration, you would start on
-;; the qwerty layer.
-;;
-;; WARNING: live reload leaks memory. This should not be a major problem though.
-;; Here are the measurements of memory consumption on Windows for version 1.0.0:
-;; - 20 reloads: 15.4 MB memory consumed
-;; - 50 reloads: 20.4 MB memory consumed
-;; So about 170 KB used per live reload. You'll probably be fine.
-;;
-;; Note: version 1.0.3 has probably doubled the amount of memory leaked per
-;; reload, though it has not been measured. In practice it's still negligible
-;; compared to a browser for example.
-;; (deflayer layers
-;;   _    @qwr _    lrld _    _    _    _    _    _    _    _    _    _
-;;   _    _    _    _    _    _    _    _    _    _    _    _    _    _
-;;   _    _    _    _    _    _    _    _    _    _    _    _    _
-;;   _  _ _    _    _    _    _    _    _    _    _    _    _
-;;   _    _    _              _              _    _    _
-;; )
 
-;;(defalias
-  ;; Alias for one-shot which will activate an action until either the timeout
-  ;; expires or a different key is pressed. The timeout is the first parameter
-  ;; and the action is the second parameter.
-  ;;
-  ;; The intended use cases are pressing a modifier for exactly one key or
-  ;; switching to another layer for exactly one key.
-  ;;
-  ;; If a one-shot key is held then it will act as a regular key. E.g. for os1
-  ;; below, holding an @os1 key will keep lsft held and holding an @os3 key
-  ;; will keep the layer set to misc.
- ;; os1 (one-shot 500 lsft)
- ;; os2 (one-shot 500 C-S-lalt)
- ;; os3 (one-shot 500 (layer-toggle misc))
-
-  ;; Alias for tap-dance which will activate one of the actions in the action
-  ;; list depending on how many taps were done. Tapping once will output the
-  ;; first action and tapping N times will output the N'th action.
-  ;;
-  ;; The first parameter is a timeout. Tapping the same tap-dance key again
-  ;; within the timeout will reset the timeout and advance the tap-dance to the
-  ;; next key.
-  ;;
-  ;; The action activates either when any of the following happens:
-  ;; - the timeout expires
-  ;; - the tap sequence reaches the end
-  ;; - a different key is pressed
-;;  td (tap-dance 200 (a b c d spc))
-;;)
-
-;;(deflayer arrows
-;;  _    f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12  _
-;;  _    _    _    _    _    _    _    pgup up   pgdn _    _    _    _
-;;  _    _    _    _    _    _    home left down rght end  _    _
-;;  _  _ _    _    _    _    _    _    _    _    _    _    _
-;;  _    _    _              _                  _    _
-;;)
-
-;; In Windows, using mouse buttons on the kanata window seems to cause it to hang.
-;; Using the mouse on other windows seems to be fine though.
-;;
 ;; The mouse buttons can be clicked using mlft, mrgt and mmid, representing the
 ;; left, right, and middle mouse buttons respectively. If the key is held, the
 ;; button press will also be held.
@@ -444,32 +303,6 @@
 ;;  _ _  _    mltp _    mrtp mmtp _    _    _    _    _    _
 ;;  _    _    _              _                 _    _
 ;;)
-
-;; (defalias
-;;   ;; Mouse wheel actions. The first number is the interval in milliseconds
-;;   ;; between scroll actions. The second number is the distance in some arbitrary
-;;   ;; unit. Play with the parameters to see what feels correct. Both numbers
-;;   ;; must be in the range 1-65535
-;;   ;;
-;;   ;; In both Windows and Linux, 120 distance units is equivalent to a single
-;;   ;; notch movement on a physical wheel. In Linux, not all desktop environments
-;;   ;; support the REL_WHEEL_HI_RES event so kanata just doesn't use it; instead a
-;;   ;; scroll happens if 120 or more distance units are accumulated. This may result
-;;   ;; in poor scrolling experience so in Linux it is recommended to use a distance
-;;   ;; value that is a multiple of 120.
-;;   mwu (mwheel-up 50 120)
-;;   mwd (mwheel-down 50 120)
-;; 
-;;   ;; Horizontal mouse wheel actions. Similar story to vertical mouse wheel.
-;;   mwl (mwheel-left 50 120)
-;;   mwr (mwheel-right 50 120)
-;; )
-;; FAKE KEYS
- ;; (defalias
- ;;   lft (multi (release-key ralt) left) ;; release ralt if held and also press left
- ;;   rgt (multi (release-key ralt) rght) ;; release ralt if held and also press rght
- ;;   rlr (release-layer ralted)          ;; release layer-toggle of ralted
- ;; )
 
 ;; Press and release fake keys.
 ;;
@@ -585,11 +418,13 @@
 (defseq z2  (2))
 (defseq iba (3))
 (defseq gh (g h))
+(defseq gg (g g))
 (defseq rdtab (l))
 
 ;; deffakekeys with S- for uppercase, with defsrc keys, with  spc A-C-q and kp1-kp9, numbers in macros are pauses
 (deffakekeys rdtab (macro A-pgup ))
-(deffakekeys gh (macro lalt 80 kp0 kp9 ret )) ;; this is working in outlook
+(deffakekeys gh  (macro lalt 80 kp1 ret )) ;; this is working in outlook
+(deffakekeys gg  (macro lalt 80 kp1 ret )) ;; this is working in outlook
 (deffakekeys str (macro S-h  a l l o spc  S-h  e r r spc   S-s  t r e c k e r t , ret ret ))
 (deffakekeys ded (macro S-h  a l l o spc  S-h  e r r spc  S-d  e d e r i c h s , ret ret ))
 (deffakekeys wic (macro S-h  a l l o spc  S-h  e r r spc   S-w  i c k l m a y r , ret ret ))
