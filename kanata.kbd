@@ -74,14 +74,6 @@
 ;; TODO where to put delete
 ;; TODO (multi lrld f9) is not working lets try makro in next release
 
-(deflayer game
-  _
-  \         1    2    3    4    5    6    7    8    9    0    [    @que bspc
-  tab       q    w    e    r    t    z    u    i    o    p    ;    =
-  caps      a    s    d    f    g    h    j    k    l    grv  '    /    ret
-  lsft 102d y    x    c    v    b    n    m    ,    .    -    rsft
-  lctl      lmet lalt           spc                           rctl
-)
 (deflayer qwerty
   f9
   @^        @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  @gam  bspc
@@ -90,7 +82,15 @@
   @oss  f24 @F23 @x|  @c{  @v}  @b+  @n=  @m*  @,F24 @.:> @-_~ @rsd
   @ocl      @oml @oal           @mus                           @ocl 
 )
-
+;; does not work for gaming
+(deflayer game
+  _
+  \         1    2    3    4    5    6    7    8    9    0    [    @que bspc
+  tab       q    w    e    r    t    z    u    i    o    p    ;    =
+  caps      a    s    d    f    g    h    j    k    l    grv  '    /    ret
+  lsft 102d y    x    c    v    b    n    m    ,    .    -    rsft
+  lctl      lmet lalt           spc                           rctl
+)
 (deflayer upper
   _
   @^         @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  ]    bspc
@@ -207,7 +207,7 @@
   tck (macro ] spc )				                                                                        ;; ´
   btk (macro S-] spc )				                                                                        ;; `
   ^   (macro \ spc )				                                                                        ;; ^
-  tab (macro tab )
+  tab (tap-hold-press  200 300 (macro tab ) M-C-lalt )  ;; hyper must be repressed ... maybe a layer would be better
 
   1@ (tap-hold 140 140 1 (multi (macro S-1 ) (tap-hold 200 400 XX (macro bspc A-C-q ))) )  
   2 (tap-hold 200 300 2 (macro S-2 ))
