@@ -29,6 +29,8 @@
 ;; TODO tap hold AltGr to f24 / AltGr and remove wincompose
 ;; TODO test release-key | release-layer
 
+;; CTRL + SPACE + ESC => Exit KANATA immediatly
+
 (defcfg
    sequence-timeout 3000
   ;; windows-altgr cancel-lctl-press ;; remove the lctl press that comes as a combo with ralt  with F24 mapping
@@ -55,7 +57,7 @@
 ;; z and y are not flipped
 ;; positioning the /-key at the ansi or iso position both work > TODO retest
 (defsrc
-  f9
+  esc
   \         1    2    3    4    5    6    7    8    9    0    [    ]    bspc
   tab       q    w    e    r    t    z    u    i    o    p    ;    =
   caps      a    s    d    f    g    h    j    k    l    grv  '    /    ret
@@ -69,16 +71,18 @@
 ;;          tapdance / hold symbols of the base layer s=shift c=ctrl a=alt
 ;;          1!@  2    3``` 4$   5%    6&  7/   8([  9)]  0 
 ;;          !@   "    (    )[   $    &    ü%   ?    ö#   \ 
-;;          ä`   ß   c[   s]    '    /   s%    c   a#  
-;;               |    {    }]   +    =    *  ;<F24  :>  -_~
+;;          ä`   ß    [    ]    '    /    %         #  
+;;         mouse |    {    }]   +    =    *  ;<F24  :>  -_~
 ;; TODO where to put delete
 ;; TODO (multi lrld f9) is not working lets try makro in next release
-
+;; rpt just rpeats one key
+;; TODO revisit win and esc otimization and rsft _ vs rsft esc  
+;; ctrl + Z single key ? 
 (deflayer qwerty
-  f9
-  @^        @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  @gam  bspc
-  @tab      @q!  @w'' @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  del  del
-  @atx      @aä  @sß  @d[  @f]  @g'  @h/  @j%  @kC   @lA# bspc @rtw f20   @rtw
+  @ech
+  @^        @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  C-z  bspc
+  @tab      @q!  @w'' @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  del  sldr
+  @atx      @aä  @sß  @d[  @f]  @g'  @h/  @j%  @kC   @lA# @bwn @rtw esc   @rtw
   @oss  f24 @F23 @x|  @c{  @v}  @b+  @n=  @m*  @,F24 @.:> @-_~ @rsd
   @ocl      @oml @oal           @mus                           @ocl 
 )
@@ -93,7 +97,7 @@
 )
 (deflayer upper
   _
-  @^         @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  ]    bspc
+  @^ec       @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  ]    bspc
   S-tab      S-q  S-w  S-e  S-r  S-t  S-z  S-u  S-i   S-o  S-p  bspc del
   caps       @AÄ  S-s  S-d  S-f  S-g  S-h  S-j  S-k   S-l  @sy1 @rtw sldr @rtw
   lsft S-102d S-y S-x  S-c  S-v  S-b  S-n  S-m  S-,   S-.  S--  rsft
@@ -104,23 +108,23 @@
 ;;          ä     ß    ö    ü    \        
 ;;     |    <     (    )    +    *
 ;; TODO esc key only once Win key bspc twice
-;; IDEA use caps for extra layer flip 
-;; 
+;; is ` used?
+;; better use of caps
 (deflayer numbers
   _
-  _         @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld _    _
-  _         @-_~  1    @wn2 3    esc  esc  home up    end  pgup pgdn _     
-  @ocl      @.:>  @al4 @ct5 @sf6 @wn0 bspc left down  rght bspc _    _    _
-  _    @os1 @,F24 7    8    9    del  ret  tab  del   lmet mrtp _
-  @ocl      _     @sy1           _                              @ocl
+  _         @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld @ral _
+  _         @-_~  1    2    3    esc  esc  home up    end  pgup pgdn _     
+  @sy1      @.wn  @al4 @ct5 @sf6 0    bspc left down  rght _    _    _    _
+  _    @btk @,F24 7    8    9    del  ret  @stb @cde  @apg @mrt _
+  _    _    _               _                              _
 )
 (deflayer numberstab
   _
-  _         _    _    _    _    _    _    _    _    _    _    _    lrld _
-  _         @-_~ 1    @wn2 3    esc  esc  home up   end  pgup pgdn _     
-  _         rght left rght rght @wn0 bspc left down rght bspc _    _    _
-  _   @os1 @,F24 7    8    9    del  ret  tab  del  lmet mrtp _
-  @ocl      _    @sy1           _                             @ocl
+  _         _    _    _    _    _    _    _    _    _    _    lrld @gam _
+  _         @-_~ 1    2    3    esc  esc  home up   end  pgup pgdn _     
+  _         rght left rght rght 0    bspc left down rght _    _    _    _
+  _   @btk @,F24 7    8    9    del  ret  @stb @cde @apg @mrt _
+  _         _    _           _                           _
 )
 ;;       ^  symbols layer (todo ß ü ö are mapped to duplicated symbols, - and _ are already on base layer)
 ;;          1    2    3    4    5    6    7    8    9    0 
@@ -146,7 +150,11 @@
   sy1 (one-shot 1000 (layer-toggle symbols))
   os1 (one-shot 3000 (layer-toggle upper))
   oss (one-shot 1000 lsft)
-  ocl (one-shot 1000 lctl)
+  ocl (one-shot 1000 lctl) 
+  stb (tap-hold-release 200 5000 tab lsft)
+  cde (tap-hold-release 200 5000 del lctl)
+  apg (tap-hold-release 200 5000 pgup lalt)
+  mrt (tap-hold-release 200 5000 mrtp lmet)
   oml (one-shot 1000 lmet)
   oal (one-shot 1000 lalt)
   gam (layer-switch game)
@@ -166,8 +174,8 @@
   at8 (multi lalt tab tab tab tab tab tab tab tab)
   at9 (multi lalt tab tab tab tab tab tab tab tab tab)
   ;;at0 (tap-dance 500 (A-tab (macro f24 r) (macro f24 t) (macro f24 z)) ) old verion of atm
-  aty (multi @numtab alt tab ) ;; alt tab by dbl_tap-hold k
-  atx (tap-hold 200 100 (multi alt tab) (multi @numtab alt tab tab) ) ;; alt tab by hold caps
+  aty (multi @numtab lalt (macro tab) ) ;; alt tab by dbl_tap-hold k
+  atx (tap-hold 200 150 (multi lalt tab) (multi @numtab lalt (macro tab tab)) ) ;; alt tab by hold caps
   ;;atm (tap-dance 700 (@at1 @at2 @at3 @at4) ) Sequence now works but is inferior to the number row mapping
   atm  (tap-dance 500 ( A-tab (macro A-(tab 90 tab )) (macro A-(tab 90 tab  90 tab )) (macro A-(tab 90 tab  90 tab  90 tab )) ))
   ;; not working on remote desktop atp  (tap-dance 500 ( (macro A-pgup) (macro A-(pgup 90 pgup )) (macro A-(pgup 90 pgup  90 pgup )) (macro A-(pgup 90 pgup  90 pgup  90 pgup )) ))
@@ -182,15 +190,16 @@
   ;; TODO test if Long_Tap_O or Dbl_Tap_Hold_L is used in practise
   lA# (tap-dance 140 ((tap-hold-release 200 240 l alt) (tap-hold 200 240 (macro l l) (macro /) )))
   ;; TODO test usage of WIN
-  rtw (tap-hold-release 200 5000 ret lmet)
+  rtw (tap-hold-release 200 5000 ret lctl)
   ;; rtw (tap-hold-release 200 340 (multi ret sldr) lmet) this makes ret not appear
   
-  rsd (tap-hold-release 200 240 - lsft) ;; TODO not used ?! BUG rsft get ignored on RDesktop??
+  rsd (tap-hold-release 200 240 S-- lsft) ;; TODO not used ?! BUG rsft get ignored on RDesktop??
   ;; number layer home row mods
   sf6 (tap-hold-release 200 240 6 lsft)
   ct5 (tap-hold-release 200 300 5 lctl)
   al4 (tap-hold-release 200 340 4 lalt)
-  wn2 (tap-hold-release 200 240 2 rmet)
+  .wn (tap-hold-release 200 240 . lmet)
+  bwn (tap-hold-release 200 5000 bspc lmet)
   wn0 (tap-hold-release 200 340 0 lmet)
   ;;ght (tap-hold-release 200 240 rght rmet)  ;;works but not used
 
@@ -207,8 +216,7 @@
   tck (macro ] spc )				                                                                        ;; ´
   btk (macro S-] spc )				                                                                        ;; `
   ^   (macro \ spc )				                                                                        ;; ^
-  tab (tap-hold-press  200 300 (macro tab ) M-C-lalt )  ;; hyper must be repressed ... maybe a layer would be better
-
+  ^ec  (tap-hold 200 300 esc @^) 
   1@ (tap-hold 140 140 1 (multi (macro S-1 ) (tap-hold 200 400 XX (macro bspc A-C-q ))) )  
   2 (tap-hold 200 300 2 (macro S-2 ))
   ;; multi 3 3 because macro 3 3 is not working
@@ -222,38 +230,53 @@
   0 (tap-hold 10 100 0 (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 400 XX (macro S-0 ))  ))  ) )
   sz (tap-hold 200 300 [ (multi (macro S-[ ) (tap-hold 200 500 XX (macro bspc A-C-[ ))))
   ;; q (multi q sldr) eats the next key after q
-  q! (tap-hold 140 140 q (multi (macro S-1 ) (tap-hold 200 400 XX (macro bspc A-C-q ))) )                   ;; q ! @
+  ;;q! (tap-hold 140 140 q (multi (macro S-1 ) (tap-hold 200 400 XX (macro bspc A-C-q ))) )                 ;; q ! @
+  q! (tap-hold 1 140 q (macro-release-cancel S-1 600 bspc A-C-q 800 bspc S-1 800 bspc))                   ;; q ! @
   w'' (tap-hold 140 140 w (multi (macro S-2 ) (tap-hold 200 400 XX (macro S-2 ))) )                         ;; " ""
   e  (tap-hold 140 140 e (multi (macro S-8 ) (tap-hold 200 400 XX (macro S-9 ))))                           ;; (  ()
   r  (tap-hold 140 140 r (multi (macro S-9 ) (tap-hold 200 400 XX (macro bspc A-C-8 ))) )                   ;; ) [ todo find a better use 
   t$  (tap-hold 140 140 t (macro S-4))                                                                      ;; $
   z&  (tap-hold 140 140 z (multi (macro S-6 ) (tap-hold 200 400 XX (macro S-6 ))))                          ;; & &&
   ;;ü (unicode ü) ;; unicode does not allow shift for upper case use macro or tap-dance for anti key repeat
-  uü  (tap-hold 140 140 u (multi (macro ; ) (tap-hold 400 400 XX (macro bspc S-5 ))) )                      ;; ü = ;  u ü % 
+  uü  (tap-hold 140 140 u (multi (macro ; ) (tap-hold 400 400 XX (macro-release-cancel bspc S-5 800 bspc ; 800 bspc))) )                      ;; ü = ;  u ü % 
   p\  (tap-dance 140 ((tap-hold 10 100 p (multi (macro @bsl ) (tap-hold 200 300 XX (macro @bsl ))))  (tap-hold 10 100 (macro p p) (macro @bsl @bsl) )))  ;; p \ \\
   oö  (tap-hold 140 140 o (multi (macro grv ) (tap-hold 400 400 XX (macro bspc / ))) )                      ;; ö = grv #=/  o ö #
-  i?  (tap-hold 140 140 i (multi (macro S-[ ) (tap-hold 200 300 XX (macro S-[ ))))                          ;; ? = S-[      i ? ??
-  aä (tap-hold 140 140 a (multi (macro ' ) (tap-hold 400 400 XX (macro bspc S-] spc ))))                    ;; ä = '  `=S-]
+  i?  (tap-hold 140 140 i (multi (macro S-[ ) (tap-hold 200 500 XX (macro S-[ ))))                          ;; ? = S-[      i ? ??
+;;aä (tap-hold 140 140 a (multi (macro ' ) (tap-hold 400 400 XX (macro bspc S-] spc ))))                    ;; ä = '  `=S-]
+;;  aä (macro-release-cancel a 140 bspc ' 560 bspc b 560 bspc c)                    ;; ä = '  `=S-]
+  aä (tap-hold 1 140 a (macro-release-cancel ' 400 bspc S-] spc 600 bspc ' 600 bspc a 600 bspc))  
   AÄ (tap-hold 140 140 S-a (multi (macro S-' ) (tap-hold 400 400 XX (macro bspc ] spc )))) 
   ß (unicode ß) ;; prevents ẞ use C-A-S on the real key
   ;; panik sß  (tap-hold 140 140 s (multi @ß  (tap-hold 200 400 XX (multi bspc sldr ))))
   sß  (tap-hold 140 140 s @ß)                                                                               ;; ß = [
-  g'  (tap-hold 140 140 g (multi (macro S-/ ) (tap-hold 200 400 XX (macro S-/ ))) )                         ;; ' ''
-  h/  (tap-hold 140 140 h (multi (macro S-7 ) (tap-hold 200 300 XX (macro S-7 ))) )                         ;; / //
-  x|  (tap-hold 140 140 x (multi (macro A-C-102d ) (tap-hold 200 300 XX (macro A-C-102d ))) )               ;; | ||
-  c{  (tap-hold 140 140 c (multi (macro A-C-7 ) (tap-hold 200 400 XX (macro A-C-0 ))))                      ;; { {}
-  v}  (tap-hold 140 140 v (multi (macro A-C-0 ) (tap-hold 200 400 XX (macro bspc A-C-9 ))) )                ;; v } ]
+  g'  (tap-hold 140 140 g (multi (macro S-/ ) (tap-hold 200 500 XX (macro S-/ ))) )                         ;; ' ''
+  h/  (tap-hold 140 140 h (multi (macro S-7 ) (tap-hold 200 400 XX (macro S-7 ))) )                         ;; / //
+  x|  (tap-hold 140 140 x (multi (macro A-C-102d ) (tap-hold 200 500 XX (macro A-C-102d ))) )               ;; | ||
+  c{  (tap-hold 140 140 c (multi (macro A-C-7 ) (tap-hold 200 500 XX (macro A-C-0 ))))                      ;; { {}
+  v}  (tap-hold 140 140 v (multi (macro A-C-0 ) (tap-hold 200 500 XX (macro bspc A-C-9 ))) )                ;; v } ]
   ;; + (unicode +) unicode protects from accidental shifts and autorepeat but can't be used in macros
-  b+  (tap-hold 140 140 b (multi (macro = ) (tap-hold 200 300 XX (macro = ))))                              ;; + = =  b + ++
-  n=  (tap-hold 140 140 n (multi (macro S-0 ) (tap-hold 200 300 XX (multi (macro S-0 ) (tap-hold 200 400 XX (macro S-0 ))  ))) ) ;; n = == ===
-  m*  (tap-hold 140 140 m (multi (macro S-= ) (tap-hold 200 300 XX (macro S-= S-= ))))                      ;; * *** = S-=
+  b+  (tap-hold 140 140 b (multi (macro = ) (tap-hold 200 500 XX (macro = ))))                              ;; + = =  b + ++
+  n=  (tap-hold 140 140 n (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 400 XX (macro S-0 ))  ))) ) ;; n = == ===
+  ;; todo try macro rpt  
+  m*  (tap-hold 140 140 m (multi (macro S-= ) (tap-hold 200 700 XX S-= )))                      ;; * *** = S-=
   ,F24 (tap-dance 140 ((tap-hold 10 100 , (multi (macro S-, ) (tap-hold 200 400 XX (macro bspc @lth ))) )  (tap-hold 10 100 f20 (macro @lth))))  ;; ,, = F24 , ; <
-  .:> (tap-dance 140 ((tap-hold 10 100 . (multi (macro S-. ) (tap-hold 200 400 XX (macro bspc @gth ))) )  (tap-hold 10 100 (macro . .) (macro @gth))))  ;; . : >
-  -_~ (tap-dance 140 ((tap-hold 10 100 - (multi (macro S-- ) (tap-hold 200 400 XX (macro bspc @til ))) )  (tap-hold 10 100 (macro - -) (macro @til))))  ;; - _ ~
+  .:> (tap-dance 140 ((tap-hold 10 100 . (multi (macro S-. ) (tap-hold 200 400 XX (macro bspc @gth ))) )  (tap-hold 10 100 (macro . .) (macro @gth)) (tap-hold 10 100 (macro . . .) .) ))  ;; . : >
+  -_~ (tap-dance 140 ((tap-hold 10 100 - (multi (macro S-- ) (tap-hold 200 400 XX (macro bspc @til ))) )  (tap-hold 10 100 (macro - -) (macro @til)) (tap-hold 10 100 (macro - - -) -) ))  ;; - _ ~
   ;; DBL-tap-Hold is not realy good for the frequently used symbol layer
   ;; mus (tap-dance 120 ((tap-hold  140 140 spc @num) (tap-hold  140 140 spc @sym) spc spc spc))
   ;; mus (tap-hold  200 200 (multi spc sldr) @num) works but would require awkward sequneces
   mus (tap-hold  200 200 spc @num)
+  ;ral (multi
+  ;      (release-key lctl)
+  ;      (release-key lsft)
+  ;      (release-key lmet)
+  ;      (release-key lalt)
+  ;      (release-key rctl)
+  ;      (release-key rsft)
+  ;      (release-key rmet)
+  ;      (release-key ralt)
+  ;    )
+  ral (macro 100 lctl 100 lsft 100 lmet 100 lalt 100 rctl 100 rsft 100 rmet 100 ralt  )
 )
 
   ;; (macro-release-cancel 1 300 bspc S-1 300 S-1 300 bspc bspc S-2)
@@ -336,11 +359,11 @@
   mmid mmid
   pal (multi
         (on-press-fakekey ctl press)
-        (on-press-fakekey sft press)
         (on-press-fakekey met press)
         (on-press-fakekey alt press)
       )
-  ral (multi
+;; release everthing key -> very usefull
+  rall (multi
         (on-press-fakekey ctl release)
         (on-press-fakekey sft release)
         (on-press-fakekey met release)
@@ -363,7 +386,7 @@
         (on-press-fakekey alt release)
       )
   pal (on-press-fakekey pal tap)
-  ral (on-press-fakekey ral tap)
+  rall (on-press-fakekey rall tap)
 
   ;; If you find that an application isn't registering keypresses correctly
   ;; with multi, you can try out:
@@ -381,6 +404,9 @@
     (on-release-fakekey-delay 200)
     (on-release-fakekey lsft release)
   )
+  ;;tab (tap-hold-press  200 300 (macro tab ) @pal )  ;; hyper must be repressed ... maybe a layer would be better
+  tab (tap-hold-press  200 400 tab f24 )
+  ech (tap-hold 140 400 esc (multi home (tap-hold 400 1100 XX end)) )
 )
 
 ;; Vim-style leader-key sequences. Activate a fakekey-tap by pressing a "leader"
@@ -444,7 +470,7 @@
 (deffakekeys z2 (macro kp2 kp1 . kp1 kp2 . kp2 kp0 kp0 kp1 ))
 
 (defalias
- rcl (tap-hold-release 200 200 sldr rctl) ;; !! sldr is hard coded leader key fake key  !!
+ rcl (tap-hold-release 200 200 sldr rctl) ;; !! sldr is hard coded leader key fake key  !! dropped in favor of ocl
  ;; F23 (tap-hold 200 200 y (multi f24 sldr))  ;; works technically f24 triggers y itselft if  must be hold for f24 ... feels bad
  F23 (tap-hold-release 200 200 y (macro f23) )
 )
