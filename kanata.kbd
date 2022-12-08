@@ -15,6 +15,7 @@
 ;; - F-Keys as normal                                     F-Key layer                                     *F-Key layer 
 ;; - bspc on ö											  - on ö or - on , _on =
 ;; - rdesktop alt-pgup controls not mappable              pgup can be remapped
+;; - Layer exit letter v}
 ;;
 ;; layers(6): normal,
 ;;            fallback normal,
@@ -237,7 +238,9 @@
   sz (tap-hold 200 300 [ (multi (macro S-[ ) (tap-hold 200 500 XX (macro bspc A-C-[ ))))
   ;; q (multi q sldr) eats the next key after q
   ;;q! (tap-hold 140 140 q (multi (macro S-1 ) (tap-hold 200 400 XX (macro bspc A-C-q ))) )                 ;; q ! @
-  q! (tap-hold 1 140 q (macro-release-cancel S-1 600 bspc (unicode @) 800 bspc S-1 800 bspc))                   ;; q ! @
+  ;;q! (tap-hold 1 140 q (macro-release-cancel S-1 600 bspc (unicode @) 800 bspc S-1 800 bspc))                   ;; q ! @
+  ;;q! (tap-dance 120 ((tap-hold 1 90 q (multi (macro S-1 ) (tap-hold 200 600 XX (macro bspc (unicode @) ))) )  (unicode @)  (unicode ä) ) )
+  q! (tap-hold 1 100 (tap-dance 150 (q  (unicode @))) (multi (macro S-1 ) (tap-hold 200 600 XX (macro bspc (unicode @) )))  ) ;; q ! @       Great! tapdance can be nested inside tap-hold
   w'' (tap-hold 140 140 w (multi (macro S-2 ) (tap-hold 200 400 XX (macro S-2 ))) )                         ;; " ""
   e  (tap-hold 140 140 e (multi (macro S-8 ) (tap-hold 200 400 XX (macro S-9 ))))                           ;; (  ()
   r  (tap-hold 140 140 r (multi (macro S-9 ) (tap-hold 200 400 XX (macro bspc A-C-8 ))) )                   ;; ) [ todo find a better use 
@@ -258,15 +261,18 @@
   x|  (tap-hold 140 140 x (multi (macro A-C-102d ) (tap-hold 200 500 XX (macro A-C-102d ))) )               ;; | ||
   c{  (tap-hold 140 140 c (multi (macro A-C-7 ) (tap-hold 200 500 XX (macro A-C-0 ))))                      ;; { {}
   ;;v}  (tap-hold 140 140 v (multi (macro A-C-0 ) (tap-hold 200 500 XX (macro bspc A-C-9 ))) )                ;; v } ]
-  ;; THIS implements Layer_with_default (if nothing is pressed on the layer) TODO what do we whant this Layer to do?
+  ;; THIS implements Layer_with_default (if nothing is pressed on the layer) TODO what do we whant this Layer to do? TDOO the default layer key is only printed after release
   v}  (tap-hold 140 140 v (tap-hold-release 200 5000 (macro A-C-0 )  @syv))             ;; v } ]
-  ;; + (unicode +) unicode protects from accidental shifts and autorepeat but can't be used in macros
   b+  (tap-hold 140 140 b (multi (macro = ) (tap-hold 200 500 XX (macro = ))))                              ;; + = =  b + ++
   n=  (tap-hold 140 140 n (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 400 XX (macro S-0 ))  ))) ) ;; n = == === 
   m*  (tap-hold 140 140 m (multi (macro S-= ) (tap-hold 200 700 XX S-= )))                      ;; * = S-= with long autorepeat
-  ,F24 (tap-dance 140 ((tap-hold 10 100 , (multi (macro S-, ) (tap-hold 200 400 XX (macro bspc @lth ))) )  (tap-hold 10 100 f20 (macro @lth))))  ;; ,, = F24 , ; <
-  .:> (tap-dance 140 ((tap-hold 10 100 . (multi (macro S-. ) (tap-hold 200 400 XX (macro bspc @gth ))) )  (tap-hold 10 100 (macro . .) (macro @gth)) (tap-hold 10 100 (macro . . .) .) ))  ;; . : >
-  -_~ (tap-dance 140 ((tap-hold 10 100 - (multi (macro S-- ) (tap-hold 200 400 XX (macro bspc @til ))) )  (tap-hold 10 100 (macro - -) (macro @til)) (tap-hold 10 100 (macro - - -) -) ))  ;; - _ ~
+;;,F24 (tap-dance 140 ((tap-hold 10 100 , (multi (macro S-, ) (tap-hold 200 400 XX (macro bspc @lth ))) )  (tap-hold 10 100 f20 (macro @lth))))  ;; ,, = F24 , ; <
+;; .:> (tap-dance 140 ((tap-hold 10 100 . (multi (macro S-. ) (tap-hold 200 400 XX (macro bspc @gth ))) )  (tap-hold 10 100 (macro . .) (macro @gth)) (tap-hold 10 100 (macro . . .) .) ))  ;; . : >
+;;  -_~ (tap-dance 140 ((tap-hold 10 100 - (multi (macro S-- ) (tap-hold 200 400 XX (macro bspc @til ))) )  (tap-hold 10 100 (macro - -) (macro @til)) (tap-hold 10 100 (macro - - -) -) ))  ;; - _ ~
+;; nesting of tap-dance inside tap-hold is now possible
+   ,F24 (tap-hold 10 100 (tap-dance 140 (, (tap-hold 10 100 f20 (macro @lth))))  (multi (macro S-, ) (tap-hold 200 400 XX (macro bspc @lth ))) )  ;; ,, = F24 , ; <
+  .:> (tap-hold 10 100 (tap-dance 140 (. (tap-hold 10 100 (macro . .) (macro @gth)) (tap-hold 10 100 (macro . . .) .) )) (multi (macro S-. ) (tap-hold 200 400 XX (macro bspc @gth ))) )    ;; . : >
+  -_~ (tap-hold 10 100 (tap-dance 140 (-   (tap-hold 10 100 (macro - -) (macro @til)) (tap-hold 10 100 (macro - - -) -) )) (multi (macro S-- ) (tap-hold 200 400 XX (macro bspc @til ))) )  ;; - _ ~
   ;; DBL-tap-Hold is not realy good for the frequently used symbol layer
   ;; mus (tap-dance 120 ((tap-hold  140 140 spc @num) (tap-hold  140 140 spc @sym) spc spc spc))
   ;; mus (tap-hold  200 200 (multi spc sldr) @num) works but would require awkward sequneces
@@ -281,7 +287,9 @@
   ;;      (release-key rmet)
   ;;      (release-key ralt)
   ;;    )
-  ral (macro 100 lctl 100 lsft 100 lmet 100 lalt 100 rctl 100 rsft 100 rmet 100 ralt  ) ;; not working
+  ;;ral (macro 100 lctl 100 lsft 100 lmet 100 lalt 100 rctl 100 rsft 100 rmet 100 ralt  ) ;; not working
+  ral S-C-M-A-9
+  
   ;;f1 (macro f1 f24)  ;; only usefull in applications that do not react on F1 ==> not usefull
 )
 
