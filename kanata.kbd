@@ -26,8 +26,8 @@
 ;;            F-key 
 ;; retry via newest version and skip fallback:  ctl win alt mouse F13 space F14 LFKey left down right
 ;;     space/numbers 
-;; TODO wich thumb activates nav?
-;; SC06F remap altgr to f24 in sharpkeys is not recognized by kanata
+;; TODO wich thumb activates nav? cursor keys seems to be used with right tumb
+;; BUG SC06F remap altgr to f24 in sharpkeys is not recognized by kanata
 ;; if numtab is good make a key to flip remote desktop controls -> dont work bc of timings non remappable keys
 ;; double leader keying (multi f24 sldr) inconsistencies with sldr 
 ;; TODO sldr key not used
@@ -122,8 +122,7 @@
 
 ;; defsrc for iso german qwertz layout  
 ;; If you are looking for other keys, the file src/keys/mod.rs should hopefully provide some insight.
-;; z and y are not flipped
-;; positioning has no meaning but must be consistent with other layers
+;; z and y are not flipped positioning has no meaning but must be consistent with other layers
 (defsrc
   esc       f1
   ^         1    2    3    4    5    6    7    8    9    0    ß    ´    bspc
@@ -154,7 +153,7 @@
 (deflayer qwerty
   @ech      f1
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  C-z  bspc
-  @tab      @q!  @w˝  @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  del  (tap-hold 200 300 sldr f20) 
+  @tab      @q!  @w˝  @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  del  (tap-hold 200 300 sldr (macro f20)) 
   @atx      @aä  @sß  @d[  @f]  @g'  @h/  @j%  @kC   @lA# @bwn @rtc esc  @rtc
   @oss  f24 @F23 @x|  @c{  @v}  @b+  @n=  @m*  @,F24 @.:> @-_~ @rsd
   @ocl      @oml @oal           @mus                           @ocl 
@@ -299,20 +298,6 @@
   9sy (tap-hold-release 200 340 9 @syv)
   ;;ght (tap-hold-release 200 240 rght rmet)  ;;works but not used
 
-;; symbols old definition
-;;bsl A-C-[							                                                                        ;; \
-;;rcb A-C-0							                                                                        ;; }
-;;lcb A-C-7   	                                                                                            ;; {
-;;rsb A-C-9							                                                                        ;; ]
-;;lsb A-C-8							                                                                        ;; [
-;;pip A-C-102d						                                                                        ;; |
-;;lth 102d							                                                                        ;; <
-;;gth S-102d						                                                                        ;; >
-;;til A-C-=			            	                                                                        ;; ~
-;;tck (macro ´ spc )				                                                                        ;; ´
-;;btk (macro ` spc )				                                                                        ;; `
-;;^   (macro \ spc )				                                                                        ;; ^
-
   1@ (tap-hold 140 140 1 (multi (macro S-1 ) (tap-hold 200 400 XX (macro bspc @@ ))) )  
   2 (tap-hold 140 300 2 (multi @˝ (tap-hold 200 700 XX @˝ )) )
   ;; multi 3 3 because macro 3 3 is not working
@@ -329,21 +314,17 @@
   ;;q! (tap-hold 140 140 q (multi (macro S-1 ) (tap-hold 200 400 XX (macro bspc A-C-q ))) )                 ;; q ! @
   ;;q! (tap-hold 1 140 q (macro-release-cancel S-1 600 bspc (unicode @) 800 bspc S-1 800 bspc))                   ;; q ! @
   ;;q! (tap-dance 120 ((tap-hold 1 90 q (multi (macro S-1 ) (tap-hold 200 600 XX (macro bspc (unicode @) ))) )  (unicode @)  (unicode ä) ) )
-  q! (tap-hold 1 100 (tap-dance 150 (q (macro @@))) (multi (macro S-1 ) (tap-hold 200 600 XX (macro bspc @@ )))  ) ;; q ! @       Great! tapdance can be nested inside tap-hold
+  q! (tap-hold 1 100 (tap-dance 150 (q @@ )) (multi @! (tap-hold 200 600 XX (macro bspc @@ )))  ) ;; q ! @    Great! tapdance can be nested inside tap-hold. Still timing problems on keybr.com
   w˝ (tap-hold 140 140 w (multi (macro S-2 ) (tap-hold 200 400 XX (macro S-2 ))) )                         ;; " ""
   e  (tap-hold 140 140 e (multi (macro S-8 ) (tap-hold 200 400 XX (macro S-9 ))))                           ;; (  ()
   r  (tap-hold 140 140 r (multi (macro S-9 ) (tap-hold 200 600 XX (macro bspc A-C-9 ))) )                   ;; ) [ todo find a better use 
   t$  (tap-hold 140 140 t (macro S-4))                                                                      ;; $
   z&  (tap-hold 140 140 z (multi (macro S-6 ) (tap-hold 200 400 XX (macro S-6 ))))                          ;; & &&
-  ;;ü (unicode ü) ;; unicode does not allow shift for upper case use macro or tap-dance for anti key repeat
   uü  (tap-hold 140 140 u (multi (macro ü ) (tap-hold 400 400 XX (macro-release-cancel bspc S-5 800 bspc ü 800 bspc))) )                      ;; ü = ;  u ü % 
   i?  (tap-hold 140 140 i (multi @? (tap-hold 200 500 XX @? )))                                           ;; ? = S-[      i ? ??
   oö  (tap-hold 140 140 o (multi (macro ö ) (tap-hold 400 400 XX (macro bspc # ))) )                      ;; ö = grv #=/  o ö #
   p\  (tap-dance 140 ((tap-hold 10 100 p (multi  @\ (tap-hold 200 300 XX  @\ )))  (tap-hold 10 100 (macro p p) (macro A-C-ß A-C-ß) )))  ;; p \ \\
-;;aä (tap-hold 140 140 a (multi (macro ' ) (tap-hold 400 400 XX (macro bspc S-] spc ))))                    ;; ä = '  `=S-]
   aä (tap-hold 1 140 a (macro-release-cancel ä 400 bspc S-´ spc 600 bspc ä 600 bspc a 600 bspc))            ;; ä = '  `=S-]
-  ;;ß (unicode ß) ;; prevents ẞ use C-A-S on the real key
-  ;; panik sß  (tap-hold 140 140 s (multi @ß  (tap-hold 200 400 XX (multi bspc sldr ))))
   sß  (tap-hold 140 140 s (macro ß ) )                                                                               ;; ß = [
   g'  (tap-hold 140 140 g (multi @' (tap-hold 200 500 XX @' )) )                         ;; ' ''
   h/  (tap-hold 140 140 h (multi (macro S-7 ) (tap-hold 200 400 XX (macro S-7 ))) )                         ;; / //
