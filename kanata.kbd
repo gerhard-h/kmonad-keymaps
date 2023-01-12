@@ -1,22 +1,26 @@
 #|
-;; FEATURES kanata                                       QMK                                              QMK minumal portable requirements
-;; - Home row mods                                        (y) but timing problems                          Fallback abc layer
-;; - Autosymbol: Tap_Hold Dbl_Tap_Hold Long_Hold          (y) but no long_hold, dbl_tap-hold on modifiers  Fallback abc layer
-;; - Long_Hold                                            n                                               *Default Querty layer
-;; - Symbol layer (rarly used)                            y                                                Fallback Symbol layer
+;; FEATURES kanata                                       QMK                                              QMK minimal portable requirements
+;; - Home row mods                                       (Y) but timing problems                          Fallback abc layer (Fallback = no kanata available)
+;; - Autosymbol: Tap_Hold                                 y TAP_HOLD / MOD_TAP
+;; -(Autosymbol: NO Dbl_Tap_Hold on Shift)                n 
+;; -(Autosymbol: Dbl_Tap_Hold ONLY for SLOW KEYS q,.)     Y for all non modifiers
+;; - Autosymbol: Dbl_Tap_Hold on non Shift modifiers      N                              Fallback abc layer may (not) have this anyway
+;; -(Autosymbol: Dbl_Tap slowes Tap_Hold)				  Y no problemfor non modifirers
+;; - Autosymbol: Long_Hold                                N                                               *Default Querty kanata layer
+;; - Symbol layer (rarly used space + caps)               y                                                Fallback Symbol layer
+;; - V-key Symbol layer (more used)                      (y) is possible  but maybe not needed             Fallback Symbol layer
 ;; - Nav/Number layer                                     y + sticky + dedicated layerkey                  Fallback number/nav layer
-;; - sticky layer not needed                              y                                                On Fallback layers
+;; - one-shot layer (rarly used)                          y                                                On Fallback layers
 ;; - one-shot shift,                                      y                                                On Fallback layer
 ;; - alt tap otimization                                  inprogress
 ;; - F23 to Ahk Mouse layer								  y even better also with ahk highlight           *Mouse Layer
 ;; - F24 to Ahk hotkeys									  y
-;; - leaderkey, wincompose and ahk integration            (y) no leaderkey but integrations still work
-;; - AHK hotstring special version                        AHK hotstring
+;; - leaderkey, wincompose and ahk integration           (y) no leaderkey but integrations still work
+;; - AHK hotstring special version                        y AHK hotstring
 ;; - extra thumbkeys can be supported (F13+)              extra thumbkeys can be handeled directly (mouse)
 ;; - F-Keys as normal                                     F-Key layer                                     *F-Key layer 
 ;; - bspc on ö											  - on ö or - on , _on =
 ;; - rdesktop alt-pgup controls not mappable              pgup can be remapped
-;; - Layer exit letter v}
 ;;
 ;; layers(6): normal,
 ;;            fallback normal,
@@ -24,7 +28,7 @@
 ;;            fallback number/nav
 ;;            mouse,
 ;;            F-key 
-;; retry via newest version and skip fallback:  ctl win alt mouse F13 space F14 LFKey left down right
+;; RETRY via newest version and skip fallback:  ctl win alt mouse F13 space F14 LFKey left down right
 ;;     space/numbers 
 ;; TODO wich thumb activates nav? cursor keys seems to be used with right tumb
 ;; BUG SC06F remap altgr to f24 in sharpkeys is not recognized by kanata
@@ -65,6 +69,9 @@
   ;; Using a binary compiled with the cmd feature enabled, uncomment below to
   ;; enable command execution:
   ;; danger-enable-cmd yes
+  process-unmapped-keys no ;; yes does not help with japanese keys
+  ;; Intl1 KEY_RO ro
+  ;; CHANGES Remoced onshot-mods and ctrl-keys to make Remotedesktop not stick ctl 
 )
 (deflocalkeys-win
   ü    186
@@ -118,6 +125,7 @@
   ² (macro A-C-2 )
   ³ (macro A-C-3 )
   µ (macro A-C-m )
+  , (macro ,)
 )
 
 ;; defsrc for iso german qwertz layout  
@@ -129,7 +137,7 @@
   tab       q    w    e    r    t    z    u    i    o    p    ü    +
   caps      a    s    d    f    g    h    j    k    l    ö    ä    #    ret
   lsft <    y    x    c    v    b    n    m    ,    .    -    rsft
-  lctl      lmet lalt           spc                           rctl
+            lmet lalt           spc             ro                  
 )
 ;; defsrc without using german deflocalkeys
 ;;(defsrc
@@ -152,11 +160,11 @@
 ;;         mouse |    {    }]   +    =    *  ;<F24  :>  -_~
 (deflayer qwerty
   @ech      f1
-  @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  C-z  bspc
-  @tab      @q!  @w˝  @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  del  (tap-hold 200 300 sldr (macro f20)) 
-  @atx      @aä  @sß  @d[  @f]  @g'  @h/  @j%  @kC   @lA# @bwn @rtc esc  @rtc
+  @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  @ral bspc
+  @tab      @q!  @w˝  @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  del  (multi f20 sldr) 
+  @atx      @aä  @sß  @d[  @f]  @g'  @h/  @j%  @kC   @lA# @bwn bspc esc  @rtc
   @oss  f24 @F23 @x|  @c{  @v}  @b+  @n=  @m*  @,F24 @.:> @-_~ @rsd
-  @ocl      @oml @oal           @mus                           @ocl 
+            @oml @oal           @mus           #                     
 )
 ;; does not work for gaming
 (deflayer game
@@ -164,8 +172,8 @@
   \         1    2    3    4    5    6    7    8    9    0    [    @que bspc
   tab       q    w    e    r    t    z    u    i    o    p    ;    =
   caps      a    s    d    f    g    h    j    k    l    grv  '    /    ret
-  lsft <    y    x    c    v    b    n    m    ,    .    -    rsft
-  lctl      lmet lalt           spc                           rctl
+  lsft <    @F23 x    c    v    b    n    m    ,    .    -    rsft
+            lmet lalt           spc               _                
 )
 ;; IDEA instead of a numpad put diacrits and pinky hell keys here, but space is limited and shift is still needed e.g. for upper case diacrits
 ;;          #     [    ]    {    }           
@@ -174,22 +182,23 @@
 ;; TODO 
 ;; esc key only once Win key bspc twice
 ;; caps=symbol layer ... better use of caps?
-;;  ISO102 = backtick used? ^ usage? XX ? simple Comma!
+;; INFO ISO102 = `backtick used? ^ usage? XX ? simple Comma @, because of little finger!
+;; BUG ALT+PgUp does not work with RemoteDesktop if PgUp is Mapped
 (deflayer numbers
   _         _
-  _         @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld @ral _
+  @^        @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld A-prtsc _
   _         @-_~  1    2    3    esc  esc  home up    end  pgup pgdn _     
-  @sy1      @.wn  @al4 @ct5 @sf6 0    bspc left down  rght _    _    _    _
-  _    @` (macro ,) 7  8    @9sy del  ret  @stb @cde  @apg @mrt _
-  _    _    _               _                              _
+  @sy1      @.wn  @al4 @ct5 @sf6 0    bspc left down  rght _    _    _     _
+  _    @`   @,    7    8    9    del  ret  @stb @cde  @alc @mrc _
+       _    _               _                 _              
 )
 (deflayer numberstab
   _         _
   _         _    _    _    _    _    _    _    _    _    _    lrld @gam _
   _         @-_~ 1    2    3    esc  esc  home up   end  pgup pgdn _     
   _         rght left rght rght 0    bspc left down rght _    _    _    _
-  _   @`    @,F24 7    8    9    del  ret  @stb @cde @apg @mrt _
-  _         _    _           _                           _
+  _   @`    @,F24 7    8    9    del  ret  @stb @cde @alc @mrc _
+            _    _           _             _               
 )
 
 ;;       ^  symbols layer (todo ß ü ö are mapped to duplicated symbols, - and _ are already on base layer)
@@ -203,7 +212,7 @@
   _         @@   @˝   @﴾   @﴿   @$   @&   @%   @?   #    @\   _    _         
   _         @`   @|   @[   @]   @'   @/   @%   @_   #    @-_~ _    _    _          
   _    @^   @´   @|   @{   @}   +    @=   @*   @<   @>   @~   _               
-  _         _    _              _                             _          
+            _    _              _           _                             
 )
 ;; TODO define cool shortcuts
 (deflayer vsymbols
@@ -212,7 +221,7 @@
   _  (unicode Ù) @˝   @﴾   @﴿   @$   @&   @%   @?   #    @\   _    _         
   _  (unicode Õ) @|   @[   @]   @'   @/   @%   @_   #    @-_~ _    _    _          
   _    @^   @´   @|   @{   _    +    @=   @*   @<   @>   @~   _               
-  _         _    _              _                             _          
+            _    _              _            _                            
 )
 ;; There are variants of the standard mouse buttons }which "tap" the button. mrgt -> mr
 ;; IDEA v/lsymbols and n/rsymbols are only usefull if activated by letter keys like v/n but I ditched that concept as to hard to do fast
@@ -235,9 +244,9 @@
   
   ;; modifiers for numpad
   stb (tap-hold-release 200 5000 tab lsft)
-  cde (tap-hold-release 200 5000 del lctl)
-  apg (tap-hold-release 200 5000 pgup lalt)
-  mrt (tap-hold-release 200 5000 mrtp lmet)
+  cde (tap-hold-release 200 5000 f23 lctl)
+  alc (tap-hold-release 200 5000 mltp lalt)
+  mrc (tap-hold-release 200 5000 mrtp lmet)
 
   ;; outer/special keys
   ech (tap-hold 140 400 esc (multi (macro home ) (tap-hold 400 1100 XX (macro end ) )) )
@@ -276,7 +285,7 @@
   ;;f]  (tap-dance 140 ((tap-hold-release 140 140 f lsft) (tap-hold 200 240 (macro f f) @] )))
   f]  (tap-hold-release 140 140 f lsft)
 ;;j%  (tap-dance 140 ((tap-hold-release 140 140 j rsft) (tap-hold 200 240 (macro j j) @% )))
-  j%  (tap-hold-release 1 140 j rsft) ;; this clean form avoids US -> Ujs bug when typing fast
+  j%  (tap-hold-release 1 140 j lsft) ;; this clean form avoids US -> Ujs bug when typing fast ;; BUG rsft has bugs on RDesktop
 ;;j%  (tap-dance 140 ((tap-hold-press 140 140 j rsft) (tap-hold 200 240 (macro j j) @% ))) ;; tap-hold-press seems to work the same when inside tap-dance
   
   
@@ -293,9 +302,9 @@
   ct5 (tap-hold-release 200 300 5 lctl)
   al4 (tap-hold-release 200 340 4 lalt)
   .wn (tap-hold-release 200 240 . lmet)
-  bwn (tap-hold-release 200 5000 bspc lmet)
+  bwn (tap-hold-release 200 5000 ret lmet)
   wn0 (tap-hold-release 200 340 0 lmet)  ;; unused because of Win+G gets triggered
-  9sy (tap-hold-release 200 340 9 @syv)
+  9sy (tap-hold-release 200 340 9 @syv)  ;; unused because v is already mapped to do this
   ;;ght (tap-hold-release 200 240 rght rmet)  ;;works but not used
 
   1@ (tap-hold 140 140 1 (multi (macro S-1 ) (tap-hold 200 400 XX (macro bspc @@ ))) )  
@@ -314,7 +323,7 @@
   ;;q! (tap-hold 140 140 q (multi (macro S-1 ) (tap-hold 200 400 XX (macro bspc A-C-q ))) )                 ;; q ! @
   ;;q! (tap-hold 1 140 q (macro-release-cancel S-1 600 bspc (unicode @) 800 bspc S-1 800 bspc))                   ;; q ! @
   ;;q! (tap-dance 120 ((tap-hold 1 90 q (multi (macro S-1 ) (tap-hold 200 600 XX (macro bspc (unicode @) ))) )  (unicode @)  (unicode ä) ) )
-  q! (tap-hold 1 100 (tap-dance 150 (q @@ )) (multi @! (tap-hold 200 600 XX (macro bspc @@ )))  ) ;; q ! @    Great! tapdance can be nested inside tap-hold. Still timing problems on keybr.com
+  q! (tap-hold 1 100 (tap-dance 150 (q @@ )) (multi @! (tap-hold 200 600 XX (macro bspc @@ )))  ) ;; q ! @    Great! tapdance can be nested inside tap-hold. Still timing problems on keybr.com!
   w˝ (tap-hold 140 140 w (multi (macro S-2 ) (tap-hold 200 400 XX (macro S-2 ))) )                         ;; " ""
   e  (tap-hold 140 140 e (multi (macro S-8 ) (tap-hold 200 400 XX (macro S-9 ))))                           ;; (  ()
   r  (tap-hold 140 140 r (multi (macro S-9 ) (tap-hold 200 600 XX (macro bspc A-C-9 ))) )                   ;; ) [ todo find a better use 
