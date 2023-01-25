@@ -163,6 +163,8 @@
   ³ (macro A-C-3 )
   µ (macro A-C-m )
   , (macro ,)
+  
+  f20 (macro f20)
 )
 
 ;; defsrc for iso german qwertz layout  
@@ -202,10 +204,10 @@
 
 ;;homerowmods         C    S              S    C    A    W   S=shift C=ctrl A=alt W=win
 
-;;          1!@  2"   3`   4$   5%   6&  7/   8([  9)]   0 
-;;          !@   "    (    )[   $    &    ü%   ?    ö#   \ 
-;;   F24    ä`   ß    [    ]    '    /    %    #  
-;;       y/mouse |    {    }]   +    =    *  ;<F24  :>  -_~   
+;;          1!@  2"   3`   4$   5%   6&  7/   8([  9)]   0=   ß?\  relea bsp
+;;          !@   "    (    )[   $    &    ü%   ?    ö#   \    del..combo ret
+;;   F24    ä`   ß    [    ]    '    /    %    F20  #    ret  bsp  bsp   ret
+;;       y/mouse |    {    }]   +    =    *  ;<F24  :>   -_~   
 (deflayer qwerty
   @ech      f1
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  @ral bspc
@@ -227,17 +229,17 @@
 (deflayer mouse  
   _         f1
   \         1    2    3    4    5    6    7    8    9    0    [    @que bspc
-  tab       q    w    e    r    XX   @msz @msu i    @mso p    ;    =
-  caps      a    @mss @msd @msf XX   h    j    k    l    grv  '    /    ret
-  lsft <    @msz x    c    v    b    n    lsft lctl lalt lmet rsft
+  tab       XX   w    e    r    XX   @msz @msu i    @mso p    ;    =
+  caps      XX   @mss @msd @msf XX   h    j    k    l    grv  '    /    ret
+  lsft @msz @msz lalt lctl lsft XX   n    m    ,    .    -    rsft
             lmet lalt           spc               _                
 )
+;; ahk mouse layer
 (defalias  
- que (layer-switch qwerty)
- mus (layer-switch mouse)
+  que (layer-switch qwerty)
+  mus (layer-switch mouse)
   ;; F23 (tap-hold 200 200 y (multi f24 sldr))  ;; works technically f24 triggers y itselft it must be hold for f24 ... feels bad
-  ;;F23 (tap-hold-release 200 200 y (macro f23) ) ;; ahk mouse layer
-  F23 (tap-hold-release 200 200 y (multi @mus (macro f23)) ) ;; ahk mouse layer
+  F23 (tap-hold-release 200 200 y (multi @mus (macro f23)) )
   msz (multi @que (macro z))
   msu (multi @que (macro u))
   mso (multi @que (macro o))
@@ -303,16 +305,23 @@
   _    @`   @´   @|   @{   _    +    @=   @*   @<   @>   @~   _               
             _    _              _            _                            
 )
+(deflayer ksymbols
+  _         _
+  _  @fashing @geb @iban  @plz _    _    _    _    _    _    _    _    _     
+  _    @`     @´   @|     @{   @}   +    @=   @*   @<   @>   @~   _               
+              _    _                _            _                            
+)
 ;; There are variants of the standard mouse buttons }which "tap" the button. mrgt -> mr
 ;; IDEA v/lsymbols and n/rsymbols are only usefull if activated by letter keys like v/n but I ditched that concept as to hard to do fast
 
-(defalias  
+(defalias  
   ;; switch-layer also possible for stickyness
   num (layer-toggle numbers)
   numtab (layer-toggle numberstab)
   sym (layer-toggle symbols)
   syv (layer-toggle vsymbols)
   sy1 (one-shot 2000 (layer-toggle symbols))
+  syk (layer-toggle ksymbols)
   gam (layer-switch game)
 
   
@@ -372,7 +381,8 @@
   ;; using left ctl on k resolves DITTO issues TODO retest
   ;; double tap hold k for alt-tab layer TODO test usage
 ;;kC  (tap-dance 140 ((tap-hold-release 200 300 k lctl) (tap-hold 200 300 (macro k k) @aty ))) 
-  kC  (tap-dance 140 ((tap-hold-release 200 300 k lctl) (tap-hold 200 300 (macro k k) (multi f20 sldr) ))) 
+;;kC  (tap-dance 140 ((tap-hold-release 200 300 k lctl) (tap-hold 200 300 (macro k k) (multi f20 sldr) )))  ;; produces stuck modifiers randomly
+  kC  (tap-dance 140 ((tap-hold-release 200 300 k lctl) (tap-hold 200 300 (macro k k) @syk ))) 
   ;; TODO test if Long_Tap_O or Dbl_Tap_Hold_L is used in practise
   lA# (tap-dance 140 ((tap-hold-release 200 300 l alt) (tap-hold 200 300 (macro l l) (macro # ) )))
 
@@ -404,16 +414,16 @@
   ;;q! (tap-dance 120 ((tap-hold 1 90 q (multi (macro S-1 ) (tap-hold 200 600 XX (macro bspc (unicode @) ))) )  (unicode @)  (unicode ä) ) )
   q! (tap-hold 1 100 (tap-dance 150 (q @@ )) (multi @! (tap-hold 200 600 XX (macro bspc @@ )))  ) ;; q ! @    Great! tapdance can be nested inside tap-hold. Still timing problems on keybr.com!
   w˝ (tap-hold 140 140 w (multi (macro S-2 ) (tap-hold 200 400 XX (macro S-2 ))) )                         ;; " ""
-  e  (tap-hold 140 140 e (multi (macro S-8 ) (tap-hold 200 400 XX (macro S-9 ))))                           ;; (  ()
+  e  (tap-hold 1 150 e (multi (macro S-8 ) (tap-hold 200 400 XX (macro S-9 ))))                           ;; (  ()
   r  (tap-hold 140 140 r (multi (macro S-9 ) (tap-hold 200 600 XX (macro bspc A-C-9 ))) )                   ;; ) [ todo find a better use 
   t$  (tap-hold 140 140 t (macro S-4))                                                                      ;; $
   z&  (tap-hold 140 140 z (multi (macro S-6 ) (tap-hold 200 400 XX (macro S-6 ))))                          ;; & &&
-  uü  (tap-hold 140 140 u (multi (macro ü ) (tap-hold 400 400 XX (macro-release-cancel bspc S-5 800 bspc ü 800 bspc))) )                      ;; ü = ;  u ü % 
   i?  (tap-hold 140 140 i (multi @? (tap-hold 200 500 XX @? )))                                           ;; ? = S-[      i ? ??
-  oö  (tap-hold 140 140 o (multi (macro ö ) (tap-hold 400 400 XX (macro bspc # ))) )                      ;; ö = grv #=/  o ö #
   p\  (tap-dance 140 ((tap-hold 10 100 p (multi  @\ (tap-hold 200 300 XX  @\ )))  (tap-hold 10 100 (macro p p) (macro A-C-ß A-C-ß) )))  ;; p \ \\
-  aä (tap-hold 1 140 a (macro-release-cancel ä 400 bspc S-´ spc 600 bspc ä 600 bspc a 600 bspc))            ;; ä = '  `=S-]
-  sß  (tap-hold 140 140 s (macro ß ) )                                                                               ;; ß = [
+  aä  (tap-hold 1 120 a (macro-release-cancel ä 400 bspc S-´ spc 600 bspc ä 600 bspc a 600 bspc))            ;; ä = '  `=S-]
+  uü  (tap-hold 1 120 u (multi (macro ü ) (tap-hold 400 400 XX (macro-release-cancel bspc S-5 800 bspc ü 800 bspc))) )                      ;; ü = ;  u ü % ##
+  oö  (tap-hold 1 120 o (multi (macro ö ) (tap-hold 400 400 XX (macro bspc # ))) )                      ;; ö = grv #=/  o ö #
+  sß  (tap-hold 1 120 s (macro ß ) )                                                                               ;; ß = [
   g'  (tap-hold 140 140 g (multi @' (tap-hold 200 500 XX @' )) )                         ;; ' ''
   h/  (tap-hold 140 140 h (multi (macro S-7 ) (tap-hold 200 400 XX (macro S-7 ))) )                         ;; / //
   x|  (tap-hold 140 140 x (multi (macro A-C-102d ) (tap-hold 200 500 XX (macro A-C-102d ))) )               ;; | ||
@@ -578,6 +588,7 @@
 (defseq web-de (w e))
 (deffakekeys web-de (macro g e r h a r d . h e i d e (unicode @) w e b . d e))
 
+
 ;; ahk f24 f23 an be triggert mouse here
 (defseq web-def (j l))
 (deffakekeys web-def (macro f23))
@@ -600,6 +611,7 @@
 (defseq z1  (1))
 (defseq z2  (2))
 (defseq iba (3))
+(defseq erbach (4))
 (defseq gh (g h))
 (defseq gg (g g))
 (defseq rdtab (l))
@@ -607,7 +619,7 @@
 (defseq dedt (q))
 
 ;; deffakekeys with S- for uppercase, with defsrc keys, with  spc A-C-q and kp1-kp9, numbers in macros are pauses
-(deffakekeys isodt (macro b b a a , ))
+(deffakekeys isodt (macro b b a a , )) ;;this does not work over Remotedesktop TODO make a dayly script to update
 (deffakekeys dedt (macro b b q q , ))
 (deffakekeys rdtab (macro A-pgup ))
 (deffakekeys gh  (macro lalt 80 kp1 ret )) ;; this is working in outlook
@@ -627,5 +639,15 @@
 (deffakekeys msg (macro g e r h a r d . h e i d e (unicode @) m s g . g r o u p ))
 (deffakekeys dih (macro S-d  - S-s  S-m  S-y  S-q  - S-i  kp7 S-m  S-y  S-d  - kp7 kp5 ))
 (deffakekeys iba (macro S-d  S-e  kp3 kp0 kp7 kp0 kp0 kp2 kp0 kp2 kp7 kp0 kp0 kp0 kp4 kp5 kp5 kp0 kp6 kp8 kp6 kp0 ))
-(deffakekeys z1 (macro kp1 kp1 . kp1 kp1 . kp2 kp0 kp2 kp2 ))
+(deffakekeys z1 (macro kp1 kp1 . kp1 kp1 . kp2 kp0 kp2 kp3 ))
 (deffakekeys z2 (macro kp2 kp1 . kp1 kp2 . kp2 kp0 kp0 kp1 ))
+(deffakekeys erbach (macro kp6 kp4 kp7 kp1 kp1 ))
+
+(defalias  
+ fashing (macro kp1 kp1 . kp1 kp1 . kp2 kp0 kp2 kp3 )
+ geb (macro kp2 kp1 . kp1 kp2 . kp2 kp0 kp0 kp1 )
+ iban (macro S-d  S-e  kp3 kp0 kp7 kp0 kp0 kp2 kp0 kp2 kp7 kp0 kp0 kp0 kp4 kp5 kp5 kp0 kp6 kp8 kp6 kp0 )
+ plz (macro kp6 kp4 kp7 kp1 kp1 )
+ ;; Last lines  of script
+dayiso (macro kp2 kp0 kp2 kp3 - kp0 kp1 - kp2 kp5  )
+dayde  (macro kp2 kp5 . kp0 kp1 . kp2 kp0 kp2 kp3  ))
