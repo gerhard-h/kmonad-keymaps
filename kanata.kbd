@@ -85,7 +85,47 @@
    BUG one shot queueing seems to break after some time - like reloading ahk
    
    BUG AltGr + I = ahk menu seems to hang CTRL - SOLVED by excluding AltGr (and Ctrls) from defsrc 	 
-   
+  
+  TODO use Dynamic makros
+  (defalias
+  dr0 (dynamic-macro-record 0)
+  dr1 (dynamic-macro-record 1)
+  dr2 (dynamic-macro-record 2)
+  dp0 (dynamic-macro-play 0)
+  dp1 (dynamic-macro-play 1)
+  dp2 (dynamic-macro-play 2)
+  dms dynamic-macro-record-stop
+  )
+  ;; Swap numbers and their symbols with respect to shift
+  (defoverrides
+  (1) (lsft 1)
+  (2) (lsft 2)
+  ;; repeat for all remaining numbers
+
+  (lsft 1) (1)
+  (lsft 2) (2)
+  ;; repeat for all remaining numbers
+  )
+  
+  TODO maybe combine with ß
+  (defsrc a b c)
+  (deflayer default
+    @cha @chb @chc
+  )
+  
+  (defalias
+    cha (chord example a)
+    chb (chord example b)
+    chc (chord example c)
+  )
+  
+  (defchords example 500
+    (a      ) a
+    (   b   ) b
+    (a     c) C-v
+    (a  b  c) @three
+  )
+     
 ;; CTRL + SPACE + ESC => Exit KANATA immediatly
 |#
 (defcfg
@@ -166,6 +206,7 @@
   , (macro ,)
   
   f20 (macro f20)
+  f19 (macro f19)
 )
 
 ;; defsrc for iso german qwertz layout  
@@ -212,7 +253,7 @@
 (deflayer qwerty
   @ech      f1
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  sldr bspc
-  @tab      @q!  @w˝  @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  del  (multi f20 sldr) 
+  @tab      @q!  @w˝  @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  del  @f20 
   @atx      @aä  @sß  @d[  @f]  @g'  @h/  @j%  @kC   @lA# @bwn bspc bspc @rtc
   @oss  f24 @F23 @x|  @c{  @v}  @b+  @n=  @m*  @,F24 @.:> @-_~ @rsd
             @oml @oal           @nav           f24                     
@@ -394,7 +435,7 @@
   ;; double tap hold k for alt-tab layer TODO test usage
 ;;kC  (tap-dance 140 ((tap-hold-release 200 300 k lctl) (tap-hold 200 300 (macro k k) @aty ))) 
 ;;kC  (tap-dance 140 ((tap-hold-release 200 300 k lctl) (tap-hold 200 300 (macro k k) (multi f20 sldr) )))  ;; produces stuck modifiers randomly
-  kC  (tap-dance 140 ((tap-hold-release 200 300 k lctl) (tap-hold 200 300 (macro k k) (multi @syk @f20) ))) 
+  kC  (tap-dance 140 ((tap-hold-release 200 300 k lctl) (tap-hold 200 300 (macro k k) (multi @syk @f19) ))) 
   ;; TODO test if Long_Tap_O or Dbl_Tap_Hold_L is used in practise
   lA# (tap-dance 140 ((tap-hold-release 200 300 l alt) (tap-hold 200 300 (macro l l) (macro # ) )))
 
@@ -662,5 +703,5 @@
  plz (macro kp6 kp4 kp7 kp1 kp1 )
  tsc (macro @\\ @\\ t s c l i e n t @\\ c @\\ d a t a )
  ;; Last lines  of script no leading spaces
-dayiso (macro kp2 kp0 kp2 kp3 - kp0 kp1 - kp2 kp9   )
-dayde  (macro kp2 kp9 . kp0 kp1 . kp2 kp0 kp2 kp3  ))
+dayiso (macro kp2 kp0 kp2 kp3 - kp0 kp1 - kp3 kp1   )
+dayde  (macro kp3 kp1 . kp0 kp1 . kp2 kp0 kp2 kp3  ))
