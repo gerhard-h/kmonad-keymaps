@@ -252,10 +252,18 @@
 ;;       y/mouse |    {    }]   +    =    *  ;<F24  :>   -_~   
 (deflayer qwerty
   @ech      f1
-  @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  sldr bspc
-  @tab      @q!  @w˝  @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  del  @f20 
+  @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  @qco bspc
+  @tab      @q!  @w˝  @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  del  (multi f20 sldr)
   @atx      @aä  @sß  @d[  @f]  @g'  @h/  @j%  @kC   @lA# @bwn bspc bspc @rtc
-  @oss  f24 @F23 @x|  @c{  @v}  @b+  @n=  @m*  @,F24 @.:> @-_~ @rsd
+  @oss  f24 @F23 @x|  @c{  @v}  @b+  @n=  @m*  @,F18 @.:> @-_~ @rsd
+            @oml @oal           @nav           f24                     
+)
+(deflayer qwertycomma
+  @ech      f1
+  @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  @que bspc
+  @tab      @q!  @w˝  @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  del  (multi f20 sldr)
+  @atx      @aä  @sß  @d[  @f]  @g'  @h/  @j%  @kC   @lA# @bwn bspc bspc @rtc
+  @oss  f24 @F23 @x|  @c{  @v}  @b+  @n=  @m*  @,F20 @.:> @-_~ @rsd
             @oml @oal           @nav           f24                     
 )
 ;; does indeed NOT WORK for gaming :)
@@ -279,6 +287,7 @@
 ;; ahk mouse layer
 (defalias  
   que (layer-switch qwerty)
+  qco (layer-switch qwertycomma)
   mus (layer-switch mouse)
   ;; F23 (tap-hold 200 200 y (multi f24 sldr))  ;; works technically f24 triggers y itselft it must be hold for f24 ... feels bad
   F23 (tap-hold-release 200 200 y (multi @mus (macro f23)) )
@@ -328,7 +337,7 @@
   _         _    _    _    _    _    _    _    _    _    _    lrld @gam _
   _         @-_~ 1    2    3    esc  esc  home up   end  pgup pgdn _     
   _         rght left rght rght 0    bspc left down rght _    _    _    _
-  _   @`    @,F24 7    8    9    del  ret  @stb @cde @alc @mrc _
+  _   @`    @,   7    8    9    del  ret  @stb @cde @alc @mrc _
             _    _           _             _               
 )
 
@@ -453,13 +462,13 @@
   2 (tap-hold 140 300 2 (multi @˝ (tap-hold 200 700 XX @˝ )) )
   ;; multi 3 3 because macro 3 3 is not working
   3` (tap-dance 140 ((tap-hold 10 100 3 (multi @` (tap-hold 200 400 XX (macro S-´ S-´))  ))  (tap-hold 10 100 (multi 3 3) (macro S-´ S-´ S-´ spc))))
-  4 (tap-hold 200 300 4 (macro S-4 ))
-  5 (tap-hold 200 300 5 (macro S-5 ))
-  6 (tap-hold 200 300 6 (multi (macro S-6 ) (tap-hold 200 400 XX (macro S-6 ))))
-  7 (tap-hold 200 300 7 (multi (macro S-7 ) (tap-hold 200 400 XX (macro S-7 ))))
-  8 (tap-hold 200 300 8 (multi (macro S-8 ) (tap-hold 200 400 XX (macro bspc A-C-8 ))) )
-  9 (tap-hold 200 300 9 (multi (macro S-9 ) (tap-hold 200 400 XX (macro bspc A-C-9 ))) )
-  0 (tap-hold 10 100 0 (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 400 XX (macro S-0 ))  ))  ) )
+  4 (tap-hold 200 500 4 (macro S-4 ))
+  5 (tap-hold 200 500 5 (macro S-5 ))
+  6 (tap-hold 200 500 6 (macro S-6 )) ;;(tap-hold 200 300 6 (multi (macro S-6 ) (tap-hold 200 400 XX (macro S-6 ))))
+  7 (tap-hold 200 500 7 (macro S-7 )) ;;(tap-hold 200 300 7 (multi (macro S-7 ) (tap-hold 200 400 XX (macro S-7 ))))
+  8 (tap-hold 200 500 8 (macro S-8 )) ;;(tap-hold 200 300 8 (multi (macro S-8 ) (tap-hold 200 400 XX (macro bspc A-C-8 ))) )
+  9 (tap-hold 200 500 9 (macro S-9 )) ;;(tap-hold 200 300 9 (multi (macro S-9 ) (tap-hold 200 400 XX (macro bspc A-C-9 ))) )
+  0 0 ;;(tap-hold 10 100 0 (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 400 XX (macro S-0 ))  ))  ) )
   sz (tap-hold 200 300 ß (multi (macro S-ß ) (tap-hold 200 500 XX (macro bspc A-C-ß ))))
   ;; q (multi q sldr) eats the next key after q
   ;;q! (tap-hold 140 140 q (multi (macro S-1 ) (tap-hold 200 400 XX (macro bspc A-C-q ))) )                 ;; q ! @
@@ -493,7 +502,9 @@
 ;; .:> (tap-dance 140 ((tap-hold 10 100 . (multi (macro S-. ) (tap-hold 200 400 XX (macro bspc @gth ))) )  (tap-hold 10 100 (macro . .) (macro @gth)) (tap-hold 10 100 (macro . . .) .) ))  ;; . : >
 ;;  -_~ (tap-dance 140 ((tap-hold 10 100 - (multi (macro S-- ) (tap-hold 200 400 XX (macro bspc @til ))) )  (tap-hold 10 100 (macro - -) (macro @til)) (tap-hold 10 100 (macro - - -) -) ))  ;; - _ ~
 ;; nesting of tap-dance inside tap-hold is now possible
-   ,F24 (tap-hold 10 100 (tap-dance 140 (, (tap-hold 10 100 f24 @<)))  (multi @;  (tap-hold 200 400 XX (macro bspc < ))) )  ;; ,, = F24 , ; <
+   ,F20 (tap-hold 10 100 (tap-dance 140 (, (tap-hold 10 100 f20 @<)))  (multi @;  (tap-hold 200 400 XX (macro bspc < ))) )  ;; ,, = F24 , ; <
+   ,F18 (tap-hold 10 100 (tap-dance 140 ( f18  (tap-hold 100 100 (macro , ,) @<) (macro , , ,) ))  (multi @;  (tap-hold 200 400 XX (macro bspc < ))) )  ;; ,, = F24 , ; <
+   ,;< (tap-hold 10 100 (tap-dance 140 (, (tap-hold 10 100 (macro , ,)  @< ) (tap-hold 10 100 (macro , , ,) .) )) (multi @; (tap-hold 200 400 XX (macro bspc < ))) ) 
   .:> (tap-hold 10 100 (tap-dance 140 (. (tap-hold 10 100 (macro . .)  @> ) (tap-hold 10 100 (macro . . .) .) )) (multi @: (tap-hold 200 400 XX (macro bspc S-< ))) )    ;; . : >
   -_~ (tap-hold 10 100 (tap-dance 140 (-   (tap-hold 10 100 (macro - -)  @~) (tap-hold 10 100 (macro - - -) -) )) (multi (macro S-- ) (tap-hold 200 400 XX (macro bspc A-C-+ ))) )  ;; - _ ~
   -_: (tap-hold 10 100 (tap-dance 140 (-   (tap-hold 10 100 (macro - -)  @:) (tap-hold 10 100 (macro - - -) -) )) (multi (macro S-- ) (tap-hold 200 400 XX (macro bspc S-. ))) )  ;; - _ :
@@ -703,5 +714,5 @@
  plz (macro kp6 kp4 kp7 kp1 kp1 )
  tsc (macro @\\ @\\ t s c l i e n t @\\ c @\\ d a t a )
  ;; Last lines  of script no leading spaces
-dayiso (macro kp2 kp0 kp2 kp3 - kp0 kp1 - kp3 kp1   )
-dayde  (macro kp3 kp1 . kp0 kp1 . kp2 kp0 kp2 kp3  ))
+dayiso (macro kp2 kp0 kp2 kp3 - kp0 kp2 - kp0 kp2   )
+dayde  (macro kp0 kp2 . kp0 kp2 . kp2 kp0 kp2 kp3  ))
