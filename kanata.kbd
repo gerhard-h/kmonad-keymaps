@@ -207,6 +207,9 @@
   
   f20 (macro f20)
   f19 (macro f19)
+  ä (macro ä)
+  ü (macro ü)
+  ö (macro ö) 
 )
 
 ;; defsrc for iso german qwertz layout  
@@ -276,7 +279,7 @@
             lmet lalt           spc               _                
 )
 ;; We need a mouse layer to get proper keyrepeat
-(deflayer mouse  
+(deflayer mouseahk  
   _         f1
   \         1    2    3    4    5    6    7    8    9    0    [    @que bspc
   tab       XX   w    e    r    XX   @msz @msu i    @mso p    ;    =
@@ -284,13 +287,47 @@
   lsft @msz @msz lalt lctl lsft XX   n    m    ,    .    -    rsft
             lmet lalt          @que               _                
 )
+(deflayer mouse  
+  _         f1
+  \         1    2    3    4    5    6    7    8    9    0    [    @que bspc
+  tab       @dp0 w    e    @slw XX  @quep @cll @ma↑ @clr p    ;    =
+  caps      @dr0 @clm @clr @cll XX   h    @ma← @ma↓ @ma→ grv  '    /    ret
+  lsft @msz @dms lalt lctl lsft XX   @ms← @ms↑ @ms↓ @ms→ -    rsft
+            lmet lalt          @quep              _                
+)
+(deflayer mouseslow
+  _         f1
+  \         1    2    3    4    5    6    7    8    9    0    [    @que bspc
+  tab       XX   @slw @slw @slw XX  @quep @cll @ms↑ @clr p    ;    =
+  caps      XX   @clm @clr @cll XX   h    @ms← @ms↓ @ms→ grv  '    /    ret
+  lsft @msz @msz lalt lctl lsft XX   @ms← @ms↑ @ms↓ @ms→ -    rsft
+            lmet lalt          @quep              _                
+)
 ;; ahk mouse layer
-(defalias  
+(defalias
   que (layer-switch qwerty)
+  quep (multi @que  A-C-M-p)
   qco (layer-switch qwertycomma)
   mus (layer-switch mouse)
+  slw (layer-toggle mouseslow)
+  
+  ms↑ (movemouse-up 3 1)
+  ms← (movemouse-left 3 1)
+  ms↓ (movemouse-down 3 1)
+  ms→ (movemouse-right 3 1)
+
+  ma↑ (movemouse-accel-up 1 1000 1 5)
+  ma← (movemouse-accel-left 1 1000 1 5)
+  ma↓ (movemouse-accel-down 1 1000 1 5)
+  ma→ (movemouse-accel-right 1 1000 1 5)
+  
+  cll (multi @que mlft A-C-M-p)
+  clr (multi @que mrgt A-C-M-p)
+  clm (multi @que mmid A-C-M-p)
+  
+  
   ;; F23 (tap-hold 200 200 y (multi f24 sldr))  ;; works technically f24 triggers y itselft it must be hold for f24 ... feels bad
-  F23 (tap-hold-release 200 200 y (multi @mus (macro f23)) )
+  F23 (tap-hold-release 200 200 y (multi @mus A-C-M-p) )
   msz (multi @que (macro z))
   msu (multi @que (macro u))
   mso (multi @que (macro o))
@@ -322,7 +359,7 @@
   _         _
   @^        @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld A-prtsc _
   _         @-_:  1    2    3  C-bspc esc  home up    end  pgup pgdn _     
-  @sy1      @.wn  @al4 @ct5 @sf6 0    bspc left down  rght @fky _    _     _
+  @sy1      @.wn  @al4 @ct5 @sf6 0    bspc left down  rght bspc ret  @fky    _
   _    @`   @,    7    8    9    del  ret  @stb @cde  @alc @mrc _
        _    _               _                 _              
 )
@@ -377,6 +414,18 @@
 ;; There are variants of the standard mouse buttons }which "tap" the button. mrgt -> mr
 ;; IDEA v/lsymbols and n/rsymbols are only usefull if activated by letter keys like v/n but I ditched that concept as to hard to do fast
 
+(defalias
+  chi (chord example i)
+  cho (chord example o)
+)
+
+(defchords example 300
+  (i      ) i
+  (   o   ) o
+  (i  o   ) f20
+)
+
+
 (defalias  
   ;; switch-layer also possible for stickyness
   num (layer-toggle numbers)
@@ -397,7 +446,7 @@
   
   ;; modifiers for numpad
   stb (tap-hold-release 200 5000 tab lsft)
-  cde (tap-hold-release 200 5000 (multi @mus (macro f23)) lctl)
+  cde (tap-hold-release 200 5000 (multi @mus A-C-M-p) lctl) ;; (multi @mus (macro f23)) lctl) to trigger ahk mouse
   alc (tap-hold-release 200 5000 mltp lalt)
   mrc (tap-hold-release 200 5000 mrtp lmet)
 
@@ -414,6 +463,14 @@
   nav (tap-hold  200 200 spc @num)
   ral S-C-M-A-9 ;; release ALL key (BUG) kanata cannot release stuck keys from ahk (both tools with elevated rights) PRESS F24 FOR RELEASE ALL MODS
   ;;rcl (tap-hold-release 200 200 sldr rctl) ;; !! sldr is hard coded leader key fake key  !! dropped in favor of ocl
+  
+  dr0 (dynamic-macro-record 0)
+  dr1 (dynamic-macro-record 1)
+  dr2 (dynamic-macro-record 2)
+  dp0 (dynamic-macro-play 0)
+  dp1 (dynamic-macro-play 1)
+  dp2 (dynamic-macro-play 2)
+  dms dynamic-macro-record-stop
   
   ;; alt tab
   at1 (multi lalt tab)
@@ -446,7 +503,7 @@
   ;; double tap hold k for alt-tab layer TODO test usage
 ;;kC  (tap-dance 140 ((tap-hold-release 200 300 k lctl) (tap-hold 200 300 (macro k k) @aty ))) 
 ;;kC  (tap-dance 140 ((tap-hold-release 200 300 k lctl) (tap-hold 200 300 (macro k k) (multi f20 sldr) )))  ;; produces stuck modifiers randomly
-  kC  (tap-dance 140 ((tap-hold-release 200 300 k lctl) (tap-hold 200 300 (macro k k) (multi @syk @f19) ))) 
+  kC  (tap-dance 140 ((tap-hold-release 200 300 k lctl) (tap-hold 200 300 (macro k k) (multi @syk) ))) 
   ;; TODO test if Long_Tap_O or Dbl_Tap_Hold_L is used in practise
   lA# (tap-dance 140 ((tap-hold-release 200 300 l alt) (tap-hold 200 300 (macro l l) (macro # ) )))
 
@@ -476,17 +533,17 @@
   ;;q! (tap-hold 140 140 q (multi (macro S-1 ) (tap-hold 200 400 XX (macro bspc A-C-q ))) )                 ;; q ! @
   ;;q! (tap-hold 1 140 q (macro-release-cancel S-1 600 bspc (unicode @) 800 bspc S-1 800 bspc))                   ;; q ! @
   ;;q! (tap-dance 120 ((tap-hold 1 90 q (multi (macro S-1 ) (tap-hold 200 600 XX (macro bspc (unicode @) ))) )  (unicode @)  (unicode ä) ) )
-  q! (tap-hold 1 100 (tap-dance 150 (q @@ )) (multi @! (tap-hold 200 600 XX (macro bspc @@ )))  ) ;; q ! @    Great! tapdance can be nested inside tap-hold. Still timing problems on keybr.com!
+  q! (tap-hold 1 100 (tap-dance-eager 150 (q (macro bspc @@) )) (multi @! (tap-hold 200 600 XX (macro bspc @@ )))  ) ;; q ! @    Great! tapdance can be nested inside tap-hold. Still timing problems on keybr.com!
   w˝ (tap-hold 140 140 w (multi (macro S-2 ) (tap-hold 200 400 XX (macro S-2 ))) )                         ;; " ""
   e  (tap-hold 1 150 e (multi (macro S-8 ) (tap-hold 200 400 XX (macro S-9 ))))                           ;; (  ()
   r  (tap-hold 140 140 r (multi (macro S-9 ) (tap-hold 200 600 XX (macro bspc A-C-9 ))) )                   ;; ) [ todo find a better use 
   t$  (tap-hold 140 140 t (macro S-4))                                                                      ;; $
   z&  (tap-hold 140 140 z (multi (macro S-6 ) (tap-hold 200 400 XX (macro S-6 ))))                          ;; & &&
-  i?  (tap-hold 140 140 i (multi @? (tap-hold 200 500 XX @? )))                                           ;; ? = S-[      i ? ??
+  i?  (tap-hold 140 140 @chi (multi @? (tap-hold 200 500 XX @? )))                                           ;; ? = S-[      i ? ??
   p\  (tap-dance 140 ((tap-hold 10 100 p (multi  @\ (tap-hold 200 300 XX  @\ )))  (tap-hold 10 100 (macro p p) (macro A-C-ß A-C-ß) )))  ;; p \ \\
   aä  (tap-hold 1 120 a (macro-release-cancel ä 400 bspc S-´ spc 600 bspc ä 600 bspc a 600 bspc))            ;; ä = '  `=S-]
   uü  (tap-hold 1 120 u (multi (macro ü ) (tap-hold 400 400 XX (macro-release-cancel bspc S-5 800 bspc ü 800 bspc))) )                      ;; ü = ;  u ü % ##
-  oö  (tap-hold 1 120 o (multi (macro ö ) (tap-hold 400 400 XX (macro bspc # ))) )                      ;; ö = grv #=/  o ö #
+  oö  (tap-hold 1 120 @cho (multi (macro ö ) (tap-hold 400 400 XX (macro bspc # ))) )                      ;; ö = grv #=/  o ö #
   sß  (tap-hold 1 120 s (macro ß ) )                                                                               ;; ß = [
   g'  (tap-hold 140 140 g (multi @' (tap-hold 200 500 XX @' )) )                         ;; ' ''
   h/  (tap-hold 140 140 h (multi (macro S-7 ) (tap-hold 200 400 XX (macro S-7 ))) )                         ;; / //
