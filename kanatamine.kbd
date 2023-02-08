@@ -253,16 +253,16 @@
 (deflayer qwerty
   @ech      f1
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  @qco bspc
-  @tab      @q!  @w˝  @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  del  (multi f20 sldr)
-  @atx      @aä  @sß  @d[  @f]  @g'  @h/  @j%  @kC   @lA# @bwn bspc bspc @rtc
+  @tab      @q!  @w˝  @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  z    bspc
+  @atx      @aä  @sß  @d[  @f]  @g'  @h/  @j%  @kC   @lA# @bwn k    @rtc @rtc
   @oss  f24 @F23 @x|  @c{  @v}  @b+  @n=  @m*  @,F18 @.:> @-_~ @rsd
             @oml @oal           @nav           f24                     
 )
 (deflayer qwertycomma
   @ech      f1
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  @que bspc
-  @tab      @q!  @w˝  @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  del  (multi f20 sldr)
-  @atx      @aä  @sß  @d[  @f]  @g'  @h/  @j%  @kC   @lA# @bwn bspc bspc @rtc
+  @tab      @q!  @w˝  @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  ü    bspc
+  @atx      @aä  @sß  @d[  @f]  @g'  @h/  @j%  @kC   @lA# @bwn ä    @rtc @rtc
   @oss  f24 @F23 @x|  @c{  @v}  @b+  @n=  @m*  @,F20 @.:> @-_~ @rsd
             @oml @oal           @nav           f24                     
 )
@@ -322,7 +322,7 @@
   _         _
   @^        @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld A-prtsc _
   _         @-_:  1    2    3  C-bspc esc  home up    end  pgup pgdn _     
-  @sy1      @.wn  @al4 @ct5 @sf6 0    bspc left down  rght @fky _    _     _
+  @sy1      @.wn  @al4 @ct5 @sf6 0    bspc left down  rght bspc @fky _     _
   _    @`   @,    7    8    9    del  ret  @stb @cde  @alc @mrc _
        _    _               _                 _              
 )
@@ -434,28 +434,28 @@
 
   ;; home row mods
   ;;f]  (tap-dance 140 ((tap-hold-release 140 140 f lsft) (tap-hold 200 240 (macro f f) @] )))
-  f]  (tap-hold-release 1 140 f lsft) ;;  INFO timing of 1 avoids keyrepeat 
+  f]  (tap-hold-release 1 140 e lsft) ;;  INFO timing of 1 avoids keyrepeat 
 ;;j%  (tap-dance 140 ((tap-hold-release 140 140 j rsft) (tap-hold 200 240 (macro j j) @% )))
-  j%  (tap-hold-release 1 140 j (multi rsft lsft)) ;; this clean form avoids US -> Ujs bug when typing fast ;; BUG rsft has bugs on RDesktop multi fixes fjf->F but jfj->j stays
+  j%  (tap-hold-release 1 140 n (multi rsft lsft)) ;; this clean form avoids US -> Ujs bug when typing fast ;; BUG rsft has bugs on RDesktop multi fixes fjf->F but jfj->j stays
 ;;j%  (tap-dance 140 ((tap-hold-press 140 140 j rsft) (tap-hold 200 240 (macro j j) @% ))) ;; tap-hold-press seems to work the same when inside tap-dance
   
   
 ;;j%  (tap-hold-release 140 140 (tap-dance 140 (j (multi i (tap-hold 90 90 k (macro bspc S-5))))) lsft) ;; this is not working 
-  d[  (tap-dance 140 ((tap-hold-release 200 300 d lctl) (tap-hold 200 300 (macro d d) (multi (macro A-C-8 ) (tap-hold 200 700 XX (macro A-C-9 ))))))
+  d[  (tap-dance 140 ((tap-hold-release 200 300 i lctl) (tap-hold 200 300 (macro i i) (multi (macro A-C-8 ) (tap-hold 200 700 XX (macro A-C-9 ))))))
   ;; using left ctl on k resolves DITTO issues TODO retest
   ;; double tap hold k for alt-tab layer TODO test usage
 ;;kC  (tap-dance 140 ((tap-hold-release 200 300 k lctl) (tap-hold 200 300 (macro k k) @aty ))) 
 ;;kC  (tap-dance 140 ((tap-hold-release 200 300 k lctl) (tap-hold 200 300 (macro k k) (multi f20 sldr) )))  ;; produces stuck modifiers randomly
-  kC  (tap-dance 140 ((tap-hold-release 200 300 k lctl) (tap-hold 200 300 (macro k k) (multi @syk @f19) ))) 
+  kC  (tap-dance 140 ((tap-hold-release 200 300 t lctl) (tap-hold 200 300 (macro t t) (multi @syk @f19) ))) 
   ;; TODO test if Long_Tap_O or Dbl_Tap_Hold_L is used in practise
-  lA# (tap-dance 140 ((tap-hold-release 200 300 l alt) (tap-hold 200 300 (macro l l) (macro # ) )))
+  lA# (tap-dance 140 ((tap-hold-release 200 300 s alt) (tap-hold 200 300 (macro s s) (macro # ) )))
 
   ;; number layer home row mods
   sf6 (tap-hold-release 200 300 6 lsft)
   ct5 (tap-hold-release 200 300 5 lctl)
   al4 (tap-hold-release 200 340 4 lalt)
   .wn (tap-hold-release 200 240 . lmet)
-  bwn (tap-hold-release 200 5000 ret lmet)
+  bwn (tap-hold-release 200 5000 h lmet)
   wn0 (tap-hold-release 200 340 0 lmet)  ;; unused because of Win+G gets triggered
   9sy (tap-hold-release 200 340 9 @syv)  ;; unused because v is already mapped to do this
   ;;ght (tap-hold-release 200 240 rght rmet)  ;;works but not used
@@ -476,30 +476,30 @@
   ;;q! (tap-hold 140 140 q (multi (macro S-1 ) (tap-hold 200 400 XX (macro bspc A-C-q ))) )                 ;; q ! @
   ;;q! (tap-hold 1 140 q (macro-release-cancel S-1 600 bspc (unicode @) 800 bspc S-1 800 bspc))                   ;; q ! @
   ;;q! (tap-dance 120 ((tap-hold 1 90 q (multi (macro S-1 ) (tap-hold 200 600 XX (macro bspc (unicode @) ))) )  (unicode @)  (unicode ä) ) )
-  q! (tap-hold 1 100 (tap-dance 150 (q @@ )) (multi @! (tap-hold 200 600 XX (macro bspc @@ )))  ) ;; q ! @    Great! tapdance can be nested inside tap-hold. Still timing problems on keybr.com!
-  w˝ (tap-hold 140 140 w (multi (macro S-2 ) (tap-hold 200 400 XX (macro S-2 ))) )                         ;; " ""
-  e  (tap-hold 1 150 e (multi (macro S-8 ) (tap-hold 200 400 XX (macro S-9 ))))                           ;; (  ()
-  r  (tap-hold 140 140 r (multi (macro S-9 ) (tap-hold 200 600 XX (macro bspc A-C-9 ))) )                   ;; ) [ todo find a better use 
-  t$  (tap-hold 140 140 t (macro S-4))                                                                      ;; $
-  z&  (tap-hold 140 140 z (multi (macro S-6 ) (tap-hold 200 400 XX (macro S-6 ))))                          ;; & &&
-  i?  (tap-hold 140 140 i (multi @? (tap-hold 200 500 XX @? )))                                           ;; ? = S-[      i ? ??
-  p\  (tap-dance 140 ((tap-hold 10 100 p (multi  @\ (tap-hold 200 300 XX  @\ )))  (tap-hold 10 100 (macro p p) (macro A-C-ß A-C-ß) )))  ;; p \ \\
-  aä  (tap-hold 1 120 a (macro-release-cancel ä 400 bspc S-´ spc 600 bspc ä 600 bspc a 600 bspc))            ;; ä = '  `=S-]
-  uü  (tap-hold 1 120 u (multi (macro ü ) (tap-hold 400 400 XX (macro-release-cancel bspc S-5 800 bspc ü 800 bspc))) )                      ;; ü = ;  u ü % ##
-  oö  (tap-hold 1 120 o (multi (macro ö ) (tap-hold 400 400 XX (macro bspc # ))) )                      ;; ö = grv #=/  o ö #
-  sß  (tap-hold 1 120 s (macro ß ) )                                                                               ;; ß = [
-  g'  (tap-hold 140 140 g (multi @' (tap-hold 200 500 XX @' )) )                         ;; ' ''
-  h/  (tap-hold 140 140 h (multi (macro S-7 ) (tap-hold 200 400 XX (macro S-7 ))) )                         ;; / //
+  q! (tap-hold 1 100 (tap-dance 150 (j @@ )) (multi @! (tap-hold 200 600 XX (macro bspc @@ )))  ) ;; q ! @    Great! tapdance can be nested inside tap-hold. Still timing problems on keybr.com!
+  w˝ (tap-hold 140 140 l (multi (macro S-2 ) (tap-hold 200 400 XX (macro S-2 ))) )                         ;; " ""
+  e  (tap-hold 1 150 u (multi (macro S-8 ) (tap-hold 200 400 XX (macro S-9 ))))                           ;; (  ()
+  r  (tap-hold 140 140 a (multi (macro S-9 ) (tap-hold 200 600 XX (macro bspc A-C-9 ))) )                   ;; ) [ todo find a better use 
+  t$  (tap-hold 140 140 q (macro S-4))                                                                      ;; $
+  z&  (tap-hold 140 140 w (multi (macro S-6 ) (tap-hold 200 400 XX (macro S-6 ))))                          ;; & &&
+  i?  (tap-hold 140 140 d (multi @? (tap-hold 200 500 XX @? )))                                           ;; ? = S-[      i ? ??
+  p\  (tap-dance 140 ((tap-hold 10 100 y (multi  @\ (tap-hold 200 300 XX  @\ )))  (tap-hold 10 100 (macro y y) (macro A-C-ß A-C-ß) )))  ;; p \ \\
+  aä  (tap-hold 1 120 c (macro-release-cancel ä 400 bspc S-´ spc 600 bspc ä 600 bspc c 600 bspc))            ;; ä = '  `=S-]
+  uü  (tap-hold 1 120 b (multi (macro ü ) (tap-hold 400 400 XX (macro-release-cancel bspc S-5 800 bspc ü 800 bspc))) )                      ;; ü = ;  u ü % ##
+  oö  (tap-hold 1 120 g (multi (macro ö ) (tap-hold 400 400 XX (macro bspc # ))) )                      ;; ö = grv #=/  o ö #
+  sß  (tap-hold 1 120 r (macro ß ) )                                                                               ;; ß = [
+  g'  (tap-hold 140 140 o (multi @' (tap-hold 200 500 XX @' )) )                         ;; ' ''
+  h/  (tap-hold 140 140 m (multi (macro S-7 ) (tap-hold 200 400 XX (macro S-7 ))) )                         ;; / //
   x|  (tap-hold 140 140 x (multi (macro A-C-102d ) (tap-hold 200 500 XX (macro A-C-102d ))) )               ;; | ||
-  c{  (tap-hold 140 140 c (multi (macro A-C-7 ) (tap-hold 200 500 XX (macro A-C-0 ))))                      ;; { {}
+  c{  (tap-hold 140 140 ü (multi (macro A-C-7 ) (tap-hold 200 500 XX (macro A-C-0 ))))                      ;; { {}
   ;;v}  (tap-hold 140 140 v (multi (macro A-C-0 ) (tap-hold 200 500 XX (macro bspc A-C-9 ))) )                ;; v } ]
 
   ;; THIS v} implements Layer_with_default (default if nothing is pressed on the layer) TODO what do we want this Layer to do? TODO Anoyance the default layer key is only printed after release ... we can't lower the timeout?
 ;;v}  (tap-hold 140 140 v (tap-hold-press 200 5000 @}  @syv))             ;; v }
-  v}  (tap-hold 100 100 v  @syv)         ;; v 
-  b+  (tap-hold 140 140 b (multi (macro + ) (tap-hold 200 500 XX (macro + ))))                              ;; + = =  b + ++
-  n=  (tap-hold 140 140 n (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 400 XX (macro S-0 ))  ))) ) ;; n = == === 
-  m*  (tap-hold 140 140 m (multi @* (tap-hold 200 700 XX S-+ )))                      ;; * = S-= with long autorepeat
+  v}  (tap-hold 100 100 ä  @syv)         ;; v 
+  b+  (tap-hold 140 140 ö (multi (macro + ) (tap-hold 200 500 XX (macro + ))))                              ;; + = =  b + ++
+  n=  (tap-hold 140 140 p (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 400 XX (macro S-0 ))  ))) ) ;; n = == === 
+  m*  (tap-hold 140 140 f (multi @* (tap-hold 200 700 XX S-+ )))                      ;; * = S-= with long autorepeat
 ;;,F24 (tap-dance 140 ((tap-hold 10 100 , (multi (macro S-, ) (tap-hold 200 400 XX (macro bspc @lth ))) )  (tap-hold 10 100 f20 (macro @lth))))  ;; ,, = F24 , ; <
 ;; .:> (tap-dance 140 ((tap-hold 10 100 . (multi (macro S-. ) (tap-hold 200 400 XX (macro bspc @gth ))) )  (tap-hold 10 100 (macro . .) (macro @gth)) (tap-hold 10 100 (macro . . .) .) ))  ;; . : >
 ;;  -_~ (tap-dance 140 ((tap-hold 10 100 - (multi (macro S-- ) (tap-hold 200 400 XX (macro bspc @til ))) )  (tap-hold 10 100 (macro - -) (macro @til)) (tap-hold 10 100 (macro - - -) -) ))  ;; - _ ~
@@ -716,5 +716,5 @@
  plz (macro kp6 kp4 kp7 kp1 kp1 )
  tsc (macro @\\ @\\ t s c l i e n t @\\ c @\\ d a t a )
  ;; Last lines  of script no leading spaces
-dayiso (macro kp2 kp0 kp2 kp3 - kp0 kp2 - kp0 kp8   )
-dayde  (macro kp0 kp8 . kp0 kp2 . kp2 kp0 kp2 kp3  ))
+dayiso (macro kp2 kp0 kp2 kp3 - kp0 kp2 - kp0 kp6   )
+dayde  (macro kp0 kp6 . kp0 kp2 . kp2 kp0 kp2 kp3  ))
