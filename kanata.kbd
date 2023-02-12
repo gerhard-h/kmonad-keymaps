@@ -258,7 +258,7 @@
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  @qco bspc
   @tab      @q!  @w˝  @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  del  (multi f20 sldr)
   @atx      @aä  @sß  @d[  @f]  @g'  @h/  @j%  @kC   @lA# @bwn bspc bspc @rtc
-  @oss  f24 @F23 @x|  @c{  @v}  @b+  @n=  @m*  @,F18 @.:> @-_~ @rsd
+  @oss  f24 @yms @x|  @c{  @v}  @b+  @n=  @m*  @,F18 @.:> @-_~ @rsd
             @oml @oal           @nav           f24                     
 )
 (deflayer qwertycomma
@@ -266,7 +266,7 @@
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  @que bspc
   @tab      @q!  @w˝  @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  del  (multi f20 sldr)
   @atx      @aä  @sß  @d[  @f]  @g'  @h/  @j%  @kC   @lA# @bwn bspc bspc @rtc
-  @oss  f24 @F23 @x|  @c{  @v}  @b+  @n=  @m*  @,F20 @.:> @-_~ @rsd
+  @oss  f24 @yms @x|  @c{  @v}  @b+  @n=  @m*  @,F20 @.:> @-_~ @rsd
             @oml @oal           @nav           f24                     
 )
 ;; does indeed NOT WORK for gaming :)
@@ -275,7 +275,7 @@
   \         1    2    3    4    5    6    7    8    9    0    [    @que bspc
   tab       q    w    e    r    t    z    u    i    o    p    ;    =
   caps      a    s    d    f    g    h    j    k    l    grv  '    /    ret
-  lsft <    @F23 x    c    v    b    n    m    ,    .    -    rsft
+  lsft <    y    x    c    v    b    n    m    ,    .    -    rsft
             lmet lalt           spc               _                
 )
 ;; We need a mouse layer to get proper keyrepeat
@@ -327,7 +327,7 @@
   
   
   ;; F23 (tap-hold 200 200 y (multi f24 sldr))  ;; works technically f24 triggers y itselft it must be hold for f24 ... feels bad
-  F23 (tap-hold-release 200 200 y (multi @mus A-C-M-p) )
+  yms (tap-hold-release 200 200 y (multi @mus A-C-M-p) )
   msz (multi @que (macro z))
   msu (multi @que (macro u))
   mso (multi @que (macro o))
@@ -773,5 +773,5 @@
  plz (macro kp6 kp4 kp7 kp1 kp1 )
  tsc (macro @\\ @\\ t s c l i e n t @\\ c @\\ d a t a )
  ;; Last lines  of script no leading spaces
-dayiso (macro kp2 kp0 kp2 kp3 - kp0 kp2 - kp0 kp8   )
-dayde  (macro kp0 kp8 . kp0 kp2 . kp2 kp0 kp2 kp3  ))
+dayiso (macro kp2 kp0 kp2 kp3 - kp0 kp2 - kp1 kp2   )
+dayde  (macro kp1 kp2 . kp0 kp2 . kp2 kp0 kp2 kp3  ))

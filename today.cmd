@@ -9,3 +9,13 @@ grep -E -v "^dayde |^dayiso " kanata.kbd > todayisokanata.txt
 sed -r -e "s/([0-9])/kp\1 /g" -e "s/-/- /g"    -e "s/^/dayiso (macro /" -e "s/$/)/" todayiso.txt >> todayisokanata.txt
 sed -r -e "s/([0-9])/kp\1 /g" -e "s/\./\. /g"  -e "s/^/dayde  (macro /" -e "s/$/))/" todayde.txt >> todayisokanata.txt
 copy todayisokanata.txt kanata.kbd
+
+grep -E -v "^dayde |^dayiso " kanatauml.kbd > todayisokanata.txt
+sed -r -e "s/([0-9])/kp\1 /g" -e "s/-/- /g"    -e "s/^/dayiso (macro /" -e "s/$/)/" todayiso.txt >> todayisokanata.txt
+sed -r -e "s/([0-9])/kp\1 /g" -e "s/\./\. /g"  -e "s/^/dayde  (macro /" -e "s/$/))/" todayde.txt >> todayisokanata.txt
+copy todayisokanata.txt kanatauml.kbd
+
+grep -E -v "^dayde |^dayiso " kanatamine.kbd > todayisokanata.txt
+sed -r -e "s/([0-9])/kp\1 /g" -e "s/-/- /g"    -e "s/^/dayiso (macro /" -e "s/$/)/" todayiso.txt >> todayisokanata.txt
+sed -r -e "s/([0-9])/kp\1 /g" -e "s/\./\. /g"  -e "s/^/dayde  (macro /" -e "s/$/))/" todayde.txt >> todayisokanata.txt
+copy todayisokanata.txt kanatamine.kbd

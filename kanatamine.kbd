@@ -253,12 +253,12 @@
 ;;          !@   "    (    )[   $    &    ü%   ?    ö#   \    del..combo ret
 ;;   F24    ä`   ß    [    ]    '    /    %    F20  #    ret  bsp  bsp   ret
 ;;       y/mouse |    {    }]   +    =    *  ;<F24  :>   -_~   
-(deflayer qwerty
+(deflayer mine
   @ech      f1
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  @qco bspc
   @tab      @q!  @w˝  @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  z    bspc
   @atx      @aä  @sß  @d[  @f]  @g'  @h/  @j%  @kC   @lA# @bwn k    @rtc @rtc
-  @oss  f24 @F23 @x|  @c{  @v}  @b+  @n=  @m*  @,F18 @.:> @-_~ @rsd
+  @oss  f24 @yms @x|  @c{  @v}  @b+  @n=  @m*  @,F18 @.:> @-_~ @rsd
             @oml @oal           @nav           f24                     
 )
 (deflayer qwertycomma
@@ -266,7 +266,7 @@
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  @que bspc
   @tab      @q!  @w˝  @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  ü    bspc
   @atx      @aä  @sß  @d[  @f]  @g'  @h/  @j%  @kC   @lA# @bwn ä    @rtc @rtc
-  @oss  f24 @F23 @x|  @c{  @v}  @b+  @n=  @m*  @,F20 @.:> @-_~ @rsd
+  @oss  f24 @yms @x|  @c{  @v}  @b+  @n=  @m*  @,F20 @.:> @-_~ @rsd
             @oml @oal           @nav           f24                     
 )
 ;; does indeed NOT WORK for gaming :)
@@ -275,7 +275,7 @@
   \         1    2    3    4    5    6    7    8    9    0    [    @que bspc
   tab       q    w    e    r    t    z    u    i    o    p    ;    =
   caps      a    s    d    f    g    h    j    k    l    grv  '    /    ret
-  lsft <    @F23 x    c    v    b    n    m    ,    .    -    rsft
+  lsft <    y    x    c    v    b    n    m    ,    .    -    rsft
             lmet lalt           spc               _                
 )
 ;; We need a mouse layer to get proper keyrepeat
@@ -305,7 +305,7 @@
 )
 ;; ahk mouse layer
 (defalias
-  que (layer-switch qwerty)
+  que (layer-switch mine)
   quep (multi @que  A-C-M-p)
   qco (layer-switch qwertycomma)
   mus (layer-switch mouse)
@@ -327,7 +327,7 @@
   
   
   ;; F23 (tap-hold 200 200 y (multi f24 sldr))  ;; works technically f24 triggers y itselft it must be hold for f24 ... feels bad
-  F23 (tap-hold-release 200 200 y (multi @mus A-C-M-p) )
+  yms (tap-hold-release 200 200 y (multi @mus A-C-M-p) )
   msz (multi @que (macro z))
   msu (multi @que (macro u))
   mso (multi @que (macro o))
@@ -357,7 +357,7 @@
 ;; BUG ALT+PgUp does not work with RemoteDesktop if PgUp is Mapped
 (deflayer numbers
   _         _
-  @^        @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld A-prtsc _
+  @^        @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld-prev A-prtsc _
   _         @-_:  1    2    3  C-bspc esc  home up    end  pgup pgdn _     
   @sy1      @.wn  @al4 @ct5 @sf6 0    bspc left down  rght bspc ret  @fky    _
   _    @`   @,    7    8    9    del  ret  @stb @cde  @alc @mrc _
@@ -415,14 +415,14 @@
 ;; IDEA v/lsymbols and n/rsymbols are only usefull if activated by letter keys like v/n but I ditched that concept as to hard to do fast
 
 (defalias
-  chi (chord example i)
-  cho (chord example o)
+  chi (chord example d)
+  cho (chord example g)
 )
 
 (defchords example 300
-  (i      ) i
-  (   o   ) o
-  (i  o   ) f20
+  (d      ) d
+  (   g   ) g
+  (d  g   ) f20
 )
 
 
@@ -539,11 +539,11 @@
   r  (tap-hold 140 140 a (multi (macro S-9 ) (tap-hold 200 600 XX (macro bspc A-C-9 ))) )                   ;; ) [ todo find a better use 
   t$  (tap-hold 140 140 q (macro S-4))                                                                      ;; $
   z&  (tap-hold 140 140 w (multi (macro S-6 ) (tap-hold 200 400 XX (macro S-6 ))))                          ;; & &&
-  i?  (tap-hold 140 140 d (multi @? (tap-hold 200 500 XX @? )))                                           ;; ? = S-[      i ? ??
+  i?  (tap-hold 140 140 @chi (multi @? (tap-hold 200 500 XX @? )))                                           ;; ? = S-[      i ? ??
   p\  (tap-dance 140 ((tap-hold 10 100 y (multi  @\ (tap-hold 200 300 XX  @\ )))  (tap-hold 10 100 (macro y y) (macro A-C-ß A-C-ß) )))  ;; p \ \\
   aä  (tap-hold 1 120 c (macro-release-cancel ä 400 bspc S-´ spc 600 bspc ä 600 bspc c 600 bspc))            ;; ä = '  `=S-]
   uü  (tap-hold 1 120 b (multi (macro ü ) (tap-hold 400 400 XX (macro-release-cancel bspc S-5 800 bspc ü 800 bspc))) )                      ;; ü = ;  u ü % ##
-  oö  (tap-hold 1 120 g (multi (macro ö ) (tap-hold 400 400 XX (macro bspc # ))) )                      ;; ö = grv #=/  o ö #
+  oö  (tap-hold 1 120 @cho (multi (macro ö ) (tap-hold 400 400 XX (macro bspc # ))) )                      ;; ö = grv #=/  o ö #
   sß  (tap-hold 1 120 r (macro ß ) )                                                                               ;; ß = [
   g'  (tap-hold 140 140 o (multi @' (tap-hold 200 500 XX @' )) )                         ;; ' ''
   h/  (tap-hold 140 140 m (multi (macro S-7 ) (tap-hold 200 400 XX (macro S-7 ))) )                         ;; / //
@@ -773,5 +773,5 @@
  plz (macro kp6 kp4 kp7 kp1 kp1 )
  tsc (macro @\\ @\\ t s c l i e n t @\\ c @\\ d a t a )
  ;; Last lines  of script no leading spaces
-dayiso (macro kp2 kp0 kp2 kp3 - kp0 kp2 - kp0 kp6   )
-dayde  (macro kp0 kp6 . kp0 kp2 . kp2 kp0 kp2 kp3  ))
+dayiso (macro kp2 kp0 kp2 kp3 - kp0 kp2 - kp1 kp2   )
+dayde  (macro kp1 kp2 . kp0 kp2 . kp2 kp0 kp2 kp3  ))

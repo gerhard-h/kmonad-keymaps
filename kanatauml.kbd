@@ -86,16 +86,6 @@
    
    BUG AltGr + I = ahk menu seems to hang CTRL - SOLVED by excluding AltGr (and Ctrls) from defsrc 	 
   
-  TODO use Dynamic makros
-  (defalias
-  dr0 (dynamic-macro-record 0)
-  dr1 (dynamic-macro-record 1)
-  dr2 (dynamic-macro-record 2)
-  dp0 (dynamic-macro-play 0)
-  dp1 (dynamic-macro-play 1)
-  dp2 (dynamic-macro-play 2)
-  dms dynamic-macro-record-stop
-  )
   ;; Swap numbers and their symbols with respect to shift
   (defoverrides
   (1) (lsft 1)
@@ -107,24 +97,7 @@
   ;; repeat for all remaining numbers
   )
   
-  TODO maybe combine with ß
-  (defsrc a b c)
-  (deflayer default
-    @cha @chb @chc
-  )
-  
-  (defalias
-    cha (chord example a)
-    chb (chord example b)
-    chc (chord example c)
-  )
-  
-  (defchords example 500
-    (a      ) a
-    (   b   ) b
-    (a     c) C-v
-    (a  b  c) @three
-  )
+  TODO maybe combine chord with ß
      
 ;; CTRL + SPACE + ESC => Exit KANATA immediatly
 |#
@@ -258,15 +231,15 @@
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  @qco bspc
   @tab      @q!  @w˝  @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  @ü   bspc
   @atx      @aä  @sß  @d[  @f]  @g'  @h/  @j%  @kC   @lA# @bwn @ä   @rtc @rtc
-  @oss  f24 @F23 @x|  @c{  @v}  @b+  @n=  @m*  @,F18 @.:> @-_~ @rsd
+  @oss  f24 @yms @x|  @c{  @v}  @b+  @n=  @m*  @,F18 @.:> @-_~ @rsd
             @oml @oal           @nav           f24                     
 )
 (deflayer qwertycomma
   @ech      f1
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  @que bspc
-  @tab      @q!  @w˝  @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  ü    bspc
-  @atx      @aä  @sß  @d[  @f]  @g'  @h/  @j%  @kC   @lA# @bwn ä    @rtc @rtc
-  @oss  f24 @F23 @x|  @c{  @v}  @b+  @n=  @m*  @,F20 @.:> @-_~ @rsd
+  @tab      @q!  @w˝  @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  @ü   bspc
+  @atx      @aä  @sß  @d[  @f]  @g'  @h/  @j%  @kC   @lA# @bwn @ä   @rtc @rtc
+  @oss  f24 @yms @x|  @c{  @v}  @b+  @n=  @m*  @,;< @.:> @-_~ @rsd
             @oml @oal           @nav           f24                     
 )
 ;; does indeed NOT WORK for gaming :)
@@ -275,7 +248,7 @@
   \         1    2    3    4    5    6    7    8    9    0    [    @que bspc
   tab       q    w    e    r    t    z    u    i    o    p    ;    =
   caps      a    s    d    f    g    h    j    k    l    grv  '    /    ret
-  lsft <    @F23 x    c    v    b    n    m    ,    .    -    rsft
+  lsft <    y    x    c    v    b    n    m    ,    .    -    rsft
             lmet lalt           spc               _                
 )
 ;; We need a mouse layer to get proper keyrepeat
@@ -287,6 +260,7 @@
   lsft @msz @msz lalt lctl lsft XX   n    m    ,    .    -    rsft
             lmet lalt          @que               _                
 )
+;; makro keys and sticky layer don't fit f
 (deflayer mouse  
   _         f1
   \         1    2    3    4    5    6    7    8    9    0    [    @que bspc
@@ -327,7 +301,7 @@
   
   
   ;; F23 (tap-hold 200 200 y (multi f24 sldr))  ;; works technically f24 triggers y itselft it must be hold for f24 ... feels bad
-  F23 (tap-hold-release 200 200 y (multi @mus A-C-M-p) )
+  yms (tap-hold-release 200 200 y (multi @mus A-C-M-p) )
   msz (multi @que (macro z))
   msu (multi @que (macro u))
   mso (multi @que (macro o))
@@ -357,7 +331,7 @@
 ;; BUG ALT+PgUp does not work with RemoteDesktop if PgUp is Mapped
 (deflayer numbers
   _         _
-  @^        @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld A-prtsc _
+  @^        @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld-next A-prtsc _
   _         @-_:  1    2    3  C-bspc esc  home up    end  pgup pgdn _     
   @sy1      @.wn  @al4 @ct5 @sf6 0    bspc left down  rght bspc ret  @fky    _
   _    @`   @,    7    8    9    del  ret  @stb @cde  @alc @mrc _
@@ -398,9 +372,9 @@
 (deflayer vsymbols
   _         _
   _         _    _    _    _    _    _    _    _    _    _    _    _    _     
-  _  (unicode Ù) @˝   @﴾   @﴿   @$   @&   @%   @?   #    @\   _    _         
+  _  (unicode Ù) @˝   @﴾   @﴿   @$   @&   @dp0 @dr0 @dms @\   _    _         
   _  (unicode Õ) @|   @[   @]   @'   @/   @%   @^   #    @-_~ _    _    _          
-  _    @`   @´   @|   @{   @}    +    @=   @*   @<   @>   @~   _               
+  _    @`   @´   @|   @{   @}    +    @=   @*  @<   @>   @~   _               
             _    _              _            _                            
 )
 (deflayer ksymbols
@@ -422,7 +396,7 @@
 (defchords example 300
   (i      ) i
   (   o   ) o
-  (i  o   ) f20
+  (i  o   ) f18
 )
 
 
@@ -512,7 +486,7 @@
   ct5 (tap-hold-release 200 300 5 lctl)
   al4 (tap-hold-release 200 340 4 lalt)
   .wn (tap-hold-release 200 240 . lmet)
-  bwn (tap-hold-release 200 5000 ö lmet)
+  bwn (tap-hold-release 200 5000 @ö lmet)
   wn0 (tap-hold-release 200 340 0 lmet)  ;; unused because of Win+G gets triggered
   9sy (tap-hold-release 200 340 9 @syv)  ;; unused because v is already mapped to do this
   ;;ght (tap-hold-release 200 240 rght rmet)  ;;works but not used
@@ -773,5 +747,5 @@
  plz (macro kp6 kp4 kp7 kp1 kp1 )
  tsc (macro @\\ @\\ t s c l i e n t @\\ c @\\ d a t a )
  ;; Last lines  of script no leading spaces
-dayiso (macro kp2 kp0 kp2 kp3 - kp0 kp2 - kp0 kp6   )
-dayde  (macro kp0 kp6 . kp0 kp2 . kp2 kp0 kp2 kp3  ))
+dayiso (macro kp2 kp0 kp2 kp3 - kp0 kp2 - kp1 kp2   )
+dayde  (macro kp1 kp2 . kp0 kp2 . kp2 kp0 kp2 kp3  ))
