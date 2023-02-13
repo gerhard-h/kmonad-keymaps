@@ -103,6 +103,7 @@
 |#
 (defcfg
    sequence-timeout 3000
+  ;; windows-interception-mouse-hwid "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0"
   ;; windows-altgr cancel-lctl-press ;; remove the lctl press that comes as a combo with ralt  with F24 mapping
   ;; windows-altgr add-lctl-release  ;; add an lctl release when ralt is released           with standard Altgr 
   ;; windows don't map altgr to avoid both options from above 
@@ -123,17 +124,18 @@
   ;; Intl1 KEY_RO ro
   ;; CHANGES Remoced onshot-mods and ctrl-keys to make Remotedesktop not stick ctl 
 )
-;;(deflocalkeys-wintercept
-;;  ü    186
-;;  +    187
-;;  #    191
-;;  ö    192
-;;  ß    219
-;;  ^    220
-;;  ´    221
-;;  ä    222
-;;  <    226
-;;)
+(deflocalkeys-winercept
+  ;; - ???
+  ü    219
+  +    221
+  #    220
+  ö    186
+  ß    189
+  ^    192
+  ´    187
+  ä    222
+  <    226
+)
 (defalias
   ;; shifted german keys
   ! (macro S-1 )
@@ -194,20 +196,20 @@
 ;; z and y are not flipped positioning has no meaning but must be consistent with other layers
 (defsrc
   esc       f1
-  grv       1    2    3    4    5    6    7    8    9    0    -    =    bspc
-  tab       q    w    e    r    t    y    u    i    o    p    [    ]
-  caps      a    s    d    f    g    h    j    k    l    ;    '    \    ret
-  lsft 102d z    x    c    v    b    n    m    ,    .    /    rsft
+  ^         1    2    3    4    5    6    7    8    9    0    ß    ´    bspc
+  tab       q    w    e    r    t    y    u    i    o    p    ü    +
+  caps      a    s    d    f    g    h    j    k    l    ö    ä    #    ret
+  lsft <    z    x    c    v    b    n    m    ,    .    /    rsft
             lmet lalt           spc                 ro                  
 )
 ;; defsrc without using german deflocalkeys
 ;;(defsrc
 ;;  esc       f1
-;;  \         1    2    3    4    5    6    7    8    9    0    [    ]    bspc
-;;  tab       q    w    e    r    t    z    u    i    o    p    ;    =
-;;  caps      a    s    d    f    g    h    j    k    l    grv  '    /    ret
-;;  lsft 102d y    x    c    v    b    n    m    ,    .    -    rsft
-;;  lctl      lmet lalt           spc                           rctl
+;;  grv       1    2    3    4    5    6    7    8    9    0    -    =    bspc
+;;  tab       q    w    e    r    t    y    u    i    o    p    [    ]
+;;  caps      a    s    d    f    g    h    j    k    l    ;    '    \    ret
+;;  lsft 102d z    x    c    v    b    n    m    ,    .    /    rsft
+;;            lmet lalt           spc                 ro      
 ;;)
 
 ;; The first layer defined is the layer that will be active by default when kanata starts up.
@@ -232,7 +234,7 @@
 ;;       y/mouse |    {    }]   +    =    *  ;<F24  :>   -_~   
 (deflayer qwerty
   @ech      f1
-  @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  @dp0 bspc
+  @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  ß    bspc
   @tab      @q!  @w˝  @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  @ü   bspc
   @atx      @aä  @sß  @d[  @f]  @g'  @h/  @j%  @kC   @lA# @bwn @ä   @rtc @rtc
   @oss  f24 @yms @x|  @c{  @v}  @b+  @n=  @m*  @,;<  @.:> @-_~ @rsd
@@ -283,6 +285,9 @@
 )
 ;; ahk mouse layer
 (defalias
+  mal M-C-A-f
+  mar M-C-A-d
+  mam M-C-A-s
   que (layer-switch qwerty)
   quep (multi @que  A-C-M-p)
   qco (layer-switch qwertycomma)
@@ -299,9 +304,10 @@
   ma↓ (movemouse-accel-down 1 1000 1 5)
   ma→ (movemouse-accel-right 1 1000 1 5)
   
-  cll (multi @que mlft A-C-M-p)
-  clr (multi @que mrgt A-C-M-p)
-  clm (multi @que mmid A-C-M-p)
+  cll (multi @que @mal A-C-M-p)
+  ;;cll @mal
+  clr (multi @que @mar A-C-M-p)
+  clm (multi @que @mam A-C-M-p)
   
   
   ;; F23 (tap-hold 200 200 y (multi f24 sldr))  ;; works technically f24 triggers y itselft it must be hold for f24 ... feels bad
@@ -425,8 +431,8 @@
   ;; modifiers for numpad
   stb (tap-hold-release 200 5000 tab lsft)
   cde (tap-hold-release 200 5000 (multi @mus A-C-M-p) lctl) ;; (multi @mus (macro f23)) lctl) to trigger ahk mouse
-  alc (tap-hold-release 200 5000 mltp lalt)
-  mrc (tap-hold-release 200 5000 mrtp lmet)
+  alc (tap-hold-release 200 5000 @mal lalt)
+  mrc (tap-hold-release 200 5000 @mar lmet)
 
   ;; outer/special keys
   ech (tap-hold 140 400 esc (multi (macro home ) (tap-hold 400 1100 XX (macro end ) )) )
@@ -518,10 +524,10 @@
   z&  (tap-hold 140 140 y (multi (macro S-6 ) (tap-hold 200 400 XX (macro S-6 ))))                          ;; & &&
   i?  (tap-hold 140 140 @chi (multi @? (tap-hold 200 500 XX @? )))                                           ;; ? = S-[      i ? ??
   p\  (tap-dance 140 ((tap-hold 10 100 p (multi  @\ (tap-hold 200 300 XX  @\ )))  (tap-hold 10 100 (macro p p) (macro A-C-[ A-C-[) )))  ;; p \ \\
-  aä  (tap-hold 1 120 a (macro-release-cancel ' 400 bspc S-= spc 600 bspc ' 600 bspc a 600 bspc))            ;; ä = '  `=S-]
-  uü  (tap-hold 1 120 u (multi (macro [ ) (tap-hold 400 400 XX (macro-release-cancel bspc S-5 800 bspc [ 800 bspc))) )                      ;; ü = ;  u ü % ##
-  oö  (tap-hold 1 120 @cho (multi (macro ; ) (tap-hold 400 400 XX (macro bspc \ ))) )                      ;; ö = grv #=/  o ö #
-  sß  (tap-hold 1 120 s (macro @ß ) )                                                                               ;; ß = [
+  aä  (tap-hold 1 120 a (macro-release-cancel ä 400 bspc S-= spc 600 bspc ä 600 bspc a 600 bspc))            ;; ä = '  `=S-]
+  uü  (tap-hold 1 120 u (multi (macro ü ) (tap-hold 400 400 XX (macro-release-cancel bspc S-5 800 bspc ü 800 bspc))) )                      ;; ü = ;  u ü % ##
+  oö  (tap-hold 1 120 @cho (multi (macro ö ) (tap-hold 400 400 XX (macro bspc # ))) )                      ;; ö = grv #=/  o ö #
+  sß  (tap-hold 1 120 s (macro ß ) )                                                                               ;; ß = [
   g'  (tap-hold 140 140 g (multi @' (tap-hold 200 500 XX @' )) )                         ;; ' ''
   h/  (tap-hold 140 140 h (multi (macro S-7 ) (tap-hold 200 400 XX (macro S-7 ))) )                         ;; / //
   x|  (tap-hold 140 140 x (multi (macro A-C-102d ) (tap-hold 200 500 XX (macro A-C-102d ))) )               ;; | ||
