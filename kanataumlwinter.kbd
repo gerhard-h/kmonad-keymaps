@@ -1,29 +1,30 @@
 (defcfg
 )
 (deflocalkeys-wintercept
-  ü    186
-  +    187
-  #    191
-  ö    192
-  ß    219
-  ^    220
-  ´    221
+  ü    219
+  +    221
+  #    220
+  ö    186
+  ß    189
+  ^    192
+  ´    187
   ä    222
   <    226
+  -    191
 )
 (defsrc
   esc       f1
-  grv       1    2    3    4    5    6    7    8    9    0    -    =    bspc
-  tab       q    w    e    r    t    y    u    i    o    p    [    ]
-  caps      a    s    d    f    g    h    j    k    l    ;    '    \    ret
-  lsft 102d z    x    c    v    b    n    m    ,    .    /    rsft
+  ^         1    2    3    4    5    6    7    8    9    0      ß  ´    bspc
+  tab       q    w    e    r    t    y    u    i    o    p    ü    +
+  caps      a    s    d    f    g    h    j    k    l    ö    ä    #    ret
+  lsft <    z    x    c    v    b    n    m    ,    .    /    rsft
             lmet lalt           spc                               
 )
-(deflayer qwerty1
+(deflayer qwerty
   esc       f1
-  grv       1    2    3    4    5    6    7    8    9    0    -    =    bspc
-  tab       q    w    e    r    t    y    u    i    o    p    [    ]
-  caps      a    s    d    f    g    h    j    k    l    ;    '    \    ret
-  lsft 102d z    x    c    v    b    n    m    ,    .    /    rsft
+  a         1    2    3    4    5    6    7    8    9    0    b    c    bspc
+  tab       q    w    e    r    t    _    u    i    o    p    d    e
+  caps      a    s    d    f    g    h    j    k    l    f    g    h    ret
+  lsft j    _    x    c    v    b    n    m    ,    .    i    rsft
             lmet lalt           spc
 )

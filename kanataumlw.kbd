@@ -2,10 +2,10 @@
 ;; FEATURES kanata                                       QMK                                              QMK minimal portable requirements
 ;; - Home row mods                                       (Y) but timing problems                          Fallback abc layer (Fallback = no kanata available)
 ;; - Autosymbol: Tap_Hold                                 y TAP_HOLD / MOD_TAP
-;; -(Autosymbol: NO Dbl_Tap_Hold on Shift)                n 
+;; -(Autosymbol: NO Dbl_Tap_Hold on Shift)                n also timing issues
 ;; -(Autosymbol: Dbl_Tap_Hold ONLY for SLOW KEYS q,.)     Y for all non modifiers
-;; - Autosymbol: Dbl_Tap_Hold on non Shift modifiers      N                              Fallback abc layer may (not) have this anyway
-;; -(Autosymbol: Dbl_Tap slowes Tap_Hold)				  Y no problemfor non modifirers
+;; - Autosymbol: Dbl_Tap_Hold on non Shift modifiers      N                                                Fallback abc layer may (not) have this anyway
+;; -(Autosymbol: Dbl_Tap slowes Tap_Hold)				  Y no problem for non modifirers
 ;; - Autosymbol: Long_Hold                                N                                               *Default Querty kanata layer
 ;; - Symbol layer (rarly used space + caps)               y                                                Fallback Symbol layer
 ;; - V-key Symbol layer (more used)                      (y) is possible  but maybe not needed             Fallback Symbol layer
@@ -28,23 +28,24 @@
 ;;            fallback number/nav
 ;;            mouse,
 ;;            F-key 
+;; Long Hold  might be anoying
 ;; RETRY via newest version and skip fallback:  ctl win alt mouse F13 space F14 LFKey left down right
 ;;     space/numbers 
 ;; TODO wich thumb activates nav? cursor keys seems to be used with right tumb
 ;; BUG SC06F remap altgr to f24 in sharpkeys is not recognized by kanata
-;; if numtab is good make a key to flip remote desktop controls -> dont work bc of timings non remappable keys
+;; if numtab is good make a key to flip remote desktop controls -> dont work bc of timings non remappable keys -> TODO retry wintercept
 ;; double leader keying (multi f24 sldr) inconsistencies with sldr 
 ;; TODO sldr key not used
-;; TODO tap hold AltGr to f24 / AltGr and remove wincompose
+;; TODO tap hold AltGr to f24 / AltGr and remove wincompose - AltGr is a bad positionend key anyway
 ;; TODO test release-key | release-layer key release not always working
-;; TODO where to put delete
+;; TODO where to put delete (´)? nav+B rshift
 ;; TODO (multi lrld f9) is not working lets try makro in next release
 ;; INFO rpt just rpeats one key
 ;; TODO revisit win and esc otimization and rsft _ vs rsft esc  
 ;; TODO ctrl + Z single key ?
 ;; INFO @tab esc key feels bad
 
-   TIP tap-dance-eager https://github.com/jtroo/kanata/issues/241
+   INFO tap-dance-eager https://github.com/jtroo/kanata/issues/241 does not make a big difference
 
    TIP dynamic macro support https://github.com/jtroo/kanata/issues/221
    TIP allow multiple sequence leaders, which can have different sequences with the same characters but different outputs
@@ -97,6 +98,9 @@
   ;; repeat for all remaining numbers
   )
   
+  ;; TODO powershell: type date-time as YYYY-MM-DD HH:MM
+  pdp (cmd-output-keys powershell.exe "echo '(' (((Get-Date -Format 'yyyy-MM-dd HH:mm').toCharArray() -join ' ').insert(20, ' spc ') -replace ':','S-;') ')'")
+  
   TODO maybe combine chord with ß
      
 ;; CTRL + SPACE + ESC => Exit KANATA immediatly
@@ -124,8 +128,8 @@
   ;; Intl1 KEY_RO ro
   ;; CHANGES Remoced onshot-mods and ctrl-keys to make Remotedesktop not stick ctl 
 )
-(deflocalkeys-winercept
-  ;; - ???
+(deflocalkeys-wintercept
+  -    191
   ü    219
   +    221
   #    220
@@ -148,7 +152,7 @@
   ﴾	(macro S-8 )  ;; ﴾ look-a-like is used because @( is no valid alias, to be displayed correctly in console requires a font that can - e.g. cascadia
   ﴿	(macro S-9 )  ;; ﴿ look-a-like is used because @) is no valid alias, to be displayed correctly in console requires a font that can - e.g. cascadia
   =	(macro S-0 )
-  ? (macro S-- )
+  ? (macro S-ß )
   * (macro S-] )
   .* S-]
   ' (macro S-\ )
@@ -167,9 +171,9 @@
   
   ;; AltGr german keys
   ~ (macro A-C-] )
-  \\ A-C-- 
-  \ (macro A-C-- )
-  ẞ (macro A-C-S-- )
+  \\ A-C-ß 
+  \ (macro A-C-ß )
+  ẞ (macro A-C-S-ß )
   | (macro A-C-102d )
   } (macro A-C-0 )
   { (macro A-C-7 )
@@ -199,7 +203,7 @@
   ^         1    2    3    4    5    6    7    8    9    0    ß    ´    bspc
   tab       q    w    e    r    t    y    u    i    o    p    ü    +
   caps      a    s    d    f    g    h    j    k    l    ö    ä    #    ret
-  lsft <    z    x    c    v    b    n    m    ,    .    /    rsft
+  lsft <    z    x    c    v    b    n    m    ,    .    -    rsft
             lmet lalt           spc                 ro                  
 )
 ;; defsrc without using german deflocalkeys
@@ -234,7 +238,7 @@
 ;;       y/mouse |    {    }]   +    =    *  ;<F24  :>   -_~   
 (deflayer qwerty
   @ech      f1
-  @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  ß    bspc
+  @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  del    bspc
   @tab      @q!  @w˝  @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  @ü   bspc
   @atx      @aä  @sß  @d[  @f]  @g'  @h/  @j%  @kC   @lA# @bwn @ä   @rtc @rtc
   @oss  f24 @yms @x|  @c{  @v}  @b+  @n=  @m*  @,;<  @.:> @-_~ @rsd
@@ -270,9 +274,9 @@
 (deflayer mouse  
   _         f1
   \         1    2    3    4    5    6    7    8    9    0    [    @que bspc
-  tab       @dp0 w    e    @slw XX  @quep @cll @ma↑ @clr p    ;    =
-  caps      @dr0 @clm @clr @cll XX   h    @ma← @ma↓ @ma→ grv  '    /    ret
-  lsft @msz @dms lalt lctl lsft XX   @ms← @ms↑ @ms↓ @ms→ -    rsft
+  tab       mlft @slw @slw @slw XX  @quep @cll @ma↑ @clr p    ;    =
+  caps      mlft @clm @clr @cll XX   h    @ma← @ma↓ @ma→ grv  '    /    ret
+  lsft @msz mlft lalt lctl lsft XX   @ms← @ms↑ @ms↓ @ms→ -    rsft
             lmet lalt          @quep              _                
 )
 (deflayer mouseslow
@@ -511,7 +515,7 @@
   8 (tap-hold 200 500 8 (macro S-8 )) ;;(tap-hold 200 300 8 (multi (macro S-8 ) (tap-hold 200 400 XX (macro bspc A-C-8 ))) )
   9 (tap-hold 200 500 9 (macro S-9 )) ;;(tap-hold 200 300 9 (multi (macro S-9 ) (tap-hold 200 400 XX (macro bspc A-C-9 ))) )
   0 0 ;;(tap-hold 10 100 0 (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 400 XX (macro S-0 ))  ))  ) )
-  sz (tap-hold 200 300 - (multi (macro S-- ) (tap-hold 200 500 XX (macro bspc A-C-- ))))
+  sz (tap-hold 200 300 ß (multi (macro S-ß ) (tap-hold 200 500 XX (macro bspc A-C-ß ))))
   ;; q (multi q sldr) eats the next key after q
   ;;q! (tap-hold 140 140 q (multi (macro S-1 ) (tap-hold 200 400 XX (macro bspc A-C-q ))) )                 ;; q ! @
   ;;q! (tap-hold 1 140 q (macro-release-cancel S-1 600 bspc (unicode @) 800 bspc S-1 800 bspc))                   ;; q ! @
@@ -521,16 +525,17 @@
   e  (tap-hold 1 150 e (multi (macro S-8 ) (tap-hold 200 400 XX (macro S-9 ))))                           ;; (  ()
   r  (tap-hold 140 140 r (multi (macro S-9 ) (tap-hold 200 600 XX (macro bspc A-C-9 ))) )                   ;; ) [ todo find a better use 
   t$  (tap-hold 140 140 t (macro S-4))                                                                      ;; $
-  z&  (tap-hold 140 140 y (multi (macro S-6 ) (tap-hold 200 400 XX (macro S-6 ))))                          ;; & &&
+  z&  (tap-hold 140 140 y (multi (macro S-6 ) (tap-hold 200 800 XX (macro S-6 ))))                          ;; & &&
   i?  (tap-hold 140 140 @chi (multi @? (tap-hold 200 500 XX @? )))                                           ;; ? = S-[      i ? ??
-  p\  (tap-dance 140 ((tap-hold 10 100 p (multi  @\ (tap-hold 200 300 XX  @\ )))  (tap-hold 10 100 (macro p p) (macro A-C-[ A-C-[) )))  ;; p \ \\
+  ;;p\  (tap-dance 140 ((tap-hold 10 100 p (multi  @\ (tap-hold 200 800 XX  @\ )))  (macro p p) ))  ;; p \ \\ TODO tapdance over tap-hold why?
+  p\  (tap-hold 140 140 (macro p) (multi @\ (tap-hold 200 800 XX @\ )) ) ;; p \ \\ 
   aä  (tap-hold 1 120 a (macro-release-cancel ä 400 bspc S-= spc 600 bspc ä 600 bspc a 600 bspc))            ;; ä = '  `=S-]
   uü  (tap-hold 1 120 u (multi (macro ü ) (tap-hold 400 400 XX (macro-release-cancel bspc S-5 800 bspc ü 800 bspc))) )                      ;; ü = ;  u ü % ##
   oö  (tap-hold 1 120 @cho (multi (macro ö ) (tap-hold 400 400 XX (macro bspc # ))) )                      ;; ö = grv #=/  o ö #
   sß  (tap-hold 1 120 s (macro ß ) )                                                                               ;; ß = [
-  g'  (tap-hold 140 140 g (multi @' (tap-hold 200 500 XX @' )) )                         ;; ' ''
-  h/  (tap-hold 140 140 h (multi (macro S-7 ) (tap-hold 200 400 XX (macro S-7 ))) )                         ;; / //
-  x|  (tap-hold 140 140 x (multi (macro A-C-102d ) (tap-hold 200 500 XX (macro A-C-102d ))) )               ;; | ||
+  g'  (tap-hold 140 140 g (multi @' (tap-hold 200 800 XX @' )) )                         ;; ' ''
+  h/  (tap-hold 140 140 (macro h) (multi (macro S-7 ) (tap-hold 200 800 XX (macro S-7 ))) )                 ;; / // TODO do we wont dbl_tap-hold keyrepeat
+  x|  (tap-hold 140 140 x (multi (macro A-C-102d ) (tap-hold 200 800 XX (macro A-C-102d ))) )               ;; | ||
   c{  (tap-hold 140 140 c (multi (macro A-C-7 ) (tap-hold 200 500 XX (macro A-C-0 ))))                      ;; { {}
   ;;v}  (tap-hold 140 140 v (multi (macro A-C-0 ) (tap-hold 200 500 XX (macro bspc A-C-9 ))) )                ;; v } ]
 
@@ -546,10 +551,10 @@
 ;; nesting of tap-dance inside tap-hold is now possible
    ,F20 (tap-hold 10 100 (tap-dance 140 (, (tap-hold 10 100 f20 @<)))  (multi @;  (tap-hold 200 400 XX (macro bspc 102d ))) )  ;; ,, = F24 , ; <
    ,F18 (tap-hold 10 100 (tap-dance 140 ( f18  (tap-hold 100 100 (macro , ,) @<) (macro , , ,) ))  (multi @;  (tap-hold 200 400 XX (macro bspc 102d ))) )  ;; ,, = F24 , ; <
-   ,;< (tap-hold 10 100 (tap-dance 140 (, (tap-hold 10 100 (macro , ,)  @< ) (tap-hold 10 100 (macro , , ,) .) )) (multi @; (tap-hold 200 400 XX (macro bspc 102d ))) ) 
-  .:> (tap-hold 10 100 (tap-dance 140 (. (tap-hold 10 100 (macro . .)  @> ) (tap-hold 10 100 (macro . . .) .) )) (multi @: (tap-hold 200 400 XX (macro bspc S-102d ))) )    ;; . : >
-  -_~ (tap-hold 10 100 (tap-dance 140 (/   (tap-hold 10 100 (macro / /)  @~) (tap-hold 10 100 (macro / / /) /) )) (multi (macro S-/ ) (tap-hold 200 400 XX (macro bspc A-C-] ))) )  ;; - _ ~
-  -_: (tap-hold 10 100 (tap-dance 140 (/   (tap-hold 10 100 (macro / /)  @:) (tap-hold 10 100 (macro / / /) /) )) (multi (macro S-/ ) (tap-hold 200 400 XX (macro bspc S-. ))) )  ;; - _ :
+   ,;< (tap-hold 10 100 (tap-dance 140 (, (tap-hold 10 100 (macro , ,)  @< ) (tap-hold 10 100 (macro , , ,) .) )) (multi @; (tap-hold 200 800 XX (macro bspc 102d ))) ) 
+  .:> (tap-hold 10 100 (tap-dance 140 (. (tap-hold 10 100 (macro . .)  @> ) (tap-hold 10 100 (macro . . .) .) )) (multi @: (tap-hold 200 800 XX (macro bspc S-102d ))) )    ;; . : >
+  -_~ (tap-hold 10 100 (tap-dance 140 (/   (tap-hold 10 100 (macro / /)  @~) (tap-hold 10 100 (macro / / /) /) )) (multi (macro S-/ ) (tap-hold 200 800 XX (macro bspc A-C-] ))) )  ;; - _ ~
+  -_: (tap-hold 10 100 (tap-dance 140 (/   (tap-hold 10 100 (macro / /)  @:) (tap-hold 10 100 (macro / / /) /) )) (multi (macro S-/ ) (tap-hold 200 800 XX (macro bspc S-. ))) )  ;; - _ :
   
   ;;f1 (macro f1 f24)  ;; only usefull in applications that do not react on F1 ==> not usefull
 )
