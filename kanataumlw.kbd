@@ -172,7 +172,7 @@
   ;; AltGr german keys
   ~ (macro A-C-] )
   \\ A-C-ß 
-  \ (macro A-C-ß )
+  \ (unicode \);;(macro A-C-ß )
   ẞ (macro A-C-S-ß )
   | (macro A-C-102d )
   } (macro A-C-0 )
@@ -262,7 +262,7 @@
             lmet lalt           spc               _                
 )
 ;; We need a mouse layer to get proper keyrepeat
-(deflayer mouseahk  
+(deflayer mouseahk
   _         f1
   \         1    2    3    4    5    6    7    8    9    0    [    @que bspc
   tab       XX   w    e    r    XX   @msz @msu i    @mso p    ;    =
@@ -376,7 +376,7 @@
 (deflayer symbols
   _         _
   _         _    _    _    _    _    _    _    _    _    _    _    _    _     
-  _         @@   @˝   @﴾   @﴿   @$   @&   @%   @?   @#   @\   _    _         
+  _         @@   @˝   @﴾   @﴿   @$   @&   @{   @?   @}   @\   _    _         
   _         @`   @|   @[   @]   @'   @/   @%   @^   @#   @-_~ _    _    _          
   _    @`   @´   @|   @{   @}   @+    @=   @*  @<   @>   @~   _               
             _    _              _           _                             
@@ -385,15 +385,15 @@
 (deflayer vsymbols
   _         _
   _         _    _    _    _    _    _    _    _    _    _    _    _    _     
-  _  (unicode Ù) @˝   @﴾   @﴿   @$   @&   @dp0 @dr0 @dms @\   _    _         
-  _  (unicode Õ) @|   @[   @]   @'   @/   @%   @^   =    @-_~ _    _    _          
-  _    @`   @´   @|   @{   @}   @+    @=   @*  @<   @>   @~   _               
+  _  (unicode Ù) @˝   @﴾   @﴿   @$   @&   @{   @?   @}   @\   _    _         
+  _  (unicode Õ) @|   @[   @]   @'   @/   @%   @^   @#   @-_~ _    _    _          
+  _    @`   @´   @|   @{   @}   @+    @=  @*   @<   @>   @~   _               
             _    _              _            _                            
 )
 (deflayer ksymbols
   _         _
   _  @fashing @geb @iban  @plz _    _    _    _    _    _    _    _    _     
-  _  @dayde   @˝   @﴾     @﴿   @tsc @&   @%   @?   @#   @\   _    _
+  _  @dayde   @˝   @﴾     @﴿   @tsc @&   @{   @?   @}   @\   _    _
   _  @dayiso  @|   @[     @]   @'   @/   @%   @^   @f20 @-_~ _    _    _
   _  @`       @´   @|     @{   @}   @+   @=   @*   @<   @>   @~   _               
               _    _                _            _                            
@@ -404,12 +404,19 @@
 (defalias
   chi (chord example i)
   cho (chord example o)
+  chm (chord mk m)
+  ch, (chord mk ,)
 )
 
 (defchords example 300
   (i      ) i
   (   o   ) o
   (i  o   ) f18
+)
+(defchords mk 140
+  (m      ) m
+  (   ,   ) ,
+  (m  ,   ) f24
 )
 
 
@@ -419,6 +426,7 @@
   numtab (layer-toggle numberstab)
   sym (layer-toggle symbols)
   syv (one-shot 2000 (layer-toggle vsymbols))
+  syvv (layer-toggle vsymbols)
   sy1 (one-shot 2000 (layer-toggle symbols))
   syk (layer-toggle ksymbols)
   gam (layer-switch game)
@@ -541,17 +549,17 @@
   ;; THIS v} implements Layer_with_default (default if nothing is pressed on the layer) TODO what do we want this Layer to do? TODO Anoyance the default layer key is only printed after release ... we can't lower the timeout?
 ;;v}  (tap-hold 140 140 v (tap-hold-press 200 5000 @}  @syv))             ;; v }
 ;;v}  (tap-hold 100 100 v  @syv)         ;; v 
-  v}  (tap-hold-press-timeout 1 400 v @syv @} )
+  v}  (tap-hold-release-timeout 200 400 v @syvv @} ) ;; 
   b+  (tap-hold 140 140 b (multi (macro @.+ ) (tap-hold 200 500 XX (macro @.+ ))))                              ;; + = =  b + ++
   n=  (tap-hold 140 140 n (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 400 XX (macro S-0 ))  ))) ) ;; n = == === 
-  m*  (tap-hold 140 140 m (multi S-] (tap-hold 200 700 XX S-] )))                      ;; * = S-= with long autorepeat
+  m*  (tap-hold 140 140 @chm (multi S-] (tap-hold 200 700 XX S-] )))                      ;; * = S-= with long autorepeat
 ;;,F24 (tap-dance 140 ((tap-hold 10 100 , (multi (macro S-, ) (tap-hold 200 400 XX (macro bspc @lth ))) )  (tap-hold 10 100 f20 (macro @lth))))  ;; ,, = F24 , ; <
 ;; .:> (tap-dance 140 ((tap-hold 10 100 . (multi (macro S-. ) (tap-hold 200 400 XX (macro bspc @gth ))) )  (tap-hold 10 100 (macro . .) (macro @gth)) (tap-hold 10 100 (macro . . .) .) ))  ;; . : >
 ;;  -_~ (tap-dance 140 ((tap-hold 10 100 - (multi (macro S-- ) (tap-hold 200 400 XX (macro bspc @til ))) )  (tap-hold 10 100 (macro - -) (macro @til)) (tap-hold 10 100 (macro - - -) -) ))  ;; - _ ~
 ;; nesting of tap-dance inside tap-hold is now possible
    ,F20 (tap-hold 10 100 (tap-dance 140 (, (tap-hold 10 100 f20 @<)))  (multi @;  (tap-hold 200 400 XX (macro bspc 102d ))) )  ;; ,, = F24 , ; <
    ,F18 (tap-hold 10 100 (tap-dance 140 ( f18  (tap-hold 100 100 (macro , ,) @<) (macro , , ,) ))  (multi @;  (tap-hold 200 400 XX (macro bspc 102d ))) )  ;; ,, = F24 , ; <
-   ,;< (tap-hold 10 100 (tap-dance 140 (, (tap-hold 10 100 (macro , ,)  @< ) (tap-hold 10 100 (macro , , ,) .) )) (multi @; (tap-hold 200 800 XX (macro bspc 102d ))) ) 
+   ,;< (tap-hold 10 100 (tap-dance 140 (@ch, (tap-hold 10 100 (macro , ,)  @< ) (tap-hold 10 100 (macro , , ,) .) )) (multi @; (tap-hold 200 800 XX (macro bspc 102d ))) ) 
   .:> (tap-hold 10 100 (tap-dance 140 (. (tap-hold 10 100 (macro . .)  @> ) (tap-hold 10 100 (macro . . .) .) )) (multi @: (tap-hold 200 800 XX (macro bspc S-102d ))) )    ;; . : >
   -_~ (tap-hold 10 100 (tap-dance 140 (/   (tap-hold 10 100 (macro / /)  @~) (tap-hold 10 100 (macro / / /) /) )) (multi (macro S-/ ) (tap-hold 200 800 XX (macro bspc A-C-] ))) )  ;; - _ ~
   -_: (tap-hold 10 100 (tap-dance 140 (/   (tap-hold 10 100 (macro / /)  @:) (tap-hold 10 100 (macro / / /) /) )) (multi (macro S-/ ) (tap-hold 200 800 XX (macro bspc S-. ))) )  ;; - _ :
@@ -762,5 +770,5 @@
  tsc (macro @\\ @\\ t s c l i e n t @\\ c @\\ d a t a )
  esp (macro S-. d a t e)
  ;; Last lines  of script no leading spaces
-dayiso (macro kp2 kp0 kp2 kp3 - kp0 kp2 - kp1 kp1   )
-dayde  (macro kp1 kp1 . kp0 kp2 . kp2 kp0 kp2 kp3  ))
+dayiso (macro kp2 kp0 kp2 kp3 - kp0 kp2 - kp2 kp3   )
+dayde  (macro kp2 kp3 . kp0 kp2 . kp2 kp0 kp2 kp3  ))
