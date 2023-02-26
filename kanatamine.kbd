@@ -241,9 +241,9 @@
    @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  @qco bspc
    @tab      j    l    u    a    q    w    b    d     g    @p\  z    bspc
 ;; @tab      @q!  @w˝  @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  z    bspc
-   @atx      c    r    i    e    o    m    n    t     s    h    k    @rtc @rtc
+   @atx      c    r    i    @f]  o    m    @j%  t     s    h    k    @rtc @rtc
 ;; @atx      @aä  @sß  @d[  @f]  @g'  @h/  @j%  @kC   @lA# @bwn k    @rtc @rtc
-   @oss  f24 y    x    ü    ä    ö    p    f    @,;<  @.:> @-_~ @rsd
+   @oss  f24 y    x    ü    ä    ö    p    f    @,;<  @.:> k    @rsd
 ;; @oss  f24 @yms @x|  @c{  @v}  @b+  @n=  @m*  @,;<  @.:> @-_~ @rsd
             @oml @oal           @nav           f24                     
 )
@@ -763,5 +763,5 @@
  plz (macro kp6 kp4 kp7 kp1 kp1 )
  tsc (macro @\\ @\\ t s c l i e n t @\\ c @\\ d a t a )
  ;; Last lines  of script no leading spaces
-dayiso (macro kp2 kp0 kp2 kp3 - kp0 kp2 - kp2 kp3   )
-dayde  (macro kp2 kp3 . kp0 kp2 . kp2 kp0 kp2 kp3  ))
+dayiso (macro kp2 kp0 kp2 kp3 - kp0 kp2 - kp2 kp6   )
+dayde  (macro kp2 kp6 . kp0 kp2 . kp2 kp0 kp2 kp3  ))

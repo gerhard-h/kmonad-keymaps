@@ -1,0 +1,3 @@
+@SETLOCAL EnableDelayedExpansion 
+@for /f "tokens=1-3 delims=. " %%a in ('date /T') do @set DT=%%a%%b%%c 
+@echo ( %DT:~0,1% %DT:~1,1% . %DT:~2,1% %DT:~3,1% . %DT:~4,1% %DT:~5,1% %DT:~6,1% %DT:~7,1% )
