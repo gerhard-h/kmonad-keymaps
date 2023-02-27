@@ -239,11 +239,11 @@
 (deflayer mine
    @ech      f1
    @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  @qco bspc
-   @tab      j    l    u    a    q    w    b    d     g    @p\  z    bspc
+   @tab      y    l    u    a    j    w    @bß  d     @gß  @p\  q    bspc
 ;; @tab      @q!  @w˝  @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  z    bspc
    @atx      c    r    i    @f]  o    m    @j%  t     s    h    k    @rtc @rtc
 ;; @atx      @aä  @sß  @d[  @f]  @g'  @h/  @j%  @kC   @lA# @bwn k    @rtc @rtc
-   @oss  f24 y    x    ü    ä    ö    p    f    @,;<  @.:> k    @rsd
+   @oss  f24 v    x    ü    ä    ö    p    f    @,;<  @.:> k    @rsd
 ;; @oss  f24 @yms @x|  @c{  @v}  @b+  @n=  @m*  @,;<  @.:> @-_~ @rsd
             @oml @oal           @nav           f24                     
 )
@@ -426,6 +426,8 @@
   gam (layer-switch game)
   fky (layer-toggle fkeys)
 
+  bß  (tap-hold 1 120 b (macro ß ) ) 
+  gß  (tap-hold 1 120 g (macro ß ) ) 
   
   ;; one shot modifiers
   oss (one-shot 2000 lsft)
@@ -530,7 +532,7 @@
   z&  (tap-hold 140 140 w (multi (macro S-6 ) (tap-hold 200 800 XX (macro S-6 ))))                          ;; & &&
   i?  (tap-hold 140 140 @chi (multi @? (tap-hold 200 500 XX @? )))                                           ;; ? = S-[      i ? ??
   ;;p\  (tap-dance 140 ((tap-hold 10 100 p (multi  @\ (tap-hold 200 800 XX  @\ )))  (macro p p) ))  ;; p \ \\ TODO tapdance over tap-hold why?
-  p\  (tap-dance 140 ((tap-hold 10 140 y (multi  @\ (tap-hold 200 300 XX  @\ )))  (tap-hold 10 100 (macro y y) (macro A-C-ß A-C-ß) )))  ;; p \ \\
+  p\  (tap-dance 140 ((tap-hold 10 140 z (multi  @\ (tap-hold 200 300 XX  @\ )))  (tap-hold 10 100 (macro z z) (macro A-C-ß A-C-ß) )))  ;; p \ \\
   aä  (tap-hold 1 120 c (macro-release-cancel ä 400 bspc S-´ spc 600 bspc ä 600 bspc c 600 bspc))            ;; ä = '  `=S-]
   uü  (tap-hold 1 120 b (multi (macro ü ) (tap-hold 400 400 XX (macro-release-cancel bspc S-5 800 bspc ü 800 bspc))) )                      ;; ü = ;  u ü % ##
   oö  (tap-hold 1 120 @cho (multi (macro ö ) (tap-hold 400 400 XX (macro bspc # ))) )                      ;; ö = grv #=/  o ö #
@@ -763,5 +765,5 @@
  plz (macro kp6 kp4 kp7 kp1 kp1 )
  tsc (macro @\\ @\\ t s c l i e n t @\\ c @\\ d a t a )
  ;; Last lines  of script no leading spaces
-dayiso (macro kp2 kp0 kp2 kp3 - kp0 kp2 - kp2 kp6   )
-dayde  (macro kp2 kp6 . kp0 kp2 . kp2 kp0 kp2 kp3  ))
+dayiso (macro kp2 kp0 kp2 kp3 - kp0 kp2 - kp2 kp7   )
+dayde  (macro kp2 kp7 . kp0 kp2 . kp2 kp0 kp2 kp3  ))
