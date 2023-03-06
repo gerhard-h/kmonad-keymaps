@@ -96,13 +96,12 @@
   (lsft 1) (1)
   (lsft 2) (2)
   ;; repeat for all remaining numbers
-  )
-  
-  ;; TODO powershell: type date-time as YYYY-MM-DD HH:MM
-  pdp (cmd-output-keys powershell.exe "echo '(' (((Get-Date -Format 'yyyy-MM-dd HH:mm').toCharArray() -join ' ').insert(20, ' spc ') -replace ':','S-;') ')'")
-  
+  ) 
   TODO maybe combine chord with ß
-     
+
+  TEST 'mouse'  click with inception
+  TEST Added: ensure all keys are released at the end of a dynamic macro
+  
 ;; CTRL + SPACE + ESC => Exit KANATA immediatly
 |#
 (defcfg
@@ -115,18 +114,12 @@
   ;; not work too well with other applications that use WH_KEYBOARD_LL.
   ;; Known applications with issues: GWSL/VcXsrv
 
-  ;; Optional configuration: enable kanata to execute commands.
-  ;;
-  ;; I consider this feature a hazard so it is conditionally compiled out of
-  ;; the default binary.
-  ;;
-  ;; This is dangerous because it allows kanata to execute arbitrary commands.
   ;; Using a binary compiled with the cmd feature enabled, uncomment below to
   ;; enable command execution:
   ;; danger-enable-cmd yes
   ;; process-unmapped-keys no ;; yes does not help with japanese keys
   ;; Intl1 KEY_RO ro
-  ;; CHANGES Remoced onshot-mods and ctrl-keys to make Remotedesktop not stick ctl 
+  ;; CHANGES Removed onshot-mods and ctrl-keys to make Remotedesktop not stick ctl 
 )
 (deflocalkeys-wintercept
   -    191
@@ -165,14 +158,14 @@
   .+ ] 
   ;; change dead keys in normal keys
   ´ (macro = spc)	  ;; ´ 
-  ` (macro S-= spc )  ;; `
-  ^ (macro grv spc )    ;; ^ = \ - shifting @^ will produce an incorrect space now
+  ` (unicode `)  ;; `
+  ^ (unicode ^)       ;; ^ = \ - shifting @^ will produce an incorrect space now
   ° S-grv
   
   ;; AltGr german keys
   ~ (macro A-C-] )
   \\ A-C-ß 
-  \ (macro A-C-ß )
+  \ (unicode \);;(macro A-C-ß )
   ẞ (macro A-C-S-ß )
   | (macro A-C-102d )
   } (macro A-C-0 )
@@ -220,12 +213,12 @@
 ;; There are currently a maximum of 25 layers allowed.
 
 ;; Test usage of the following features!!!
-;; TAP ^=esc rshift=_
+;; TAP ^=esc - seems not be used
 ;; HOLD ö=WIN y=mouse$ esc=home Return=Ctrl v=Symbols frequent: ^=^ caps=Alt-Tab
-;; DBL-tap q=@ ,Komma=F24 frequent:
-;; DBL-tap-Hold L=# k=Alt-Tab frequent:
-;; Long_Hold symbols: u=% o=# m=**** a=` q=@ esc=end frequent: ,=< .=> -=~ 
-;; IDEA? Long_Hold s=alt
+;; DBL-tap q=@ , 2xKomma=F24 was to difficult to perform
+;; DBL-tap-Hold L=# k=k-Symbols vs iso102 
+;; Long_Hold symbols: u=% o=# vs v-symbols u={ o=}
+;; Long_Hold m=**** a=` q=@ esc=end frequent: ,=< .=> -=~ 
 ;; Force Mod release @ral
 ;; Macro Key + (multi f20 sldr) 
 
@@ -239,11 +232,11 @@
 (deflayer mine
    @ech      f1
    @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  @qco bspc
-   @tab      y    l    u    a    j    w    @bß  d     @gß  @p\  q    bspc
+   @tab      j    v    u    a    y    w    @bß  d     @gß  p    q    bspc
 ;; @tab      @q!  @w˝  @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  z    bspc
-   @atx      c    r    i    @f]  o    m    @j%  t     s    h    k    @rtc @rtc
+   @atx      c    r    i    @f]  o    m    @j%  t     s    h    ß    @rtc @rtc
 ;; @atx      @aä  @sß  @d[  @f]  @g'  @h/  @j%  @kC   @lA# @bwn k    @rtc @rtc
-   @oss  f24 v    x    ü    ä    ö    p    f    @,;<  @.:> k    @rsd
+   @oss  f24 z    x    ü    ä    ö    f    l    @,;<  @.:> k    @rsd
 ;; @oss  f24 @yms @x|  @c{  @v}  @b+  @n=  @m*  @,;<  @.:> @-_~ @rsd
             @oml @oal           @nav           f24                     
 )
@@ -264,8 +257,8 @@
   lsft 102d y    x    c    v    b    n    m    ,    .    -    rsft
             lmet lalt           spc               _                
 )
-;; We need a mouse layer to get proper keyrepeat
-(deflayer mouseahk  
+;; We need a mouse layer to get proper keyrepeat (but kanatas own mouse layer is superior)
+(deflayer mouseahk
   _         f1
   \         1    2    3    4    5    6    7    8    9    0    [    @que bspc
   tab       XX   w    e    r    XX   @msz @msu i    @mso p    ;    =
@@ -273,6 +266,7 @@
   lsft @msz @msz lalt lctl lsft XX   n    m    ,    .    -    rsft
             lmet lalt          @que               _                
 )
+;; makro keys and sticky layer don't fit f
 (deflayer mouse  
   _         f1
   \         1    2    3    4    5    6    7    8    9    0    [    @que bspc
@@ -343,7 +337,7 @@
 ;; is the whole Alt-Tab number row ever used?
 ;; caps=symbol layer ... better use of caps?
 ;; INFO ISO102 = `backtick used? ^ usage? XX ? simple Comma @, because of little finger!
-;; BUG ALT+PgUp does not work with RemoteDesktop if PgUp is Mapped
+;; BUG ALT+PgUp does not work with RemoteDesktop if PgUp is Mapped - fixed by wintercept
 (deflayer numbers
   _         _
   @^        @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld-prev A-prtsc _
@@ -378,7 +372,7 @@
 (deflayer symbols
   _         _
   _         _    _    _    _    _    _    _    _    _    _    _    _    _     
-  _         @@   @˝   @﴾   @﴿   @$   @&   @%   @?   @#   @\   _    _         
+  _         @@   @˝   @﴾   @﴿   @$   @&   @{   @?   @}   @\   _    _         
   _         @`   @|   @[   @]   @'   @/   @%   @^   @#   @-_~ _    _    _          
   _    @`   @´   @|   @{   @}   @+    @=   @*  @<   @>   @~   _               
             _    _              _           _                             
@@ -387,16 +381,16 @@
 (deflayer vsymbols
   _         _
   _         _    _    _    _    _    _    _    _    _    _    _    _    _     
-  _  (unicode Ù) @˝   @﴾   @﴿   @$   @&   @dp0 @dr0 @dms @\   _    _         
-  _  (unicode Õ) @|   @[   @]   @'   @/   @%   @^   =    @-_~ _    _    _          
-  _    @`   @´   @|   @{   @}   @+    @=   @*  @<   @>   @~   _               
+  _  (unicode Ù) @˝   @﴾   @﴿   @$   @&   @{   @?   @}   @\   _    _         
+  _  (unicode Õ) @|   @[   @]   @'   @/   @%   @^   @#   @-_~ _    _    _          
+  _    @`   @´   @|   @{   @}   @+    @=  @*   @<   @>   @~   _               
             _    _              _            _                            
 )
 (deflayer ksymbols
   _         _
   _  @fashing @geb @iban  @plz _    _    _    _    _    _    _    _    _     
-  _  @dayde   @˝   @﴾     @﴿   @tsc @&   @%   @?   @#   @\   _    _
-  _  @dayiso  @|   @[     @]   @'   @/   @%   @^   @f20 @-_~ _    _    _
+  _  @cmdde   @˝   @﴾     @﴿   @tsc @&   @{   @?   @}   @\   _    _
+  _  @cmdiso  @|   @[     @]   @'   @/   @%   @^   @f20 @-_~ _    _    _
   _  @`       @´   @|     @{   @}   @+   @=   @*   @<   @>   @~   _               
               _    _                _            _                            
 )
@@ -404,14 +398,21 @@
 ;; IDEA v/lsymbols and n/rsymbols are only usefull if activated by letter keys like v/n but I ditched that concept as to hard to do fast
 
 (defalias
-  chi (chord example d)
-  cho (chord example g)
+  chi (chord example i)
+  cho (chord example o)
+  chm (chord mk m)
+  ch, (chord mk ,)
 )
 
 (defchords example 300
   (d      ) d
   (   g   ) g
-  (d  g   ) f20
+  (d  g   ) f18    ;;(multi f18 sldr)
+)
+(defchords mk 140
+  (l      ) l
+  (   ,   ) ,
+  (l  ,   ) f24
 )
 
 
@@ -421,6 +422,7 @@
   numtab (layer-toggle numberstab)
   sym (layer-toggle symbols)
   syv (one-shot 2000 (layer-toggle vsymbols))
+  syvv (layer-toggle vsymbols)
   sy1 (one-shot 2000 (layer-toggle symbols))
   syk (layer-toggle ksymbols)
   gam (layer-switch game)
@@ -442,8 +444,8 @@
   mrc (tap-hold-release 200 5000 @mar lmet)
 
   ;; outer/special keys
-  ech (tap-hold 140 400 esc (multi (macro home ) (tap-hold 400 1100 XX (macro end ) )) )
-  ^ec  (tap-hold 200 300 esc @^)
+  ech (tap-hold 140 400 esc (multi (macro home ) (tap-hold 400 900 XX (macro end ) )) )
+  ^ec  (tap-hold 200 300 esc (macro grv spc))
   tab (tap-hold-press  200 400 tab lctl )
 ;;rtc (tap-hold-release 200 340 (multi ret sldr) lmet) this makes ret not appear
   rtc (tap-hold-release 200 5000 ret lctl)
@@ -507,7 +509,16 @@
   wn0 (tap-hold-release 200 340 0 lmet)  ;; unused because of Win+G gets triggered
   9sy (tap-hold-release 200 340 9 @syv)  ;; unused because v is already mapped to do this
   ;;ght (tap-hold-release 200 240 rght rmet)  ;;works but not used
-
+  n1 1
+  n2 2
+  n3 3
+  n4 4 
+  n5 5 
+  n6 6 
+  n7 7 
+  n8 8 
+  n9 9 
+  n0 0
   1@ (tap-hold 140 140 1 (multi (macro S-1 ) (tap-hold 200 400 XX (macro bspc @@ ))) )  
   2 (tap-hold 140 300 2 (multi @˝ (tap-hold 200 700 XX @˝ )) )
   ;; multi 3 3 because macro 3 3 is not working
@@ -555,7 +566,7 @@
 ;; nesting of tap-dance inside tap-hold is now possible
    ,F20 (tap-hold 10 100 (tap-dance 140 (, (tap-hold 10 100 f20 @<)))  (multi @;  (tap-hold 200 400 XX (macro bspc < ))) )  ;; ,, = F24 , ; <
    ,F18 (tap-hold 10 100 (tap-dance 140 ( f18  (tap-hold 100 100 (macro , ,) @<) (macro , , ,) ))  (multi @;  (tap-hold 200 400 XX (macro bspc < ))) )  ;; ,, = F24 , ; <
-   ,;< (tap-hold 10 100 (tap-dance 140 (, (tap-hold 10 100 (macro , ,)  @< ) (tap-hold 10 100 (macro , , ,) .) )) (multi @; (tap-hold 200 400 XX (macro bspc < ))) ) 
+   ,;< (tap-hold 10 100 (tap-dance 140 (@ch, (tap-hold 10 100 (macro , ,)  @< ) (tap-hold 10 100 (macro , , ,) .) )) (multi @; (tap-hold 200 400 XX (macro bspc < ))) ) 
   .:> (tap-hold 10 100 (tap-dance 140 (. (tap-hold 10 100 (macro . .)  @> ) (tap-hold 10 100 (macro . . .) .) )) (multi @: (tap-hold 200 400 XX (macro bspc S-< ))) )    ;; . : >
   -_~ (tap-hold 10 100 (tap-dance 140 (-   (tap-hold 10 100 (macro - -)  @~) (tap-hold 10 100 (macro - - -) -) )) (multi (macro S-- ) (tap-hold 200 400 XX (macro bspc A-C-+ ))) )  ;; - _ ~
   -_: (tap-hold 10 100 (tap-dance 140 (-   (tap-hold 10 100 (macro - -)  @:) (tap-hold 10 100 (macro - - -) -) )) (multi (macro S-- ) (tap-hold 200 400 XX (macro bspc S-. ))) )  ;; - _ :
@@ -563,148 +574,11 @@
   ;;f1 (macro f1 f24)  ;; only usefull in applications that do not react on F1 ==> not usefull
 )
 
-  ;; (macro-release-cancel 1 300 bspc S-1 300 S-1 300 bspc bspc S-2)
-  
-  ;; macro supports A-() cording and unicode now
-  
-  ;; Having a cmd action in your configuration without explicitly enabling
-  ;; `danger-enable-cmd` **and** using the cmd-enabled executable will make
-  ;; kanata refuse to load your configuration. The aliases below are commented
-  ;; out since commands aren't allowed by this configuration file.
-  ;;
-  ;; Note that the parameters to `cmd` are executed directly as opposed to
-  ;; passed to a shell. So for example, `~` and `$HOME` would not refer
-  ;; to your home directory on Linux.
-  ;;
-  ;; You can use:
-  ;; `cmd bash -c "your_stuff_here"` to run your command inside of bash.
-  ;;
-  ;; cm1 (cmd bash -c "echo hello world")
-  ;; cm2 (cmd rm -fr /tmp/testing)
- ;; )
-
-;; The underscore _ means transparent. The key on the base layer will be used
-;; instead. XX means no-op. The key will do nothing.
-
-;; The `lrld` action stands for "live reload". This will re-parse everything
-
-;; The mouse buttons can be clicked using mlft, mrgt and mmid, representing the
-;; left, right, and middle mouse buttons respectively. If the key is held, the
-;; button press will also be held.
-;;
-;; If there are multiple mouse click actions within a single multi action, e.g.
-;; (multi mrgt mlft), then all the buttons except the last will be clicked then
-;; unclicked. The last button will remain held until key release. In the example
-;; given, the button sequence will be:
-;; press key->click right->unclick right->click left->release key->release left
-;;
-;; There are variants of the standard mouse buttons which "tap" the button.
-;; These are mltp, mrtp, and mmtp. Rather than holding until key release, this
-;; action will click and unclick the button once the key is pressed. Nothing
-;; happens on key release. The action (multi lctl mltp) will result in the
-;; sequence below:
-;; press key->press lctl->click left->unclick left->release key->release lctl
-;;(deflayer mouse
-;;  _    @mwu @mwd @mwl @mwr _    _    _    _    _    _    _    _    _
-;;  _    pgup bck  _    fwd  _    _    _    _    _    _    _    _    _
-;;  _    pgdn mlft _    mrgt mmid _    _    _    _    _    _    _
-;;  _ _  _    mltp _    mrtp mmtp _    _    _    _    _    _
-;;  _    _    _              _                 _    _
-;;)
-
-;; Press and release fake keys.
-;;
-;; Fake keys can't be pressed by any physical keyboard buttons and can only be
-;; acted upon by the actions on-press-fakekey and on-release-fakekey. The
-;; purpose of fake keys is for a use case such as holding modifier keys for
-;; any number of keypresses and then releasing the modifiers when desired.
-;;
-;; The actions associated with fake keys in deffakekeys are parsed before
-;; aliases, so you can't use aliases within deffakekeys. Other than the lack
-;; of alias support, fake keys can do any action that a normal key can,
-;; including doing operations on previously defined fake keys.
-;;
-;; Operations on fake keys can occur either on press (on-press-fakekey or
-;; on release (on-release-fakekey The use cases for the on-release variant
-;; are left up to your own creativity.
-;; (deflayer fakekeys
-;;   _    @fcp @fsp @fmp @pal _    _    _    _    _    _    _    _    _
-;;   _    @fcr @fsr @fap @ral _    _    _    _    _    _    _    _    _
-;;   _    @fct @fst @rma _    _    _    _    _    _    _    _    _
-;;   _ _  _    _    _    _    _    _    _    _    _    _    _
-;;   _    _    _              _                  _    _
-;; )
-
-;;(deffakekeys
-;;  ctl lctl
-;;  sft lsft
-;;  lsft lsft
-;;  met lmet
-;;  alt lalt
-;;  mmid mmid
-;;  pal (multi
-;;        (on-press-fakekey ctl press)
-;;        (on-press-fakekey met press)
-;;        (on-press-fakekey alt press)
-;;      )
-;;;; release everthing key -> very usefull
-;;  rall (multi
-;;        (on-press-fakekey ctl release)
-;;        (on-press-fakekey sft release)
-;;        (on-press-fakekey met release)
-;;        (on-press-fakekey alt release)
-;;      )
-;;)
-;;
-;;(defalias
-;;  fcp (on-press-fakekey ctl press)
-;;  fcr (on-press-fakekey ctl release)
-;;  fct (on-press-fakekey ctl tap)
-;;  fsp (on-release-fakekey sft press)
-;;  fsr (on-release-fakekey sft release)
-;;  fst (on-release-fakekey sft tap)
-;;  fmp (on-press-fakekey met press)
-;;  fap (on-press-fakekey alt press)
-;;  far (on-press-fakekey alt release)
-;;  rma (multi
-;;        (on-press-fakekey met release)
-;;        (on-press-fakekey alt release)
-;;      )
-;;  pal (on-press-fakekey pal tap)
-;;  rall (on-press-fakekey rall tap)
-;;
-;;  ;; If you find that an application isn't registering keypresses correctly
-;;  ;; with multi, you can try out:
-;;  ;; - on-press-fakekey-delay
-;;  ;; - on-release-fakekey-delay
-;;  ;;
-;;  ;; Do note that processing a fakekey-delay and even a sequence of delays will
-;;  ;; delay any other inputs from being processed until the fakekey-delays are
-;;  ;; all complete, so use with care.
-;;  stm (multi ;; Shift -> middle mouse with a delay
-;;    (on-press-fakekey lsft press)
-;;    (on-press-fakekey-delay 200)
-;;    (on-press-fakekey mmid press)
-;;    (on-release-fakekey mmid release)
-;;    (on-release-fakekey-delay 200)
-;;    (on-release-fakekey lsft release)
-;;  )
-;;)
-
-;; Vim-style leader-key sequences. Activate a fakekey-tap by pressing a "leader"
-;; key and then a sequence of characters.
-;; See: https://github.com/jtroo/kanata/issues/97
-;;
-;; You can add an entry to defcfg to change the sequence timeout (default is 1000):
-;;     sequence-timeout <number(ms)>
-(defseq git-status (g s t))
-(deffakekeys git-status (macro g i t spc s t a t u s ret))
-
 (defseq web-de (w e))
 (deffakekeys web-de (macro g e r h a r d . h e i d e (unicode @) w e b . d e))
 
 
-;; ahk f24 f23 an be triggert mouse here
+;; ahk f24 f23 can be triggert mouse here (unused)
 (defseq web-def (j l))
 (deffakekeys web-def (macro f23))
 
@@ -752,6 +626,7 @@
 (deffakekeys mfg (macro S-m  i t spc   f r e u n d l i c h e n spc  S-g  r ; [ e n   spc ret  S-g  e r h a r d spc  S-h  e i d e ))
 (deffakekeys bye (macro b y e ret S-g  e r h a r d ))
 (deffakekeys msg (macro g e r h a r d . h e i d e (unicode @) m s g . g r o u p ))
+;; make sure numlock is active for these ones
 (deffakekeys dih (macro S-d  - S-s  S-m  S-y  S-q  - S-i  kp7 S-m  S-y  S-d  - kp7 kp5 ))
 (deffakekeys iba (macro S-d  S-e  kp3 kp0 kp7 kp0 kp0 kp2 kp0 kp2 kp7 kp0 kp0 kp0 kp4 kp5 kp5 kp0 kp6 kp8 kp6 kp0 ))
 (deffakekeys z1 (macro kp1 kp1 . kp1 kp1 . kp2 kp0 kp2 kp3 ))
@@ -759,11 +634,18 @@
 (deffakekeys erbach (macro kp6 kp4 kp7 kp1 kp1 ))
 
 (defalias  
- fashing (macro kp1 kp1 . kp1 kp1 . kp2 kp0 kp2 kp3 )
- geb (macro kp2 kp1 . kp1 kp2 . kp2 kp0 kp0 kp1 )
- iban (macro S-d  S-e  kp3 kp0 kp7 kp0 kp0 kp2 kp0 kp2 kp7 kp0 kp0 kp0 kp4 kp5 kp5 kp0 kp6 kp8 kp6 kp0 )
- plz (macro kp6 kp4 kp7 kp1 kp1 )
+ fashing (macro @n1 @n1 . @n1 @n1 . @n2 @n0 @n2 @n3 )
+ geb (macro @n2 @n1 . @n1 @n2 . @n2 @n0 @n0 @n1 )
+ iban (macro S-d  S-e  @n3 @n0 @n7 @n0 @n0 @n2 @n0 @n2 @n7 @n0 @n0 @n0 @n4 @n5 @n5 @n0 @n6 @n8 @n6 @n0 )
+ plz (macro @n6 @n4 @n7 @n1 @n1 )
  tsc (macro @\\ @\\ t s c l i e n t @\\ c @\\ d a t a )
+ esp (macro S-. d a t e)
  ;; Last lines  of script no leading spaces
-dayiso (macro kp2 kp0 kp2 kp3 - kp0 kp2 - kp2 kp7   )
-dayde  (macro kp2 kp7 . kp0 kp2 . kp2 kp0 kp2 kp3  ))
+psiso (cmd-output-keys powershell.exe -NoProfile -NoLogo -NonInteractiv -Command "echo '(' ((Get-Date -Format 'yyyy-MM-dd').toCharArray() -join ' ') ')'") 
+;;cmdiso (cmd-output-keys cmd.exe /C timek.cmd) 
+cmdiso (cmd "C:\Program Files\AutoHotkey\AutoHotkeyU64_UIA.exe" "isodate.ahk")
+cmdde (cmd-output-keys cmd.exe /C timedek.cmd) 
+;; bash might be on windows an is much faster than wsl or powershell 
+;;bashiso (cmd-output-keys bash -c "date +'%F %R' | sed 's/./& /g' | sed 's/:/S-;/g' | sed 's/\(.\{20\}\)\(.*\)/\(\1 spc \2\)/'")
+dayiso (macro @n2 @n0 @n2 @n3 - @n0 @n3 - @n0 @n6   )
+dayde  (macro @n0 @n6 . @n0 @n3 . @n2 @n0 @n2 @n3  ))
