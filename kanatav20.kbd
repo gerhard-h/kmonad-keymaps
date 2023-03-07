@@ -193,102 +193,109 @@
 ;; If you are looking for other keys, the file src/keys/mod.rs should hopefully provide some insight.
 ;; z and y are not flipped positioning has no meaning but must be consistent with other layers
 (defsrc
-  esc       f1
-  ^         1    2    3    4    5    6    7    8    9    0    ß    ´    bspc
-  tab       q    w    e    r    t    y    u    i    o    p    ü    +
-  caps      a    s    d    f    g    h    j    k    l    ö    ä    #    ret
-  lsft <    z    x    c    v    b    n    m    ,    .    -    rsft
-            lmet lalt           spc                 ro                  
+  esc       f1   f24
+  ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
+  tab       j    v    u    a    y    w    b    d    g    p    q    +    #
+  caps      c    r    i    e    o    m    n    t    s    h    ß    ret
+  lsft      z    x    ü    ä    ö    f    l    ,    .    k    rsft
+            lmet lalt           spc                           
 )
-;; defsrc without using german deflocalkeys
-;;(defsrc
-;;  esc       f1
-;;  grv       1    2    3    4    5    6    7    8    9    0    -    =    bspc
-;;  tab       q    w    e    r    t    y    u    i    o    p    [    ]
-;;  caps      a    s    d    f    g    h    j    k    l    ;    '    \    ret
-;;  lsft 102d z    x    c    v    b    n    m    ,    .    /    rsft
-;;            lmet lalt           spc                 ro      
-;;)
-
-;; The first layer defined is the layer that will be active by default when kanata starts up.
-;; There are currently a maximum of 25 layers allowed.
-
-;; Test usage of the following features!!!
-;; TAP ^=esc - seems not be used
-;; HOLD ö=WIN y=mouse$ esc=home Return=Ctrl v=Symbols frequent: ^=^ caps=Alt-Tab
-;; DBL-tap q=@ , 2xKomma=F24 was to difficult to perform
-;; DBL-tap-Hold L=# k=k-Symbols vs iso102 
-;; Long_Hold symbols: u=% o=# vs v-symbols u={ o=}
-;; Long_Hold m=**** a=` q=@ esc=end frequent: ,=< .=> -=~ 
-;; Force Mod release @ral
-;; Macro Key + (multi f20 sldr) 
-
-
-;;homerowmods         C    S              S    C    A    W   S=shift C=ctrl A=alt W=win
-
-;;          1!@  2"   3`   4$   5%   6&  7/   8([  9)]   0=   ß?\  relea bsp
-;;          !@   "    (    )[   $    &    ü%   ?    ö#   \    del..combo ret
-;;   F24    ä`   ß    [    ]    '    /    %    F20  #    ret  bsp  bsp   ret
-;;       y/mouse |    {    }]   +    =    *  ;<F24  :>   -_~   
-(deflayer qwerty
-  @ech      f1
-  @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  del    bspc
-  @tab      @q!  @w˝  @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  @ü   bspc
-  @atx      @aä  @sß  @d[  @f]  @g'  @h/  @j%  @kC   @lA# @bwn @ä   @rtc @rtc
-  @oss  f24 @yms @x|  @c{  @v}  @b+  @n=  @m*  @,;<  @.:> @-_~ @rsd
-            @oml @oal           @nav           f24                     
+(deflayer base
+  @ech      f1   f24
+  @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8   @9   @0   -    del  bspc
+  @tab      j    v    u    a    y    w    @b%  @d?  @g#  p    q    +    bspc
+  @atx      c    r    @i[  @e]  o    m    @n%  @tC  @s#  @hwn ß    @rtc
+  @oss      z    x    ü    ä    ö    f    @l*  @,;< @.:> @k_~ rsft
+            @oml @oal           @nav                           
 )
-(deflayer qwertycomma
-  @ech      f1
-  @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  @que bspc
-  @tab      @q!  @w˝  @e   @r   @t$  @z&  @uü  @i?   @oö  @p\  @ü   bspc
-  @atx      @aä  @sß  @d[  @f]  @g'  @h/  @j%  @kC   @lA# @bwn @ä   @rtc @rtc
-  @oss  f24 @yms @x|  @c{  @v}  @b+  @n=  @m*  @,F18 @.:> @-_~ @rsd
-            @oml @oal           @nav           f24                     
+(deflayer numbers
+  esc       f1   f24
+  @^        @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld-next A-prtsc _
+  _         @-_:  1    2    3  C-bspc esc  home up    end  pgup pgdn      _       _
+  @sy1      @.wn  @al4 @ct5 @sf6 0    bspc left down  rght bspc @fky      _
+  _         @,    7    8    9    del  ret  @stb @cde  @alc @mrc _
+            _     _              _                  
 )
-;; does indeed NOT WORK for gaming :)
-(deflayer game
-  _         f1
-  \         1    2    3    4    5    6    7    8    9    0    [    @que bspc
-  tab       q    w    e    r    t    z    u    i    o    p    ;    =
-  caps      a    s    d    f    g    h    j    k    l    grv  '    /    ret
-  lsft 102d y    x    c    v    b    n    m    ,    .    -    rsft
-            lmet lalt           spc               _                
+(deflayer numberstab
+  esc       f1   f24
+  ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
+  tab       j    v    u    a    y    w    b    d    g    p    q    +    #
+  caps      c    r    i    e    o    m    n    t    s    h    ß    ret
+  lsft      z    x    ü    ä    ö    f    l    ,    .    k    rsft
+            lmet lalt           spc                           
 )
-;; We need a mouse layer to get proper keyrepeat (but kanatas own mouse layer is superior)
-(deflayer mouseahk
-  _         f1
-  \         1    2    3    4    5    6    7    8    9    0    [    @que bspc
-  tab       XX   w    e    r    XX   @msz @msu i    @mso p    ;    =
-  caps      XX   @mss @msd @msf XX   h    j    k    l    grv  '    /    ret
-  lsft @msz @msz lalt lctl lsft XX   n    m    ,    .    -    rsft
-            lmet lalt          @que               _                
+(deflayer symbols
+  esc       f1   f24
+  ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
+  tab       j    v    u    a    y    w    b    d    g    p    q    +    #
+  caps      c    r    i    e    o    m    n    t    s    h    ß    ret
+  lsft      z    x    ü    ä    ö    f    l    ,    .    k    rsft
+            lmet lalt           spc                           
 )
-;; makro keys and sticky layer don't fit f
-(deflayer mouse  
-  _         f1
-  \         1    2    3    4    5    6    7    8    9    0    [    @que bspc
-  tab       @dp0 w    e    @slw XX  @quep @cll @ma↑ @clr p    ;    =
-  caps      @dr0 @clm @clr @cll XX   h    @ma← @ma↓ @ma→ grv  '    /    ret
-  lsft @msz @dms lalt lctl lsft XX   @ms← @ms↑ @ms↓ @ms→ -    rsft
-            lmet lalt          @quep              _                
+(deflayer vsymbols
+  esc       f1   f24
+  ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
+  tab       j    v    u    a    y    w    b    d    g    p    q    +    #
+  caps      c    r    i    e    o    m    n    t    s    h    ß    ret
+  lsft      z    x    ü    ä    ö    f    l    ,    .    k    rsft
+            lmet lalt           spc                           
+)
+(deflayer ksymbols
+  esc       f1   f24
+  ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
+  tab       j    v    u    a    y    w    b    d    g    p    q    +    #
+  caps      c    r    i    e    o    m    n    t    s    h    ß    ret
+  lsft      z    x    ü    ä    ö    f    l    ,    .    k    rsft
+            lmet lalt           spc                           
+)
+(deflayer fkeys
+  esc       f1   f24
+  ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
+  tab       j    v    u    a    y    w    b    d    g    p    q    +    #
+  caps      c    r    i    e    o    m    n    t    s    h    ß    ret
+  lsft      z    x    ü    ä    ö    f    l    ,    .    k    rsft
+            lmet lalt           spc                           
+)
+(deflayer mouse
+  esc       f1   f24
+  ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
+  tab       j    v    u    a    y    w    b    d    g    p    q    +    #
+  caps      c    r    i    e    o    m    n    t    s    h    ß    ret
+  lsft      z    x    ü    ä    ö    f    l    ,    .    k    rsft
+            lmet lalt           spc                           
 )
 (deflayer mouseslow
-  _         f1
-  \         1    2    3    4    5    6    7    8    9    0    [    @que bspc
-  tab       XX   @slw @slw @slw XX  @quep @cll @ms↑ @clr p    ;    =
-  caps      XX   @clm @clr @cll XX   h    @ms← @ms↓ @ms→ grv  '    /    ret
-  lsft @msz @msz lalt lctl lsft XX   @ms← @ms↑ @ms↓ @ms→ -    rsft
-            lmet lalt          @quep              _                
+  esc       f1   f24
+  ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
+  tab       j    v    u    a    y    w    b    d    g    p    q    +    #
+  caps      c    r    i    e    o    m    n    t    s    h    ß    ret
+  lsft      z    x    ü    ä    ö    f    l    ,    .    k    rsft
+            lmet lalt           spc                           
 )
-;; ahk mouse layer
+(defalias
+  chi (chord example d)
+  cho (chord example g)
+  chm (chord mk l)
+  ch, (chord mk ,)
+)
+
+(defchords example 300
+  (d      ) d
+  (   g   ) g
+  (d  g   ) f18    ;;(multi f18 sldr)
+)
+(defchords mk 140
+  (l      ) l
+  (   ,   ) ,
+  (l  ,   ) f24
+)
+;; mouse layer
 (defalias
   mal M-C-A-f
   mar M-C-A-d
   mam M-C-A-s
-  que (layer-switch qwerty)
+  que (layer-switch base)
   quep (multi @que  A-C-M-p)
-  qco (layer-switch qwertycomma)
   mus (layer-switch mouse)
   slw (layer-toggle mouseslow)
   
@@ -320,99 +327,6 @@
   ;;Double Click is missing
   
 )
-;; Different IDEA for Using Space-Bar-Layer: instead of a numpad put diacrits and pinky hell keys here, but space on the left is limited and shift is still needed for upper case diacrits while j is LEFTARROW but Hold and DBL-tap are an option
-;;          #     [    ]    {    }           
-;;          ä     ß    ö    ü    \        
-;;     |    <     (    )    +    *
-
-;; NAV & NUMBERS
-;; The numpad has all 4 home row mods while on the right all mods are below the cursor keys 
-;; TODO
-;; typical number separators co:lon and space are not on this layer (also ;) TODO flip ~ for : and caps for space 
-;; hold_space + tap_caps + release_all + one_shot_symbol Sounds nice in theory
-;; esc key is twice on this Layer
-;; Tap ´= A-prtsc
-;; is the whole Alt-Tab number row ever used?
-;; caps=symbol layer ... better use of caps?
-;; INFO ISO102 = `backtick used? ^ usage? XX ? simple Comma @, because of little finger!
-;; BUG ALT+PgUp does not work with RemoteDesktop if PgUp is Mapped - fixed by wintercept
-(deflayer numbers
-  _         _
-  @^        @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld-next A-prtsc _
-  _         @-_:  1    2    3  C-bspc esc  home up    end  pgup pgdn _     
-  @sy1      @.wn  @al4 @ct5 @sf6 0    bspc left down  rght bspc ret  @fky    _
-  _    @`   @,    7    8    9    del  ret  @stb @cde  @alc @mrc _
-       _    _               _                 _              
-)
-(deflayer fkeys
-  _         _
-  @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  sldr bspc
-  _         @-_: f1   f2   f3   f10  esc  home up    end  pgup pgdn _     
-  @sy1      @.wn f4   f5   f6   f11  lmet lsft lctl  lalt _    _    _     _
-  _    @`   @,   f7   f8   f9   f12  ret  @stb @cde  @alc @mrc _
-       _    _               _                 _              
-)
-(deflayer numberstab
-  _         _
-  _         _    _    _    _    _    _    _    _    _    _    lrld @gam _
-  _         @-_~ 1    2    3    esc  esc  home up   end  pgup pgdn _     
-  _         rght left rght rght 0    bspc left down rght _    _    _    _
-  _   @`    @,   7    8    9    del  ret  @stb @cde @alc @mrc _
-            _    _           _             _               
-)
-
-;;       ^  symbols layer (todo ß ü ö are mapped to duplicated symbols, - and _ are already on base layer)
-;;          1    2    3    4    5    6    7    8    9    0 
-;;          !@   "    (    )    $    &    ü%   ?    ö#   \
-;;          ä`   ß|   [    ]    '    /    %    ^    #    -_
-;;       `  ´    |    {    }    +    =    *    <    >    ~
-;; TODO find usage for s| = s^
-(deflayer symbols
-  _         _
-  _         _    _    _    _    _    _    _    _    _    _    _    _    _     
-  _         @@   @˝   @﴾   @﴿   @$   @&   @{   @?   @}   @\   _    _         
-  _         @`   @|   @[   @]   @'   @/   @%   @^   @#   @-_~ _    _    _          
-  _    @`   @´   @|   @{   @}   @+    @=   @*  @<   @>   @~   _               
-            _    _              _           _                             
-)
-;; TODO define more cool shortcuts like Õ 
-(deflayer vsymbols
-  _         _
-  _         _    _    _    _    _    _    _    _    _    _    _    _    _     
-  _  (unicode Ù) @˝   @﴾   @﴿   @$   @&   @{   @?   @}   @\   _    _         
-  _  (unicode Õ) @|   @[   @]   @'   @/   @%   @^   @#   @-_~ _    _    _          
-  _    @`   @´   @|   @{   @}   @+    @=  @*   @<   @>   @~   _               
-            _    _              _            _                            
-)
-(deflayer ksymbols
-  _         _
-  _  @fashing @geb @iban  @plz _    _    _    _    _    _    _    _    _     
-  _  @cmdde   @˝   @﴾     @﴿   @tsc @&   @{   @?   @}   @\   _    _
-  _  @cmdiso  @|   @[     @]   @'   @/   @%   @^   @f20 @-_~ _    _    _
-  _  @`       @´   @|     @{   @}   @+   @=   @*   @<   @>   @~   _               
-              _    _                _            _                            
-)
-;; There are variants of the standard mouse buttons }which "tap" the button. mrgt -> mr
-;; IDEA v/lsymbols and n/rsymbols are only usefull if activated by letter keys like v/n but I ditched that concept as to hard to do fast
-
-(defalias
-  chi (chord example i)
-  cho (chord example o)
-  chm (chord mk m)
-  ch, (chord mk ,)
-)
-
-(defchords example 300
-  (i      ) i
-  (   o   ) o
-  (i  o   ) f18    ;;(multi f18 sldr)
-)
-(defchords mk 140
-  (m      ) m
-  (   ,   ) ,
-  (m  ,   ) f24
-)
-
 
 (defalias  
   ;; switch-layer also possible for stickyness
@@ -423,7 +337,6 @@
   syvv (layer-toggle vsymbols)
   sy1 (one-shot 2000 (layer-toggle symbols))
   syk (layer-toggle ksymbols)
-  gam (layer-switch game)
   fky (layer-toggle fkeys)
 
   
@@ -480,27 +393,27 @@
 
   ;; home row mods
   ;;f]  (tap-dance 140 ((tap-hold-release 140 140 f lsft) (tap-hold 200 240 (macro f f) @] )))
-  f]  (tap-hold-release 1 140 f lsft) ;;  INFO timing of 1 avoids keyrepeat 
+  e]  (tap-hold-release 1 140 e lsft) ;;  INFO timing of 1 avoids keyrepeat 
 ;;j%  (tap-dance 140 ((tap-hold-release 140 140 j rsft) (tap-hold 200 240 (macro j j) @% )))
-  j%  (tap-hold-release 1 140 j rsft)  ;;(multi rsft lsft)) ;; this clean form avoids US -> Ujs bug when typing fast ;; BUG rsft has bugs on RDesktop multi fixes fjf->F but jfj->j stays
+  n%  (tap-hold-release 1 140 n rsft)  ;;(multi rsft lsft)) ;; this clean form avoids US -> Ujs bug when typing fast ;; BUG rsft has bugs on RDesktop multi fixes fjf->F but jfj->j stays
 ;;j%  (tap-dance 140 ((tap-hold-press 140 140 j rsft) (tap-hold 200 240 (macro j j) @% ))) ;; tap-hold-press seems to work the same when inside tap-dance
   
   
 ;;j%  (tap-hold-release 140 140 (tap-dance 140 (j (multi i (tap-hold 90 90 k (macro bspc S-5))))) lsft) ;; this is not working 
-  d[  (tap-dance 140 ((tap-hold-release 200 300 d lctl) (tap-hold 200 300 (macro d d) (multi (macro A-C-8 ) (tap-hold 200 700 XX (macro A-C-9 ))))))
+  i[  (tap-dance 140 ((tap-hold-release 200 300 i lctl) (tap-hold 200 300 (macro i i) (multi (macro A-C-8 ) (tap-hold 200 700 XX (macro A-C-9 ))))))
   ;; using left ctl on k resolves DITTO issues TODO retest
   ;; double tap hold k for alt-tab layer TODO test usage
 ;;kC  (tap-dance 140 ((tap-hold-release 200 300 k lctl) (tap-hold 200 300 (macro k k) @aty ))) 
 ;;kC  (tap-dance 140 ((tap-hold-release 200 300 k lctl) (tap-hold 200 300 (macro k k) (multi f20 sldr) )))  ;; produces stuck modifiers randomly
-  kC  (tap-dance 140 ((tap-hold-release 200 300 k lctl) (tap-hold 200 300 (macro k k) (multi @syk) ))) 
+  tC  (tap-dance 140 ((tap-hold-release 200 300 t lctl) (tap-hold 200 300 (macro t t) (multi @syk) ))) 
   ;; TODO test if Long_Tap_O or Dbl_Tap_Hold_L is used in practise
-  lA# (tap-dance 140 ((tap-hold-release 200 300 l alt) (tap-hold 200 300 (macro l l) (macro @# ) )))
+  s# (tap-dance 140 ((tap-hold-release 200 300 s alt) (tap-hold 200 300 (macro s s) (macro @# ) )))
   ;; number layer home row mods
   sf6 (tap-hold-release 200 300 6 lsft)
   ct5 (tap-hold-release 200 300 5 lctl)
   al4 (tap-hold-release 200 340 4 lalt)
   .wn (tap-hold-release 200 240 . lmet)
-  bwn (tap-hold-release 200 5000 @ö lmet)
+  hwn (tap-hold-release 200 5000 h lmet)
   wn0 (tap-hold-release 200 340 0 lmet)  ;; unused because of Win+G gets triggered
   9sy (tap-hold-release 200 340 9 @syv)  ;; unused because v is already mapped to do this
   ;;ght (tap-hold-release 200 240 rght rmet)  ;;works but not used
@@ -536,12 +449,12 @@
   r  (tap-hold 140 140 r (multi (macro S-9 ) (tap-hold 200 600 XX (macro bspc A-C-9 ))) )                   ;; ) [ todo find a better use 
   t$  (tap-hold 140 140 t (macro S-4))                                                                      ;; $
   z&  (tap-hold 140 140 y (multi (macro S-6 ) (tap-hold 200 800 XX (macro S-6 ))))                          ;; & &&
-  i?  (tap-hold 140 140 @chi (multi @? (tap-hold 200 500 XX @? )))                                           ;; ? = S-[      i ? ??
+  d?  (tap-hold 140 140 @chi (multi @? (tap-hold 200 500 XX @? )))                                           ;; ? = S-[      i ? ??
   ;;p\  (tap-dance 140 ((tap-hold 10 100 p (multi  @\ (tap-hold 200 800 XX  @\ )))  (macro p p) ))  ;; p \ \\ TODO tapdance over tap-hold why?
   p\  (tap-hold 140 140 (macro p) (multi @\ (tap-hold 200 800 XX @\ )) ) ;; p \ \\ 
   aä  (tap-hold 1 120 a (macro-release-cancel ä 400 bspc S-= spc 600 bspc ä 600 bspc a 600 bspc))            ;; ä = '  `=S-]
-  uü  (tap-hold 1 120 u (multi (macro ü ) (tap-hold 400 400 XX (macro-release-cancel bspc S-5 800 bspc ü 800 bspc))) )                      ;; ü = ;  u ü % ##
-  oö  (tap-hold 1 120 @cho (multi (macro ö ) (tap-hold 400 400 XX (macro bspc # ))) )                      ;; ö = grv #=/  o ö #
+  b%  (tap-hold 1 140 b  (multi S-5 (tap-hold 400 400 XX (macro bspc A-C-7 ))) )                       ;; ü = ;  u ü % ##
+  g#  (tap-hold 1 140 @cho (multi # (tap-hold 400 400 XX (macro bspc A-C-0 ))) )                      ;; ö = grv #=/  o ö #
   sß  (tap-hold 1 120 s (macro ß ) )                                                                               ;; ß = [
   g'  (tap-hold 140 140 g (multi @' (tap-hold 200 800 XX @' )) )                         ;; ' ''
   h/  (tap-hold 140 140 (macro h) (multi (macro S-7 ) (tap-hold 200 800 XX (macro S-7 ))) )                 ;; / // TODO do we wont dbl_tap-hold keyrepeat
@@ -555,7 +468,7 @@
   v}  (tap-hold-release-timeout 200 400 v @syvv @} ) ;; 
   b+  (tap-hold 140 140 b (multi (macro @.+ ) (tap-hold 200 500 XX (macro @.+ ))))                              ;; + = =  b + ++
   n=  (tap-hold 140 140 n (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 400 XX (macro S-0 ))  ))) ) ;; n = == === 
-  m*  (tap-hold 140 140 @chm (multi S-] (tap-hold 200 700 XX S-] )))                      ;; * = S-= with long autorepeat
+  l*  (tap-hold 140 140 @chm (multi S-] (tap-hold 200 700 XX S-] )))                      ;; * = S-= with long autorepeat
 ;;,F24 (tap-dance 140 ((tap-hold 10 100 , (multi (macro S-, ) (tap-hold 200 400 XX (macro bspc @lth ))) )  (tap-hold 10 100 f20 (macro @lth))))  ;; ,, = F24 , ; <
 ;; .:> (tap-dance 140 ((tap-hold 10 100 . (multi (macro S-. ) (tap-hold 200 400 XX (macro bspc @gth ))) )  (tap-hold 10 100 (macro . .) (macro @gth)) (tap-hold 10 100 (macro . . .) .) ))  ;; . : >
 ;;  -_~ (tap-dance 140 ((tap-hold 10 100 - (multi (macro S-- ) (tap-hold 200 400 XX (macro bspc @til ))) )  (tap-hold 10 100 (macro - -) (macro @til)) (tap-hold 10 100 (macro - - -) -) ))  ;; - _ ~
@@ -566,82 +479,7 @@
   .:> (tap-hold 10 100 (tap-dance 140 (. (tap-hold 10 100 (macro . .)  @> ) (tap-hold 10 100 (macro . . .) .) )) (multi @: (tap-hold 200 800 XX (macro bspc S-102d ))) )    ;; . : >
   -_~ (tap-hold 10 100 (tap-dance 140 (/   (tap-hold 10 100 (macro / /)  @~) (tap-hold 10 100 (macro / / /) /) )) (multi (macro S-/ ) (tap-hold 200 800 XX (macro bspc A-C-] ))) )  ;; - _ ~
   -_: (tap-hold 10 100 (tap-dance 140 (/   (tap-hold 10 100 (macro / /)  @:) (tap-hold 10 100 (macro / / /) /) )) (multi (macro S-/ ) (tap-hold 200 800 XX (macro bspc S-. ))) )  ;; - _ :
+  k_~ (tap-hold 10 100 (tap-dance 140 (k   (tap-hold 10 100 (macro k k)  @~) (tap-hold 10 100 (macro k k k) k) )) (multi (macro S-/ ) (tap-hold 200 800 XX (macro bspc A-C-] ))) )  ;; - _ ~
   
   ;;f1 (macro f1 f24)  ;; only usefull in applications that do not react on F1 ==> not usefull
 )
-
-(defseq web-de (w e))
-(deffakekeys web-de (macro g e r h a r d . h e i d e (unicode @) w e b . d e))
-
-
-;; ahk f24 f23 can be triggert mouse here (unused)
-(defseq web-def (j l))
-(deffakekeys web-def (macro f23))
-
-(defseq str (s t))
-(defseq ded (d e))
-(defseq wic (w i))
-(defseq wal (w a))
-(defseq mar (m a))
-(defseq m'  (m '))
-(defseq flo (f l))
-(defseq seb (s e))
-(defseq jar (j a))
-(defseq mon (m o))
-(defseq mfg (m f))
-(defseq bye (b y))
-(defseq msg (m s))
-(defseq dih (d i))
-(defseq iba (i b))
-(defseq z1  (1))
-(defseq z2  (2))
-(defseq iba (3))
-(defseq erbach (4))
-(defseq gh (g h))
-(defseq gg (g g))
-(defseq rdtab (l))
-(defseq isodt (a))
-(defseq dedt (q))
-
-;; deffakekeys with S- for uppercase, with defsrc keys, with  spc A-C-q and kp1-kp9, numbers in macros are pauses
-(deffakekeys isodt (macro b b a a , )) ;;this does not work over Remotedesktop TODO make a dayly script to update
-(deffakekeys dedt (macro b b q q , ))
-(deffakekeys rdtab (macro A-pgup ))
-(deffakekeys gh  (macro lalt 80 kp1 ret )) ;; this is working in outlook
-(deffakekeys gg  (macro lalt 80 kp1 ret )) ;; this is working in outlook
-(deffakekeys str (macro S-h  a l l o spc  S-h  e r r spc   S-s  t r e c k e r t , ret ret ))
-(deffakekeys ded (macro S-h  a l l o spc  S-h  e r r spc  S-d  e d e r i c h s , ret ret ))
-(deffakekeys wic (macro S-h  a l l o spc  S-h  e r r spc   S-w  i c k l m a y r , ret ret ))
-(deffakekeys wal (macro S-h  a l l o spc  S-f  r a u spc   S-w  a l d e n m a i e r , ret ret ))
-(deffakekeys mar (macro S-h  a l l o spc  S-m  a r k u s , ret ret ))
-(deffakekeys m'  (macro S-h  a l l o spc  S-f  r a u spc   S-m  ' d e r , ret ret ))
-(deffakekeys flo (macro S-h  a l l o spc  S-f  l o r i a n , ret ret ))
-(deffakekeys seb (macro S-h  a l l o spc  S-s  e b a s t i a n , ret ret ))
-(deffakekeys jar (macro S-h  a l l o spc  S-h  e r r  spc  S-j  a r o s c h , ret ret ))
-(deffakekeys mon (macro S-h  a l l o spc  S-m  o n i k a , ret ret ))
-(deffakekeys mfg (macro S-m  i t spc   f r e u n d l i c h e n spc  S-g  r ; [ e n   spc ret  S-g  e r h a r d spc  S-h  e i d e ))
-(deffakekeys bye (macro b y e ret S-g  e r h a r d ))
-(deffakekeys msg (macro g e r h a r d . h e i d e (unicode @) m s g . g r o u p ))
-;; make sure numlock is active for these ones
-(deffakekeys dih (macro S-d  - S-s  S-m  S-y  S-q  - S-i  kp7 S-m  S-y  S-d  - kp7 kp5 ))
-(deffakekeys iba (macro S-d  S-e  kp3 kp0 kp7 kp0 kp0 kp2 kp0 kp2 kp7 kp0 kp0 kp0 kp4 kp5 kp5 kp0 kp6 kp8 kp6 kp0 ))
-(deffakekeys z1 (macro kp1 kp1 . kp1 kp1 . kp2 kp0 kp2 kp3 ))
-(deffakekeys z2 (macro kp2 kp1 . kp1 kp2 . kp2 kp0 kp0 kp1 ))
-(deffakekeys erbach (macro kp6 kp4 kp7 kp1 kp1 ))
-
-(defalias  
- fashing (macro @n1 @n1 . @n1 @n1 . @n2 @n0 @n2 @n3 )
- geb (macro @n2 @n1 . @n1 @n2 . @n2 @n0 @n0 @n1 )
- iban (macro S-d  S-e  @n3 @n0 @n7 @n0 @n0 @n2 @n0 @n2 @n7 @n0 @n0 @n0 @n4 @n5 @n5 @n0 @n6 @n8 @n6 @n0 )
- plz (macro @n6 @n4 @n7 @n1 @n1 )
- tsc (macro @\\ @\\ t s c l i e n t @\\ c @\\ d a t a )
- esp (macro S-. d a t e)
- ;; Last lines  of script no leading spaces
-psiso (cmd-output-keys powershell.exe -NoProfile -NoLogo -NonInteractiv -Command "echo '(' ((Get-Date -Format 'yyyy-MM-dd').toCharArray() -join ' ') ')'") 
-;;cmdiso (cmd-output-keys cmd.exe /C timek.cmd) 
-cmdiso (cmd "C:\Program Files\AutoHotkey\AutoHotkeyU64_UIA.exe" "isodate.ahk")
-cmdde (cmd-output-keys cmd.exe /C timedek.cmd) 
-;; bash might be on windows an is much faster than wsl or powershell 
-;;bashiso (cmd-output-keys bash -c "date +'%F %R' | sed 's/./& /g' | sed 's/:/S-;/g' | sed 's/\(.\{20\}\)\(.*\)/\(\1 spc \2\)/'")
-dayiso (macro @n2 @n0 @n2 @n3 - @n0 @n3 - @n0 @n6   )
-dayde  (macro @n0 @n6 . @n0 @n3 . @n2 @n0 @n2 @n3  ))

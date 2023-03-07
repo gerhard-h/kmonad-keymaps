@@ -643,5 +643,5 @@ cmdiso (cmd "C:\Program Files\AutoHotkey\AutoHotkeyU64_UIA.exe" "isodate.ahk")
 cmdde (cmd-output-keys cmd.exe /C timedek.cmd) 
 ;; bash might be on windows an is much faster than wsl or powershell 
 ;;bashiso (cmd-output-keys bash -c "date +'%F %R' | sed 's/./& /g' | sed 's/:/S-;/g' | sed 's/\(.\{20\}\)\(.*\)/\(\1 spc \2\)/'")
-dayiso (macro @n2 @n0 @n2 @n3 - @n0 @n3 - @n0 @n6   )
-dayde  (macro @n0 @n6 . @n0 @n3 . @n2 @n0 @n2 @n3  ))
+dayiso (macro @n2 @n0 @n2 @n3 - @n0 @n3 - @n0 @n7   )
+dayde  (macro @n0 @n7 . @n0 @n3 . @n2 @n0 @n2 @n3  ))

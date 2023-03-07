@@ -747,5 +747,5 @@
  plz (macro kp6 kp4 kp7 kp1 kp1 )
  tsc (macro @\\ @\\ t s c l i e n t @\\ c @\\ d a t a )
  ;; Last lines  of script no leading spaces
-dayiso (macro kp2 kp0 kp2 kp3 - kp0 kp3 - kp0 kp6   )
-dayde  (macro kp0 kp6 . kp0 kp3 . kp2 kp0 kp2 kp3  ))
+dayiso (macro kp2 kp0 kp2 kp3 - kp0 kp3 - kp0 kp7   )
+dayde  (macro kp0 kp7 . kp0 kp3 . kp2 kp0 kp2 kp3  ))
