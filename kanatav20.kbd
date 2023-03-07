@@ -193,7 +193,7 @@
 ;; If you are looking for other keys, the file src/keys/mod.rs should hopefully provide some insight.
 ;; z and y are not flipped positioning has no meaning but must be consistent with other layers
 (defsrc
-  esc       f1   f24
+  esc       f1   f13   f24
   ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
   tab       j    v    u    a    y    w    b    d    g    p    q    +    #
   caps      c    r    i    e    o    m    n    t    s    h    ß    ret
@@ -201,15 +201,15 @@
             lmet lalt           spc                           
 )
 (deflayer base
-  @ech      f1   f24
+  @ech      f1   f13   f24
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8   @9   @0   -    del  bspc
-  @tab      j    v    u    a    y    w    @b%  @d?  @g#  p    q    +    bspc
-  @atx      c    r    @i[  @e]  o    m    @n%  @tC  @s#  @hwn ß    @rtc
-  @oss      z    x    ü    ä    ö    f    @l*  @,;< @.:> @k_~ rsft
+  @tab      @j!  @v˝  @u﴾  @a﴿  @z$  @w&  @b%  @d?  @g#  @p\  @q@  +    bspc
+  @atx      c    r    @i[  @e]  @o'  @m/  @n%  @tC  @s#  @hwn @ß-  @rtc
+  @oss      @y`  @x|  @ü{  @ä}  @ö+  f    @l*  @,;< @.:> @k_~ rsft
             @oml @oal           @nav                           
 )
 (deflayer numbers
-  esc       f1   f24
+  esc       f1   f13   f24
   @^        @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld-next A-prtsc _
   _         @-_:  1    2    3  C-bspc esc  home up    end  pgup pgdn      _       _
   @sy1      @.wn  @al4 @ct5 @sf6 0    bspc left down  rght bspc @fky      _
@@ -217,47 +217,47 @@
             _     _              _                  
 )
 (deflayer numberstab
-  esc       f1   f24
+  esc       f1   f13   f24
   ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
-  tab       j    v    u    a    y    w    b    d    g    p    q    +    #
-  caps      c    r    i    e    o    m    n    t    s    h    ß    ret
-  lsft      z    x    ü    ä    ö    f    l    ,    .    k    rsft
-            lmet lalt           spc                           
+  _         @-_:  1    2    3  C-bspc esc home up   end  pgup pgdn      _       _
+  @sy1      left rght left rght 0    bspc left down rght bspc @fky      _
+  _         @,    7    8    9    del  ret  @stb @cde  @alc @mrc _
+            _     _              _                        
 )
 (deflayer symbols
-  esc       f1   f24
-  ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
-  tab       j    v    u    a    y    w    b    d    g    p    q    +    #
-  caps      c    r    i    e    o    m    n    t    s    h    ß    ret
-  lsft      z    x    ü    ä    ö    f    l    ,    .    k    rsft
-            lmet lalt           spc                           
+  _         f1   f13   f24
+  _         _    _    _    _    _    _    _    _    _    _    _    _    _     
+  _         @!   @˝   @﴾   @﴿   @$   @&   @{   @?   @}   @\   _    _    _         
+  _         @´   @@   @[   @]   @'   @/   @%   @^   #    @-_~ _    _          
+  _         @`   @|   @{   @}   @+   @=   @*   @<   @>   @~   _               
+            _    _              _
 )
 (deflayer vsymbols
-  esc       f1   f24
-  ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
-  tab       j    v    u    a    y    w    b    d    g    p    q    +    #
-  caps      c    r    i    e    o    m    n    t    s    h    ß    ret
-  lsft      z    x    ü    ä    ö    f    l    ,    .    k    rsft
-            lmet lalt           spc                           
+  _         f1   f13   f24
+  _         _    _    _    _    _    _    _    _    _    _    _    _    _   
+  _  (unicode Ù) @˝   @﴾   @﴿   @$   @&   @{   @?   @}   @\   _    _    _         
+  _  (unicode Õ) @@   @[   @]   @'   @/   @%   @^   @#   @-_~ _    _          
+  _         @`   @|   @{   @}   @+    @=  @*   @<   @>   @~   _               
+            _    _              _
 )
 (deflayer ksymbols
-  esc       f1   f24
-  ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
-  tab       j    v    u    a    y    w    b    d    g    p    q    +    #
-  caps      c    r    i    e    o    m    n    t    s    h    ß    ret
-  lsft      z    x    ü    ä    ö    f    l    ,    .    k    rsft
-            lmet lalt           spc                           
+  _         f1   f13   f24
+  _         @fashing @geb @iban  @plz _    _    _    _    _    _    _    _    _
+  _         @cmdde   @˝   @﴾     @﴿   @tsc @&   @{   @?   @}   @\   _    _    _         
+  _         @cmdiso  @@   @[     @]   @'   @/   @%   @^   #    @-_~ _    _          
+  _         @`       @|   @{     @}   @+   @=   @*   @<   @>   @~   _               
+            _        _                _ 
 )
 (deflayer fkeys
-  esc       f1   f24
-  ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
-  tab       j    v    u    a    y    w    b    d    g    p    q    +    #
-  caps      c    r    i    e    o    m    n    t    s    h    ß    ret
-  lsft      z    x    ü    ä    ö    f    l    ,    .    k    rsft
-            lmet lalt           spc                           
+  esc       f1   f13   f24
+  @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  sldr bspc
+  _         @-_: f1   f2   f3   f10  esc  home up    end  pgup pgdn _    _    
+  @sy1      @.wn f4   f5   f6   f11  lmet lsft lctl  lalt lmet _    _ 
+  _         @,   f7   f8   f9   f12  ret  @stb @cde  @alc @mrc _
+       _    _               _             
 )
 (deflayer mouse
-  esc       f1   f24
+  esc       f1   f13   f24
   ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
   tab       j    v    u    a    y    w    b    d    g    p    q    +    #
   caps      c    r    i    e    o    m    n    t    s    h    ß    ret
@@ -265,7 +265,7 @@
             lmet lalt           spc                           
 )
 (deflayer mouseslow
-  esc       f1   f24
+  esc       f1   f13   f24
   ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
   tab       j    v    u    a    y    w    b    d    g    p    q    +    #
   caps      c    r    i    e    o    m    n    t    s    h    ß    ret
@@ -443,12 +443,12 @@
   ;;q! (tap-hold 140 140 q (multi (macro S-1 ) (tap-hold 200 400 XX (macro bspc A-C-q ))) )                 ;; q ! @
   ;;q! (tap-hold 1 140 q (macro-release-cancel S-1 600 bspc (unicode @) 800 bspc S-1 800 bspc))                   ;; q ! @
   ;;q! (tap-dance 120 ((tap-hold 1 90 q (multi (macro S-1 ) (tap-hold 200 600 XX (macro bspc (unicode @) ))) )  (unicode @)  (unicode ä) ) )
-  q! (tap-hold 1 100 (tap-dance-eager 150 (q (macro bspc @@) )) (multi @! (tap-hold 200 600 XX (macro bspc @@ )))  ) ;; q ! @    Great! tapdance can be nested inside tap-hold. Still timing problems on keybr.com!
-  w˝ (tap-hold 140 140 w (multi (macro S-2 ) (tap-hold 200 400 XX (macro S-2 ))) )                         ;; " ""
-  e  (tap-hold 1 150 e (multi (macro S-8 ) (tap-hold 200 400 XX (macro S-9 ))))                           ;; (  ()
-  r  (tap-hold 140 140 r (multi (macro S-9 ) (tap-hold 200 600 XX (macro bspc A-C-9 ))) )                   ;; ) [ todo find a better use 
-  t$  (tap-hold 140 140 t (macro S-4))                                                                      ;; $
-  z&  (tap-hold 140 140 y (multi (macro S-6 ) (tap-hold 200 800 XX (macro S-6 ))))                          ;; & &&
+  j! (tap-hold 1 100 (tap-dance-eager 150 (j (macro bspc @@) )) (multi @! (tap-hold 200 600 XX (macro bspc @@ )))  ) ;; q ! @    Great! tapdance can be nested inside tap-hold. Still timing problems on keybr.com!
+  v˝ (tap-hold 140 140 v (multi (macro S-2 ) (tap-hold 200 400 XX (macro S-2 ))) )                         ;; " ""
+  u﴾  (tap-hold 1 150 u (multi (macro S-8 ) (tap-hold 200 400 XX (macro S-9 ))))                           ;; (  ()
+  a﴿  (tap-hold 140 140 a (multi (macro S-9 ) (tap-hold 200 600 XX (macro bspc A-C-9 ))) )                   ;; ) [ todo find a better use 
+  z$  (tap-hold 140 140 y (macro S-4))                                                                      ;; $
+  w&  (tap-hold 140 140 w (multi (macro S-6 ) (tap-hold 200 800 XX (macro S-6 ))))                          ;; & &&
   d?  (tap-hold 140 140 @chi (multi @? (tap-hold 200 500 XX @? )))                                           ;; ? = S-[      i ? ??
   ;;p\  (tap-dance 140 ((tap-hold 10 100 p (multi  @\ (tap-hold 200 800 XX  @\ )))  (macro p p) ))  ;; p \ \\ TODO tapdance over tap-hold why?
   p\  (tap-hold 140 140 (macro p) (multi @\ (tap-hold 200 800 XX @\ )) ) ;; p \ \\ 
@@ -456,17 +456,20 @@
   b%  (tap-hold 1 140 b  (multi S-5 (tap-hold 400 400 XX (macro bspc A-C-7 ))) )                       ;; ü = ;  u ü % ##
   g#  (tap-hold 1 140 @cho (multi # (tap-hold 400 400 XX (macro bspc A-C-0 ))) )                      ;; ö = grv #=/  o ö #
   sß  (tap-hold 1 120 s (macro ß ) )                                                                               ;; ß = [
-  g'  (tap-hold 140 140 g (multi @' (tap-hold 200 800 XX @' )) )                         ;; ' ''
-  h/  (tap-hold 140 140 (macro h) (multi (macro S-7 ) (tap-hold 200 800 XX (macro S-7 ))) )                 ;; / // TODO do we wont dbl_tap-hold keyrepeat
+  ß-  (tap-hold 140 140 ß (macro - ) )                                                                               ;; ß = [
+  q@  (tap-hold 140 140 q @@ ) 
+  o'  (tap-hold 140 140 o (multi @' (tap-hold 200 800 XX @' )) )                         ;; ' ''
+  m/  (tap-hold 140 140 (macro m) (multi (macro S-7 ) (tap-hold 200 800 XX (macro S-7 ))) )                 ;; / // TODO do we wont dbl_tap-hold keyrepeat
   x|  (tap-hold 140 140 x (multi (macro A-C-102d ) (tap-hold 200 800 XX (macro A-C-102d ))) )               ;; | ||
-  c{  (tap-hold 140 140 c (multi (macro A-C-7 ) (tap-hold 200 500 XX (macro A-C-0 ))))                      ;; { {}
+  y`  (tap-hold 140 140 z (multi @` (tap-hold 200 800 XX @´ )) )
+  ü{  (tap-hold 140 140 ü (multi (macro A-C-7 ) (tap-hold 200 500 XX (macro A-C-0 ))))                      ;; { {}
   ;;v}  (tap-hold 140 140 v (multi (macro A-C-0 ) (tap-hold 200 500 XX (macro bspc A-C-9 ))) )                ;; v } ]
 
   ;; THIS v} implements Layer_with_default (default if nothing is pressed on the layer) TODO what do we want this Layer to do? TODO Anoyance the default layer key is only printed after release ... we can't lower the timeout?
 ;;v}  (tap-hold 140 140 v (tap-hold-press 200 5000 @}  @syv))             ;; v }
 ;;v}  (tap-hold 100 100 v  @syv)         ;; v 
-  v}  (tap-hold-release-timeout 200 400 v @syvv @} ) ;; 
-  b+  (tap-hold 140 140 b (multi (macro @.+ ) (tap-hold 200 500 XX (macro @.+ ))))                              ;; + = =  b + ++
+  ä}  (tap-hold-release-timeout 200 400 ä @syvv @} ) ;; 
+  ö+  (tap-hold 140 140 ö (multi (macro @.+ ) (tap-hold 200 500 XX (macro @.+ ))))                              ;; + = =  b + ++
   n=  (tap-hold 140 140 n (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 400 XX (macro S-0 ))  ))) ) ;; n = == === 
   l*  (tap-hold 140 140 @chm (multi S-] (tap-hold 200 700 XX S-] )))                      ;; * = S-= with long autorepeat
 ;;,F24 (tap-dance 140 ((tap-hold 10 100 , (multi (macro S-, ) (tap-hold 200 400 XX (macro bspc @lth ))) )  (tap-hold 10 100 f20 (macro @lth))))  ;; ,, = F24 , ; <
@@ -483,3 +486,20 @@
   
   ;;f1 (macro f1 f24)  ;; only usefull in applications that do not react on F1 ==> not usefull
 )
+
+(defalias  
+ fashing (macro @n1 @n1 . @n1 @n1 . @n2 @n0 @n2 @n3 )
+ geb (macro @n2 @n1 . @n1 @n2 . @n2 @n0 @n0 @n1 )
+ iban (macro S-d  S-e  @n3 @n0 @n7 @n0 @n0 @n2 @n0 @n2 @n7 @n0 @n0 @n0 @n4 @n5 @n5 @n0 @n6 @n8 @n6 @n0 )
+ plz (macro @n6 @n4 @n7 @n1 @n1 )
+ tsc (macro @\\ @\\ t s c l i e n t @\\ c @\\ d a t a )
+ esp (macro S-. d a t e)
+ ;; Last lines  of script no leading spaces
+psiso (cmd-output-keys powershell.exe -NoProfile -NoLogo -NonInteractiv -Command "echo '(' ((Get-Date -Format 'yyyy-MM-dd').toCharArray() -join ' ') ')'") 
+;;cmdiso (cmd-output-keys cmd.exe /C timek.cmd) 
+cmdiso (cmd "C:\Program Files\AutoHotkey\AutoHotkeyU64_UIA.exe" "isodate.ahk")
+cmdde (cmd-output-keys cmd.exe /C timedek.cmd) 
+;; bash might be on windows an is much faster than wsl or powershell 
+;;bashiso (cmd-output-keys bash -c "date +'%F %R' | sed 's/./& /g' | sed 's/:/S-;/g' | sed 's/\(.\{20\}\)\(.*\)/\(\1 spc \2\)/'")
+dayiso (macro @n2 @n0 @n2 @n3 - @n0 @n3 - @n0 @n6   )
+dayde  (macro @n0 @n6 . @n0 @n3 . @n2 @n0 @n2 @n3  ))
