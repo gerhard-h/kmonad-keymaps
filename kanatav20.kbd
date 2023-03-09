@@ -193,23 +193,23 @@
 ;; If you are looking for other keys, the file src/keys/mod.rs should hopefully provide some insight.
 ;; z and y are not flipped positioning has no meaning but must be consistent with other layers
 (defsrc
-  esc       f1   f13   f24
+  esc       f1   f13   f14 f24
   ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
   tab       j    v    u    a    y    w    b    d    g    p    q    +    #
-  caps      c    r    i    e    o    m    n    t    s    h    ß    ret
-  lsft      z    x    ü    ä    ö    f    l    ,    .    k    rsft
+  caps      c    r    i    e    o    h    n    t    s    l    ß    ret
+  lsft      z    x    ü    ä    ö    f    m    ,    .    k    rsft
             lmet lalt           spc                           
 )
 (deflayer base
-  @ech      f1   f13   f24
+  @ech      f1   @ff13   @ff14 f24
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8   @9   @0   -    del  bspc
   @tab      @j!  @v˝  @u﴾  @a﴿  @z$  @w&  @b%  @d?  @g#  @p\  @q@  +    bspc
-  @atx      c    r    @i[  @e]  @o'  @m/  @n%  @tC  @s#  @hwn @ß-  @rtc
-  @oss      @y`  @x|  @ü{  @ä}  @ö+  f    @l*  @,;< @.:> @k_~ rsft
+  @atx      @cwn @r@  @i[  @e]  @o'  @h/  @n%  @tC  @s#  @lwn @ß-  @rtc
+  @oss      @y`  @x|  @ü{  @ä}  @ö+  @f=  @m*  @,;< @.:> @k_~ rsft
             @oml @oal           @nav                           
 )
 (deflayer numbers
-  esc       f1   f13   f24
+  esc       f1   @ff13   bspc f24
   @^        @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld-next A-prtsc _
   _         @-_:  1    2    3  C-bspc esc  home up    end  pgup pgdn      _       _
   @sy1      @.wn  @al4 @ct5 @sf6 0    bspc left down  rght bspc @fky      _
@@ -217,7 +217,7 @@
             _     _              _                  
 )
 (deflayer numberstab
-  esc       f1   f13   f24
+  esc       f1   @ff13   @ff14 f24
   ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
   _         @-_:  1    2    3  C-bspc esc home up   end  pgup pgdn      _       _
   @sy1      left rght left rght 0    bspc left down rght bspc @fky      _
@@ -225,15 +225,15 @@
             _     _              _                        
 )
 (deflayer symbols
-  _         f1   f13   f24
-  _         _    _    _    _    _    _    _    _    _    _    _    _    _     
-  _         @!   @˝   @﴾   @﴿   @$   @&   @{   @?   @}   @\   _    _    _         
-  _         @´   @@   @[   @]   @'   @/   @%   @^   #    @-_~ _    _          
+  _         f1   @ff13   @ff14 f24
+  _         _    _    _    _    _    _    _    _    _    @atm lrld-next A-prtsc _
+  _         @!   @˝   @﴾   @﴿   @$   @&   @{   @?   @}   @\   @@    _    _         
+  _         @´   @@   @[   @]   @'   @/   @%   @^   #    @-_~ @_    _          
   _         @`   @|   @{   @}   @+   @=   @*   @<   @>   @~   _               
-            _    _              _
+            _    _              ret
 )
 (deflayer vsymbols
-  _         f1   f13   f24
+  _         f1   @ff13   @ff14 f24
   _         _    _    _    _    _    _    _    _    _    _    _    _    _   
   _  (unicode Ù) @˝   @﴾   @﴿   @$   @&   @{   @?   @}   @\   _    _    _         
   _  (unicode Õ) @@   @[   @]   @'   @/   @%   @^   @#   @-_~ _    _          
@@ -241,7 +241,7 @@
             _    _              _
 )
 (deflayer ksymbols
-  _         f1   f13   f24
+  _         f1   @ff13   @ff14 f24
   _         @fashing @geb @iban  @plz _    _    _    _    _    _    _    _    _
   _         @cmdde   @˝   @﴾     @﴿   @tsc @&   @{   @?   @}   @\   _    _    _         
   _         @cmdiso  @@   @[     @]   @'   @/   @%   @^   #    @-_~ _    _          
@@ -249,7 +249,7 @@
             _        _                _ 
 )
 (deflayer fkeys
-  esc       f1   f13   f24
+  esc       f1   @ff13   @ff14 f24
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  sldr bspc
   _         @-_: f1   f2   f3   f10  esc  home up    end  pgup pgdn _    _    
   @sy1      @.wn f4   f5   f6   f11  lmet lsft lctl  lalt lmet _    _ 
@@ -257,7 +257,7 @@
        _    _               _             
 )
 (deflayer mouse
-  esc       f1   f13   f24
+  esc       f1   @ff13   @ff14 f24
   ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
   tab       j    v    u    a    y    w    b    d    g    p    q    +    #
   caps      c    r    i    e    o    m    n    t    s    h    ß    ret
@@ -265,7 +265,7 @@
             lmet lalt           spc                           
 )
 (deflayer mouseslow
-  esc       f1   f13   f24
+  esc       f1   @ff13   @ff14 f24
   ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
   tab       j    v    u    a    y    w    b    d    g    p    q    +    #
   caps      c    r    i    e    o    m    n    t    s    h    ß    ret
@@ -275,7 +275,7 @@
 (defalias
   chi (chord example d)
   cho (chord example g)
-  chm (chord mk l)
+  chm (chord mk m)
   ch, (chord mk ,)
 )
 
@@ -285,9 +285,9 @@
   (d  g   ) f18    ;;(multi f18 sldr)
 )
 (defchords mk 140
-  (l      ) l
+  (m      ) m
   (   ,   ) ,
-  (l  ,   ) f24
+  (m  ,   ) f24
 )
 ;; mouse layer
 (defalias
@@ -338,7 +338,9 @@
   sy1 (one-shot 2000 (layer-toggle symbols))
   syk (layer-toggle ksymbols)
   fky (layer-toggle fkeys)
-
+  ff14 (tap-hold  200 200 spc (layer-toggle symbols))
+  ;;ff13 (one-shot 500 (layer-toggle ksymbols))
+  ff13 (layer-toggle ksymbols)
   
   ;; one shot modifiers
   oss (one-shot 2000 lsft)
@@ -392,28 +394,22 @@
   ;; not working on remote desktop atp  (tap-dance 500 ( (macro A-pgup) (macro A-(pgup 90 pgup )) (macro A-(pgup 90 pgup  90 pgup )) (macro A-(pgup 90 pgup  90 pgup  90 pgup )) ))
 
   ;; home row mods
-  ;;f]  (tap-dance 140 ((tap-hold-release 140 140 f lsft) (tap-hold 200 240 (macro f f) @] )))
+
   e]  (tap-hold-release 1 140 e lsft) ;;  INFO timing of 1 avoids keyrepeat 
-;;j%  (tap-dance 140 ((tap-hold-release 140 140 j rsft) (tap-hold 200 240 (macro j j) @% )))
   n%  (tap-hold-release 1 140 n rsft)  ;;(multi rsft lsft)) ;; this clean form avoids US -> Ujs bug when typing fast ;; BUG rsft has bugs on RDesktop multi fixes fjf->F but jfj->j stays
-;;j%  (tap-dance 140 ((tap-hold-press 140 140 j rsft) (tap-hold 200 240 (macro j j) @% ))) ;; tap-hold-press seems to work the same when inside tap-dance
-  
-  
-;;j%  (tap-hold-release 140 140 (tap-dance 140 (j (multi i (tap-hold 90 90 k (macro bspc S-5))))) lsft) ;; this is not working 
-  i[  (tap-dance 140 ((tap-hold-release 200 300 i lctl) (tap-hold 200 300 (macro i i) (multi (macro A-C-8 ) (tap-hold 200 700 XX (macro A-C-9 ))))))
-  ;; using left ctl on k resolves DITTO issues TODO retest
-  ;; double tap hold k for alt-tab layer TODO test usage
-;;kC  (tap-dance 140 ((tap-hold-release 200 300 k lctl) (tap-hold 200 300 (macro k k) @aty ))) 
-;;kC  (tap-dance 140 ((tap-hold-release 200 300 k lctl) (tap-hold 200 300 (macro k k) (multi f20 sldr) )))  ;; produces stuck modifiers randomly
-  tC  (tap-dance 140 ((tap-hold-release 200 300 t lctl) (tap-hold 200 300 (macro t t) (multi @syk) ))) 
+  i[  (tap-dance 140 ((tap-hold-release 200 400 i lctl) (tap-hold 200 300 (macro i i) (multi (macro A-C-8 ) (tap-hold 200 700 XX (macro A-C-9 ))))))
+  tC  (tap-dance 140 ((tap-hold-release 200 400 t lctl) (tap-hold 200 300 (macro t t) (multi @syk) ))) 
   ;; TODO test if Long_Tap_O or Dbl_Tap_Hold_L is used in practise
-  s# (tap-dance 140 ((tap-hold-release 200 300 s alt) (tap-hold 200 300 (macro s s) (macro @# ) )))
+  s# (tap-dance 140 ((tap-hold-release 200 400 s alt) (tap-hold 200 400 (macro s s) (macro @# ) )))
+  lwn (tap-hold-release 200 5000 l lmet)
+  cwn (tap-hold-release 200 5000 c lmet)
+  r@ (tap-hold-release 200 5000 r lalt)
+  
   ;; number layer home row mods
   sf6 (tap-hold-release 200 300 6 lsft)
   ct5 (tap-hold-release 200 300 5 lctl)
   al4 (tap-hold-release 200 340 4 lalt)
   .wn (tap-hold-release 200 240 . lmet)
-  hwn (tap-hold-release 200 5000 h lmet)
   wn0 (tap-hold-release 200 340 0 lmet)  ;; unused because of Win+G gets triggered
   9sy (tap-hold-release 200 340 9 @syv)  ;; unused because v is already mapped to do this
   ;;ght (tap-hold-release 200 240 rght rmet)  ;;works but not used
@@ -459,19 +455,16 @@
   ß-  (tap-hold 140 140 ß (macro - ) )                                                                               ;; ß = [
   q@  (tap-hold 140 140 q @@ ) 
   o'  (tap-hold 140 140 o (multi @' (tap-hold 200 800 XX @' )) )                         ;; ' ''
-  m/  (tap-hold 140 140 (macro m) (multi (macro S-7 ) (tap-hold 200 800 XX (macro S-7 ))) )                 ;; / // TODO do we wont dbl_tap-hold keyrepeat
+  h/  (tap-hold 140 140 (macro h) (multi (macro S-7 ) (tap-hold 200 800 XX (macro S-7 ))) )                 ;; / // TODO do we wont dbl_tap-hold keyrepeat
   x|  (tap-hold 140 140 x (multi (macro A-C-102d ) (tap-hold 200 800 XX (macro A-C-102d ))) )               ;; | ||
   y`  (tap-hold 140 140 z (multi @` (tap-hold 200 800 XX @´ )) )
   ü{  (tap-hold 140 140 ü (multi (macro A-C-7 ) (tap-hold 200 500 XX (macro A-C-0 ))))                      ;; { {}
-  ;;v}  (tap-hold 140 140 v (multi (macro A-C-0 ) (tap-hold 200 500 XX (macro bspc A-C-9 ))) )                ;; v } ]
 
-  ;; THIS v} implements Layer_with_default (default if nothing is pressed on the layer) TODO what do we want this Layer to do? TODO Anoyance the default layer key is only printed after release ... we can't lower the timeout?
-;;v}  (tap-hold 140 140 v (tap-hold-press 200 5000 @}  @syv))             ;; v }
-;;v}  (tap-hold 100 100 v  @syv)         ;; v 
-  ä}  (tap-hold-release-timeout 200 400 ä @syvv @} ) ;; 
+  ;;ä}  (tap-hold-release-timeout 200 400 ä @syvv @} ) ;; not needed on v20 bc of second space bar
+  ä}  (tap-hold 140 140 ä @} )
   ö+  (tap-hold 140 140 ö (multi (macro @.+ ) (tap-hold 200 500 XX (macro @.+ ))))                              ;; + = =  b + ++
-  n=  (tap-hold 140 140 n (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 400 XX (macro S-0 ))  ))) ) ;; n = == === 
-  l*  (tap-hold 140 140 @chm (multi S-] (tap-hold 200 700 XX S-] )))                      ;; * = S-= with long autorepeat
+  f=  (tap-hold 140 140 f (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 400 XX (macro S-0 ))  ))) ) ;; n = == === 
+  m*  (tap-hold 140 140 @chm (multi S-] (tap-hold 200 700 XX S-] )))                      ;; * = S-= with long autorepeat
 ;;,F24 (tap-dance 140 ((tap-hold 10 100 , (multi (macro S-, ) (tap-hold 200 400 XX (macro bspc @lth ))) )  (tap-hold 10 100 f20 (macro @lth))))  ;; ,, = F24 , ; <
 ;; .:> (tap-dance 140 ((tap-hold 10 100 . (multi (macro S-. ) (tap-hold 200 400 XX (macro bspc @gth ))) )  (tap-hold 10 100 (macro . .) (macro @gth)) (tap-hold 10 100 (macro . . .) .) ))  ;; . : >
 ;;  -_~ (tap-dance 140 ((tap-hold 10 100 - (multi (macro S-- ) (tap-hold 200 400 XX (macro bspc @til ))) )  (tap-hold 10 100 (macro - -) (macro @til)) (tap-hold 10 100 (macro - - -) -) ))  ;; - _ ~
@@ -482,7 +475,7 @@
   .:> (tap-hold 10 100 (tap-dance 140 (. (tap-hold 10 100 (macro . .)  @> ) (tap-hold 10 100 (macro . . .) .) )) (multi @: (tap-hold 200 800 XX (macro bspc S-102d ))) )    ;; . : >
   -_~ (tap-hold 10 100 (tap-dance 140 (/   (tap-hold 10 100 (macro / /)  @~) (tap-hold 10 100 (macro / / /) /) )) (multi (macro S-/ ) (tap-hold 200 800 XX (macro bspc A-C-] ))) )  ;; - _ ~
   -_: (tap-hold 10 100 (tap-dance 140 (/   (tap-hold 10 100 (macro / /)  @:) (tap-hold 10 100 (macro / / /) /) )) (multi (macro S-/ ) (tap-hold 200 800 XX (macro bspc S-. ))) )  ;; - _ :
-  k_~ (tap-hold 10 100 (tap-dance 140 (k   (tap-hold 10 100 (macro k k)  @~) (tap-hold 10 100 (macro k k k) k) )) (multi (macro S-/ ) (tap-hold 200 800 XX (macro bspc A-C-] ))) )  ;; - _ ~
+  k_~ (tap-hold 10 100 (tap-dance 120 (k   (tap-hold 10 100 (macro k k)  @~) (tap-hold 10 100 (macro k k k) k) )) (multi (macro S-/ ) (tap-hold 200 800 XX (macro bspc A-C-] ))) )  ;; - _ ~
   
   ;;f1 (macro f1 f24)  ;; only usefull in applications that do not react on F1 ==> not usefull
 )
