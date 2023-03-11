@@ -201,12 +201,14 @@
             lmet lalt           spc                           
 )
 (deflayer base
-  @ech      f1   @ff13   @ff14 f24
+;;  @ech
+  esc       f1   @ff13   @ff14 f24
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8   @9   @0   -    del  bspc
-  @tab      @j!  @v˝  @u﴾  @a﴿  @z$  @w&  @b%  @d?  @g#  @p\  @q@  +    bspc
+  @tab      @j!  @v˝  @u﴾  @a﴿  @z$  @w&  @b%  @d?  @g#  @p\  @q@  +    @rtw
   @atx      @cwn @r@  @i[  @e]  @o'  @h/  @n%  @tC  @s#  @lwn @ß-  @rtc
   @oss      @y`  @x|  @ü{  @ä}  @ö+  @f=  @m*  @,;< @.:> @k_~ rsft
-            @oml @oal           @nav                           
+            lmet lalt           @nav
+;;          @oml @oal           @nav                           
 )
 (deflayer numbers
   esc       f1   @ff13   bspc f24
@@ -277,6 +279,8 @@
   cho (chord example g)
   chm (chord mk m)
   ch, (chord mk ,)
+  chk (chord el t)
+  chl (chord el s)
 )
 
 (defchords example 300
@@ -288,6 +292,11 @@
   (m      ) m
   (   ,   ) ,
   (m  ,   ) f24
+)
+(defchords el 90
+  (t      ) t
+  (   s   ) s
+  (t  s   ) l
 )
 ;; mouse layer
 (defalias
@@ -360,6 +369,7 @@
   tab (tap-hold-press  200 400 tab lctl )
 ;;rtc (tap-hold-release 200 340 (multi ret sldr) lmet) this makes ret not appear
   rtc (tap-hold-release 200 5000 ret lctl)
+  rtw (tap-hold-release 200 5000 ret lmet)
   rsd (tap-hold-release 200 240 @syv (multi rsft lsft)) ;; TODO not used ?! BUG rsft get ignored on RDesktop -> use lsft  or (multi rsft lsft) ?
   ;; DBL-tap-Hold is not realy good for the frequently used symbol layer
   ;; nav (tap-dance 120 ((tap-hold  140 140 spc @num) (tap-hold  140 140 spc @sym) spc spc spc))
@@ -398,9 +408,13 @@
   e]  (tap-hold-release 1 140 e lsft) ;;  INFO timing of 1 avoids keyrepeat 
   n%  (tap-hold-release 1 140 n rsft)  ;;(multi rsft lsft)) ;; this clean form avoids US -> Ujs bug when typing fast ;; BUG rsft has bugs on RDesktop multi fixes fjf->F but jfj->j stays
   i[  (tap-dance 140 ((tap-hold-release 200 400 i lctl) (tap-hold 200 300 (macro i i) (multi (macro A-C-8 ) (tap-hold 200 700 XX (macro A-C-9 ))))))
-  tC  (tap-dance 140 ((tap-hold-release 200 400 t lctl) (tap-hold 200 300 (macro t t) (multi @syk) ))) 
+  ;;tC  (tap-dance 140 ((tap-hold-release 200 400 @chk lctl) (tap-hold 200 300 (macro t t) (multi @syk) ))) 
+  tC (tap-hold-release 140 900 @chk lctl)
+  ;;tC  @chk
   ;; TODO test if Long_Tap_O or Dbl_Tap_Hold_L is used in practise
-  s# (tap-dance 140 ((tap-hold-release 200 400 s alt) (tap-hold 200 400 (macro s s) (macro @# ) )))
+  ;;s# (tap-dance 140 ((tap-hold-release 200 400 @chl alt) (tap-hold 200 400 (macro s s) (macro @# ) )))
+  s# (tap-hold-release 140 900 @chl alt)
+  ;;s# @chl
   lwn (tap-hold-release 200 5000 l lmet)
   cwn (tap-hold-release 200 5000 c lmet)
   r@ (tap-hold-release 200 5000 r lalt)
