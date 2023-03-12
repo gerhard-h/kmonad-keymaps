@@ -195,18 +195,38 @@
 (defsrc
   esc       f1   f13   f14 f24
   ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
-  tab       j    v    u    a    y    w    b    d    g    p    q    +    #
-  caps      c    r    i    e    o    h    n    t    s    l    ß    ret
-  lsft      z    x    ü    ä    ö    f    m    ,    .    k    rsft
+  tab       j    l    u    a    y    w    b    d    g    z    q    +    #
+  caps      c    r    i    e    o    m    n    t    s    h    ß    ret
+  lsft      v    x    ü    ä    ö    p    f    ,    .    k    rsft
             lmet lalt           spc                           
 )
 (deflayer base
 ;;  @ech
   esc       f1   @ff13   @ff14 f24
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8   @9   @0   -    del  bspc
-  @tab      @j!  @v˝  @u﴾  @a﴿  @z$  @w&  @b%  @d?  @g#  @p\  @q@  +    @rtw
-  @atx      @cwn @r@  @i[  @e]  @o'  @h/  @n%  @tC  @s#  @lwn @ß-  @rtc
-  @oss      @y`  @x|  @ü{  @ä}  @ö+  @f=  @m*  @,;< @.:> @k_~ rsft
+  @tab      @j!  @l˝  @u﴾  @a﴿  @z$  @w&  @b%  @d?  @g#  @y\  @q@  +    @rtw
+  @atx      @cwn @r@  @i[  @e]  @o'  @m/  @n%  @tC  @s#  @hwn @ß-  @rtc
+  @oss      @v`  @x|  @ü{  @ä}  @ö+  @p=  @f*  @,;< @.:> @k_~ rsft
+            lmet lalt           @nav
+;;          @oml @oal           @nav                           
+)
+(deflayer smodded
+;;  @ech
+  esc       f1   @ff13   bspc f24
+  @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8   @9   @0   -    del  bspc
+  @tab      s    @l˝  @u﴾  @a﴿  @z$  @w&  @b%  @d?  @g#  @y\  @q@  +    @rtw
+  @atx      @cwn @r@  @i[  @e]  @o'  @m/  @n%  @tC  @s#  @hwn @ß-  @rtc
+  @oss      @v`  @x|  @ü{  @ä}  @ö+  @p=  @f*  @,;< @.:> @k_~ rsft
+            lmet lalt           @nav
+;;          @oml @oal           @nav                           
+)
+(deflayer cmodded ;; dbl tap C-j fix
+;;  @ech
+  esc       f1   @ff13   bspc f24
+  @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8   @9   @0   -    del  bspc
+  @tab      j    @l˝  @u﴾  @a﴿  @z$  @w&  @b%  @d?  @g#  @y\  @q@  +    @rtw
+  @atx      @cwn @r@  @i[  @e]  @o'  @m/  @n%  @tC  @s#  @hwn @ß-  @rtc
+  @oss      @v`  @x|  @ü{  @ä}  @ö+  @p=  @f*  @,;< @.:> @k_~ rsft
             lmet lalt           @nav
 ;;          @oml @oal           @nav                           
 )
@@ -230,8 +250,8 @@
   _         f1   @ff13   @ff14 f24
   _         _    _    _    _    _    _    _    _    _    @atm lrld-next A-prtsc _
   _         @!   @˝   @﴾   @﴿   @$   @&   @{   @?   @}   @\   @@    _    _         
-  _         @´   @@   @[   @]   @'   @/   @%   @^   #    @-_~ @_    _          
-  _         @`   @|   @{   @}   @+   @=   @*   @<   @>   @~   _               
+  _         @`   @@   @[   @]   @'   @/   @%   @^   #    @-_~ @_    _          
+  _         @´   @|   @{   @}   @+   @=   @*   @<   @>   @~   _               
             _    _              ret
 )
 (deflayer vsymbols
@@ -261,24 +281,24 @@
 (deflayer mouse
   esc       f1   @ff13   @ff14 f24
   ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
-  tab       j    v    u    a    y    w    b    d    g    p    q    +    #
-  caps      c    r    i    e    o    m    n    t    s    h    ß    ret
-  lsft      z    x    ü    ä    ö    f    l    ,    .    k    rsft
-            lmet lalt           spc                           
+  tab       XX   @slw @slw @slw XX  @quep @cll @ma↑ @clr z    q    +    #
+  caps      XX   @clm @clr @cll XX   h    @ma← @ma↓ @ma→ h    ß    ret
+  lsft      @msz lalt lctl lsft XX   @ms← @ms↑ @ms↓ @ms→ k    rsft
+            lmet lalt           @quep                           
 )
 (deflayer mouseslow
   esc       f1   @ff13   @ff14 f24
   ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
-  tab       j    v    u    a    y    w    b    d    g    p    q    +    #
-  caps      c    r    i    e    o    m    n    t    s    h    ß    ret
-  lsft      z    x    ü    ä    ö    f    l    ,    .    k    rsft
-            lmet lalt           spc                           
+  tab       XX   @slw @slw @slw XX  @quep @cll @ms↑ @clr z    q    +    #
+  caps      XX   @clm @clr @cll XX   h    @ms← @ms↓ @ms→ h    ß    ret
+  lsft      @msz lalt lctl lsft XX   @ms← @ms↑ @ms↓ @ms→ k    rsft
+            lmet lalt           @quep
 )
 (defalias
   chi (chord example d)
   cho (chord example g)
-  chm (chord mk m)
-  ch, (chord mk ,)
+  chf (chord fk f)
+  ch, (chord fk ,)
   chk (chord el t)
   chl (chord el s)
 )
@@ -288,10 +308,10 @@
   (   g   ) g
   (d  g   ) f18    ;;(multi f18 sldr)
 )
-(defchords mk 140
-  (m      ) m
+(defchords fk 140
+  (f      ) f
   (   ,   ) ,
-  (m  ,   ) f24
+  (f  ,   ) f24
 )
 (defchords el 90
   (t      ) t
@@ -405,17 +425,17 @@
 
   ;; home row mods
 
-  e]  (tap-hold-release 1 140 e lsft) ;;  INFO timing of 1 avoids keyrepeat 
-  n%  (tap-hold-release 1 140 n rsft)  ;;(multi rsft lsft)) ;; this clean form avoids US -> Ujs bug when typing fast ;; BUG rsft has bugs on RDesktop multi fixes fjf->F but jfj->j stays
-  i[  (tap-dance 140 ((tap-hold-release 200 400 i lctl) (tap-hold 200 300 (macro i i) (multi (macro A-C-8 ) (tap-hold 200 700 XX (macro A-C-9 ))))))
+  e]  (tap-hold-release 1 140 e (multi lsft (layer-while-held smodded) )) ;;  INFO timing of 1 avoids keyrepeat 
+  n%  (tap-hold-release 1 140 n (multi rsft (layer-while-held smodded) ))  ;;(multi rsft lsft)) ;; this clean form avoids US -> Ujs bug when typing fast ;; BUG rsft has bugs on RDesktop multi fixes fjf->F but jfj->j stays
+  i[  (tap-dance 140 ((tap-hold-release 200 400 i (multi lctl (layer-while-held cmodded)) ) (tap-hold 200 300 (macro i i) (multi (macro A-C-8 ) (tap-hold 200 700 XX (macro A-C-9 ))))))
   ;;tC  (tap-dance 140 ((tap-hold-release 200 400 @chk lctl) (tap-hold 200 300 (macro t t) (multi @syk) ))) 
-  tC (tap-hold-release 140 900 @chk lctl)
+  tC (tap-hold-release 140 900 @chk (multi lctl (layer-while-held cmodded)) )
   ;;tC  @chk
   ;; TODO test if Long_Tap_O or Dbl_Tap_Hold_L is used in practise
   ;;s# (tap-dance 140 ((tap-hold-release 200 400 @chl alt) (tap-hold 200 400 (macro s s) (macro @# ) )))
   s# (tap-hold-release 140 900 @chl alt)
   ;;s# @chl
-  lwn (tap-hold-release 200 5000 l lmet)
+  hwn (tap-hold-release 200 5000 h lmet)
   cwn (tap-hold-release 200 5000 c lmet)
   r@ (tap-hold-release 200 5000 r lalt)
   
@@ -454,14 +474,14 @@
   ;;q! (tap-hold 1 140 q (macro-release-cancel S-1 600 bspc (unicode @) 800 bspc S-1 800 bspc))                   ;; q ! @
   ;;q! (tap-dance 120 ((tap-hold 1 90 q (multi (macro S-1 ) (tap-hold 200 600 XX (macro bspc (unicode @) ))) )  (unicode @)  (unicode ä) ) )
   j! (tap-hold 1 100 (tap-dance-eager 150 (j (macro bspc @@) )) (multi @! (tap-hold 200 600 XX (macro bspc @@ )))  ) ;; q ! @    Great! tapdance can be nested inside tap-hold. Still timing problems on keybr.com!
-  v˝ (tap-hold 140 140 v (multi (macro S-2 ) (tap-hold 200 400 XX (macro S-2 ))) )                         ;; " ""
+  l˝ (tap-hold 140 140 l (multi (macro S-2 ) (tap-hold 200 400 XX (macro S-2 ))) )                         ;; " ""
   u﴾  (tap-hold 1 150 u (multi (macro S-8 ) (tap-hold 200 400 XX (macro S-9 ))))                           ;; (  ()
   a﴿  (tap-hold 140 140 a (multi (macro S-9 ) (tap-hold 200 600 XX (macro bspc A-C-9 ))) )                   ;; ) [ todo find a better use 
   z$  (tap-hold 140 140 y (macro S-4))                                                                      ;; $
   w&  (tap-hold 140 140 w (multi (macro S-6 ) (tap-hold 200 800 XX (macro S-6 ))))                          ;; & &&
   d?  (tap-hold 140 140 @chi (multi @? (tap-hold 200 500 XX @? )))                                           ;; ? = S-[      i ? ??
   ;;p\  (tap-dance 140 ((tap-hold 10 100 p (multi  @\ (tap-hold 200 800 XX  @\ )))  (macro p p) ))  ;; p \ \\ TODO tapdance over tap-hold why?
-  p\  (tap-hold 140 140 (macro p) (multi @\ (tap-hold 200 800 XX @\ )) ) ;; p \ \\ 
+  y\  (tap-hold 140 140 (macro z) (multi @\ (tap-hold 200 800 XX @\ )) ) ;; p \ \\ 
   aä  (tap-hold 1 120 a (macro-release-cancel ä 400 bspc S-= spc 600 bspc ä 600 bspc a 600 bspc))            ;; ä = '  `=S-]
   b%  (tap-hold 1 140 b  (multi S-5 (tap-hold 400 400 XX (macro bspc A-C-7 ))) )                       ;; ü = ;  u ü % ##
   g#  (tap-hold 1 140 @cho (multi # (tap-hold 400 400 XX (macro bspc A-C-0 ))) )                      ;; ö = grv #=/  o ö #
@@ -469,16 +489,16 @@
   ß-  (tap-hold 140 140 ß (macro - ) )                                                                               ;; ß = [
   q@  (tap-hold 140 140 q @@ ) 
   o'  (tap-hold 140 140 o (multi @' (tap-hold 200 800 XX @' )) )                         ;; ' ''
-  h/  (tap-hold 140 140 (macro h) (multi (macro S-7 ) (tap-hold 200 800 XX (macro S-7 ))) )                 ;; / // TODO do we wont dbl_tap-hold keyrepeat
+  m/  (tap-hold 140 140 (macro m) (multi (macro S-7 ) (tap-hold 200 800 XX (macro S-7 ))) )                 ;; / // TODO do we wont dbl_tap-hold keyrepeat
   x|  (tap-hold 140 140 x (multi (macro A-C-102d ) (tap-hold 200 800 XX (macro A-C-102d ))) )               ;; | ||
-  y`  (tap-hold 140 140 z (multi @` (tap-hold 200 800 XX @´ )) )
+  v`  (tap-hold 140 140 v (multi @` (tap-hold 200 800 XX @´ )) )
   ü{  (tap-hold 140 140 ü (multi (macro A-C-7 ) (tap-hold 200 500 XX (macro A-C-0 ))))                      ;; { {}
 
   ;;ä}  (tap-hold-release-timeout 200 400 ä @syvv @} ) ;; not needed on v20 bc of second space bar
   ä}  (tap-hold 140 140 ä @} )
   ö+  (tap-hold 140 140 ö (multi (macro @.+ ) (tap-hold 200 500 XX (macro @.+ ))))                              ;; + = =  b + ++
-  f=  (tap-hold 140 140 f (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 400 XX (macro S-0 ))  ))) ) ;; n = == === 
-  m*  (tap-hold 140 140 @chm (multi S-] (tap-hold 200 700 XX S-] )))                      ;; * = S-= with long autorepeat
+  p=  (tap-hold 140 140 p (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 400 XX (macro S-0 ))  ))) ) ;; n = == === 
+  f*  (tap-hold 140 140 @chf (multi S-] (tap-hold 200 700 XX S-] )))                      ;; * = S-= with long autorepeat
 ;;,F24 (tap-dance 140 ((tap-hold 10 100 , (multi (macro S-, ) (tap-hold 200 400 XX (macro bspc @lth ))) )  (tap-hold 10 100 f20 (macro @lth))))  ;; ,, = F24 , ; <
 ;; .:> (tap-dance 140 ((tap-hold 10 100 . (multi (macro S-. ) (tap-hold 200 400 XX (macro bspc @gth ))) )  (tap-hold 10 100 (macro . .) (macro @gth)) (tap-hold 10 100 (macro . . .) .) ))  ;; . : >
 ;;  -_~ (tap-dance 140 ((tap-hold 10 100 - (multi (macro S-- ) (tap-hold 200 400 XX (macro bspc @til ))) )  (tap-hold 10 100 (macro - -) (macro @til)) (tap-hold 10 100 (macro - - -) -) ))  ;; - _ ~
