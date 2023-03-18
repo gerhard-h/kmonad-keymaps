@@ -214,7 +214,7 @@
 ;;  @ech
   esc       f1   @ff13   bspc f24
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8   @9   @0   -    del  bspc
-  @tab      s    @l˝  @u﴾  @a﴿  @z$  @w&  @b%  @d?  @g#  @y\  @q@  +    @rtw
+  @tab      j    @l˝  @u﴾  @a﴿  @z$  @w&  @b%  @d?  @g#  @y\  @q@  +    @rtw
   @atx      @cwn @r@  @i[  @e]  @o'  @m/  @n%  @tC  @s#  @hwn @ß-  @rtc
   @oss      @v`  @x|  @ü{  @ä}  @ö+  @p=  @f*  @,;< @.:> @k_~ rsft
             lmet lalt           @nav
@@ -235,7 +235,7 @@
   @^        @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld-next A-prtsc _
   _         @-_:  1    2    3  C-bspc esc  home up    end  pgup pgdn      _       _
   @sy1      @.wn  @al4 @ct5 @sf6 0    bspc left down  rght bspc @fky      _
-  _         @,    7    8    9    del  ret  @stb @cde  @alc @mrc _
+  _         @,:   7    8    9    del  ret  @stb @cde  @alc @mrc _
             _     _              _                  
 )
 (deflayer numberstab
@@ -243,23 +243,31 @@
   ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
   _         @-_:  1    2    3  C-bspc esc home up   end  pgup pgdn      _       _
   @sy1      left rght left rght 0    bspc left down rght bspc @fky      _
-  _         @,    7    8    9    del  ret  @stb @cde  @alc @mrc _
+  _         @,:   7    8    9    del  ret  @stb @cde  @alc @mrc _
             _     _              _                        
+)
+(deflayer numfix
+  esc       f1   @ff13   @que f24
+  @^        @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld-next A-prtsc _
+  _         @-_:  1    2    3  C-bspc esc  home up    end  pgup pgdn      _       _
+  @que      @.wn  @al4 @ct5 @sf6 0    bspc left down  rght bspc @fky      _
+  _         @,:   7    8    9    del  ret  @stb @cde  @alc @mrc _
+            _     _              _                  
 )
 (deflayer symbols
   _         f1   @ff13   @ff14 f24
   _         _    _    _    _    _    _    _    _    _    @atm lrld-next A-prtsc _
   _         @!   @˝   @﴾   @﴿   @$   @&   @{   @?   @}   @\   @@    _    _         
-  _         @`   @@   @[   @]   @'   @/   @%   @^   #    @-_~ @_    _          
-  _         @´   @|   @{   @}   @+   @=   @*   @<   @>   @~   _               
+  @numfix   @`   @-_: @[   @]   @'   @/   @%   @-_~ #    @_   -     _          
+  _         @@   @|   @{   @}   @+   @=   @*   @<   @>   @~   _               
             _    _              ret
 )
 (deflayer vsymbols
   _         f1   @ff13   @ff14 f24
   _         _    _    _    _    _    _    _    _    _    _    _    _    _   
   _  (unicode Ù) @˝   @﴾   @﴿   @$   @&   @{   @?   @}   @\   _    _    _         
-  _  (unicode Õ) @@   @[   @]   @'   @/   @%   @^   @#   @-_~ _    _          
-  _         @`   @|   @{   @}   @+    @=  @*   @<   @>   @~   _               
+  _  (unicode Õ) @@   @[   @]   @'   @/   @%   @-_~ @#   @-_~ -    _          
+  _         @`   @|   @{   @}   @+   @=   @*   @<   @>   @~   _               
             _    _              _
 )
 (deflayer ksymbols
@@ -299,10 +307,23 @@
   cho (chord example g)
   chf (chord fk f)
   ch, (chord fk ,)
-  chk (chord el t)
-  chl (chord el s)
+;;  chk (chord el t)
+;;  chl (chord el s)
+  chü (chord üä ü)
+  chä (chord üä ä)
+;;  chu (chord ua u)
+;;  cha (chord ua a)
 )
-
+(defchords üä 300
+  (ü      ) ü
+  (   ä   ) ä
+  (ü  ä   ) @numfix
+)
+;;(defchords ua 700
+;;  (u      ) u
+;;  (   a   ) a
+;;  (u  a   ) @numfix
+;;)
 (defchords example 300
   (d      ) d
   (   g   ) g
@@ -313,17 +334,18 @@
   (   ,   ) ,
   (f  ,   ) f24
 )
-(defchords el 90
-  (t      ) t
-  (   s   ) s
-  (t  s   ) l
-)
+;;(defchords el 90
+;;  (t      ) t
+;;  (   s   ) s
+;;  (t  s   ) l
+;;)
 ;; mouse layer
 (defalias
   mal M-C-A-f
   mar M-C-A-d
   mam M-C-A-s
   que (layer-switch base)
+  numfix (layer-switch numfix)
   quep (multi @que  A-C-M-p)
   mus (layer-switch mouse)
   slw (layer-toggle mouseslow)
@@ -423,21 +445,20 @@
   atm  (tap-dance 500 ( A-tab (macro A-(tab 90 tab )) (macro A-(tab 90 tab  90 tab )) (macro A-(tab 90 tab  90 tab  90 tab )) ))
   ;; not working on remote desktop atp  (tap-dance 500 ( (macro A-pgup) (macro A-(pgup 90 pgup )) (macro A-(pgup 90 pgup  90 pgup )) (macro A-(pgup 90 pgup  90 pgup  90 pgup )) ))
 
-  ;; home row mods
-
+  ;; *** HOME ROW MODS ***
   e]  (tap-hold-release 1 140 e (multi lsft (layer-while-held smodded) )) ;;  INFO timing of 1 avoids keyrepeat 
   n%  (tap-hold-release 1 140 n (multi rsft (layer-while-held smodded) ))  ;;(multi rsft lsft)) ;; this clean form avoids US -> Ujs bug when typing fast ;; BUG rsft has bugs on RDesktop multi fixes fjf->F but jfj->j stays
-  i[  (tap-dance 140 ((tap-hold-release 200 400 i (multi lctl (layer-while-held cmodded)) ) (tap-hold 200 300 (macro i i) (multi (macro A-C-8 ) (tap-hold 200 700 XX (macro A-C-9 ))))))
+  i[  (tap-dance 180 ((tap-hold-release 200 400 i (multi lctl (layer-while-held cmodded)) ) (tap-hold 200 300 (macro i i) (multi (macro A-C-8 ) (tap-hold 200 700 XX (macro A-C-9 ))))))
   ;;tC  (tap-dance 140 ((tap-hold-release 200 400 @chk lctl) (tap-hold 200 300 (macro t t) (multi @syk) ))) 
-  tC (tap-hold-release 140 900 @chk (multi lctl (layer-while-held cmodded)) )
+  tC (tap-hold-release 180 900 t (multi lctl (layer-while-held cmodded)) )
   ;;tC  @chk
   ;; TODO test if Long_Tap_O or Dbl_Tap_Hold_L is used in practise
   ;;s# (tap-dance 140 ((tap-hold-release 200 400 @chl alt) (tap-hold 200 400 (macro s s) (macro @# ) )))
-  s# (tap-hold-release 140 900 @chl alt)
+  s# (tap-hold-release 250 900 s alt)
   ;;s# @chl
-  hwn (tap-hold-release 200 5000 h lmet)
-  cwn (tap-hold-release 200 5000 c lmet)
-  r@ (tap-hold-release 200 5000 r lalt)
+  hwn (tap-hold-release 350 5000 h lmet)
+  cwn (tap-hold-release 350 5000 c lmet)
+  r@ (tap-hold-release 250 5000 r lalt)
   
   ;; number layer home row mods
   sf6 (tap-hold-release 200 300 6 lsft)
@@ -492,10 +513,9 @@
   m/  (tap-hold 140 140 (macro m) (multi (macro S-7 ) (tap-hold 200 800 XX (macro S-7 ))) )                 ;; / // TODO do we wont dbl_tap-hold keyrepeat
   x|  (tap-hold 140 140 x (multi (macro A-C-102d ) (tap-hold 200 800 XX (macro A-C-102d ))) )               ;; | ||
   v`  (tap-hold 140 140 v (multi @` (tap-hold 200 800 XX @´ )) )
-  ü{  (tap-hold 140 140 ü (multi (macro A-C-7 ) (tap-hold 200 500 XX (macro A-C-0 ))))                      ;; { {}
-
+  ü{  (tap-hold 140 140 @chü (multi (macro A-C-7 ) (tap-hold 200 500 XX (macro A-C-0 ))))                      ;; { {}
   ;;ä}  (tap-hold-release-timeout 200 400 ä @syvv @} ) ;; not needed on v20 bc of second space bar
-  ä}  (tap-hold 140 140 ä @} )
+  ä}  (tap-hold 140 140 @chä @} )
   ö+  (tap-hold 140 140 ö (multi (macro @.+ ) (tap-hold 200 500 XX (macro @.+ ))))                              ;; + = =  b + ++
   p=  (tap-hold 140 140 p (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 400 XX (macro S-0 ))  ))) ) ;; n = == === 
   f*  (tap-hold 140 140 @chf (multi S-] (tap-hold 200 700 XX S-] )))                      ;; * = S-= with long autorepeat
@@ -510,6 +530,7 @@
   -_~ (tap-hold 10 100 (tap-dance 140 (/   (tap-hold 10 100 (macro / /)  @~) (tap-hold 10 100 (macro / / /) /) )) (multi (macro S-/ ) (tap-hold 200 800 XX (macro bspc A-C-] ))) )  ;; - _ ~
   -_: (tap-hold 10 100 (tap-dance 140 (/   (tap-hold 10 100 (macro / /)  @:) (tap-hold 10 100 (macro / / /) /) )) (multi (macro S-/ ) (tap-hold 200 800 XX (macro bspc S-. ))) )  ;; - _ :
   k_~ (tap-hold 10 100 (tap-dance 120 (k   (tap-hold 10 100 (macro k k)  @~) (tap-hold 10 100 (macro k k k) k) )) (multi (macro S-/ ) (tap-hold 200 800 XX (macro bspc A-C-] ))) )  ;; - _ ~
+  ,:  (tap-hold 1 600 , @: )
   
   ;;f1 (macro f1 f24)  ;; only usefull in applications that do not react on F1 ==> not usefull
 )
