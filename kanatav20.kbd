@@ -119,6 +119,7 @@
   danger-enable-cmd yes
   ;; are there usecases? for cmd
   ;; process-unmapped-keys no ;; yes does not help with japanese keys
+  process-unmapped-keys yes
   ;; Intl1 KEY_RO ro
   ;; CHANGES Removed onshot-mods and ctrl-keys to make Remotedesktop not stick ctl 
 )
@@ -207,27 +208,7 @@
   @tab      @j!  @l˝  @u﴾  @a﴿  @z$  @w&  @b%  @d?  @g#  @y\  @q@  +    @rtw
   @atx      @cwn @r@  @i[  @e]  @o'  @m/  @n%  @tC  @s#  @hwn @ß-  @rtc
   @oss      @v`  @x|  @ü{  @ä}  @ö+  @p=  @f*  @,;< @.:> @k_~ rsft
-            lmet lalt           @nav
-;;          @oml @oal           @nav                           
-)
-(deflayer smodded
-;;  @ech
-  esc       f1   @ff13   bspc f24
-  @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8   @9   @0   -    del  bspc
-  @tab      j    @l˝  @u﴾  @a﴿  @z$  @w&  @b%  @d?  @g#  @y\  @q@  +    @rtw
-  @atx      @cwn @r@  @i[  @e]  @o'  @m/  @n%  @tC  @s#  @hwn @ß-  @rtc
-  @oss      @v`  @x|  @ü{  @ä}  @ö+  @p=  @f*  @,;< @.:> @k_~ rsft
-            lmet lalt           @nav
-;;          @oml @oal           @nav                           
-)
-(deflayer cmodded ;; dbl tap C-j fix
-;;  @ech
-  esc       f1   @ff13   bspc f24
-  @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8   @9   @0   -    del  bspc
-  @tab      j    @l˝  @u﴾  @a﴿  @z$  @w&  @b%  @d?  @g#  @y\  @q@  +    @rtw
-  @atx      @cwn @r@  @i[  @e]  @o'  @m/  @n%  @tC  @s#  @hwn @ß-  @rtc
-  @oss      @v`  @x|  @ü{  @ä}  @ö+  @p=  @f*  @,;< @.:> @k_~ rsft
-            lmet lalt           @nav
+            lmet lalt          (tap-hold  200 200 spc (fork @num @sym (rsft lsft)))
 ;;          @oml @oal           @nav                           
 )
 (deflayer numbers
@@ -446,19 +427,19 @@
   ;; not working on remote desktop atp  (tap-dance 500 ( (macro A-pgup) (macro A-(pgup 90 pgup )) (macro A-(pgup 90 pgup  90 pgup )) (macro A-(pgup 90 pgup  90 pgup  90 pgup )) ))
 
   ;; *** HOME ROW MODS ***
-  e]  (tap-hold-release 1 140 e (multi lsft (layer-while-held smodded) )) ;;  INFO timing of 1 avoids keyrepeat 
-  n%  (tap-hold-release 1 140 n (multi rsft (layer-while-held smodded) ))  ;;(multi rsft lsft)) ;; this clean form avoids US -> Ujs bug when typing fast ;; BUG rsft has bugs on RDesktop multi fixes fjf->F but jfj->j stays
-  i[  (tap-dance 180 ((tap-hold-release 200 400 i (multi lctl (layer-while-held cmodded)) ) (tap-hold 200 300 (macro i i) (multi (macro A-C-8 ) (tap-hold 200 700 XX (macro A-C-9 ))))))
-  ;;tC  (tap-dance 140 ((tap-hold-release 200 400 @chk lctl) (tap-hold 200 300 (macro t t) (multi @syk) ))) 
-  tC (tap-hold-release 180 900 t (multi lctl (layer-while-held cmodded)) )
+  e]  (tap-hold-release 1 140 e lsft)  ;;(multi lsft (layer-while-held smodded) )) ;;  INFO timing of 1 avoids keyrepeat
+  n%  (tap-hold-release 1 140 n rsft ) ;;(multi rsft lsft)) ;; this clean form avoids US -> Ujs bug when typing fast ;; BUG rsft has bugs on RDesktop multi fixes fjf->F but jfj->j stays
+  i[  (tap-dance 180 ((tap-hold-release 200 400 i lctl ) (tap-hold 200 300 (macro i i) (multi (macro A-C-8 ) (tap-hold 200 700 XX (macro A-C-9 ))))))
+  tC  (tap-dance 140 ((tap-hold-release 200 400 t lctl ) (tap-hold 200 300 (macro t t) (macro -) ))) 
+  ;;tC (tap-hold-release 180 900 t (multi lctl (layer-while-held cmodded)) )
   ;;tC  @chk
-  ;; TODO test if Long_Tap_O or Dbl_Tap_Hold_L is used in practise
+  ;; TODO test if Long_Tap_O or Dbl_Tap_Hold_L is used in practiser
   ;;s# (tap-dance 140 ((tap-hold-release 200 400 @chl alt) (tap-hold 200 400 (macro s s) (macro @# ) )))
   s# (tap-hold-release 250 900 s alt)
   ;;s# @chl
   hwn (tap-hold-release 350 5000 h lmet)
   cwn (tap-hold-release 350 5000 c lmet)
-  r@ (tap-hold-release 250 5000 r lalt)
+  r@ (tap-hold-release 350 5000 r lalt)
   
   ;; number layer home row mods
   sf6 (tap-hold-release 200 300 6 lsft)
@@ -494,18 +475,18 @@
   ;;q! (tap-hold 140 140 q (multi (macro S-1 ) (tap-hold 200 400 XX (macro bspc A-C-q ))) )                 ;; q ! @
   ;;q! (tap-hold 1 140 q (macro-release-cancel S-1 600 bspc (unicode @) 800 bspc S-1 800 bspc))                   ;; q ! @
   ;;q! (tap-dance 120 ((tap-hold 1 90 q (multi (macro S-1 ) (tap-hold 200 600 XX (macro bspc (unicode @) ))) )  (unicode @)  (unicode ä) ) )
-  j! (tap-hold 1 100 (tap-dance-eager 150 (j (macro bspc @@) )) (multi @! (tap-hold 200 600 XX (macro bspc @@ )))  ) ;; q ! @    Great! tapdance can be nested inside tap-hold. Still timing problems on keybr.com!
+  j! (tap-hold 1 100 (tap-dance-eager 150 (j (fork (macro bspc @@) A-C-q (lctl rctl)) )) (multi @! (tap-hold 200 600 XX (macro bspc @@ )))  ) ;; q ! @    Great! tapdance can be nested inside tap-hold. Still timing problems on keybr.com!
   l˝ (tap-hold 140 140 l (multi (macro S-2 ) (tap-hold 200 400 XX (macro S-2 ))) )                         ;; " ""
   u﴾  (tap-hold 1 150 u (multi (macro S-8 ) (tap-hold 200 400 XX (macro S-9 ))))                           ;; (  ()
-  a﴿  (tap-hold 140 140 a (multi (macro S-9 ) (tap-hold 200 600 XX (macro bspc A-C-9 ))) )                   ;; ) [ todo find a better use 
+  a﴿  (tap-hold 140 140 a (fork (macro-release-cancel S-9 600 bspc A-C-9 ) C-a (lctl rctl)) )                   ;; ) [ todo find a better use 
   z$  (tap-hold 140 140 y (macro S-4))                                                                      ;; $
   w&  (tap-hold 140 140 w (multi (macro S-6 ) (tap-hold 200 800 XX (macro S-6 ))))                          ;; & &&
   d?  (tap-hold 140 140 @chi (multi @? (tap-hold 200 500 XX @? )))                                           ;; ? = S-[      i ? ??
   ;;p\  (tap-dance 140 ((tap-hold 10 100 p (multi  @\ (tap-hold 200 800 XX  @\ )))  (macro p p) ))  ;; p \ \\ TODO tapdance over tap-hold why?
   y\  (tap-hold 140 140 (macro z) (multi @\ (tap-hold 200 800 XX @\ )) ) ;; p \ \\ 
   aä  (tap-hold 1 120 a (macro-release-cancel ä 400 bspc S-= spc 600 bspc ä 600 bspc a 600 bspc))            ;; ä = '  `=S-]
-  b%  (tap-hold 1 140 b  (multi S-5 (tap-hold 400 400 XX (macro bspc A-C-7 ))) )                       ;; ü = ;  u ü % ##
-  g#  (tap-hold 1 140 @cho (multi # (tap-hold 400 400 XX (macro bspc A-C-0 ))) )                      ;; ö = grv #=/  o ö #
+  b%  (tap-hold 1 140 b  (macro S-5 ))
+  g#  (tap-hold 1 140 @cho (macro # ))
   sß  (tap-hold 1 120 s (macro ß ) )                                                                               ;; ß = [
   ß-  (tap-hold 140 140 ß (macro - ) )                                                                               ;; ß = [
   q@  (tap-hold 140 140 q @@ ) 
