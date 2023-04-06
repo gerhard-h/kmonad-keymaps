@@ -234,13 +234,13 @@
   _         @,:   7    8    9    del  ret  @stb @cde  @alc @mrc _
             _     _              _                        
 )
-;; Exit numfix with CAPS or HOLD SPACE
+  ;; Exit numfix with CAPS or HOLD SPACE or 7+9
 (deflayer numfix
   esc       f1   @ff13   (tap-hold  200 200 spc @que) f24
   @^        @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld-next A-prtsc _
   _         @-_:  1    2    3  C-bspc esc  home up    end  pgup pgdn      _       _
   @que      @.wn  @al4 @ct5 @sf6 0    bspc left down  rght bspc @fky      _
-  _         @,:   7    8    9    del  ret  @stb @cde  @alc @mrc _
+  _         @,:   @ch7 8    @ch9 del  ret  @stb @cde  @alc @mrc _
             _     _              (tap-hold  200 200 spc @que)                  
 )
 (deflayer symbols
@@ -297,13 +297,20 @@
   chf (chord fk f)
   ch, (chord fk ,)
   ch. (chord fk .)
-  chü (chord üä ü)
-  chä (chord üä ä)
+  chx (chord xä x)
+  chä (chord xä ä)
+  ch7 (chord exit79 7)
+  ch9 (chord exit79 9)
 )
-(defchords üä 300
-  (ü      ) ü
+(defchords exit79 300
+  (7      ) 7
+  (   9   ) 9
+  (7  9   ) @que
+)
+(defchords xä 300
+  (x      ) x
   (   ä   ) ä
-  (ü  ä   ) @numfix
+  (x  ä   ) @numfix
 )
 (defchords example 300
   (d      ) d
@@ -489,9 +496,9 @@
   q@  (tap-hold 140 140 q @@ ) 
   o'  (tap-hold 140 140 o (multi @' (tap-hold 200 800 XX @' )) )                         ;; ' ''
   m/  (tap-hold 140 140 (macro m) (multi (macro S-7 ) (tap-hold 200 800 XX (macro S-7 ))) )                 ;; / // TODO do we wont dbl_tap-hold keyrepeat
-  x|  (tap-hold 140 140 x (multi (macro RA-102d ) (tap-hold 200 800 XX (macro RA-102d ))) )               ;; | ||
+  x|  (tap-hold 140 140 @chx (multi (macro RA-102d ) (tap-hold 200 800 XX (macro RA-102d ))) )               ;; | ||
   v`  (tap-hold 140 140 v (multi @` (tap-hold 200 800 XX @´ )) )
-  ü{  (tap-hold 140 140 @chü (multi (macro RA-7 ) (tap-hold 200 500 XX (macro RA-0 ))))                      ;; { {}
+  ü{  (tap-hold 140 140 ü (multi (macro RA-7 ) (tap-hold 200 500 XX (macro RA-0 ))))                      ;; { {}
   ;;ä}  (tap-hold-release-timeout 200 400 ä @syvv @} ) ;; not needed on v20 bc of second space bar
   ä}  (tap-hold 140 140 @chä @} )
   ö+  (tap-hold 140 140 ö (multi (macro @.+ ) (tap-hold 200 500 XX (macro @.+ ))))                              ;; + = =  b + ++
