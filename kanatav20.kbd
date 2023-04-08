@@ -203,18 +203,18 @@
 (defsrc
   esc       f1   f13   f14 f24
   ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
-  tab       j    l    u    a    y    w    b    d    g    z    q    +    #
+  tab       j    g    u    a    y    w    b    d    l    k    q    +    #
   caps      c    r    i    e    o    m    n    t    s    h    ß    ret
-  lsft      v    x    ü    ä    ö    p    f    ,    .    k    rsft
+  lsft      z    x    ü    ä    ö    p    f    ,    .    v    rsft
             lmet lalt           spc                           
 )
 (deflayer base
 ;;  @ech
   esc       f1   @ff13   @ff14 f24
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8   @9   @0   -    del  bspc
-  @tab      @j!  @g˝  @u﴾  @a﴿  @z$  @w&  @b%  @d?  @l#  @v\  @q@  +    @rtw
-  @atx      @cwn @r@  @i[  @e]  @o'  @m/  @n%  @tC  @s#  @h-  @ßwn @rtc
-  @oss      @y`  @x|  @ü{  @ä}  @ö+  @p=  @f*  @,;< @.:> @k_~ @rsf
+  @tab      @j!  @g˝  @u﴾  @a﴿  @z$  @w&  @b%  @d?  @l#  @k\  @q@  +    @rtw
+  @atx      @cwn @r@  @i[  @e]  @o'  @m/  @n%  @tC  @s#  @hwn  @ß- @rtc
+  @oss      @y`  @x|  @ü{  @ä}  @ö+  @p=  @f*  @,;< @.:> @v_~ @rsf
             lmet lalt          (tap-hold  200 200 spc (fork @num @sym (rsft lsft)))
 ;;          @oml @oal           @nav                           
 )
@@ -222,8 +222,8 @@
   esc       f1   @ff13   bspc f24
   @^        @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld-next A-prtsc _
   _         @-_:  1    2    3  C-bspc esc  home up    end  pgup pgdn      _       _
-  @sy1      @.wn  @al4 @ct5 @sf6 0    bspc left down  rght bspc @fky      _
-  _         @,:   7    8    9    del  ret  @stb @cde  @alc @mrc _
+  @sy1      @.wn  @al4 @ct5 @sf6 0    bspc left down  rght del  @fky      _
+  _         @,:   7    8    9    del  tab  @srt @cde  @alc @mrc _
             _     _              _                  
 )
 (deflayer numberstab
@@ -231,7 +231,7 @@
   ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
   _         @-_:  1    2    3  C-bspc esc home up   end  pgup pgdn      _       _
   @sy1      left rght left rght 0    bspc left down rght bspc @fky      _
-  _         @,:   7    8    9    del  ret  @stb @cde  @alc @mrc _
+  _         @,:   7    8    9    del  tab  @srt @cde  @alc @mrc _
             _     _              _                        
 )
   ;; Exit numfix with CAPS or HOLD SPACE or 7+9
@@ -240,7 +240,7 @@
   @^        @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld-next A-prtsc _
   _         @-_:  1    2    3  C-bspc esc  home up    end  pgup pgdn      _       _
   @que      @.wn  @al4 @ct5 @sf6 0    bspc left down  rght bspc @fky      _
-  _         @,:   @ch7 8    @ch9 del  ret  @stb @cde  @alc @mrc _
+  _         @,:   @ch7 8    @ch9 del  tab  @srt @cde  @alc @mrc _
             _     _              (tap-hold  200 200 spc @que)                  
 )
 (deflayer symbols
@@ -272,7 +272,7 @@
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  sldr bspc
   _         @-_: f1   f2   f3   f10  esc  home up    end  pgup pgdn _    _    
   @sy1      @.wn f4   f5   f6   f11  lmet lsft lctl  lalt lmet _    _ 
-  _         @,   f7   f8   f9   f12  ret  @stb @cde  @alc @mrc _
+  _         @,   f7   f8   f9   f12  tab  @srt @cde  @alc @mrc _
        _    _               _             
 )
 (deflayer mouse
@@ -385,7 +385,7 @@
   oml (one-shot 2000 lmet)
   
   ;; modifiers for numpad
-  stb (tap-hold-release 200 5000 tab lsft)
+  srt (tap-hold-release 200 5000 ret lsft)
   cde (tap-hold-release 200 5000 (multi @mus A-C-M-p) lctl) ;; (multi @mus (macro f23)) lctl) to trigger ahk mouse
   alc (tap-hold-release 200 5000 @mal lalt)
   mrc (tap-hold-release 200 5000 @mar lmet)
@@ -441,8 +441,8 @@
   ;;s# (tap-dance 140 ((tap-hold-release 200 400 @chl alt) (tap-hold 200 400 (macro s s) (macro @# ) )))
   s# (tap-hold-release 250 900 s alt)
   ;;s# @chl
-  ßwn (tap-hold-release 350 5000 ß lmet)
-  h-  (tap-hold 1 180 h (macro - ) )                                                                               ;; ß = [
+  hwn (tap-hold-release 350 5000 h lmet)
+  ß-  (tap-hold 1 180 ß (macro - ) )                                                                                ;; ß = [
   cwn (tap-hold-release 400 5000 c lmet)
   r@ (tap-hold-release 350 5000 r lalt)
   rsf (tap-hold-release 350 500 - rsft)
@@ -488,7 +488,7 @@
   w&  (tap-hold 140 140 w (multi (macro S-6 ) (tap-hold 200 800 XX (macro S-6 ))))                          ;; & &&
   d?  (tap-hold 140 140 @chi (multi @? (tap-hold 200 500 XX @? )))                                           ;; ? = S-[      i ? ??
   ;;p\  (tap-dance 140 ((tap-hold 10 100 p (multi  @\ (tap-hold 200 800 XX  @\ )))  (macro p p) ))  ;; p \ \\ TODO tapdance over tap-hold why?
-  v\  (tap-hold 140 140 (macro v) (multi @\ (tap-hold 200 800 XX @\ )) ) ;; p \ \\ 
+  k\  (tap-hold 140 140 (macro k) (multi @\ (tap-hold 200 800 XX @\ )) ) ;; p \ \\ 
   aä  (tap-hold 1 120 a (macro-release-cancel ä 400 bspc S-= spc 600 bspc ä 600 bspc a 600 bspc))            ;; ä = '  `=S-]
   b%  (tap-hold 1 140 b  (macro S-5 ))
   l#  (tap-hold 1 140 @cho (macro # ))
@@ -502,7 +502,7 @@
   ;;ä}  (tap-hold-release-timeout 200 400 ä @syvv @} ) ;; not needed on v20 bc of second space bar
   ä}  (tap-hold 140 140 @chä @} )
   ö+  (tap-hold 140 140 ö (multi (macro @.+ ) (tap-hold 200 500 XX (macro @.+ ))))                              ;; + = =  b + ++
-  p=  (tap-hold 140 140 p (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 400 XX (macro S-0 ))  ))) ) ;; n = == === 
+  p=  (tap-hold 140 140 p (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 1000 XX (macro S-0 ))  ))) ) ;; n = == === 
   f*  (tap-hold 140 140 @chf (multi S-] (tap-hold 500 900 XX S-] )))                      ;; * = S-= with long autorepeat
 ;;,F24 (tap-dance 140 ((tap-hold 10 100 , (multi (macro S-, ) (tap-hold 200 400 XX (macro bspc @lth ))) )  (tap-hold 10 100 f20 (macro @lth))))  ;; ,, = F24 , ; <
 ;; .:> (tap-dance 140 ((tap-hold 10 100 . (multi (macro S-. ) (tap-hold 200 400 XX (macro bspc @gth ))) )  (tap-hold 10 100 (macro . .) (macro @gth)) (tap-hold 10 100 (macro . . .) .) ))  ;; . : >
@@ -514,7 +514,7 @@
   .:>  (tap-hold  10 100 (tap-dance 140 (@ch. (tap-hold 10 100 (macro . .)  @> ) (tap-hold 10 100 (macro . . .) .) )) (multi @: (tap-hold 200 800 XX (macro bspc S-102d ))) )    ;; . : >
   -_~  (tap-hold  10 100 (tap-dance 140 (/   (tap-hold 10 100 (macro / /)  @~) (tap-hold 10 100 (macro / / /) /) )) (multi (macro S-/ ) (tap-hold 200 800 XX (macro bspc RA-] ))) )  ;; - _ ~
   -_:  (tap-hold  10 100 (tap-dance 140 (/   (tap-hold 10 100 (macro / /)  @:) (tap-hold 10 100 (macro / / /) /) )) (multi (macro S-/ ) (tap-hold 200 800 XX (macro bspc S-. ))) )  ;; - _ :
-  k_~  (tap-hold 140 140 (tap-dance 120 (k   (tap-hold 10 100 (macro k k)  @~) (tap-hold 10 100 (macro k k k) k) )) (multi (macro S-/ ) (tap-hold 200 800 XX (macro bspc RA-] ))) )  ;; - _ ~
+  v_~  (tap-hold 140 140 (tap-dance 120 (v   (tap-hold 10 100 (macro v v)  @~) (tap-hold 10 100 (macro v v v) v) )) (multi (macro S-/ ) (tap-hold 200 800 XX (macro bspc RA-] ))) )  ;; - _ ~
   ,:   (tap-hold   1 600 , @: )
   
   ;;f1 (macro f1 f24)  ;; only usefull in applications that do not react on F1 ==> not usefull
