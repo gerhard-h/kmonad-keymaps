@@ -1,3 +1,5 @@
+rem disabled
+goto :eof
 rem (defalias  
 rem ;; Last lines of script no leading spaces 
 rem dayiso (macro kp2 kp0 kp2 kp3 - kp0 kp1 - kp3 kp0  )  ;; 2023-01-30
@@ -8,12 +10,12 @@ setlocal
 grep -E -v "^dayde |^dayiso " kanata.kbd > todayisokanata.txt
 sed -r -e "s/([0-9])/kp\1 /g" -e "s/-/- /g"    -e "s/^/dayiso (macro /" -e "s/$/)/" todayiso.txt >> todayisokanata.txt
 sed -r -e "s/([0-9])/kp\1 /g" -e "s/\./\. /g"  -e "s/^/dayde  (macro /" -e "s/$/))/" todayde.txt >> todayisokanata.txt
-copy todayisokanata.txt kanata.kbd
+todayisokanata.txt kanata.kbd
 
 grep -E -v "^dayde |^dayiso " kanatauml.kbd > todayisokanata.txt
 sed -r -e "s/([0-9])/kp\1 /g" -e "s/-/- /g"    -e "s/^/dayiso (macro /" -e "s/$/)/" todayiso.txt >> todayisokanata.txt
 sed -r -e "s/([0-9])/kp\1 /g" -e "s/\./\. /g"  -e "s/^/dayde  (macro /" -e "s/$/))/" todayde.txt >> todayisokanata.txt
-copy todayisokanata.txt kanatauml.kbd
+rem copy todayisokanata.txt kanatauml.kbd
 
 grep -E -v "^dayde |^dayiso " kanatamine.kbd > todayisokanata.txt
 sed -r -e "s/([0-9])/kp\1 /g" -e "s/-/- /g"    -e "s/^/dayiso (macro /" -e "s/$/)/" todayiso.txt >> todayisokanata.txt
