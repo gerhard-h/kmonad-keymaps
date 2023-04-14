@@ -431,8 +431,8 @@
   ;; not working on remote desktop atp  (tap-dance 500 ( (macro A-pgup) (macro A-(pgup 90 pgup )) (macro A-(pgup 90 pgup  90 pgup )) (macro A-(pgup 90 pgup  90 pgup  90 pgup )) ))
 
   ;; *** HOME ROW MODS ***
-  e]  (tap-hold-release 1 140 e lsft)  ;;(multi lsft (layer-while-held smodded) )) ;;  INFO timing of 1 avoids keyrepeat
-  n  (tap-hold-release 1 140 n rsft ) ;;(multi rsft lsft)) ;; this clean form avoids US -> Ujs bug when typing fast ;; BUG rsft has bugs on RDesktop multi fixes fjf->F but jfj->j stays
+  e]  (tap-hold-release 1 140 e (one-shot 500 lsft))  ;;(multi lsft (layer-while-held smodded) )) ;;  INFO timing of 1 avoids keyrepeat
+  n  (tap-hold-release 1 140 n (one-shot 500 rsft) ) ;;(multi rsft lsft)) ;; this clean form avoids US -> Ujs bug when typing fast ;; BUG rsft has bugs on RDesktop multi fixes fjf->F but jfj->j stays
 ;;i[  (tap-dance 180 ((tap-hold-release 350 600 (macro i) lctl ) (tap-hold 200 300 (macro i i) (multi (macro RA-8 ) (tap-hold 200 700 XX (macro RA-9 ))))))
 ;;i[  (tap-hold-release 450 5000 i lctl)
 ;;  i[  (tap-hold 1000 1000 i (fork  (unicode i) lctl (lsft)))
