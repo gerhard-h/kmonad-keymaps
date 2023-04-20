@@ -35,17 +35,17 @@
 ;; BUG SC06F remap altgr to f24 in sharpkeys is not recognized by kanata
 ;; if numtab is good make a key to flip remote desktop controls -> dont work bc of timings non remappable keys -> TODO retry wintercept
 ;; double leader keying (multi f24 sldr) inconsistencies with sldr 
-;; TODO sldr key not used
-;; TODO tap hold AltGr to f24 / AltGr and remove wincompose - AltGr is a bad positionend key anyway
+;; INFO sldr key not used
+;; INFO tap hold AltGr to f24 / AltGr and remove wincompose - AltGr is a bad positionend key anyway
 ;; TODO test release-key | release-layer key release not always working
 ;; TODO where to put delete (´)? nav+B rshift
 ;; TODO (multi lrld f9) is not working lets try makro in next release
 ;; INFO rpt just rpeats one key
-;; TODO revisit win and esc otimization and rsft _ vs rsft esc  
+;; TODO revisit win and esc otimization / rsft - vs rsft esc  / @rtw vs esc_win
 ;; TODO ctrl + Z single key ?
-;; INFO @tab esc key feels bad
+;; INFO combine @tab with esc feels bad
 
-   INFO tap-dance-eager https://github.com/jtroo/kanata/issues/241 does not make a big difference
+   INFO tap-dance-eager https://github.com/jtroo/kanata/issues/241 - does not make a big difference
 
    TIP dynamic macro support https://github.com/jtroo/kanata/issues/221
    TIP allow multiple sequence leaders, which can have different sequences with the same characters but different outputs
@@ -70,6 +70,7 @@
      fake_key_5 (macro o k a y S-1)
    )
    
+   [***
    (defalias
      3ld (multi sldr (macro 1 @three))
      s3 (tap-hold 150 150 @three @3ld)
@@ -79,12 +80,11 @@
      fake_key_3  (3 4)
      fake_key_5  (3 5)
    )
-   This does work, few issues though i) 3 loses key repeat, and ii) since it is leader style action, I cannot repeat it, for e.g. 3 & 4 without releasing 3 going for 5, will not trigger 3 & 5
+   This multi sldr does work, few issues though i) 3 loses key repeat, and ii) since it is leader style action, I cannot repeat it, for e.g. 3 & 4 without releasing 3 going for 5, will not trigger 3 & 5
+   ***]
    
    TIP If you want instant activation on a tap-hold you could try do something like: (multi (macro a) (tap-hold 100 100 xx b))
-   
-   BUG one shot queueing seems to break after some time - like reloading ahk
-   
+   BUG one shot queueing seems to break after some time - like reloading ahk 
    BUG AltGr + I = ahk menu seems to hang CTRL - SOLVED by excluding AltGr (and Ctrls) from defsrc 	 
   
   ;; Swap numbers and their symbols with respect to shift
@@ -97,19 +97,11 @@
   (lsft 2) (2)
   ;; repeat for all remaining numbers
   ) 
-  TODO maybe combine chord with ß
 
   TEST 'mouse'  click with inception
   TEST Added: ensure all keys are released at the end of a dynamic macro
   
-   todo nav + ,.- = mouse..,mouse..,mouse..
-
-   ist unötig 
-   todo lspace + rspace = enter but AltGr = enter (or backspace?)
    todo del und - position
-	
-  
-;; CTRL + SPACE + ESC => Exit KANATA immediatly
 |#
 (defcfg
    sequence-timeout 3000
@@ -151,8 +143,8 @@
   %	(macro S-5 )
   &	(macro S-6 )
   /	(macro S-7 )
-  ﴾	(macro S-8 )  ;; ﴾ look-a-like is used because @( is no valid alias, to be displayed correctly in console requires a font that can - e.g. cascadia
-  ﴿	(macro S-9 )  ;; ﴿ look-a-like is used because @) is no valid alias, to be displayed correctly in console requires a font that can - e.g. cascadia
+  【	(macro S-8 )  ;; 【 look-a-like is used because @( is no valid alias, to be displayed correctly in console requires a font that can - e.g. cascadia
+  】	(macro S-9 )  ;; 】 look-a-like is used because @) is no valid alias, to be displayed correctly in console requires a font that can - e.g. cascadia
   =	(macro S-0 )
   ? (macro S-ß )
   * (macro S-] )
@@ -209,16 +201,25 @@
             lmet lalt           spc                           
 )
 (deflayer base
+;; TODO is @rtw / sft+space=@sym / @ech / @y` / ever used?  / is @^ec used for esc?
+;; TODO did lmet, lalt not being one-shot / not incluing lctl solve any problems?
+;; TODO dbl_tap-j = hold-q = SYM+Y = s+i+q = @
+;; TODO ONLY c s i o t r h f p x ü ä ö g u a u z w d q have dbl_tap autorepeat
 ;;  @ech
   esc       f1   @ff13   @ff14 f24
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8   @9   @0   -    del  bspc
-  @tab      @j!  @g˝  @u﴾  @a﴿  @z$  @w&  @b%  @d?  @l#  @k\  @q@  +    @rtw
+  @tab      @j!  @g˝  @u【  @a】  @z$  @w&  @b%  @d?  @l#  @k\  @q@  +    @rtw
   @atx      @cwn @s   @i[  @e]  @o'  @m/  @n   @t,  @r-  @hwn @ß-  @rtc
   @oss      @y`  @x|  @ü{  @ä}  @ö+  @p=  @f*  @,;< @.:> @v_~ @rsf
             lmet lalt          (tap-hold  200 200 spc (fork @num @sym (rsft lsft)))
-;;          @oml @oal           @nav                           
+#|          @oml @oal           @nav   
+ CTRL + SPACE + ESC => Exit KANATA immediatly
+ lspace + rspace = AltGr = Enter (or backspace?)      |#                 
 )
 (deflayer numbers
+;; TODO caps to sym / C-bspc / at1 - atm  / A-prtsc / @fky never used!
+;; TODO F14 space to bspc ever used?
+;; TEST atx with RDP
   esc       f1   @ff13   bspc f24
   @^        @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld-next A-prtsc _
   _         @-_:  1    2    3  C-bspc esc  home up    end  pgup pgdn      _       _
@@ -246,7 +247,7 @@
 (deflayer symbols
   _         f1   @ff13   @ff14 f24
   _         _    _    _    _    _    _    _    _    _    @atm lrld-next A-prtsc _
-  _         @!   @˝   @﴾   @﴿   @$   @&   @%   @?   #    @\   @@    _    _         
+  _         @!   @˝   @【   @】   @$   @&   @%   @?   #    @\   @@    _    _         
   @numfix   @`   @-_: @[   @]   @'   @/   S-.  ,    .    @_   -     _          
   _         @@   @|   @{   @}   @+   @=   @*   @<   @>   @~   _               
             _    _              ret
@@ -254,7 +255,7 @@
 (deflayer vsymbols
   _         f1   @ff13   @ff14 f24
   _         _    _    _    _    _    _    _    _    _    _    _    _    _   
-  _  (unicode Ù) @˝   @﴾   @﴿   @$   @&   @%   @?   #    @\   _    _    _         
+  _  (unicode Ù) @˝   @【   @】   @$   @&   @%   @?   #    @\   _    _    _         
   _  (unicode Õ) @@   @[   @]   @'   @/   S-.  ,    .    @-_~ -    _          
   _         @`   @|   @{   @}   @+   @=   @*   @<   @>   @~   _               
             _    _              _
@@ -262,7 +263,7 @@
 (deflayer ksymbols
   _         f1   @ff13   @ff14 f24
   _         @fashing @geb @iban  @plz _    _    _    _    _    _    _    _    _
-  _         @cmdde   @˝   @﴾     @﴿   @tsc @&   @%   @?   #    @\   _    _    _         
+  _         @cmdde   @˝   @【     @】   @tsc @&   @%   @?   #    @\   _    _    _         
   _         @cmdiso  @@   @[     @]   @'   @/   S-.  ,    .    @-_~ _    _          
   _         @`       @|   @{     @}   @+   @=   @*   @<   @>   @~   _               
             _        _                _ 
@@ -275,6 +276,7 @@
   _         @,   f7   f8   f9   f12  tab  @srt @cde  @alc @mrc _
        _    _               _             
 )
+;; TODO should mouse layer contain numpad? using QMK Mouse 
 (deflayer mouse
   esc       f1   @ff13   @ff14 f24
   ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
@@ -294,9 +296,9 @@
 (defalias
 ;;  chi (chord example d)
 ;;  cho (chord example l)
-  chf (chord fk f)
-  ch, (chord fk ,)
-  ch. (chord fk .)
+  chf (chord fkomma f)
+  ch, (chord fkomma ,)
+  ch. (chord fkomma .)
   chx (chord xä x)
   chä (chord xä ä)
   ch7 (chord exit79 7)
@@ -317,7 +319,7 @@
 ;;  (   l   ) l
 ;;  (d  l   ) f18    ;;(multi f18 sldr) trigger ahk string replace
 ;;)
-(defchords fk 140
+(defchords fkomma 140
   (f       ) f
   (   ,    ) ,
   (f  ,    ) f24
@@ -374,7 +376,7 @@
   sy1 (one-shot 2000 (layer-toggle symbols))
   syk (layer-toggle ksymbols)
   fky (layer-toggle fkeys)
-  ff14 (tap-hold  200 200 spc (layer-toggle symbols))
+  ff14 (tap-hold  200 200 spc (fork (layer-toggle symbols) (layer-toggle numbers) (rsft lsft)))
   ;;ff13 (one-shot 500 (layer-toggle ksymbols))
   ff13 (layer-toggle ksymbols)
   
@@ -414,15 +416,15 @@
   dms dynamic-macro-record-stop
   
   ;; alt tab - never use this
-  at1 (multi lalt tab)
-  at2 (multi lalt tab tab)
-  at3 (multi lalt tab tab tab)
-  at4 (multi lalt tab tab tab tab)
-  at5 (multi lalt tab tab tab tab tab)
-  at6 (multi lalt tab tab tab tab tab tab)
-  at7 (multi lalt tab tab tab tab tab tab tab)
-  at8 (multi lalt tab tab tab tab tab tab tab tab)
-  at9 (multi lalt tab tab tab tab tab tab tab tab tab)
+  at1 (multi lalt pgup)
+  at2 (multi lalt pgup pgup)
+  at3 (multi lalt pgup pgup pgup)
+  at4 (multi lalt pgup pgup pgup pgup)
+  at5 (multi lalt pgup pgup pgup pgup pgup)
+  at6 (multi lalt pgup pgup pgup pgup pgup pgup)
+  at7 (multi lalt pgup pgup pgup pgup pgup pgup pgup)
+  at8 (multi lalt pgup pgup pgup pgup pgup pgup pgup pgup)
+  at9 (multi lalt pgup pgup pgup pgup pgup pgup pgup pgup pgup)
   ;;at0 (tap-dance 500 (A-tab (macro f24 r) (macro f24 t) (macro f24 z)) ) old verion of atm
   aty (multi @numtab lalt (macro tab) ) ;; alt tab by dbl_tap-hold k
   atx (tap-hold 200 150 (multi lalt tab) (multi @numtab lalt (macro tab tab)) ) ;; alt tab by hold caps
@@ -431,8 +433,9 @@
   ;; not working on remote desktop atp  (tap-dance 500 ( (macro A-pgup) (macro A-(pgup 90 pgup )) (macro A-(pgup 90 pgup  90 pgup )) (macro A-(pgup 90 pgup  90 pgup  90 pgup )) ))
 
   ;; *** HOME ROW MODS ***
-  e]  (tap-hold-release 1 140 e (one-shot 500 lsft))  ;;(multi lsft (layer-while-held smodded) )) ;;  INFO timing of 1 avoids keyrepeat
-  n  (tap-hold-release 1 140 n (one-shot 500 rsft) ) ;;(multi rsft lsft)) ;; this clean form avoids US -> Ujs bug when typing fast ;; BUG rsft has bugs on RDesktop multi fixes fjf->F but jfj->j stays
+  e]  (tap-hold 1 140 e (one-shot 500 lsft))  ;;(multi lsft (layer-while-held smodded) )) ;;  INFO timing of 1 avoids keyrepeat
+;;n   (tap-hold-release 1 140 (fork n (unicode n) (rsft) )(one-shot 400 rsft) )
+  n   (tap-hold 1 140 n (one-shot 500 rsft)) ;;(multi rsft lsft)) ;; this clean form avoids US -> Ujs bug when typing fast ;; BUG rsft has bugs on RDesktop multi fixes fjf->F but jfj->j stays
 ;;i[  (tap-dance 180 ((tap-hold-release 350 600 (macro i) lctl ) (tap-hold 200 300 (macro i i) (multi (macro RA-8 ) (tap-hold 200 700 XX (macro RA-9 ))))))
 ;;i[  (tap-hold-release 450 5000 i lctl)
 ;;  i[  (tap-hold 1000 1000 i (fork  (unicode i) lctl (lsft)))
@@ -487,8 +490,8 @@
   ;;q! (tap-dance 120 ((tap-hold 1 90 q (multi (macro S-1 ) (tap-hold 200 600 XX (macro bspc (unicode @) ))) )  (unicode @)  (unicode ä) ) )
   j! (tap-hold 1 100 (tap-dance-eager 150 (j (fork (macro bspc @@) RA-q (lctl rctl)) )) (multi @! (tap-hold 200 600 XX (macro bspc @@ )))  ) ;; q ! @    Great! tapdance can be nested inside tap-hold. Still timing problems on keybr.com!
   g˝ (tap-hold 140 140 g (multi (macro S-2 ) (tap-hold 200 400 XX (macro S-2 ))) )                         ;; " ""
-  u﴾  (tap-hold 1 150 u (multi (macro S-8 ) (tap-hold 200 400 XX (macro S-9 ))))                           ;; (  ()
-  a﴿  (tap-hold 140 140 a (fork (macro-release-cancel S-9 600 bspc RA-9 ) C-a (lctl rctl)) )                   ;; ) [ todo find a better use 
+  u【  (tap-hold 1 150 u (multi (macro S-8 ) (tap-hold 200 400 XX (macro S-9 ))))                           ;; (  ()
+  a】  (tap-hold 140 140 a (fork (macro-release-cancel S-9 600 bspc RA-9 ) C-a (lctl rctl)) )                   ;; ) [ todo find a better use 
   z$  (tap-hold 140 140 y (macro S-4))                                                                      ;; $
   w&  (tap-hold 140 140 w (multi (macro S-6 ) (tap-hold 200 800 XX (macro S-6 ))))                          ;; & &&
   d?  (tap-hold 140 140 d (multi @? (tap-hold 200 500 XX @? )))                                           ;; ? = S-[      i ? ??
