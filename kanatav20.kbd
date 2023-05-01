@@ -211,7 +211,7 @@
   @tab      @j!  @g˝  @u【  @a】  @z$  @w&  @b%  @d?  @l#  @k\  @q@  +    @rtw
   @atx      @cwn @s   @i[  @e]  @o'  @m/  @n   @t,  @r-  @hwn @ß-  @rtc
   @oss      @y`  @x|  @ü{  @ä}  @ö+  @p=  @f*  @,;< @.:> @v_~ @rsf
-            lmet lalt          (tap-hold  200 200 spc (fork @num @sym (rsft lsft)))
+            lmet lalt          (tap-hold  200 200 spc (fork @num @sym (rsft)))
 #|          @oml @oal           @nav   
  CTRL + SPACE + ESC => Exit KANATA immediatly
  lspace + rspace = AltGr = Enter (or backspace?)      |#                 
@@ -227,12 +227,52 @@
   _         @,:   7    8    9    del  tab  @srt @cde  @alc @mrc _
             _     _              _                  
 )
+(deffakekeys
+  ctl lctl
+  sft lsft
+  met lmet
+  alt lalt
+
+ ;; ;; Press all modifiers
+ ;; pal (multi
+ ;;       (on-press-fakekey ctl press)
+ ;;       (on-press-fakekey sft press)
+ ;;       (on-press-fakekey met press)
+ ;;       (on-press-fakekey alt press)
+ ;;     )
+ ;;
+ ;; ;; Release all modifiers
+ ;; ral (multi
+ ;;       (on-press-fakekey ctl release)
+ ;;       (on-press-fakekey sft release)
+ ;;       (on-press-fakekey met release)
+ ;;       (on-press-fakekey alt release)
+ ;;     )
+)
+
+
+(deffakekeys
+  atxdown (multi (layer-toggle numberstab) (on-press-fakekey alt press) (macro tab tab))
+  atxrelease (multi (release-layer numberstab	) (layer-switch base) (on-press-fakekey alt release))
+)
+(defalias
+  adn  (on-press-fakekey alt press)
+  aup  (on-press-fakekey alt release)
+  atp  (on-press-fakekey alt tap)
+  
+  atxd (on-press-fakekey atxdown press)
+  atxu (on-press-fakekey atxrelease press)
+  
+  
+ ;; pal (on-press-fakekey pal tap)
+ ;; ral (on-press-fakekey ral tap)
+)
 (deflayer numberstab
   esc       f1   @ff13   @ff14 f24
-  ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
-  _         @-_:  1    2    3  C-bspc esc home up   end  pgup pgdn      _       _
-  @sy1      left rght left rght 0    bspc left down rght bspc @fky      _
-  _         @,:   7    8    9    del  tab  @srt @cde  @alc @mrc _
+  ^         1    2     3     4     5      6    7    8    9    0    -    ´    bspc
+  _         @aup up    esc   esc   C-bspc esc  home up   end  pgup pgdn      _       _
+  @sy1      left down  rght  rght  0      bspc left down rght bspc @fky      _
+  _         @,:  down  down  down  del    tab  @srt @cde @alc @mrc _
             _     _              _                        
 )
   ;; Exit numfix with CAPS or HOLD SPACE or 7+9
@@ -324,7 +364,7 @@
   (   ,    ) ,
   (f  ,    ) f24
   (      . ) .
-  (   ,  . ) k
+  (   ,  . ) q
 )
 ;; mouse layer
 (defalias
@@ -415,7 +455,7 @@
   dp2 (dynamic-macro-play 2)
   dms dynamic-macro-record-stop
   
-  ;; alt tab - never use this
+  ;; alt tab - never use this - TODO try it on RDP
   at1 (multi lalt pgup)
   at2 (multi lalt pgup pgup)
   at3 (multi lalt pgup pgup pgup)
