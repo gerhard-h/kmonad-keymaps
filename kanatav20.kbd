@@ -232,40 +232,22 @@
   sft lsft
   met lmet
   alt lalt
-
- ;; ;; Press all modifiers
- ;; pal (multi
- ;;       (on-press-fakekey ctl press)
- ;;       (on-press-fakekey sft press)
- ;;       (on-press-fakekey met press)
- ;;       (on-press-fakekey alt press)
- ;;     )
- ;;
- ;; ;; Release all modifiers
- ;; ral (multi
- ;;       (on-press-fakekey ctl release)
- ;;       (on-press-fakekey sft release)
- ;;       (on-press-fakekey met release)
- ;;       (on-press-fakekey alt release)
- ;;     )
+  tabb tab
 )
 
-
-(deffakekeys
-  atxdown (multi (layer-toggle numberstab) (on-press-fakekey alt press) (macro tab tab))
-  atxrelease (multi (release-layer numberstab	) (layer-switch base) (on-press-fakekey alt release))
-)
 (defalias
-  adn  (on-press-fakekey alt press)
   aup  (on-press-fakekey alt release)
-  atp  (on-press-fakekey alt tap)
-  
-  atxd (on-press-fakekey atxdown press)
-  atxu (on-press-fakekey atxrelease press)
-  
-  
- ;; pal (on-press-fakekey pal tap)
- ;; ral (on-press-fakekey ral tap)
+	   
+  atxx 	(multi
+    (layer-toggle numberstab)
+    (on-press-fakekey alt press)
+    (on-press-fakekey-delay 50)
+    (on-press-fakekey tabb tap)
+    (on-press-fakekey tabb tap)
+    (on-release-fakekey-delay 50)
+    (on-release-fakekey alt release)   
+  )
+
 )
 (deflayer numberstab
   esc       f1   @ff13   @ff14 f24
@@ -467,7 +449,7 @@
   at9 (multi lalt pgup pgup pgup pgup pgup pgup pgup pgup pgup)
   ;;at0 (tap-dance 500 (A-tab (macro f24 r) (macro f24 t) (macro f24 z)) ) old verion of atm
   aty (multi @numtab lalt (macro tab) ) ;; alt tab by dbl_tap-hold k
-  atx (tap-hold 200 150 (multi lalt tab) (multi @numtab lalt (macro tab tab)) ) ;; alt tab by hold caps
+  atx (tap-hold 200 150 (multi lalt tab) @atxx ) ;; alt tab by hold caps
   ;;atm (tap-dance 700 (@at1 @at2 @at3 @at4) ) Sequence now works but is inferior to the number row mapping
   atm  (tap-dance 500 ( A-tab (macro A-(tab 90 tab )) (macro A-(tab 90 tab  90 tab )) (macro A-(tab 90 tab  90 tab  90 tab )) ))
   ;; not working on remote desktop atp  (tap-dance 500 ( (macro A-pgup) (macro A-(pgup 90 pgup )) (macro A-(pgup 90 pgup  90 pgup )) (macro A-(pgup 90 pgup  90 pgup  90 pgup )) ))
