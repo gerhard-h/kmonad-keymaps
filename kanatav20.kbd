@@ -241,10 +241,10 @@
   atxx 	(multi
     (layer-toggle numberstab)
     (on-press-fakekey alt press)
-    (on-press-fakekey-delay 50)
+    ;;(on-press-fakekey-delay 50)
     (on-press-fakekey tabb tap)
     (on-press-fakekey tabb tap)
-    (on-release-fakekey-delay 50)
+    ;;(on-release-fakekey-delay 50)
     (on-release-fakekey alt release)   
   )
 
