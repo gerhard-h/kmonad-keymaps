@@ -238,6 +238,7 @@
             lmet lalt           spc                           
 )
 (deflayer base
+;;****************   BASE   ********************************************************
 ;; TODO is @rtw / sft+space=@sym / @ech / @y` / ever used?  / is @^ec used for esc?
 ;; TODO did lmet, lalt not being one-shot / not incluing lctl solve any problems?
 ;; TODO dbl_tap-j = hold-q = SYM+Y = s+i+q = @
@@ -256,6 +257,7 @@
  lspace + rspace = Enter  / AltGr = Backspace      |#                 
 )
 (deflayer numbers
+;;****************   NUMBERS   ****************************************************
 ;; TODO caps to sym / C-bspc / at1 - atm  / A-prtsc / @fky never used!
 ;; TODO F14 space to bspc ever used? 
 ;; TEST atx with RDP
@@ -290,6 +292,7 @@
 
 )
 (deflayer numberstab
+;;****************   LEFT NAV   ********************************************************
   esc       f1   @ff13   @ff14 f24
   ^         1    2     3     4     5      6    7    8    9    0    -    ´    bspc
   _         @aup up    esc   esc   C-bspc esc  home up   end  pgup pgdn      _       _
@@ -299,6 +302,7 @@
 )
   ;; Exit numfix with CAPS or HOLD SPACE or 7+9
 (deflayer numfix
+;;****************   NUMBERS(fix)   ********************************************************
   esc       f1   @ff13   (tap-hold  200 200 spc @que) f24
   @^        @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld-next A-prtsc _
   _         @-_:  1    2    3  C-bspc esc  home up    end  pgup pgdn      _       _
@@ -307,6 +311,7 @@
             _     _              (tap-hold  200 200 spc @que)                  
 )
 (deflayer symbols
+;;****************   SYSMBOLS   ********************************************************
   _         f1   @ff13   @ff14 f24
   _         _    _    _    _    _    _    _    _    _    @atm lrld-next A-prtsc _
   _         @!   @˝   @【   @】   @$   @&   @%   @?   #    @\   @@    _    _         
@@ -323,6 +328,7 @@
             _    _              _
 )
 (deflayer ksymbols ;; macro and symbols triggered from the RIGHT side
+;;****************   MACRO   ********************************************************
   _         f1   @ff13   @ff14 f24
   _         @fashing @geb @iban  @plz _    _    _    _    _    _    _    _    _
   _         @cmdde   @˝   @【     @】   @tsc @&   @%   @?   #    @\   _    _    _         
@@ -331,6 +337,7 @@
             _        _                _ 
 )
 (deflayer fkeys ;;triggered with ß from numbers
+;;****************   F KEYS   ********************************************************
   esc       f1   @ff13   @ff14 f24
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  sldr bspc
   _         @-_: f1   f2   f3   f10  esc  home up    end  pgup pgdn _    _    
@@ -340,6 +347,7 @@
 )
 ;; TODO should mouse layer contain numpad? using QMK Mouse curreently
 (deflayer mouse
+;;****************   MOUSE   ********************************************************
   esc       f1   @ff13   @ff14 f24
   ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
   tab       XX   @slw @slw @slw XX  @quep @cll @ma↑ @clr z    q    +    #
@@ -348,6 +356,7 @@
             lmet lalt           @quep                           
 )
 (deflayer mouseslow
+;;****************   MOUSE   ********************************************************
   esc       f1   @ff13   @ff14 f24
   ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
   tab       XX   @slw @slw @slw XX  @quep @cll @ms↑ @clr z    q    +    #
