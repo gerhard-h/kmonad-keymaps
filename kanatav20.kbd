@@ -45,6 +45,30 @@
 ;; TODO ctrl + Z single key ?
 ;; INFO combine @tab with esc feels bad
 
+*** How to store status in local key (or F24) and query it with forkts
+(deflocalkeys-linux
+  colemak_enabled 555
+)
+
+(deffakekeys
+  colemak_enabled_helper colemak_enabled
+)
+
+(defalias
+  tgl (fork
+    (multi
+      (layer-switch colemak)
+      (on-press-fakekey colemak_enabled_helper press)
+    )
+    (multi
+      (layer-switch qwerty)
+      (release-key colemak_enabled)
+      (on-press-fakekey colemak_enabled_helper release) 
+    )
+    (colemak_enabled)
+  )
+)
+***
    INFO tap-dance-eager https://github.com/jtroo/kanata/issues/241 - does not make a big difference
 
    TIP dynamic macro support https://github.com/jtroo/kanata/issues/221
@@ -134,8 +158,24 @@
   ä    222
   <    226
 )
+;;(deflocalkeys-win
+;;  ;; -  ??d
+;;  ü    186
+;;  +    187
+;;  #    191
+;;  ö    192
+;;  ß    219
+;;  ^    220
+;;  ´    221
+;;  ä    222
+;;  <    226
+;;)
+;;(defalias ;; non wintercept
+;;  # \
+;;  ß -
+;;)
 (defalias
-  ;; shifted german keys
+  ;; shifted german keys - every standard definition  as (macro) to disable autorepeate if the key is use on tap-hold
   ! (macro S-1 )
   ˝ (macro S-2 )  ;; ˝ look-a-like is used because @" is no valid alias, to be displayed correctly in console requires a font that can - e.g. cascadia
   §	(macro S-3 )
@@ -148,7 +188,6 @@
   =	(macro S-0 )
   ? (macro S-ß )
   * (macro S-] )
-  .* S-]
   ' (macro S-\ )
   ; (macro S-, )
   : (macro S-. )
@@ -156,16 +195,15 @@
   > (macro S-102d )
   < (macro 102d  ) ;; not really needed but having @< and @> looks consistent
   + (macro ] )
-  .+ ] 
   ;; change dead keys in normal keys
   ´ (macro = spc)	  ;; ´ 
-  ` (unicode `)  ;; `
+  ` (unicode `)       ;; ` unicode also disables autorepeat
   ^ (unicode ^)       ;; ^ = \ - shifting @^ will produce an incorrect space now
   ° S-grv
   
   ;; AltGr german keys
   ~ (macro RA-] )
-  \\ RA-ß 
+  \\ RA-ß             ;; single Backslash to be used inside of certain macros
   \ (unicode \);;(macro RA-ß )
   ẞ (macro RA-S-ß )
   | (macro RA-102d )
@@ -178,20 +216,19 @@
   ² (macro RA-2 )
   ³ (macro RA-3 )
   µ (macro RA-m )
-  , (macro ,)
   
+  ;; Disable autorepeat
+  , (macro ,)
   f20 (macro f20)
   f19 (macro f19)
   ä (macro ')
   ü (macro [)
   ö (macro ;) 
-  # \
-  ß -
 )
 
-;; defsrc for iso german qwertz layout  
+;; defsrc for ansi german mine layout  
 ;; If you are looking for other keys, the file src/keys/mod.rs should hopefully provide some insight.
-;; z and y are not flipped positioning has no meaning but must be consistent with other layers
+;; z and y are FLIPPED, positioning has no meaning but must be consistent with other layers
 (defsrc
   esc       f1   f13   f14 f24
   ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
@@ -205,6 +242,8 @@
 ;; TODO did lmet, lalt not being one-shot / not incluing lctl solve any problems?
 ;; TODO dbl_tap-j = hold-q = SYM+Y = s+i+q = @
 ;; TODO ONLY c s i o t r h f p x ü ä ö g u a u z w d q have dbl_tap autorepeat
+;; F13 = right-B = macro & symbol layer (never used for symbols)
+;; F14 = left-Space & symbol layer / lsft+F14 = number layer
 ;;  @ech
   esc       f1   @ff13   @ff14 f24
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8   @9   @0   -    del  bspc
@@ -214,11 +253,11 @@
             lmet lalt          (tap-hold  200 200 spc (fork @num @sym (rsft)))
 #|          @oml @oal           @nav   
  CTRL + SPACE + ESC => Exit KANATA immediatly
- lspace + rspace = AltGr = Enter (or backspace?)      |#                 
+ lspace + rspace = Enter  / AltGr = Backspace      |#                 
 )
 (deflayer numbers
 ;; TODO caps to sym / C-bspc / at1 - atm  / A-prtsc / @fky never used!
-;; TODO F14 space to bspc ever used?
+;; TODO F14 space to bspc ever used? 
 ;; TEST atx with RDP
   esc       f1   @ff13   bspc f24
   @^        @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld-next A-prtsc _
@@ -227,6 +266,7 @@
   _         @,:   7    8    9    del  tab  @srt @cde  @alc @mrc _
             _     _              _                  
 )
+;; setting fakekeys for numberstab
 (deffakekeys
   ctl lctl
   sft lsft
@@ -236,7 +276,7 @@
 )
 
 (defalias
-  aup  (on-press-fakekey alt release)
+  aup  (on-press-fakekey alt release)  ;; to exit the alt-tab dialog but stay in the layer 
 	   
   atxx 	(multi
     (layer-toggle numberstab)
@@ -274,7 +314,7 @@
   _         @@   @|   @{   @}   @+   @=   @*   @<   @>   @~   _               
             _    _              ret
 )
-(deflayer vsymbols
+(deflayer vsymbols ;; macro and symbols triggered from the LEFT side
   _         f1   @ff13   @ff14 f24
   _         _    _    _    _    _    _    _    _    _    _    _    _    _   
   _  (unicode Ù) @˝   @【   @】   @$   @&   @%   @?   #    @\   _    _    _         
@@ -282,7 +322,7 @@
   _         @`   @|   @{   @}   @+   @=   @*   @<   @>   @~   _               
             _    _              _
 )
-(deflayer ksymbols
+(deflayer ksymbols ;; macro and symbols triggered from the RIGHT side
   _         f1   @ff13   @ff14 f24
   _         @fashing @geb @iban  @plz _    _    _    _    _    _    _    _    _
   _         @cmdde   @˝   @【     @】   @tsc @&   @%   @?   #    @\   _    _    _         
@@ -290,7 +330,7 @@
   _         @`       @|   @{     @}   @+   @=   @*   @<   @>   @~   _               
             _        _                _ 
 )
-(deflayer fkeys
+(deflayer fkeys ;;triggered with ß from numbers
   esc       f1   @ff13   @ff14 f24
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8    @9   @0   @sz  sldr bspc
   _         @-_: f1   f2   f3   f10  esc  home up    end  pgup pgdn _    _    
@@ -298,7 +338,7 @@
   _         @,   f7   f8   f9   f12  tab  @srt @cde  @alc @mrc _
        _    _               _             
 )
-;; TODO should mouse layer contain numpad? using QMK Mouse 
+;; TODO should mouse layer contain numpad? using QMK Mouse curreently
 (deflayer mouse
   esc       f1   @ff13   @ff14 f24
   ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
@@ -316,14 +356,12 @@
             lmet lalt           @quep
 )
 (defalias
-;;  chi (chord example d)
-;;  cho (chord example l)
-  chf (chord fkomma f)
-  ch, (chord fkomma ,)
-  ch. (chord fkomma .)
-  chx (chord xä x)
+  chf (chord fkomma f)  ;; F24
+  ch, (chord fkomma ,)  
+  ch. (chord fkomma .)  ;; Q alternative
+  chx (chord xä x)		;; sticky numbers
   chä (chord xä ä)
-  ch7 (chord exit79 7)
+  ch7 (chord exit79 7)	;; exit numbers
   ch9 (chord exit79 9)
 )
 (defchords exit79 300
@@ -417,7 +455,7 @@
   ;; outer/special keys
   ech (tap-hold 140 400 esc (multi (macro home ) (tap-hold 400 900 XX (macro end ) )) )
   ^ec  (tap-hold 200 300 esc (macro grv spc))
-  tab (tap-hold-press  200 400 tab lctl )
+  tab (tap-hold-press  200 400 tab lctl )	;; TODO is ctl ever used?
 ;;rtc (tap-hold-release 200 340 (multi ret sldr) lmet) this makes ret not appear
   rtc (tap-hold-release 200 5000 ret lctl)
   rtw (tap-hold-release 200 5000 ret lmet)
@@ -425,7 +463,7 @@
   ;; DBL-tap-Hold is not realy good for the frequently used symbol layer
   ;; nav (tap-dance 120 ((tap-hold  140 140 spc @num) (tap-hold  140 140 spc @sym) spc spc spc))
   ;; nav (tap-hold  200 200 (multi spc sldr) @num) works but would require awkward sequneces
-  nav (tap-hold  200 200 spc @num)
+  nav (tap-hold  200 200 spc @num)  ;; TODO not used no fork
   ral S-C-M-A-9 ;; release ALL key (BUG) kanata cannot release stuck keys from ahk (both tools with elevated rights) PRESS F24 FOR RELEASE ALL MODS
   ;;rcl (tap-hold-release 200 200 sldr rctl) ;; !! sldr is hard coded leader key fake key  !! dropped in favor of ocl
   
@@ -461,9 +499,9 @@
 ;;i[  (tap-dance 180 ((tap-hold-release 350 600 (macro i) lctl ) (tap-hold 200 300 (macro i i) (multi (macro RA-8 ) (tap-hold 200 700 XX (macro RA-9 ))))))
 ;;i[  (tap-hold-release 450 5000 i lctl)
 ;;  i[  (tap-hold 1000 1000 i (fork  (unicode i) lctl (lsft)))
-  i[  (tap-hold 1000 1000 i lctl )
+  i[  (tap-hold 500 500 i lctl )
 ;;t-  (tap-dance 340 ((tap-hold-release 200 400 t lctl ) (tap-hold 200 300 (macro t t) (macro -) ))) 
-  t, (tap-hold 1000 1000 t rctl )
+  t, (tap-hold 500 500 t rctl )
   ;;tC (tap-hold-release 180 900 t (multi lctl (layer-while-held cmodded)) )
   ;;tC  @chk
   ;; TODO test if Long_Tap_O or Dbl_Tap_Hold_L is used in practiser
@@ -531,7 +569,7 @@
   ü{  (tap-hold 140 140 ü (multi (macro RA-7 ) (tap-hold 200 500 XX (macro RA-0 ))))                      ;; { {}
   ;;ä}  (tap-hold-release-timeout 200 400 ä @syvv @} ) ;; not needed on v20 bc of second space bar
   ä}  (tap-hold 140 140 @chä @} )
-  ö+  (tap-hold 140 140 ö (multi (macro @.+ ) (tap-hold 200 500 XX (macro @.+ ))))                              ;; + = =  b + ++
+  ö+  (tap-hold 140 140 ö (multi @+ (tap-hold 200 500 XX @+ )))                              ;; + = =  b + ++
   p=  (tap-hold 140 140 p (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 1000 XX (macro S-0 ))  ))) ) ;; n = == === 
   f* (tap-hold 140 140 @chf (multi @* (tap-hold 1 800 XX S-+ )))  ;; * with long autorepeat - there must be a macro (@*) after the multi for the timeout do work
 ;;,F24 (tap-dance 140 ((tap-hold 10 100 , (multi (macro S-, ) (tap-hold 200 400 XX (macro bspc @lth ))) )  (tap-hold 10 100 f20 (macro @lth))))  ;; ,, = F24 , ; <
