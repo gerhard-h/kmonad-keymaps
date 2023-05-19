@@ -1,26 +1,34 @@
 #|
+ hanging ctrl key 
+ try to add lctl lctl to desktop swap makro
+ idea: also add rctl
+ idea: deactivate autohotkey (to see if the problem persists) 
+
+TODO caps words with cords on homerow shift or sft + fork space
+
 ;; FEATURES kanata                                       QMK                                              QMK minimal portable requirements
 ;; - Home row mods                                       (Y) but timing problems                          Fallback abc layer (Fallback = no kanata available)
 ;; - Autosymbol: Tap_Hold                                 y TAP_HOLD / MOD_TAP
 ;; -(Autosymbol: NO Dbl_Tap_Hold on Shift)                n also timing issues
 ;; -(Autosymbol: Dbl_Tap_Hold ONLY for SLOW KEYS q,.)     Y for all non modifiers
 ;; - Autosymbol: Dbl_Tap_Hold on non Shift modifiers      N                                                Fallback abc layer may (not) have this anyway
-;; -(Autosymbol: Dbl_Tap slowes Tap_Hold)				  Y no problem for non modifirers
+;; -(Autosymbol: Dbl_Tap slowes Tap_Hold)				  Y no problem for non modifiers
 ;; - Autosymbol: Long_Hold                                N                                               *Default Querty kanata layer
 ;; - Symbol layer (rarly used space + caps)               y                                                Fallback Symbol layer
-;; - V-key Symbol layer (more used)                      (y) is possible  but maybe not needed             Fallback Symbol layer
+;; - V-key Symbol layer (not used anymore)               (y) is possible  but maybe not needed             Fallback Symbol layer
 ;; - Nav/Number layer                                     y + sticky + dedicated layerkey                  Fallback number/nav layer
+;; - Shift fork layer                                    (y) tricky 
 ;; - one-shot layer (rarly used)                          y                                                On Fallback layers
 ;; - one-shot shift,                                      y                                                On Fallback layer
 ;; - alt tap otimization                                  inprogress
 ;; - F23 to Ahk Mouse layer								  y even better also with ahk highlight           *Mouse Layer
 ;; - F24 to Ahk hotkeys									  y
 ;; - leaderkey, wincompose and ahk integration           (y) no leaderkey but integrations still work
-;; - AHK hotstring special version                        y AHK hotstring
+;; - AHK hotstring Problems                              (y) less AHK hotstring
 ;; - extra thumbkeys can be supported (F13+)              extra thumbkeys can be handeled directly (mouse)
 ;; - F-Keys as normal                                     F-Key layer                                     *F-Key layer 
-;; - bspc on ö											  - on ö or - on , _on =
-;; - rdesktop alt-pgup controls not mappable              pgup can be remapped
+;; - bspc on ö	 (not used anymore) 					  - on ö or - on , _on =
+;; - rdesktop alt-pgup controls not mappable?             pgup can be remapped
 ;;
 ;; layers(6): normal,
 ;;            fallback normal,
@@ -28,7 +36,7 @@
 ;;            fallback number/nav
 ;;            mouse,
 ;;            F-key 
-;; Long Hold  might be anoying
+;; Long Hold  might be anoying anyway
 ;; RETRY via newest version and skip fallback:  ctl win alt mouse F13 space F14 LFKey left down right
 ;;     space/numbers 
 ;; TODO wich thumb activates nav? cursor keys seems to be used with right tumb
@@ -37,10 +45,8 @@
 ;; double leader keying (multi f24 sldr) inconsistencies with sldr 
 ;; INFO sldr key not used
 ;; INFO tap hold AltGr to f24 / AltGr and remove wincompose - AltGr is a bad positionend key anyway
-;; TODO test release-key | release-layer key release not always working
-;; TODO where to put delete (´)? nav+B rshift
-;; TODO (multi lrld f9) is not working lets try makro in next release
-;; INFO rpt just rpeats one key
+;; TODO where to put delete (´)? nav+B rshift nav+h
+;; INFO rpt just rpeats one key and no mods ... useless TODO rpt-any test
 ;; TODO revisit win and esc otimization / rsft - vs rsft esc  / @rtw vs esc_win
 ;; TODO ctrl + Z single key ?
 ;; INFO combine @tab with esc feels bad
@@ -124,8 +130,6 @@
 
   TEST 'mouse'  click with inception
   TEST Added: ensure all keys are released at the end of a dynamic macro
-  
-   todo del und - position
 |#
 (defcfg
    sequence-timeout 3000
@@ -204,7 +208,7 @@
   ;; AltGr german keys
   ~ (macro RA-] )
   \\ RA-ß             ;; single Backslash to be used inside of certain macros
-  \ (unicode \);;(macro RA-ß )
+  \ (unicode \)       ;;(macro RA-ß )
   ẞ (macro RA-S-ß )
   | (macro RA-102d )
   } (macro RA-0 )
@@ -230,7 +234,7 @@
 ;; If you are looking for other keys, the file src/keys/mod.rs should hopefully provide some insight.
 ;; z and y are FLIPPED, positioning has no meaning but must be consistent with other layers
 (defsrc
-  esc       f1   f13   f14 f24
+  esc       f1   f13  f14  f24
   ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
   tab       j    g    u    a    y    w    b    d    l    k    q    +    #
   caps      c    s    i    e    o    m    n    t    r    h    ß    ret
@@ -248,7 +252,7 @@
 ;;  @ech
   esc       f1   @ff13   @ff14 f24
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8   @9   @0   -    del  bspc
-  @tab      @j!  @g˝  @u【  @a】  @z$  @w&  @b%  @d?  @l#  @k\  @q@  +    @rtw
+  @tab      @j!  @g˝  @u【  @a】  @z$  @w&  @b%  @d?  @l#  @k\  @q@  f24  @rtw
   @atx      @cwn @s   @i[  @e]  @o'  @m/  @n   @t,  @r-  @hwn @ß-  @rtc
   @oss      @y`  @x|  @ü{  @ä}  @ö+  @p=  @f*  @,;< @.:> @v_~ @rsf
             lmet lalt          (tap-hold  200 200 spc (fork @num @sym (rsft)))
@@ -259,7 +263,7 @@
 (deflayer numbers
 ;;****************   NUMBERS   ****************************************************
 ;; TODO caps to sym / C-bspc / at1 - atm  / A-prtsc / @fky never used!
-;; TODO F14 space to bspc ever used? 
+;; TODO F14 space to bspc ever used?  h = del or h = esc
 ;; TEST atx with RDP
   esc       f1   @ff13   bspc f24
   @^        @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld-next A-prtsc _
@@ -303,23 +307,24 @@
   ;; Exit numfix with CAPS or HOLD SPACE or 7+9
 (deflayer numfix
 ;;****************   NUMBERS(fix)   ********************************************************
-  esc       f1   @ff13   (tap-hold  200 200 spc @que) f24
+  esc       f1   @ff13   (tap-hold  200 200 spc @quen) f24
   @^        @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld-next A-prtsc _
   _         @-_:  1    2    3  C-bspc esc  home up    end  pgup pgdn      _       _
-  @que      @.wn  @al4 @ct5 @sf6 0    bspc left down  rght bspc @fky      _
+  @quen     @.wn  @al4 @ct5 @sf6 0    bspc left down  rght bspc @fky      _
   _         @,:   @ch7 8    @ch9 del  tab  @srt @cde  @alc @mrc _
-            _     _              (tap-hold  200 200 spc @que)                  
+            _     _              (tap-hold  200 200 spc @quen)                  
 )
 (deflayer symbols
 ;;****************   SYSMBOLS   ********************************************************
-  _         f1   @ff13   @ff14 f24
-  _         _    _    _    _    _    _    _    _    _    @atm lrld-next A-prtsc _
+;; @numfix by tap 7+9 / |+} and release space
+  _         f1  @ff13 @ff14 f24
+  _         @at1 @at2 @at3 @at4 @at5 @at6 @at7 @at8 @at9 @atm lrld-next A-prtsc _
   _         @!   @˝   @【   @】   @$   @&   @%   @?   #    @\   @@    _    _         
-  @numfix   @`   @-_: @[   @]   @'   @/   S-.  ,    .    @_   -     _          
-  _         @@   @|   @{   @}   @+   @=   @*   @<   @>   @~   _               
+  @atr      @`   @-_: @[   @]   @'   @/   S-.  ,    .    @_   -     _          
+  _         @@   @ch| @{   @ch} @+   @=   @*   @<   @>   @~   _               
             _    _              ret
 )
-(deflayer vsymbols ;; macro and symbols triggered from the LEFT side
+(deflayer vsymbols ;; macro and symbols triggered from the LEFT side - not used on v20 and not complete (unicode Õ)... are for ahk integration
   _         f1   @ff13   @ff14 f24
   _         _    _    _    _    _    _    _    _    _    _    _    _    _   
   _  (unicode Ù) @˝   @【   @】   @$   @&   @%   @?   #    @\   _    _    _         
@@ -372,36 +377,45 @@
   chä (chord xä ä)
   ch7 (chord exit79 7)	;; exit numbers
   ch9 (chord exit79 9)
+  ch| (chord |} <)      ;; mods will be added later in defchord
+  ch} (chord |} 0)
 )
-(defchords exit79 300
+(defchords exit79 20
   (7      ) 7
   (   9   ) 9
-  (7  9   ) @que
+  (7  9   ) @quen
 )
-(defchords xä 300
+(defchords xä 20
   (x      ) x
   (   ä   ) ä
   (x  ä   ) @numfix
 )
+(defchords |} 140
+  (0      ) @}
+  (   <   ) @|
+  (0  <   ) @numfix
+)
+;; TODO make xä |}
 ;;(defchords example 300
 ;;  (d      ) d
 ;;  (   l   ) l
 ;;  (d  l   ) f18    ;;(multi f18 sldr) trigger ahk string replace
 ;;)
-(defchords fkomma 140
+(defchords fkomma 20
   (f       ) f
   (   ,    ) ,
   (f  ,    ) f24
   (      . ) .
   (   ,  . ) q
 )
-;; mouse layer
+;; mouse layer keys
 (defalias
   mal M-C-A-f
   mar M-C-A-d
   mam M-C-A-s
   que (layer-switch base)
-  numfix (layer-switch numfix)
+  quen (multi (layer-switch base) nlck)
+  numfix (multi (layer-switch numfix) nlck)
   quep (multi @que  A-C-M-p)
   mus (layer-switch mouse)
   slw (layer-toggle mouseslow)
@@ -420,23 +434,23 @@
   clr (multi @que @mar A-C-M-p)
   clm (multi @que @mam A-C-M-p)
   
-  
   ;; F23 (tap-hold 200 200 y (multi f24 sldr))  ;; works technically f24 triggers y itselft it must be hold for f24 ... feels bad
   yms (tap-hold-release 200 200 z (multi @mus A-C-M-p) )
   msz (multi @que (macro z))
   msu (multi @que (macro u))
   mso (multi @que (macro o))
-;;  msf (multi @que (macro mltp A-C-p))
- ;; msf (macro mlft 10 f17 100 lrld)
+  ;;  msf (multi @que (macro mltp A-C-p))
+  ;; msf (macro mlft 10 f17 100 lrld)
   msf (multi mlft f17  lrld)
   msd (multi @que (macro d))
   mss (multi @que (macro s))
   ;;Double Click is missing
   
+  ;; mouse layer keys end 
 )
 
 (defalias  
-  ;; switch-layer also possible for stickyness
+  ;; layer-toggle & switch-layer(stickyness)
   num (layer-toggle numbers)
   numtab (layer-toggle numberstab)
   sym (layer-toggle symbols)
@@ -447,7 +461,7 @@
   fky (layer-toggle fkeys)
   ff14 (tap-hold  200 200 spc (fork (layer-toggle symbols) (layer-toggle numbers) (rsft lsft)))
   ;;ff13 (one-shot 500 (layer-toggle ksymbols))
-  ff13 (layer-toggle ksymbols)
+  ff13 (layer-toggle ksymbols) ;; removing one-shot solves problems with accidentially hitting the key
   
   ;; one shot modifiers
   oss (one-shot 2000 lsft)
@@ -457,9 +471,11 @@
   
   ;; modifiers for numpad
   srt (tap-hold-release 200 5000 ret lsft)
-  cde (tap-hold-release 200 5000 (multi @mus A-C-M-p) lctl) ;; (multi @mus (macro f23)) lctl) to trigger ahk mouse
-  alc (tap-hold-release 200 5000 @mal lalt)
-  mrc (tap-hold-release 200 5000 @mar lmet)
+  ;; cde  (multi @mus (macro f23)) lctl) ;; to trigger ahk mouse  or ctl
+  ;; cde (tap-hold-release 200 5000 (multi @mus A-C-M-p) lctl) ;; to trigger kanata mouse layer & spotlight or ctl
+  cde lctl ;; kanata mouse not working with interception drivers
+  alc (tap-hold-release 200 5000 @mal lalt) ;; mouse lclick or alt
+  mrc (tap-hold-release 200 5000 @mar lmet) ;; mouse rclick or win
 
   ;; outer/special keys
   ech (tap-hold 140 400 esc (multi (macro home ) (tap-hold 400 900 XX (macro end ) )) )
@@ -476,6 +492,7 @@
   ral S-C-M-A-9 ;; release ALL key (BUG) kanata cannot release stuck keys from ahk (both tools with elevated rights) PRESS F24 FOR RELEASE ALL MODS
   ;;rcl (tap-hold-release 200 200 sldr rctl) ;; !! sldr is hard coded leader key fake key  !! dropped in favor of ocl
   
+  ;; dynamic-macro TODO test them
   dr0 (dynamic-macro-record 0)
   dr1 (dynamic-macro-record 1)
   dr2 (dynamic-macro-record 2)
@@ -484,7 +501,7 @@
   dp2 (dynamic-macro-play 2)
   dms dynamic-macro-record-stop
   
-  ;; alt tab - never use this - TODO try it on RDP
+  ;; alt tab - never used this - TODO try it on RDP
   at1 (multi lalt pgup)
   at2 (multi lalt pgup pgup)
   at3 (multi lalt pgup pgup pgup)
@@ -496,6 +513,7 @@
   at9 (multi lalt pgup pgup pgup pgup pgup pgup pgup pgup pgup)
   ;;at0 (tap-dance 500 (A-tab (macro f24 r) (macro f24 t) (macro f24 z)) ) old verion of atm
   aty (multi @numtab lalt (macro tab) ) ;; alt tab by dbl_tap-hold k
+  atr (multi @numtab lalt (macro tab) ) ;; atx for RDP
   atx (tap-hold 200 150 (multi lalt tab) @atxx ) ;; alt tab by hold caps
   ;;atm (tap-dance 700 (@at1 @at2 @at3 @at4) ) Sequence now works but is inferior to the number row mapping
   atm  (tap-dance 500 ( A-tab (macro A-(tab 90 tab )) (macro A-(tab 90 tab  90 tab )) (macro A-(tab 90 tab  90 tab  90 tab )) ))
@@ -531,6 +549,8 @@
   wn0 (tap-hold-release 200 340 0 lmet)  ;; unused because of Win+G gets triggered 
   9sy (tap-hold-release 200 340 9 @syv)  ;; unused because v is already mapped to do this
   ;;ght (tap-hold-release 200 240 rght rmet)  ;;works but not used
+  
+  ;; number aliases (n0-n9 for use inside other macros)
   n1 1
   n2 2
   n3 3
@@ -552,6 +572,8 @@
   8 (tap-hold 200 500 8 (macro S-8 )) ;;(tap-hold 200 300 8 (multi (macro S-8 ) (tap-hold 200 400 XX (macro bspc RA-8 ))) )
   9 (tap-hold 200 500 9 (macro S-9 )) ;;(tap-hold 200 300 9 (multi (macro S-9 ) (tap-hold 200 400 XX (macro bspc RA-9 ))) )
   0 0 ;;(tap-hold 10 100 0 (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 400 XX (macro S-0 ))  ))  ) )
+  
+  ;; normal keys
   sz (tap-hold 200 300 ß (multi (macro S-ß ) (tap-hold 200 500 XX (macro bspc RA-ß ))))
   ;; q (multi q sldr) eats the next key after q
   ;;q! (tap-hold 140 140 q (multi (macro S-1 ) (tap-hold 200 400 XX (macro bspc RA-q ))) )                 ;; q ! @
@@ -573,11 +595,11 @@
   q@  (tap-hold 140 140 q @@ ) 
   o'  (tap-hold 140 140 o (multi @' (tap-hold 200 800 XX @' )) )                         ;; ' ''
   m/  (tap-hold 140 140 (macro m) (multi (macro S-7 ) (tap-hold 200 800 XX (macro S-7 ))) )                 ;; / // TODO do we wont dbl_tap-hold keyrepeat
-  x|  (tap-hold 140 140 @chx (multi (macro RA-102d ) (tap-hold 200 800 XX (macro RA-102d ))) )               ;; | ||
+  x|  (tap-hold 1 140 @chx (multi (macro RA-102d ) (tap-hold 200 800 XX (macro RA-102d ))) )               ;; | ||
   y`  (tap-hold 140 140 z (multi @` (tap-hold 200 800 XX @´ )) )
   ü{  (tap-hold 140 140 ü (multi (macro RA-7 ) (tap-hold 200 500 XX (macro RA-0 ))))                      ;; { {}
   ;;ä}  (tap-hold-release-timeout 200 400 ä @syvv @} ) ;; not needed on v20 bc of second space bar
-  ä}  (tap-hold 140 140 @chä @} )
+  ä}  (tap-hold 1 140 @chä @} )
   ö+  (tap-hold 140 140 ö (multi @+ (tap-hold 200 500 XX @+ )))                              ;; + = =  b + ++
   p=  (tap-hold 140 140 p (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 1000 XX (macro S-0 ))  ))) ) ;; n = == === 
   f* (tap-hold 140 140 @chf (multi @* (tap-hold 1 800 XX S-+ )))  ;; * with long autorepeat - there must be a macro (@*) after the multi for the timeout do work
@@ -599,6 +621,7 @@
 
 
 (defalias  
+ ;; macros
  fashing (macro @n1 @n1 . @n1 @n1 . @n2 @n0 @n2 @n3 )
  geb (macro @n2 @n1 . @n1 @n2 . @n2 @n0 @n0 @n1 )
  iban (macro S-d  S-e  @n3 @n0 @n7 @n0 @n0 @n2 @n0 @n2 @n7 @n0 @n0 @n0 @n4 @n5 @n5 @n0 @n6 @n8 @n6 @n0 )
