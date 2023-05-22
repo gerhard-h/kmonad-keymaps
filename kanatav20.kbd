@@ -249,13 +249,14 @@ TODO caps words with cords on homerow shift or sft + fork space
 ;; TODO ONLY c s i o t r h f p x ü ä ö g u a u z w d q have dbl_tap autorepeat
 ;; F13 = right-B = macro & symbol layer (never used for symbols)
 ;; F14 = left-Space & symbol layer / lsft+F14 = number layer
+;; feat: rpt-any to be tested
 ;;  @ech
   esc       f1   @ff13   @ff14 f24
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8   @9   @0   -    del  bspc
   @tab      @j!  @g˝  @u【  @a】  @z$  @w&  @b%  @d?  @l#  @k\  @q@  f24  @rtw
   @atx      @cwn @s   @i[  @e]  @o'  @m/  @n   @t,  @r-  @hwn @ß-  @rtc
   @oss      @y`  @x|  @ü{  @ä}  @ö+  @p=  @f*  @,;< @.:> @v_~ @rsf
-            lmet lalt          (tap-hold  200 200 spc (fork @num @sym (rsft)))
+            lmet lalt           @nav
 #|          @oml @oal           @nav   
  CTRL + SPACE + ESC => Exit KANATA immediatly
  lspace + rspace = Enter  / AltGr = Backspace      |#                 
@@ -370,15 +371,18 @@ TODO caps words with cords on homerow shift or sft + fork space
             lmet lalt           @quep
 )
 (defalias
+  que (layer-switch base)
+  quen (multi (layer-switch base) nlck)
+  numfix (multi (layer-switch numfix) nlck)
   chf (chord fkomma f)  ;; F24
   ch, (chord fkomma ,)  
   ch. (chord fkomma .)  ;; Q alternative
   chx (chord xä x)		;; sticky numbers
   chä (chord xä ä)
   ch7 (chord exit79 7)	;; exit numbers
-  ch9 (chord exit79 9)
+  ch9 (tap-hold 1 200 (chord exit79 9) @quen)
   ch| (chord |} <)      ;; mods will be added later in defchord
-  ch} (chord |} 0)
+  ch} (tap-hold 1 200 (chord |} 0) (release-layer symbols))
 )
 (defchords exit79 20
   (7      ) 7
@@ -413,9 +417,6 @@ TODO caps words with cords on homerow shift or sft + fork space
   mal M-C-A-f
   mar M-C-A-d
   mam M-C-A-s
-  que (layer-switch base)
-  quen (multi (layer-switch base) nlck)
-  numfix (multi (layer-switch numfix) nlck)
   quep (multi @que  A-C-M-p)
   mus (layer-switch mouse)
   slw (layer-toggle mouseslow)
@@ -459,9 +460,14 @@ TODO caps words with cords on homerow shift or sft + fork space
   sy1 (one-shot 2000 (layer-toggle symbols))
   syk (layer-toggle ksymbols)
   fky (layer-toggle fkeys)
-  ff14 (tap-hold  200 200 spc (fork (layer-toggle symbols) (layer-toggle numbers) (rsft lsft)))
+  ff14 (tap-hold  200 200 spc (fork (multi (layer-toggle numbers) (layer-toggle symbols)) (layer-toggle numbers) (rsft lsft))) ;; LEFT sft + LEFT spc == numbers 
   ;;ff13 (one-shot 500 (layer-toggle ksymbols))
   ff13 (layer-toggle ksymbols) ;; removing one-shot solves problems with accidentially hitting the key
+  ;; DBL-tap-Hold is not realy good for the frequently used symbol layer
+  ;; nav (tap-dance 120 ((tap-hold  140 140 spc @num) (tap-hold  140 140 spc @sym) spc spc spc))
+  ;; nav (tap-hold  200 200 (multi spc sldr) @num) works but would require awkward sequneces
+  ;; nav (tap-hold  200 200 spc @num)  ;;  not used no fork
+  nav (tap-hold  200 200 spc (fork @num @sym (rsft))) ;; RIGHT sft + RIGHT spc == symbols
   
   ;; one shot modifiers
   oss (one-shot 2000 lsft)
@@ -485,10 +491,6 @@ TODO caps words with cords on homerow shift or sft + fork space
   rtc (tap-hold-release 200 5000 ret lctl)
   rtw (tap-hold-release 200 5000 ret lmet)
   rsd (tap-hold-release 200 240 @syv (multi rsft lsft)) ;; TODO not used ?! BUG rsft get ignored on RDesktop -> use lsft  or (multi rsft lsft) ?
-  ;; DBL-tap-Hold is not realy good for the frequently used symbol layer
-  ;; nav (tap-dance 120 ((tap-hold  140 140 spc @num) (tap-hold  140 140 spc @sym) spc spc spc))
-  ;; nav (tap-hold  200 200 (multi spc sldr) @num) works but would require awkward sequneces
-  nav (tap-hold  200 200 spc @num)  ;; TODO not used no fork
   ral S-C-M-A-9 ;; release ALL key (BUG) kanata cannot release stuck keys from ahk (both tools with elevated rights) PRESS F24 FOR RELEASE ALL MODS
   ;;rcl (tap-hold-release 200 200 sldr rctl) ;; !! sldr is hard coded leader key fake key  !! dropped in favor of ocl
   
