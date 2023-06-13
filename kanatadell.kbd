@@ -1,4 +1,4 @@
-#|
+#| FOR DELL NOTE BOOK
  hanging ctrl key 
  try to add lctl lctl to desktop swap makro
  idea: also add rctl
@@ -236,11 +236,11 @@ TODO caps words with cords on homerow shift or sft + fork space
 ;; z and y are FLIPPED, positioning has no meaning but must be consistent with other layers
 (defsrc
   esc       f1   f13  f14  f24
-  ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
-  tab       j    g    u    a    y    w    b    d    l    k    q    +    #
-  caps      c    s    i    e    o    m    n    t    r    h    ß    ret
-  lsft      z    x    ü    ä    ö    p    f    ,    .    v    rsft
-            lmet lalt           spc                           
+  ^         1    2    3    4    5    6    7    8    9    0    ß    ´    bspc  ;; ß or - ?  z/y ? DELL
+  tab       q    w    e    r    t    y    u    i    o    p    ü    +    #     ;; # moved
+  caps      a    s    d    f    g    h    j    k    l    ö    ä    ret
+  lsft      z    x    c    v    b    n    m    ,    .    -    rsft            ;; 102d not configured may put it at f24 position
+            lmet lalt           spc                          
 )
 (deflayer base
 ;;****************   BASE   ********************************************************
@@ -255,7 +255,7 @@ TODO caps words with cords on homerow shift or sft + fork space
   esc       f1   @ff13   @ff14 f24
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8   @9   @0   -    del  bspc
   @tab      @j!  @g˝  @u【  @a】  @z$  @w&  @b%  @d?  @l#  @k\  @q@  f24  @rtw
-  @atx      @cwn @s   @i[  @e]  @o'  @m/  @n   @t,  @r-  @hwn @ß-  ret
+  @atx      @cwn @s   @i[  @e]  @o'  @m/  @n   @t,  @r-  @hwn @ß-  @rtc         ;; DELL rtc
   @oss      @y` @chx| @ü{  @ä}  @ö+  @p=  @f*  @,;< @.:> @v_~ @rsf
             lmet lalt           @nav
 #|          @oml @oal           @nav   
