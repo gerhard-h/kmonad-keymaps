@@ -592,7 +592,8 @@ TODO caps words with cords on homerow shift or sft + fork space
   z$  (tap-hold 1 140 y (macro S-4))                                                                      ;; $
   w&  (tap-hold 1 140 w (multi (macro S-6 ) (tap-hold 200 800 XX (macro S-6 ))))                          ;; & &&
   d?  (tap-hold 1 140 d (multi @? (tap-hold 200 500 XX @? )))                                           ;; ? = S-[      i ? ??
-  k\  (tap-hold 1 140 k (multi @\ (tap-hold 200 800 XX @\ )) )  
+;;k\  (tap-hold 1 140 k (multi @\ (tap-hold 200 800 XX @\ )) )  ;; fast reponsive
+  k\  (tap-hold  1 100 (tap-dance-eager 100 (k (tap-hold 1 100 (macro k) (macro bspc @\ @\)) (tap-hold 1 100 (macro k k) k) )) (multi (macro @\ ) (tap-hold 1 800 XX (macro @\ ))) ) 
   aä  (tap-hold 1 120 a (macro-release-cancel ä 400 bspc S-= spc 600 bspc ä 600 bspc a 600 bspc))            ;; ä = '  `=S-]
   b%  (tap-hold 1 140 b  (macro S-5 ))
   l#  (tap-hold 1 140 l (macro # ))
