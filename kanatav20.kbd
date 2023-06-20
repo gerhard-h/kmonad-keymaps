@@ -130,6 +130,8 @@ TODO caps words with cords on homerow shift or sft + fork space
 
   TEST 'mouse'  click with inception
   TEST Added: ensure all keys are released at the end of a dynamic macro
+  
+  TEST like ,< use DBL-tap-Hold on more Long_Hold keys
 |#
 (defcfg
    sequence-timeout 3000
@@ -604,7 +606,9 @@ TODO caps words with cords on homerow shift or sft + fork space
   ;;ä}  (tap-hold-release-timeout 200 400 ä @syvv @} ) ;; not needed on v20 bc of second space bar
   ä}  (tap-hold 1 140 @chä @} )
   ö+  (tap-hold 1 140 ö (multi @+ (tap-hold 200 500 XX @+ )))                              ;; + = =  b + ++
-  p=  (tap-hold 1 140 p (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 1000 XX (macro S-0 ))  ))) ) ;; n = == === 
+;;p=  (tap-hold 1 240 p (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 1000 XX (macro S-0 ))  ))) ) ;; p = == === 
+  p=  (tap-hold 1 100 (tap-dance-eager 100 (p (tap-hold 1 100 (macro p) (multi (macro bspc S-0 S-0) (tap-hold 200 600 XX (macro S-0 )))) (tap-hold 1 100 (macro p p) p) )) (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 800 XX (macro S-0 ))  ))) )
+  
   f*  (tap-hold 1 140 @chf (multi @* (tap-hold 1 800 XX S-+ )))  ;; * with long autorepeat - there must be a macro (@*) after the multi for the timeout do work
 ;;,F24 (tap-dance 140 ((tap-hold 10 100 , (multi (macro S-, ) (tap-hold 200 400 XX (macro bspc @lth ))) )  (tap-hold 10 100 f20 (macro @lth))))  ;; ,, = F24 , ; <
 ;; .:> (tap-dance 140 ((tap-hold 10 100 . (multi (macro S-. ) (tap-hold 200 400 XX (macro bspc @gth ))) )  (tap-hold 10 100 (macro . .) (macro @gth)) (tap-hold 10 100 (macro . . .) .) ))  ;; . : >
