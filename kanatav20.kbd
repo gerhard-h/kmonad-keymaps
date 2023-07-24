@@ -1,8 +1,7 @@
 #|
- hanging ctrl key 
- try to add lctl lctl to desktop swap makro
- idea: also add rctl
- idea: deactivate autohotkey (to see if the problem persists) 
+ bug hanging ctrl key with AHK and RDP - (workaround) add lctl lctl to desktop swap makro
+ idea: implement a AHK funtionality to swap desktops without pressing ctl currently (multi lmet lalt ß)
+ idea: deactivate autohotkey (to see if the problem persists) but than desktop cycling won't work 
 
 TODO caps words with cords on homerow shift or sft + fork space
 
@@ -36,22 +35,22 @@ TODO caps words with cords on homerow shift or sft + fork space
 ;;            fallback number/nav
 ;;            mouse,
 ;;            F-key 
-;; Long Hold  might be anoying anyway
+;; TODO Long Hold  might be anoying anyway
 ;; RETRY via newest version and skip fallback:  ctl win alt mouse F13 space F14 LFKey left down right
 ;;     space/numbers 
-;; TODO wich thumb activates nav? cursor keys seems to be used with right tumb
+;; INFO wich thumb activates nav? cursor keys seems to be used with right tumb
 ;; BUG SC06F remap altgr to f24 in sharpkeys is not recognized by kanata
-;; if numtab is good make a key to flip remote desktop controls -> dont work bc of timings non remappable keys -> TODO retry wintercept
-;; double leader keying (multi f24 sldr) inconsistencies with sldr 
+;; INFO use atx numtab for remote desktop -> atr (problem with non remappable keys -> solved by wintercept)
+;; INFO double leader keying (multi f24 sldr) inconsistencies with sldr 
 ;; INFO sldr key not used
-;; INFO tap hold AltGr to f24 / AltGr and remove wincompose - AltGr is a bad positionend key anyway
-;; TODO where to put delete (´)? nav+B rshift nav+h
+;; INFO AltGr is a bad positionend key anyway - bspc but not used 
+;; TODO where to put delete? nav+B nav+h <- learn nav+h
 ;; INFO rpt just rpeats one key and no mods ... useless TODO rpt-any test
 ;; TODO revisit win and esc otimization / rsft - vs rsft esc  / @rtw vs esc_win
-;; TODO ctrl + Z single key ?
+;; TODO ctrl + Z single key ? but no need
 ;; INFO combine @tab with esc feels bad
 
-*** How to store status in local key (or F24) and query it with forkts
+****** How to store status in local key (or F24) and query it with forkts ******
 (deflocalkeys-linux
   colemak_enabled 555
 )
@@ -118,6 +117,7 @@ TODO caps words with cords on homerow shift or sft + fork space
    BUG AltGr + I = ahk menu seems to hang CTRL - SOLVED by excluding AltGr (and Ctrls) from defsrc 	 
   
   ;; Swap numbers and their symbols with respect to shift
+  ;; works, but no usecases :(
   (defoverrides
   (1) (lsft 1)
   (2) (lsft 2)
@@ -129,8 +129,7 @@ TODO caps words with cords on homerow shift or sft + fork space
   ) 
 
   TEST 'mouse'  click with inception
-  TEST Added: ensure all keys are released at the end of a dynamic macro
-  
+  TEST Added: ensure all keys are released at the end of a dynamic macro 
   TEST like ,< use DBL-tap-Hold on more Long_Hold keys
 |#
 (defcfg
@@ -286,8 +285,11 @@ TODO caps words with cords on homerow shift or sft + fork space
 )
 
 (defalias
+;;**************** LEFT HAND COURSOR KEYS by Using aup *********************************************
   aup  (on-press-fakekey alt release)  ;; to exit the alt-tab dialog but stay in the layer 
-	   
+
+  dsk (multi lmet lalt ß)  ;; AHK desktop switch must use MODS to be active within RDP  SYMBOL+M 
+  
   atxx 	(multi
     (layer-toggle numberstab)
     (on-press-fakekey alt press)
@@ -300,7 +302,8 @@ TODO caps words with cords on homerow shift or sft + fork space
 
 )
 (deflayer numberstab
-;;****************   LEFT NAV   ********************************************************
+;;****************   LEFT HAND COURSOR KEYS by Using aup   ********************************************************
+;; TODO How usefull are the esc Keys?
   esc       f1   @ff13   @ff14 f24
   ^         1    2     3     4     5      6    7    8    9    0    -    ´    bspc
   _         @aup up    esc   esc   C-bspc esc  home up   end  pgup pgdn      _       _
@@ -324,7 +327,7 @@ TODO caps words with cords on homerow shift or sft + fork space
   _         f1  @ff13 @ff14 f24
   _         @at1 @at2 @at3 @at4 @at5 @at6 @at7 @at8 @at9 @atm lrld-next A-prtsc _
   _         @!   @˝   @【   @】   @$   @&   @%   @?   #    @\   @@    _    _         
-  @atr      @`   @-_: @[   @]   @'   @/   S-.  ,    .    @_   -     _          
+  @atr      @`   @-_: @[   @]   @'   @dsk   S-.  ,    .    @_   -     _          
   _         @@   @ch| @{   @ch} @+   @=   @*   @<   @>   @~   _               
             _    _              ret
 )
@@ -518,7 +521,7 @@ TODO caps words with cords on homerow shift or sft + fork space
   at9 (multi lalt pgup pgup pgup pgup pgup pgup pgup pgup pgup)
   ;;at0 (tap-dance 500 (A-tab (macro f24 r) (macro f24 t) (macro f24 z)) ) old verion of atm
   aty (multi @numtab lalt (macro tab) ) ;; alt tab by dbl_tap-hold k
-  atr (multi @numtab lalt (macro tab) ) ;; atx for RDP
+  atr (multi @numtab lalt (macro pgup) ) ;; atx for RDP
   atx (tap-hold 200 150 (multi lalt tab) @atxx ) ;; alt tab by hold caps
   ;;atm (tap-dance 700 (@at1 @at2 @at3 @at4) ) Sequence now works but is inferior to the number row mapping
   atm  (tap-dance 500 ( A-tab (macro A-(tab 90 tab )) (macro A-(tab 90 tab  90 tab )) (macro A-(tab 90 tab  90 tab  90 tab )) ))
