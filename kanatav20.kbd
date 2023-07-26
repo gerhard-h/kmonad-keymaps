@@ -1,40 +1,48 @@
 #|
  bug hanging ctrl key with AHK and RDP - (workaround) add lctl lctl to desktop swap makro
- idea: implement a AHK funtionality to swap desktops without pressing ctl currently (multi lmet lalt ß)
+ idea (implemented): AHK funtionality to swap desktops without pressing ctl currently (multi lmet lalt ß)
  idea: deactivate autohotkey (to see if the problem persists) but than desktop cycling won't work 
+ 
+ ***** ALT-Tab **************************
+ caps alt-tab x1
+ caps-hold WASD alt-tab selection 
+ J/Q do depress alt to have WASD cursor keys
+ shift caps = S-alt-tab = Cycle though all windows backward (all desktops)
+ Lspace caps = RDP replace tab with pgup
+ ctl caps = keep selection screen open => useless caps words insteadrr
+*****************************************
 
-TODO caps words with cords on homerow shift or sft + fork space
+INFO caps words = shift + Lspace (no chords)
+
+TODO ] = F24 = f+, not used 
+TODO + = DEL not used
+TODO Numberrow - not used
+TODO space+w = tap ^ = ESC not used
 
 ;; FEATURES kanata                                       QMK                                              QMK minimal portable requirements
 ;; - Home row mods                                       (Y) but timing problems                          Fallback abc layer (Fallback = no kanata available)
-;; - Autosymbol: Tap_Hold                                 y TAP_HOLD / MOD_TAP
+;; - Autosymbol: Tap_Hold                                 y TAP_HOLD / MOD_TAP                            Fallback abc (but not VIA) => Fallback Symbol layer
 ;; -(Autosymbol: NO Dbl_Tap_Hold on Shift)                n also timing issues
 ;; -(Autosymbol: Dbl_Tap_Hold ONLY for SLOW KEYS q,.)     Y for all non modifiers
-;; - Autosymbol: Dbl_Tap_Hold on non Shift modifiers      N                                                Fallback abc layer may (not) have this anyway
+;; - Autosymbol: Dbl_Tap_Hold on non Shift modifiers      N                                               
 ;; -(Autosymbol: Dbl_Tap slowes Tap_Hold)				  Y no problem for non modifiers
-;; - Autosymbol: Long_Hold                                N                                               *Default Querty kanata layer
-;; - Symbol layer (rarly used space + caps)               y                                                Fallback Symbol layer
-;; - V-key Symbol layer (not used anymore)               (y) is possible  but maybe not needed             Fallback Symbol layer
-;; - Nav/Number layer                                     y + sticky + dedicated layerkey                  Fallback number/nav layer
+;; - Autosymbol: Long_Hold                                N                                               
+;; - Symbol layer (rarly used space + caps)               y                                               Fallback Symbol layer (with dedicated key)
+;; - V-key Symbol layer (not used anymore)               (y) is possible  but maybe not needed             
+;; - Nav/Number layer                                     y + sticky + dedicated layerkey                 Fallback number/nav layer (with SPACE)
 ;; - Shift fork layer                                    (y) tricky 
-;; - one-shot layer (rarly used)                          y                                                On Fallback layers
-;; - one-shot shift,                                      y                                                On Fallback layer
-;; - alt tap otimization                                  inprogress
+;; - one-shot layer (rarly used)                          y                                               
+;; - one-shot shift,                                      y                                               
+;; - alt tap otimization                                  ?												  map caps to ALT-Tab or SYSMBOLS
 ;; - F23 to Ahk Mouse layer								  y even better also with ahk highlight           *Mouse Layer
-;; - F24 to Ahk hotkeys									  y
+;; - F24 to Ahk hotkeys									  y												  ?
 ;; - leaderkey, wincompose and ahk integration           (y) no leaderkey but integrations still work
 ;; - AHK hotstring Problems                              (y) less AHK hotstring
 ;; - extra thumbkeys can be supported (F13+)              extra thumbkeys can be handeled directly (mouse)
 ;; - F-Keys as normal                                     F-Key layer                                     *F-Key layer 
 ;; - bspc on ö	 (not used anymore) 					  - on ö or - on , _on =
-;; - rdesktop alt-pgup controls not mappable?             pgup can be remapped
+;; - rdesktop alt-pgup requires interception?             pgup can be remapped
 ;;
-;; layers(6): normal,
-;;            fallback normal,
-;;            fallback symbol
-;;            fallback number/nav
-;;            mouse,
-;;            F-key 
 ;; TODO Long Hold  might be anoying anyway
 ;; RETRY via newest version and skip fallback:  ctl win alt mouse F13 space F14 LFKey left down right
 ;;     space/numbers 
@@ -466,9 +474,24 @@ TODO caps words with cords on homerow shift or sft + fork space
   sy1 (one-shot 2000 (layer-toggle symbols))
   syk (layer-toggle ksymbols)
   fky (layer-toggle fkeys)
-  ff14 (tap-hold  200 200 spc (fork (multi (layer-toggle numbers) (layer-toggle symbols)) (layer-toggle numbers) (rsft lsft))) ;; LEFT sft + LEFT spc == numbers 
+  cwd (caps-word-custom 2000 
+		(a b c d e f g h i j k l m n o p q r s t u v w x y z ä ü ö)
+	    (kp0 kp1 kp2 kp3 kp4 kp5 kp6 kp7 kp8 kp9 bspc del up down left rght rsft lsft -) ;; rsft lsft must be exluded as they are used for triggering caps words
+  )
+  ff14 (tap-hold  200 200 
+  		(fork 
+			spc
+			@cwd
+			(rsft lsft)	
+		) 
+		(fork 
+			(multi (layer-toggle numbers) (layer-toggle symbols))
+			(layer-toggle numbers)
+			(lsft)
+	    )
+  ) ;; LEFT sft + LEFT spc == numbers   
   ;;ff13 (one-shot 500 (layer-toggle ksymbols))
-  ff13 (layer-toggle ksymbols) ;; removing one-shot solves problems with accidentially hitting the key
+  ff13 (layer-toggle ksymbols) ;; MACRO+SYSMBOLS TIP removing one-shot solves problems with hitting the key by accident
   ;; DBL-tap-Hold is not realy good for the frequently used symbol layer
   ;; nav (tap-dance 120 ((tap-hold  140 140 spc @num) (tap-hold  140 140 spc @sym) spc spc spc))
   ;; nav (tap-hold  200 200 (multi spc sldr) @num) works but would require awkward sequneces
@@ -547,7 +570,7 @@ TODO caps words with cords on homerow shift or sft + fork space
   hwn (tap-hold-release 350 5000 h lmet)
   ß-  (tap-hold 1 180 ß (macro - ) )                                                                                ;; ß = [
   cwn (tap-hold 1000 1000 c lmet)
-  r- (tap-hold-release 450 5000 r lalt)
+  r- (tap-hold-release 450 1000 r lalt)
   rsf (tap-hold-release 350 500 - rsft)
   ;; number layer home row mods
   sf6 (tap-hold-release 200 300 6 lsft)
