@@ -576,7 +576,7 @@ TODO space+w = tap ^ = ESC not used
   ;; (one-shot 500 lsft))  ;;(multi lsft (layer-while-held smodded) )) ;;  INFO timing of 1 avoids keyrepeat
   ;;e] (multi 
  e]	(multi
-      (on-idle-fakekey nosft_fk release 1 )
+      (on-idle-fakekey nosft_fk release 222 )
       (tap-hold 1 160 (fork e f (lctl rctl)) lsft) 
  )
 ;;	(on-press-fakekey nosft_fk press)
@@ -585,14 +585,17 @@ TODO space+w = tap ^ = ESC not used
   n (tap-hold 1 160 
 	(fork
 	 n
-	 (unicode n)
-	 (nosft_fk)
+	 (multi
+	     (unicode n)
+		 (on-press-fakekey nosft_fk release)
+	 )
+	 (f22)
 	)
   rsft) ;; (fork n (unicode b) (rsft) ) rsft)  ;;(one-shot 500 rsft)) ;;(multi rsft lsft)) ;; this clean form avoids US -> Ujs bug when typing fast ;; BUG rsft has bugs on RDesktop multi fixes fjf->F but jfj->j stays
 ;;i[  (tap-dance 180 ((tap-hold-release 350 600 (macro i) lctl ) (tap-hold 200 300 (macro i i) (multi (macro RA-8 ) (tap-hold 200 700 XX (macro RA-9 ))))))
 ;;i[  (tap-hold-release 450 5000 i lctl)
 ;;  i[  (tap-hold 1000 1000 i (fork  (unicode i) lctl (lsft)))
-  i[  (multi (on-press-fakekey nosft_fk press) (tap-hold 500 500 (fork i (macro (unicode e)(unicode i)) (lsft) ) lctl ) (on-idle-fakekey nosft_fk release 1 ))
+  i[  (multi (on-press-fakekey nosft_fk press) (tap-hold 500 500 (fork i (macro (unicode e)(unicode i)) (lsft) ) lctl ) )
 ;;t-  (tap-dance 340 ((tap-hold-release 200 400 t lctl ) (tap-hold 200 300 (macro t t) (macro -) ))) 
   t, (tap-hold 500 500 t rctl )
   ;;tC (tap-hold-release 180 900 t (multi lctl (layer-while-held cmodded)) )
