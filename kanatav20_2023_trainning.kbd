@@ -254,7 +254,7 @@ TODO space+w = tap ^ = ESC not used
 (defsrc
   esc       f1   f13  f14  f24
   ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
-  tab       j    z    u    a    y    p    b    d    l    w    q    +    #
+  tab       j    z    u    a    y    w    b    d    l    p    q    +    #
   caps      c    s    i    e    o    m    n    t    r    h    ß    ret
   lsft      v    x    ü    ä    ö    g    f    ,    .    k    rsft
             lmet lalt           spc                           
@@ -284,7 +284,7 @@ TODO space+w = tap ^ = ESC not used
 ;;****************   typing   ********************************************************
   esc       f1   @ff13   @ff14 f24
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8   @9   @0   -    del  bspc
-  @tab      j    z     u    a    y    p    b    d    l    w   q    f24  @rtw
+  @tab      j    z     u    a    y    w    b    d    l    p   q    f24  @rtw
   @atx      c    s     i    e    o    m    n    t    r    h   @ß-  ret
   @oss      v    x    @ü{  @ä}  @ö+   g    f   @,;< @.:> @y_~ @rsf
             lmet lalt           @nav              
@@ -673,10 +673,10 @@ TODO space+w = tap ^ = ESC not used
   u【  (tap-hold 1 150 u (multi (macro S-8 ) (tap-hold 200 400 XX (macro S-9 ))))                           ;; (  ()
   a】  (tap-hold 1 140 a (fork (macro-release-cancel S-9 600 bspc RA-9 ) C-a (lctl rctl)) )                   ;; ) [ todo find a better use 
   z$  (tap-hold 1 140 z (macro S-4))                                                                      ;; $
-  w&  (tap-hold 1 140 p (multi (macro S-6 ) (tap-hold 200 800 XX (macro S-6 ))))                          ;; & &&
+  w&  (tap-hold 1 140 w (multi (macro S-6 ) (tap-hold 200 800 XX (macro S-6 ))))                          ;; & &&
   d?  (tap-hold 1 140 d (multi @? (tap-hold 200 500 XX @? )))                                           ;; ? = S-[      i ? ??
 ;;k\  (tap-hold 1 140 k (multi @\ (tap-hold 200 800 XX @\ )) )  ;; fast reponsive
-  k\  (tap-hold  1 100 (tap-dance-eager 100 (w (tap-hold 1 100 (macro w) (macro bspc @\ @\)) (tap-hold 1 100 (macro w w) w) )) (multi (macro @\ ) (tap-hold 1 800 XX (macro @\ ))) ) 
+  k\  (tap-hold  1 100 (tap-dance-eager 100 (p (tap-hold 1 100 (macro p) (macro bspc @\ @\)) (tap-hold 1 100 (macro p p) p) )) (multi (macro @\ ) (tap-hold 1 800 XX (macro @\ ))) ) 
   aä  (tap-hold 1 120 a (macro-release-cancel ä 400 bspc S-= spc 600 bspc ä 600 bspc a 600 bspc))            ;; ä = '  `=S-]
   b%  (tap-hold 1 140 b  (macro S-5 ))
   l#  (tap-hold 1 140 l (macro # ))
