@@ -153,11 +153,9 @@ TODO space+w = tap ^ = ESC not used
   ;; Using a binary compiled with the cmd feature enabled, uncomment below to
   ;; enable command execution:
   danger-enable-cmd yes
-  ;; are there usecases? for cmd
-  ;; process-unmapped-keys no ;; yes does not help with japanese keys ; flipped to no may help with RDP
+  ;;usecases for cmd: current date
+  ;; process-unmapped-keys no ;; yes does not help with japanese keys ; flipped to no did not help with RDP
   process-unmapped-keys no
-  ;; Intl1 KEY_RO ro
-  ;; CHANGES Removed onshot-mods and ctrl-keys to make Remotedesktop not stick ctl 
 )
 (deflocalkeys-wintercept
   -    191
@@ -170,10 +168,11 @@ TODO space+w = tap ^ = ESC not used
   ´    187
   ä    222
   <    226
-  ;;- 555 does not work with interception
+  ;;- 555 custom numbers does not work with interception
 )
 (deffakekeys
-  nosft_fk f22
+  nosft_fk f22  ;; unused
+  to-base (layer-switch base)
 )
 ;;(deflocalkeys-win
 ;;  ;; -  ??d
@@ -192,6 +191,11 @@ TODO space+w = tap ^ = ESC not used
 ;;  ß -
 ;;)
 (defalias
+  ;; alias to cancel tap-hold keys if typing rapidly but restore after a shord idle period
+  tp (multi
+    (layer-switch typing)
+    (on-idle-fakekey to-base tap 35)
+  )
   ;; shifted german keys - every standard definition  as (macro) to disable autorepeate if the key is use on tap-hold
   ! (macro S-1 )
   ˝ (macro S-2 )  ;; ˝ look-a-like is used because @" is no valid alias, to be displayed correctly in console requires a font that can - e.g. cascadia
@@ -268,12 +272,22 @@ TODO space+w = tap ^ = ESC not used
   esc       f1   @ff13   @ff14 f24
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8   @9   @0   -    del  bspc
   @tab      @j!  @g˝  @u【  @a】  @z$  @w&  @b%  @d?  @l#  @k\  @q@  f24  @rtw
-  @atx      @cwn @s   @i[  @e]  @o'  @m/  @n   @t,  @r-  @hwn @ß-  @ret22
+  @atx      @cwn @s   @i[  @e]  @o'  @m/  @n   @t,  @r-  @hwn @ß-  ret
   @oss      @v` @chx| @ü{  @ä}  @ö+  @p=  @f*  @,;< @.:> @y_~ @rsf
+            @oml @oal           @nav   
+#|
             lmet lalt           @nav
-#|          @oml @oal           @nav   
  CTRL + SPACE + ESC => Exit KANATA immediatly
- lspace + rspace = Enter  / AltGr = Backspace      |#                 
+ lspace + rspace = Enter  / AltGr = Backspace      |#
+)
+(deflayer typing
+;;****************   typing   ********************************************************
+  esc       f1   @ff13   @ff14 f24
+  @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8   @9   @0   -    del  bspc
+  @tab      j    g     u    a    z    w    b    d    l    k   q    f24  @rtw
+  @atx      c    s     i    e    o    m    n    t    r    h   @ß-  ret
+  @oss      v    x    @ü{  @ä}  @ö+   p    f   @,;< @.:> @y_~ @rsf
+            lmet lalt           @nav              
 )
 (deflayer numbers
 ;;****************   NUMBERS   ****************************************************
@@ -283,7 +297,7 @@ TODO space+w = tap ^ = ESC not used
   esc       f1   @ff13   bspc f24
   @^        @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld-next A-prtsc _
   _         @-_:  1    2    3  C-bspc esc  home up    end  pgup pgdn      _       _
-  @sy1      @.wn  @al4 @ct5 @sf6 0    @fbs left down  rght del  @fky      _
+  @sy1      @.wn  @al4 @ct5 @sf6 0    bspc left down  rght del  @fky      _
   _         @,:   7    8    9    del  tab  @srt @cde  @alc @mrc _
             _     _              _                  
 )
@@ -299,6 +313,8 @@ TODO space+w = tap ^ = ESC not used
 (defalias
 ;;**************** LEFT HAND COURSOR KEYS by Using aup *********************************************
   aup  (on-press-fakekey alt release)  ;; to exit the alt-tab dialog but stay in the layer 
+
+;; fbs and are examples to deactivate a fakekey but not needed anymore
   fbs  (multi
 		(on-press-fakekey nosft_fk release)
 		bspc
@@ -349,7 +365,7 @@ TODO space+w = tap ^ = ESC not used
   _         @!   @˝   @【   @】   @$   @&   @%   @?   #    @\   @@    _    _         
   @atr      @`   @-_: @[   @]   @'   @dsk   S-.  ,    .    @_   -     _          
   _         @@   @ch| @{   @ch} @+   @=   @*   @<   @>   @~   _               
-            _    _              @ret22
+            _    _              ret
 )
 (deflayer vsymbols ;; macro and symbols triggered from the LEFT side - not used on v20 and not complete (unicode Õ)... are for ahk integration
   _         f1   @ff13   @ff14 f24
@@ -495,7 +511,8 @@ TODO space+w = tap ^ = ESC not used
 	    (1 2 3 bspc del up down left rght lsft -) ;; lsft must be exluded as they are used for triggering caps words
   )
   ff14 (tap-hold  200 200 
-  		(fork 
+        (multi	
+		(fork 
 			(fork 
 			   spc
 			   @cwd
@@ -503,23 +520,20 @@ TODO space+w = tap ^ = ESC not used
 			)
 			@cwl
 			(lsft)	
-		) 
+		) )
 		(fork 
 			(multi (layer-toggle numbers) (layer-toggle symbols))
 			(layer-toggle numbers)
 			(lsft)
 	    )
-  ) ;; LEFT sft + LEFT spc == numbers   
+  ) ;; LEFT sft + LEFT spc == numbers
   ;;ff13 (one-shot 500 (layer-toggle ksymbols))
   ff13 (multi f21 (layer-toggle ksymbols)) ;; MACRO+SYSMBOLS TIP removing one-shot solves problems with hitting the key by accident
   ;; DBL-tap-Hold is not realy good for the frequently used symbol layer
   ;; nav (tap-dance 120 ((tap-hold  140 140 spc @num) (tap-hold  140 140 spc @sym) spc spc spc))
   ;; nav (tap-hold  200 200 (multi spc sldr) @num) works but would require awkward sequneces
   ;; nav (tap-hold  200 200 spc @num)  ;;  not used no fork
-  nav   (multi
-		(on-press-fakekey nosft_fk release)
-		(tap-hold  200 200 spc (fork @num @sym (rsft))) ;; RIGHT sft + RIGHT spc == symbols
-  )
+  nav   (tap-hold  200 200 spc (fork @num @sym (rsft))) ;; RIGHT sft + RIGHT spc == symbols  
   ;; one shot modifiers
   oss (one-shot 2000 lsft)
   ocl (one-shot 2000 lctl) 
@@ -574,28 +588,33 @@ TODO space+w = tap ^ = ESC not used
 
   ;; *** HOME ROW MODS ***
   ;; (one-shot 500 lsft))  ;;(multi lsft (layer-while-held smodded) )) ;;  INFO timing of 1 avoids keyrepeat
-  ;;e] (multi 
- e]	(multi
-      (on-idle-fakekey nosft_fk release 222 )
-      (tap-hold 1 160 (fork e f (lctl rctl)) lsft) 
- )
-;;	(on-press-fakekey nosft_fk press)
-;;  ) 
+ 
+;; e]	(multi
+;;      (on-idle-fakekey nosft_fk release 222 )
+;;      (tap-hold 1 160 (fork e f (lctl rctl)) lsft) 
+;; )
+  e] (tap-hold 1 160 (fork e f (lctl rctl)) lsft)
+  n (tap-hold 1 160 n rsft)
 ;;n   (tap-hold-release 1 140 (fork n (unicode n) (rsft) )(one-shot 400 rsft) )
-  n (tap-hold 1 160 
-	(fork
-	 n
-	 (multi
-	     (unicode n)
-		 (on-press-fakekey nosft_fk release)
-	 )
-	 (f22)
-	)
-  rsft) ;; (fork n (unicode b) (rsft) ) rsft)  ;;(one-shot 500 rsft)) ;;(multi rsft lsft)) ;; this clean form avoids US -> Ujs bug when typing fast ;; BUG rsft has bugs on RDesktop multi fixes fjf->F but jfj->j stays
+;;  n (tap-hold 1 160 
+;;	(fork
+;;	 n
+;;	 (multi
+;;	     (unicode n)
+;;		 (on-press-fakekey nosft_fk release)
+;;	 )
+;;	 (f22)
+;;	)
+;;  rsft) ;; (fork n (unicode b) (rsft) ) rsft)  ;;(one-shot 500 rsft)) ;;(multi rsft lsft)) ;; this clean form avoids US -> Ujs bug when typing fast ;; BUG rsft has bugs on RDesktop multi fixes fjf->F but jfj->j stays
 ;;i[  (tap-dance 180 ((tap-hold-release 350 600 (macro i) lctl ) (tap-hold 200 300 (macro i i) (multi (macro RA-8 ) (tap-hold 200 700 XX (macro RA-9 ))))))
 ;;i[  (tap-hold-release 450 5000 i lctl)
 ;;  i[  (tap-hold 1000 1000 i (fork  (unicode i) lctl (lsft)))
-  i[  (multi (on-press-fakekey nosft_fk press) (tap-hold 500 500 (fork i (macro (unicode e)(unicode i)) (lsft) ) lctl ) )
+  
+  
+;;i[  (multi (on-press-fakekey nosft_fk press) (tap-hold 500 500 (fork i (macro (unicode e)(unicode i)) (lsft) ) lctl ) )
+  i[  (multi                                   (tap-hold 500 500 (fork i (macro (unicode e)(unicode i)) (lsft) ) lctl ) @tp )
+  
+  
 ;;t-  (tap-dance 340 ((tap-hold-release 200 400 t lctl ) (tap-hold 200 300 (macro t t) (macro -) ))) 
   t, (tap-hold 500 500 t rctl )
   ;;tC (tap-hold-release 180 900 t (multi lctl (layer-while-held cmodded)) )
@@ -687,8 +706,6 @@ TODO space+w = tap ^ = ESC not used
   -_:  (tap-hold  1 100 (tap-dance 140 (/   (tap-hold 10 100 (macro / /)  @:) (tap-hold 10 100 (macro / / /) /) )) (multi (macro S-/ ) (tap-hold 200 800 XX (macro bspc S-. ))) )  ;; - _ :
   y_~  (tap-hold  1 140 (tap-dance-eager 140 (z (tap-hold 1 100 (macro z) (macro bspc @\~)) (tap-hold 1 100 (macro z z) z) )) (multi (macro S-/ ) (tap-hold 1 800 XX (macro bspc RA-] ))) )  ;; - _ ~
   ,:   (tap-hold  1 600 , @: )
-  
-  ;;f1 (macro f1 f24)  ;; only usefull in applications that do not react on F1 ==> not usefull
 )
 
 
