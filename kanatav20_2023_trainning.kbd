@@ -254,7 +254,7 @@ TODO space+w = tap ^ = ESC not used
 (defsrc
   esc       f1   f13  f14  f24
   ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
-  tab       j    y    u    a    z    p    b    d    l    w    q    +    #
+  tab       j    z    u    a    y    p    b    d    l    w    q    +    #
   caps      c    s    i    e    o    m    n    t    r    h    ß    ret
   lsft      v    x    ü    ä    ö    g    f    ,    .    k    rsft
             lmet lalt           spc                           
@@ -284,7 +284,7 @@ TODO space+w = tap ^ = ESC not used
 ;;****************   typing   ********************************************************
   esc       f1   @ff13   @ff14 f24
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8   @9   @0   -    del  bspc
-  @tab      j    z     u    a    y    p    b    d    l    y   q    f24  @rtw
+  @tab      j    z     u    a    y    p    b    d    l    w   q    f24  @rtw
   @atx      c    s     i    e    o    m    n    t    r    h   @ß-  ret
   @oss      v    x    @ü{  @ä}  @ö+   g    f   @,;< @.:> @y_~ @rsf
             lmet lalt           @nav              
