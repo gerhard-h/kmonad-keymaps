@@ -254,9 +254,9 @@ TODO space+w = tap ^ = ESC not used
 (defsrc
   esc       f1   f13  f14  f24
   ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
-  tab       j    y    u    a    z    b    d    l    m    w    q    +    #
+  tab       j    y    u    a    z    b    f    l    m    w    q    +    #
   caps      c    s    i    e    o    p    t    n    r    h    ß    ret
-  lsft      v    x    ü    ä    ö    g    f    ,    .    k    rsft
+  lsft      v    x    ü    ä    ö    g    d    ,    .    k    rsft
             lmet lalt           spc                           
 )
 (deflayer base
@@ -271,9 +271,9 @@ TODO space+w = tap ^ = ESC not used
 ;;  @ech  ret hold does ctl via QMK
   esc       f1   @ff13   @ff14 f24
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8   @9   @0   -    del  bspc
-  @tab      @j!  @z˝  @u【  @a】  @y$  @b&  @p%  @l?  @m#  @w\  @q@  f24  @rtw
-  @atx      @cwn @s   @i[  @e]  @o'  @d/  @t   @n   @r-  @hwn @ß-  ret
-  @oss      @v` @chx| @ü{  @ä}  @ö+  @g=  @f*  @,;< @.:> @k_~ @rsf
+  @tab      @j!  @z˝  @u【  @a】  @y$  @b&  @f%  @l?  @m#  @w\  @q@  f24  @rtw
+  @atx      @cwn @s   @i[  @e]  @o'  @p/  @t   @n   @r-  @hwn @ß-  ret
+  @oss      @v` @chx| @ü{  @ä}  @ö+  @g=  @d*  @,;< @.:> @k_~ @rsf
             @oml @oal           @nav   
 #|
             lmet lalt           @nav
@@ -284,9 +284,9 @@ TODO space+w = tap ^ = ESC not used
 ;;****************   typing   ********************************************************
   esc       f1   @ff13   @ff14 f24
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8   @9   @0   -    del  bspc
-  @tab      j    y     u    a    z    b    d    l    m    w   q    f24  @rtw
+  @tab      j    y     u    a    z    b    f    l    m    w   q    f24  @rtw
   @atx      c    s     i    e    o    p    t    n    r    h   @ß-  ret
-  @oss      v    x    @ü{  @ä}  @ö+   g    f   @,;< @.:> @k_~ @rsf
+  @oss      v    x    @ü{  @ä}  @ö+   g    d   @,;< @.:> @k_~ @rsf
             lmet lalt           @nav              
 )
 (deflayer numbers
@@ -416,7 +416,7 @@ TODO space+w = tap ^ = ESC not used
   que (layer-switch base)
   quen (multi (layer-switch base) nlck)
   numfix (multi (layer-switch numfix) nlck)
-  chf  (chord fkomma f)  ;; F24
+  chf  (chord fkomma d)  ;; F24
   ch,  (chord fkomma ,)  
   ch.  (chord fkomma .)  ;; Q alternative
   chx| (chord xä x)		;; sticky numbers
@@ -448,9 +448,9 @@ TODO space+w = tap ^ = ESC not used
 ;;  (d  l   ) f18    ;;(multi f18 sldr) trigger ahk string replace
 ;;)
 (defchords fkomma 20
-  (f       ) f
+  (d       ) d
   (   ,    ) ,
-  (f  ,    ) f24
+  (d  ,    ) f24
   (      . ) .
   (   ,  . ) q
 )
@@ -678,12 +678,12 @@ TODO space+w = tap ^ = ESC not used
 ;;k\  (tap-hold 1 140 k (multi @\ (tap-hold 200 800 XX @\ )) )  ;; fast reponsive
   w\  (tap-hold  1 100 (tap-dance-eager 100 (w (tap-hold 1 100 (macro w) (macro bspc @\ @\)) (tap-hold 1 100 (macro w w) w) )) (multi (macro @\ ) (tap-hold 1 800 XX (macro @\ ))) ) 
   aä  (tap-hold 1 120 a (macro-release-cancel ä 400 bspc S-= spc 600 bspc ä 600 bspc a 600 bspc))            ;; ä = '  `=S-]
-  p%  (tap-hold 1 140 d  (macro S-5 ))
+  f%  (tap-hold 1 140 f  (macro S-5 ))
   m#  (tap-hold 1 140 m (macro # ))
   sß  (tap-hold 1 120 s (macro ß ) )                                                                               ;; ß = [
   q@  (tap-hold 1 120 q @@ ) 
   o'  (tap-hold 1 140 o (multi @' (tap-hold 200 800 XX @' )) )                         ;; ' ''
-  d/  (tap-hold 1 180 p (multi (macro S-7 ) (tap-hold 200 800 XX (macro S-7 ))) )                 ;; / // TODO do we want dbl_tap-hold keyrepeat //
+  p/  (tap-hold 1 180 p (multi (macro S-7 ) (tap-hold 200 800 XX (macro S-7 ))) )                 ;; / // TODO do we want dbl_tap-hold keyrepeat //
   x|  (tap-hold 1 120 @chx| (multi (macro RA-102d ) (tap-hold 200 800 XX (macro RA-102d ))) )               ;; | || not used
   v`  (tap-hold 1 160 v (multi @` (tap-hold 200 800 XX @´ )) )
   ü{  (tap-hold 1 140 ü (multi (macro RA-7 ) (tap-hold 200 500 XX (macro RA-0 ))))                      ;; { {}
@@ -693,7 +693,7 @@ TODO space+w = tap ^ = ESC not used
 ;;p=  (tap-hold 1 240 p (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 1000 XX (macro S-0 ))  ))) ) ;; p = == === 
   g=  (tap-hold 1 160 (tap-dance-eager 160 (g (tap-hold 1 160 (macro g) (multi (macro bspc S-0 S-0) (tap-hold 260 600 XX (macro S-0 )))) (tap-hold 1 160 (macro g g) g) )) (multi (macro S-0 ) (tap-hold 260 400 XX (multi (macro S-0 ) (tap-hold 260 800 XX (macro S-0 ))  ))) )
   
-  f*  (tap-hold 1 140 @chf (multi @* (tap-hold 1 800 XX S-+ )))  ;; * with long autorepeat - there must be a macro (@*) after the multi for the timeout do work
+  d*  (tap-hold 1 140 @chf (multi @* (tap-hold 1 800 XX S-+ )))  ;; * with long autorepeat - there must be a macro (@*) after the multi for the timeout do work
 ;;,F24 (tap-dance 140 ((tap-hold 10 100 , (multi (macro S-, ) (tap-hold 200 400 XX (macro bspc @lth ))) )  (tap-hold 10 100 f20 (macro @lth))))  ;; ,, = F24 , ; <
 ;; .:> (tap-dance 140 ((tap-hold 10 100 . (multi (macro S-. ) (tap-hold 200 400 XX (macro bspc @gth ))) )  (tap-hold 10 100 (macro . .) (macro @gth)) (tap-hold 10 100 (macro . . .) .) ))  ;; . : >
 ;;  -_~ (tap-dance 140 ((tap-hold 10 100 - (multi (macro S-- ) (tap-hold 200 400 XX (macro bspc @til ))) )  (tap-hold 10 100 (macro - -) (macro @til)) (tap-hold 10 100 (macro - - -) -) ))  ;; - _ ~
