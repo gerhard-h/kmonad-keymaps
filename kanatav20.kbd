@@ -256,7 +256,7 @@ TODO space+w = tap ^ = ESC not used
   ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
   tab       j    y    u    a    z    b    f    l    m    w    q    +    #
   caps      c    s    i    e    o    p    t    n    r    h    ß    ret
-  lsft      v    x    ü    ä    ö    g    d    ,    .    k    rsft
+  lsft      v    x    ü    ä    ö    d    g    ,    .    k    rsft
             lmet lalt           spc                           
 )
 (deflayer base
@@ -273,7 +273,7 @@ TODO space+w = tap ^ = ESC not used
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8   @9   @0   -    del  bspc
   @tab      @j!  @z˝  @u【  @a】  @y$  @b&  @f%  @l?  @m#  @w\  @q@  f24  @rtw
   @atx      @cwn @s   @i[  @e]  @o'  @p/  @t   @n   @r-  @hwn @ß-  ret
-  @oss      @v` @chx| @ü{  @ä}  @ö+  @g=  @d*  @,;< @.:> @k_~ @rsf
+  @oss      @v` @chx| @ü{  @ä}  @ö+  @d=  @g*  @,;< @.:> @k_~ @rsf
             @oml @oal           @nav   
 #|
             lmet lalt           @nav
@@ -286,7 +286,7 @@ TODO space+w = tap ^ = ESC not used
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8   @9   @0   -    del  bspc
   @tab      j    y     u    a    z    b    f    l    m    w   q    f24  @rtw
   @atx      c    s     i    e    o    p    t    n    r    h   @ß-  ret
-  @oss      v    x    @ü{  @ä}  @ö+   g    d   @,;< @.:> @k_~ @rsf
+  @oss      v    x    @ü{  @ä}  @ö+   d    g   @,;< @.:> @k_~ @rsf
             lmet lalt           @nav              
 )
 (deflayer numbers
@@ -416,7 +416,7 @@ TODO space+w = tap ^ = ESC not used
   que (layer-switch base)
   quen (multi (layer-switch base) nlck)
   numfix (multi (layer-switch numfix) nlck)
-  chf  (chord fkomma d)  ;; F24
+  chf  (chord fkomma g)  ;; F24
   ch,  (chord fkomma ,)  
   ch.  (chord fkomma .)  ;; Q alternative
   chx| (chord xä x)		;; sticky numbers
@@ -448,9 +448,9 @@ TODO space+w = tap ^ = ESC not used
 ;;  (d  l   ) f18    ;;(multi f18 sldr) trigger ahk string replace
 ;;)
 (defchords fkomma 20
-  (d       ) d
+  (g       ) g
   (   ,    ) ,
-  (d  ,    ) f24
+  (g  ,    ) f24
   (      . ) .
   (   ,  . ) q
 )
@@ -691,9 +691,9 @@ TODO space+w = tap ^ = ESC not used
   ä}  (tap-hold 1 140 @chä @} )
   ö+  (tap-hold 1 140 ö (multi @+ (tap-hold 200 500 XX @+ )))                              ;; + = =  b + ++
 ;;p=  (tap-hold 1 240 p (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 1000 XX (macro S-0 ))  ))) ) ;; p = == === 
-  g=  (tap-hold 1 160 (tap-dance-eager 160 (g (tap-hold 1 160 (macro g) (multi (macro bspc S-0 S-0) (tap-hold 260 600 XX (macro S-0 )))) (tap-hold 1 160 (macro g g) g) )) (multi (macro S-0 ) (tap-hold 260 400 XX (multi (macro S-0 ) (tap-hold 260 800 XX (macro S-0 ))  ))) )
+  d=  (tap-hold 1 160 (tap-dance-eager 160 (d (tap-hold 1 160 (macro d) (multi (macro bspc S-0 S-0) (tap-hold 260 600 XX (macro S-0 )))) (tap-hold 1 160 (macro d d) d) )) (multi (macro S-0 ) (tap-hold 260 400 XX (multi (macro S-0 ) (tap-hold 260 800 XX (macro S-0 ))  ))) )
   
-  d*  (tap-hold 1 140 @chf (multi @* (tap-hold 1 800 XX S-+ )))  ;; * with long autorepeat - there must be a macro (@*) after the multi for the timeout do work
+  g*  (tap-hold 1 140 @chf (multi @* (tap-hold 1 800 XX S-+ )))  ;; * with long autorepeat - there must be a macro (@*) after the multi for the timeout do work
 ;;,F24 (tap-dance 140 ((tap-hold 10 100 , (multi (macro S-, ) (tap-hold 200 400 XX (macro bspc @lth ))) )  (tap-hold 10 100 f20 (macro @lth))))  ;; ,, = F24 , ; <
 ;; .:> (tap-dance 140 ((tap-hold 10 100 . (multi (macro S-. ) (tap-hold 200 400 XX (macro bspc @gth ))) )  (tap-hold 10 100 (macro . .) (macro @gth)) (tap-hold 10 100 (macro . . .) .) ))  ;; . : >
 ;;  -_~ (tap-dance 140 ((tap-hold 10 100 - (multi (macro S-- ) (tap-hold 200 400 XX (macro bspc @til ))) )  (tap-hold 10 100 (macro - -) (macro @til)) (tap-hold 10 100 (macro - - -) -) ))  ;; - _ ~
@@ -719,8 +719,8 @@ TODO space+w = tap ^ = ESC not used
  esp (macro S-. d a t e)
  ;; Last lines  of script no leading spaces
 psiso (cmd-output-keys powershell.exe -NoProfile -NoLogo -NonInteractiv -Command "echo '(' ((Get-Date -Format 'yyyy-MM-dd').toCharArray() -join ' ') ')'") 
-;;cmdiso (cmd-output-keys cmd.exe /C timek.cmd) 
-cmdiso (cmd "C:\Program Files\AutoHotkey\AutoHotkeyU64_UIA.exe" "isodate.ahk")
+cmdiso (cmd-output-keys cmd.exe /C timek.cmd) 
+;;cmdiso (cmd "C:\Program Files\AutoHotkey\AutoHotkeyU64_UIA.exe" "isodate.ahk") ;; goes not work on new PC
 cmdde (cmd-output-keys cmd.exe /C timedek.cmd) 
 ;; bash might be on windows an is much faster than wsl or powershell 
 ;;bashiso (cmd-output-keys bash -c "date +'%F %R' | sed 's/./& /g' | sed 's/:/S-;/g' | sed 's/\(.\{20\}\)\(.*\)/\(\1 spc \2\)/'")
