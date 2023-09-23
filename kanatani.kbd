@@ -170,15 +170,15 @@ TODO space+w = tap ^ = ESC not used
 ;;  <    226
 ;;  ;;- 555 custom numbers does not work with interception
 ;;)
-(deflocalkeys-wintercept
-  -    191
-  ü    219
-  +    221
-  #    220
-  ö    186
-  ß    189
-  ^    192
-  ´    187
+(deflocalkeys-win
+  -    189
+  ü    186
+  +    187
+  #    191
+  ö    192
+  ß    219
+  ^    220
+  ´    221
   ä    222
   <    226
   ;;- 555 custom numbers does not work with interception
@@ -207,14 +207,15 @@ TODO space+w = tap ^ = ESC not used
   )
   ;; shifted german keys - every standard definition  as (macro) to disable autorepeate if the key is use on tap-hold
   ;; wintercept alias differences
-  y z
-  z y
-  ' (macro S-\ )
-  + (macro ] )
-  * (macro S-] )
-  ~ (macro RA-] )
-  ~~ RA-]             ;; tilde most likly do be used inside another macros
-  _  S-/
+  y y
+  z z
+  ' (macro S-# )
+  + (macro + )
+  * (macro S-+ )
+  ~ (macro RA-+ )
+  ~~ RA-+             ;; tilde most likly do be used inside another macros
+  _  S--
+
   ! (macro S-1 )
   ˝ (macro S-2 )  ;; ˝ look-a-like is used because @" is no valid alias, to be displayed correctly in console requires a font that can - e.g. cascadia
   §	(macro S-3 )
@@ -266,7 +267,7 @@ TODO space+w = tap ^ = ESC not used
 (defsrc
   esc       f1   f13  f14  f24
   ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
-  tab       j    y    u    a    z    p    f    l    m    w    q    +    #
+  tab       j    z    u    a    y    p    f    l    m    w    q    +    #
   caps      c    s    i    e    o    d    t    n    r    h    ß    ret
   lsft      v    x    ü    ä    ö    b    g    ,    .    k    rsft
             lmet lalt           spc                           
