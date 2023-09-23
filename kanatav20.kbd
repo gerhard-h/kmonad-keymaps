@@ -259,6 +259,7 @@ TODO space+w = tap ^ = ESC not used
   lsft      v    x    ü    ä    ö    b    g    ,    .    k    rsft
             lmet lalt           spc                           
 )
+;; DON'T mess with the @u【 @a】 spacing 
 (deflayer base
 ;;****************   BASE   ********************************************************
 ;; TODO is @rtw / rsft+rspace=@sym / @ech / @y` / ever used?  / is @^ec used for esc?
@@ -271,11 +272,11 @@ TODO space+w = tap ^ = ESC not used
 ;; feat: rpt-any to be tested
 ;;  @ech  ret hold does ctl via QMK
   esc       f1   @ff13   @ff14 f24
-  @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8   @9   @0   -    del  bspc
-  @tab      @j!  @z˝  @u【  @a】  @y$  @p&  @f%  @l?  @m#  @w\  @q@  f24  @rtw
-  @atx      @cwn @s   @i[  @e]  @o'  @d/  @t   @n   @r   @hwn @ß-  ret
-  @oss      @v` @chx| @ü{  @ä}  @ö+  @b=  @g*  @,;< @.:> @k_~ @rsf
-            @oml @oal           @nav   
+  @^ec      @1@  @2    @3`  @4    @5   @6   @7   @8   @9   @0   -    del  bspc
+  @tab      @j!  @z˝   @u【 @a】  @y$  @p&  @f%  @l?  @m#  @w\  @q@  f24  @rtw
+  @atx      @cwn @s    @i[  @e]   @o'  @d/  @t   @n   @r   @hwn @ß-  ret
+  @oss      @v`  @chx| @ü{  @ä}   @ö+  @b=  @g*  @,;< @.:> @k_~ @rsf
+            @oml @oal             @nav   
 #|
             lmet lalt           @nav
  CTRL + SPACE + ESC => Exit KANATA immediatly
@@ -364,7 +365,7 @@ TODO space+w = tap ^ = ESC not used
 ;; @numfix by tap 7+9 / |+} and release space
   _         f1  @ff13 @ff14 f24
   _         @at1 @at2 @at3 @at4 @at5 @at6 @at7 @at8 @at9 @atm lrld-next A-prtsc _
-  _         @!   @˝   @【   @】   @$   @&   @%   @?   #    @\   @@    _    _         
+  _         @!   @˝   @【  @】  @$   @&   @%   @?   #    @\   @@    _    _         
   @atr      @`   @^   @[   @]   @'   @dsk S-7  -    @_   S-.  @€    _          
   _         ´    @ch| @{   @ch} @+   @=   @*   @<   @>   @~   _               
             _    _              ret
@@ -374,16 +375,16 @@ TODO space+w = tap ^ = ESC not used
   _         _    _    _    _    _    _    _    _    _    _    _    _    _   
   _  (unicode Ù) @˝   @【   @】   @$   @&   @%   @?   #    @\   _    _    _         
   _  (unicode Õ) @@   @[   @]   @'   @/   S-.  ,    .    @-_~ -    _          
-  _         @`   @|   @{   @}   @+   @=   @*   @<   @>   @~   _               
+  _         ´    @|   @{   @}   @+   @=   @*   @<   @>   ^    _               
             _    _              _
 )
 (deflayer ksymbols ;; macro F-keys and (symbols) triggered from the RIGHT side (ff13)
 ;;****************   MACRO   ********************************************************
   _         f1   @ff13   @ff14 f24
-  _         @fashing @geb @iban  @plz _    _    _    _    _    _    _    _    _
-  _         @cmdde   f1   f2   f3   f10    @&   @%   @?   #    @\   _    _    _         
-  _         @cmdiso  f4   f5   f6   f11    lmet  lsft .   _    @-_~ _    _          
-  _         @`       f7   f8   f9   f12    lsft  lctl lalt _   @~   _               
+  _         @fashing @geb @iban  @plz _    _     _    _    _   _    _    _    _
+  _         @cmdde   f1   f2   f3   f10    @&    @%   @tsc #   @\   _    _    _         
+  _         @cmdiso  f4   f5   f6   f11    lmet  lsft ^    ^   @-_~ _    _          
+  _         ´        f7   f8   f9   f12    lsft  lctl lalt _   ^    _               
             _        _                _ 
 )
 (deflayer fkeys ;;triggered with ß from numbers
@@ -450,7 +451,7 @@ TODO space+w = tap ^ = ESC not used
 (defchords fkomma 20
   (g       ) g
   (   ,    ) ,
-  (g  ,    ) f24
+  (g  ,    ) esc
   (      . ) .
   (   ,  . ) q
 )
@@ -543,7 +544,7 @@ TODO space+w = tap ^ = ESC not used
   srt (tap-hold-release 200 5000 ret lsft)
   ;; cde  (multi @mus (macro f23)) lctl) ;; to trigger ahk mouse  or ctl
   ;; cde (tap-hold-release 200 5000 (multi @mus A-C-M-p) lctl) ;; to trigger kanata mouse layer & spotlight or ctl
-  cde lctl ;; kanata mouse not working with interception drivers
+  cde (tap-hold 200 200 esc lctl) ;; kanata mouse not working with interception drivers
   alc (tap-hold-release 200 5000 @mal lalt) ;; mouse lclick or alt
   mrc (tap-hold-release 200 5000 @mar lmet) ;; mouse rclick or win
 
@@ -714,7 +715,7 @@ TODO space+w = tap ^ = ESC not used
  geb (macro @n2 @n1 . @n1 @n2 . @n2 @n0 @n0 @n1 )
  iban (macro S-d  S-e  @n3 @n0 @n7 @n0 @n0 @n2 @n0 @n2 @n7 @n0 @n0 @n0 @n4 @n5 @n5 @n0 @n6 @n8 @n6 @n0 )
  plz (macro @n6 @n4 @n7 @n1 @n1 )
- tsc (macro @\\ @\\ t s c l i e n t @\\ c @\\ d a t a )
+ tsc (macro @\\ @\\ t s c l i e n t @\\ c @\\ )
  esp (macro S-. d a t e)
  ;; Last lines  of script no leading spaces
 psiso (cmd-output-keys powershell.exe -NoProfile -NoLogo -NonInteractiv -Command "echo '(' ((Get-Date -Format 'yyyy-MM-dd').toCharArray() -join ' ') ')'") 
