@@ -224,8 +224,8 @@ TODO space+w = tap ^ = ESC not used
   
   ;; AltGr german keys
   ~ (macro RA-] )
-  \~ RA-]             ;; Backslash at the start of the alias indicates the non macro verion (most likly do be used inside another macro )
-  \\ RA-ß             ;; single Backslash to be used inside of certain macros
+  ~~ RA-]             ;; tilde most likly do be used inside another macros
+  \\ RA-ß             ;; single Backslash to be used inside of certain macros  
   \ (unicode \)       ;;(macro RA-ß )
   ẞ (macro RA-S-ß )
   | (macro RA-102d )
@@ -675,7 +675,7 @@ TODO space+w = tap ^ = ESC not used
   p&  (tap-hold 1 160 p (multi (macro S-6 ) (tap-hold 200 800 XX (macro S-6 ))))                          ;; & &&
   l?  (tap-hold 1 140 l (multi @? (tap-hold 200 500 XX @? )))                                           ;; ? = S-[      i ? ??
 ;;k\  (tap-hold 1 140 k (multi @\ (tap-hold 200 800 XX @\ )) )  ;; fast reponsive
-  w\  (tap-hold  1 100 (tap-dance-eager 100 (w (tap-hold 1 100 (macro w) (macro bspc @\ @\)) (tap-hold 1 100 (macro w w) w) )) (multi (macro @\ ) (tap-hold 1 800 XX (macro @\ ))) ) 
+  w\  (tap-hold  1 100 (tap-dance-eager 100 (w (tap-hold 1 100 (macro w) (macro bspc @\\ @\\)) (tap-hold 1 100 (macro w w) w) )) (multi (macro @\\ ) (tap-hold 1 800 XX (macro @\\ ))) ) 
   aä  (tap-hold 1 120 a (macro-release-cancel ä 400 bspc S-= spc 600 bspc ä 600 bspc a 600 bspc))            ;; ä = '  `=S-]
   f%  (tap-hold 1 140 f  (macro S-5 ))
   m#  (tap-hold 1 140 m (macro # ))
@@ -703,7 +703,7 @@ TODO space+w = tap ^ = ESC not used
   .:>  (tap-hold  1 100 (tap-dance 140 (@ch. (tap-hold 10 100 (macro . .)  @> ) (tap-hold 10 100 (macro . . .) .) )) (multi @: (tap-hold 200 800 XX (macro bspc S-102d ))) )    ;; . : >
   -_~  (tap-hold  1 100 (tap-dance 140 (/   (tap-hold 10 100 (macro / /)  @~) (tap-hold 10 100 (macro / / /) /) )) (multi (macro S-/ ) (tap-hold 200 800 XX (macro bspc RA-] ))) )  ;; - _ ~
   -_:  (tap-hold  1 100 (tap-dance 140 (/   (tap-hold 10 100 (macro / /)  @:) (tap-hold 10 100 (macro / / /) /) )) (multi (macro S-/ ) (tap-hold 200 800 XX (macro bspc S-. ))) )  ;; - _ :
-  k_~  (tap-hold  1 140 (tap-dance-eager 140 (k (tap-hold 1 100 (macro k) (macro bspc @\~)) (tap-hold 1 100 (macro k k) k) )) (multi (macro S-/ ) (tap-hold 1 800 XX (macro bspc RA-] ))) )  ;; - _ ~
+  k_~  (tap-hold  1 140 (tap-dance-eager 140 (k (tap-hold 1 100 (macro k) (macro bspc @~~)) (tap-hold 1 100 (macro k k) k) )) (multi (macro S-/ ) (tap-hold 1 800 XX (macro bspc RA-] ))) )  ;; - _ ~
   ,:   (tap-hold  1 600 , @: )
 )
 
