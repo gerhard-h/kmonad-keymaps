@@ -217,7 +217,7 @@ TODO space+w = tap ^ = ESC not used
   _  S--
   ;; AltGr german keys
   | (macro C-A-102d )
-  } (macro C-A-0 )   ;; C-A- works with rdp but C-A- 7 8 9 0 shortcuts must be deleted in windows terminal 
+  } (macro C-A-0 )   ;; this works with rdp but C-A- 7 8 9 0 shortcuts must be deleted in windows terminal 
   { (macro C-A-7 )
   ] (macro C-A-9 )
   [ (macro C-A-8 )
@@ -598,7 +598,7 @@ TODO space+w = tap ^ = ESC not used
 ;;      (tap-hold 1 160 (fork e f (lctl rctl)) lsft) 
 ;; )
   e] (tap-hold 1 160 (fork e f (lctl rctl)) lsft)
-  t (tap-hold 1 160 t rsft)
+  t (tap-hold 1 160 t lsft)
 ;;n   (tap-hold-release 1 140 (fork n (unicode n) (rsft) )(one-shot 400 rsft) )
 ;;  n (tap-hold 1 160 
 ;;	(fork

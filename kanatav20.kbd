@@ -215,6 +215,20 @@ TODO space+w = tap ^ = ESC not used
   ~ (macro RA-] )
   ~~ RA-]             ;; tilde most likly do be used inside another macros
   _  S-/
+  ;; AltGr german keys
+  | (macro RA-102d )
+  } (macro RA-0 )   ;; C-A- works with rdp but C-A- 7 8 9 0 shortcuts must be deleted in windows terminal 
+  { (macro RA-7 )
+  ] (macro RA-9 )
+  [ (macro RA-8 )
+  \\ RA-ß             ;; single Backslash to be used inside of certain macros  
+  \ (unicode \)       ;;(macro RA-ß )
+  ẞ (macro RA-S-ß )
+  € (unicode € ) ;;(macro RA-e )
+  @ (unicode @ )
+  ² (macro RA-2 )
+  ³ (macro RA-3 )
+  µ (macro RA-m )
   ! (macro S-1 )
   ˝ (macro S-2 )  ;; ˝ look-a-like is used because @" is no valid alias, to be displayed correctly in console requires a font that can - e.g. cascadia
   §	(macro S-3 )
@@ -233,23 +247,8 @@ TODO space+w = tap ^ = ESC not used
   ;; change dead keys in normal keys
   ´ (macro = spc)	  ;; ´ 
   ` (unicode `)       ;; ` unicode also disables autorepeat
-  ^ (unicode ^)       ;; ^ = \ - shifting @^ will produce an incorrect space now
+  ^ (unicode ^)       ;; ^ = \ - shifting (macro grv spc) will produce an incorrect space now: "° "
   ° S-grv
-  
-  ;; AltGr german keys
-  \\ RA-ß             ;; single Backslash to be used inside of certain macros  
-  \ (unicode \)       ;;(macro RA-ß )
-  ẞ (macro RA-S-ß )
-  | (macro RA-102d )
-  } (macro RA-0 )
-  { (macro RA-7 )
-  ] (macro RA-9 )
-  [ (macro RA-8 )
-  € (unicode € ) ;;(macro RA-e )
-  @ (unicode @ )
-  ² (macro RA-2 )
-  ³ (macro RA-3 )
-  µ (macro RA-m )
   
   ;; Disable autorepeat
   , (macro ,)
@@ -378,7 +377,7 @@ TODO space+w = tap ^ = ESC not used
   _         f1  @ff13 @ff14 f24
   _         @at1 @at2 @at3 @at4 @at5 @at6 @at7 @at8 @at9 @atm lrld-next A-prtsc _
   _         @!   @˝   @【  @】  @$   @&   @%   @?   #    @\   @@    _    _         
-  @atr      @`   @^   @[   @]   @'   @dsk S-7  -    @_   S-.  @€    _          
+  @atr      @`   @^   @[   @]   @'   @dsk S-7  -    @_   @.:  @€    _          
   _         ´    @ch| @{   @ch} @+   @=   @*   @<   @>   @~   _               
             _    _              ret
 )
@@ -449,7 +448,7 @@ TODO space+w = tap ^ = ESC not used
 )
 ;; from BASE to NUMFIX
 (defchords xä 20
-  (x      ) (tap-hold 1 120 x (multi (macro RA-102d ) (tap-hold 200 800 XX (macro RA-102d ))) ) 
+  (x      ) (tap-hold 1 120 x (multi @| (tap-hold 200 800 XX @| )) ) 
   (   ä   ) ä
   (x  ä   ) @numfix
 )
@@ -541,11 +540,8 @@ TODO space+w = tap ^ = ESC not used
 	    )
   ) ;; LEFT sft + LEFT spc == numbers
   ff13 (multi f21 (layer-toggle ksymbols)) ;; MACRO+SYSMBOLS TIP removing one-shot solves problems with hitting the key by accident
-  ;; DBL-tap-Hold is not realy good for the frequently used symbol layer
-  ;; nav (tap-dance 120 ((tap-hold  140 140 spc @num) (tap-hold  140 140 spc @sym) spc spc spc))
-  ;; nav (tap-hold  200 200 (multi spc sldr) @num) works but would require awkward sequneces
-  ;; nav (tap-hold  200 200 spc @num)  ;;  not used no fork
   nav   (tap-hold  200 200 spc (fork @num @sym (rsft))) ;; RIGHT sft + RIGHT spc == symbols  
+  
   ;; one shot modifiers
   oss (one-shot 2000 lsft)
   ocl (one-shot 2000 lctl) 
@@ -562,14 +558,12 @@ TODO space+w = tap ^ = ESC not used
 
   ;; outer/special keys
   ech (tap-hold 140 400 esc (multi (macro home ) (tap-hold 400 900 XX (macro end ) )) )
-  ^ec  (tap-hold 200 300 esc (macro grv spc))
+  ^ec (tap-hold 200 300 esc @^)
   tab (tap-hold-press  200 400 tab lctl )	;; TODO is ctl ever used?
-;;rtc (tap-hold-release 200 340 (multi ret sldr) lmet) this makes ret not appear
   rtc (tap-hold-release 200 5000 ret lctl)
   rtw (tap-hold-release 200 5000 ret lmet)
   rsd (tap-hold-release 200 240 @syv (multi rsft lsft)) ;; TODO not used ?! BUG rsft get ignored on RDesktop -> use lsft  or (multi rsft lsft) ?
   ral S-C-M-A-9 ;; release ALL key (BUG) kanata cannot release stuck keys from ahk (both tools with elevated rights) PRESS F24 FOR RELEASE ALL MODS
-  ;;rcl (tap-hold-release 200 200 sldr rctl) ;; !! sldr is hard coded leader key fake key  !! dropped in favor of ocl
   
   ;; dynamic-macro TODO test them
   dr0 (dynamic-macro-record 0)
@@ -598,9 +592,7 @@ TODO space+w = tap ^ = ESC not used
   atm  (tap-dance 500 ( A-tab (macro A-(tab 90 tab )) (macro A-(tab 90 tab  90 tab )) (macro A-(tab 90 tab  90 tab  90 tab )) ))
   ;; not working on remote desktop atp  (tap-dance 500 ( (macro A-pgup) (macro A-(pgup 90 pgup )) (macro A-(pgup 90 pgup  90 pgup )) (macro A-(pgup 90 pgup  90 pgup  90 pgup )) ))
 
-  ;; *** HOME ROW MODS ***
-  ;; (one-shot 500 lsft))  ;;(multi lsft (layer-while-held smodded) )) ;;  INFO timing of 1 avoids keyrepeat
- 
+;; *** HOME ROW MODS *** 
 ;; e]	(multi
 ;;      (on-idle-fakekey nosft_fk release 222 )
 ;;      (tap-hold 1 160 (fork e f (lctl rctl)) lsft) 
@@ -618,24 +610,12 @@ TODO space+w = tap ^ = ESC not used
 ;;	 (f22)
 ;;	)
 ;;  rsft) ;; (fork n (unicode b) (rsft) ) rsft)  ;;(one-shot 500 rsft)) ;;(multi rsft lsft)) ;; this clean form avoids US -> Ujs bug when typing fast ;; BUG rsft has bugs on RDesktop multi fixes fjf->F but jfj->j stays
-;;i[  (tap-dance 180 ((tap-hold-release 350 600 (macro i) lctl ) (tap-hold 200 300 (macro i i) (multi (macro RA-8 ) (tap-hold 200 700 XX (macro RA-9 ))))))
-;;i[  (tap-hold-release 450 5000 i lctl)
-;;  i[  (tap-hold 1000 1000 i (fork  (unicode i) lctl (lsft)))
   
   
 ;;i[  (multi (on-press-fakekey nosft_fk press) (tap-hold 500 500 (fork i (macro (unicode e)(unicode i)) (lsft) ) lctl ) )
   i[  (multi                                   (tap-hold 500 500 (fork i (macro (unicode e)(unicode i)) (lsft) ) lctl ) @tp )
-  
-  
-;;t-  (tap-dance 340 ((tap-hold-release 200 400 t lctl ) (tap-hold 200 300 (macro t t) (macro -) ))) 
-  n  (tap-hold 500 500 n rctl )
-  ;;tC (tap-hold-release 180 900 t (multi lctl (layer-while-held cmodded)) )
-  ;;tC  @chk
-  ;; TODO test if Long_Tap_O or Dbl_Tap_Hold_L is used in practiser
-  ;;s# (tap-dance 140 ((tap-hold-release 200 400 @chl alt) (tap-hold 200 400 (macro s s) (macro @# ) )))
-  ;;s (tap-hold-release 1200 1200 s alt)
+  n  (tap-hold 500 500 n rctl )  ;; Bug in no interception rctl+y  to start ditto, then ditto will not act on keyboard input 
   s (tap-hold 1000 1000 s alt)
-  ;;s# @chl
   hwn (tap-hold 350 1000 h lmet)
   ß-  (tap-hold 1 180 ß (macro - ) )                                                                                ;; ß = [
   cwn (tap-hold 1000 1000 c lmet)
@@ -696,9 +676,9 @@ TODO space+w = tap ^ = ESC not used
   q@  (tap-hold 1 120 q @@ ) 
   o'  (tap-hold 1 160 o (multi @' (tap-hold 200 800 XX @' )) )                         ;; ' ''
   d/  (tap-hold 1 200 d (multi (macro S-7 ) (tap-hold 180 800 XX (macro S-7 ))) )                 ;; / // TODO do we want dbl_tap-hold keyrepeat //
-  x|  (tap-hold 1 120 @chx| (multi (macro RA-102d ) (tap-hold 200 800 XX (macro RA-102d ))) )               ;; | || not used
+  x|  (tap-hold 1 120 @chx| (multi @| (tap-hold 200 800 XX @| )) )               ;; | || not used
   v`  (tap-hold 1 160 v (multi @` (tap-hold 200 800 XX @´ )) )
-  ü{  (tap-hold 1 140 ü (multi (macro RA-7 ) (tap-hold 200 500 XX (macro RA-0 ))))                      ;; { {}
+  ü{  (tap-hold 1 140 ü (multi @| (tap-hold 200 500 XX @| )))                      ;; { {}
   ;;ä}  (tap-hold-release-timeout 200 400 ä @syvv @} ) ;; not needed on v20 bc of second space bar
   ä}  (tap-hold 1 140 @chä @} )
   ö+  (tap-hold 1 180 ö (multi @+ (tap-hold 220 500 XX @+ )))                              ;; + = =  b + ++
@@ -718,6 +698,7 @@ TODO space+w = tap ^ = ESC not used
   -_:  (tap-hold  1 100 (tap-dance 140 (/   (tap-hold 10 100 (macro / /)  @:) (tap-hold 10 100 (macro / / /) /) )) (multi (macro @_ ) (tap-hold 200 800 XX (macro bspc S-. ))) )  ;; - _ :
   k_~  (tap-hold  1 140 (tap-dance-eager 140 (k (tap-hold 1 100 (macro k) (macro bspc @~~)) (tap-hold 1 100 (macro k k) k) )) (multi (macro @_ ) (tap-hold 1 800 XX (macro bspc @~~ ))) )  ;; - _ ~
   ,:   (tap-hold  1 600 , @: )
+  .:   (tap-hold  1 600 . @: )
 )
 
 
