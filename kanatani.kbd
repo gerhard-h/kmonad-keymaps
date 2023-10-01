@@ -308,7 +308,7 @@ TODO space+w = tap ^ = ESC not used
 ;; TODO caps to sym / C-bspc / at1 - at9 RDESK / atm  / A-prtsc / @fky never used!
 ;; TODO F14 space to DEL ever used?  h = del or h = esc
 ;; TEST atx with RDP
-  esc       f1   @ff13   del f24
+  esc       f1   @ff13   esc f24
   @^        @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld-next A-prtsc _
   _         @-_:  1    2    3  C-bspc esc  home up    end  pgup pgdn      _       _
   @sy1      @.wn  @al4 @ct5 @sf6 0    bspc left down  rght del  @fky      _
