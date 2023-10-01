@@ -1,2 +1,2 @@
-# kmonad-keymaps
-german iso homerow mods and auto symbol
+# kanata-keymaps
+german, homerow mods, autosymbol
