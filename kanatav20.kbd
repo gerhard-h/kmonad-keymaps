@@ -464,7 +464,7 @@ TODO space+w = tap ^ = ESC not used
   (   ,    ) ,
   (g  ,    ) esc
   (      . ) .
-  (   ,  . ) q
+  (   ,  . ) f24
 )
 ;; mouse layer keys
 (defalias
@@ -598,7 +598,7 @@ TODO space+w = tap ^ = ESC not used
 ;;      (tap-hold 1 160 (fork e f (lctl rctl)) lsft) 
 ;; )
   e] (tap-hold 1 160 (fork e f (lctl rctl)) lsft)
-  t (tap-hold 1 160 t rsft)
+  t (tap-hold 1 160 t rsft)  ;; rsft ,rctl have RDP problems without interception
 ;;n   (tap-hold-release 1 140 (fork n (unicode n) (rsft) )(one-shot 400 rsft) )
 ;;  n (tap-hold 1 160 
 ;;	(fork
@@ -615,6 +615,8 @@ TODO space+w = tap ^ = ESC not used
 ;;i[  (multi (on-press-fakekey nosft_fk press) (tap-hold 500 500 (fork i (macro (unicode e)(unicode i)) (lsft) ) lctl ) )
   i[  (multi                                   (tap-hold 500 500 (fork i (macro (unicode e)(unicode i)) (lsft) ) lctl ) @tp )
   n  (tap-hold 500 500 n rctl )  ;; Bug in no interception rctl+y  to start ditto, then ditto will not act on keyboard input 
+                                 ;; also RDP ignores rctl DIFFERENCE to rsft is: rctl is missing in defsrc
+                                 ;; but adding it will not solve the issue Enter will start the search
   s (tap-hold 1000 1000 s alt)
   hwn (tap-hold 350 1000 h lmet)
   ß-  (tap-hold 1 180 ß (macro - ) )                                                                                ;; ß = [
