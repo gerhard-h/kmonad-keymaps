@@ -212,10 +212,10 @@ TODO space+w = tap ^ = ESC not used
   ' (macro S-# )
   + (macro + )
   * (macro S-+ )
-  ~ (macro C-A-+ )
-  ~~ C-A-+             ;; tilde most likly do be used inside another macros
   _  S--
   ;; AltGr german keys
+  ~ (macro C-A-+ )
+  ~~ C-A-+             ;; tilde most likly do be used inside another macros
   | (macro C-A-102d )
   } (macro C-A-0 )   ;; C-A- works with rdp but C-A- 7 8 9 0 shortcuts must be deleted in windows terminal 
   { (macro C-A-7 )
@@ -301,7 +301,7 @@ TODO space+w = tap ^ = ESC not used
   @tab      j   @z     u    a   @y    p    f    l    m    w   q    esc  @rtw
   @atx      c    s     i    e    o    d    t    n    r    h   @ß-  ret
   @oss      v    x    @ü{  @ä}  @ö+   b    g   @,;< @.:> @k_~ @rsf
-            lmet lalt           @nav              
+            lmet lalt           @nav-typing              
 )
 (deflayer numbers
 ;;****************   NUMBERS   ****************************************************
@@ -541,7 +541,7 @@ TODO space+w = tap ^ = ESC not used
   ) ;; LEFT sft + LEFT spc == numbers
   ff13 (multi f21 (layer-toggle ksymbols)) ;; MACRO+SYSMBOLS TIP removing one-shot solves problems with hitting the key by accident
   nav   (tap-hold  200 200 spc (fork @num @sym (rsft))) ;; RIGHT sft + RIGHT spc == symbols  
-  
+  nav-typing   (tap-hold  200 200 (multi @que spc) (fork @num @sym (rsft))) 
   ;; one shot modifiers
   oss (one-shot 2000 lsft)
   ocl (one-shot 2000 lctl) 
@@ -680,7 +680,7 @@ TODO space+w = tap ^ = ESC not used
   d/  (tap-hold 1 200 d (multi (macro S-7 ) (tap-hold 180 800 XX (macro S-7 ))) )                 ;; / // TODO do we want dbl_tap-hold keyrepeat //
   x|  (tap-hold 1 120 @chx| (multi @| (tap-hold 200 800 XX @| )) )               ;; | || not used
   v`  (tap-hold 1 160 v (multi @` (tap-hold 200 800 XX @´ )) )
-  ü{  (tap-hold 1 140 ü (multi @| (tap-hold 200 500 XX @| )))                      ;; { {}
+  ü{  (tap-hold 1 140 ü (multi @{ (tap-hold 200 500 XX @} )))                      ;; { {}
   ;;ä}  (tap-hold-release-timeout 200 400 ä @syvv @} ) ;; not needed on v20 bc of second space bar
   ä}  (tap-hold 1 140 @chä @} )
   ö+  (tap-hold 1 180 ö (multi @+ (tap-hold 220 500 XX @+ )))                              ;; + = =  b + ++
