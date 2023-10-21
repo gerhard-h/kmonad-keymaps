@@ -268,7 +268,7 @@ TODO space+w = tap ^ = ESC not used
   tab       j    y    u    a    z    p    f    l    m    w    q    +    #
   caps      c    s    i    e    o    d    t    n    r    h    ß    ret
   lsft      v    x    ü    ä    ö    b    g    ,    .    k    rsft
-            lmet lalt           spc                           
+            lmet lalt           spc            f15                           
 )
 ;; DON'T mess with the @u【 @a】 spacing 
 (deflayer base
@@ -287,33 +287,43 @@ TODO space+w = tap ^ = ESC not used
   @tab      @j!  @z˝   @u【 @a】  @y$  @p&  @f%  @l?  @m#  @w\  @q@  esc  @rtw
   @atx      @cwn @s    @i[  @e]   @o'  @d/  @t   @n   @r   @hwn @ß-  ret
   @oss      @v`  @chx| @ü{  @ä}   @ö+  @b=  @g*  @,;< @.:> @k_~ @rsf
-            @oml @oal             @nav   
+            @oml @oal             @nav           @ff15   
 #|
             lmet lalt           @nav
  CTRL + SPACE + ESC => Exit KANATA immediatly
  lspace + rspace = Enter  / AltGr = DEL      |#
 )
 ;; Typing layer prevents Upper Case within words when typing fast
+;; i must be forced to be unicode
 (deflayer typing
 ;;****************   typing   ********************************************************
   esc       f1   @ff13   @ff14 f24
   @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8   @9   @0   -    del  bspc
   @tab      j   @z     u    a   @y    p    f    l    m    w   q    esc  @rtw
-  @atx      c    s     i    e    o    d    t    n    r    h   @ß-  ret
+  @atx      c    s (unicode i)    e    o    d    t    n    r    h   @ß-  ret
   @oss      v    x    @ü{  @ä}  @ö+   b    g   @,;< @.:> @k_~ @rsf
-            lmet lalt           @nav-typing              
+            lmet lalt           @nav-typing    @ff15              
 )
 (deflayer numbers
 ;;****************   NUMBERS   ****************************************************
 ;; TODO caps to sym / C-bspc / at1 - at9 RDESK / atm  / A-prtsc / @fky never used!
 ;; TODO F14 space to DEL ever used?  h = del or h = esc
 ;; TEST atx with RDP
-  esc       f1   @ff13   esc f24
+  esc       f1   @ff13 0 f24
   @^        @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld-next A-prtsc _
   _         @-_:  1    2    3  C-bspc esc  home up    end  pgup pgdn      _       _
   @sy1      @.wn  @al4 @ct5 @sf6 0    bspc left down  rght del  @fky      _
   _         @,:   7    8    9    del  tab  @srt @cde  @alc @mrc _
-            _     _              _                  
+            _     _              _    @ff15              
+)
+(deflayer numberline
+;;****************   Numberrow   ********************************************************
+  esc       f1   @ff13   @ff14 f24
+  @^ec      kp1  kp2   kp3  kp4   kp5  kp6  kp7  kp8  kp9  kp0  f11   f12 bspc
+  @tab      f1   f2    f3   f4    f5   f6   f7   f8   f9   f10  f11   f12 @rtw
+  @atx      @l1  @l2   @l3  @l4   @l5  @l6  @l7  @l8  @l9  @l0  esc   ret
+  @oss      @v`  @chx| @ü{  @ä}   @ö+  @b=  @g*  @,;< @.:> @-_~ @rsf
+            @oml @oal         (multi spc @que)          @que
 )
 ;; setting fakekeys for numberstab
 (deffakekeys
@@ -359,17 +369,17 @@ TODO space+w = tap ^ = ESC not used
   _         @aup up    esc   esc   C-bspc esc  home up   end  pgup pgdn      _       _
   @sy1      left down  rght  rght  0      bspc left down rght bspc @fky      _
   _         @,:  down  down  down  del    tab  @srt @cde @alc @mrc _
-            _     _              _                        
+            _     _              _             @ff15                      
 )
   ;; Exit numfix with CAPS or HOLD SPACE or 7+9
 (deflayer numfix
 ;;****************   NUMBERS(fix)   ********************************************************
-  esc       f1   @ff13   (tap-hold  200 200 spc @quen) f24
+  esc       f1   @ff13   (tap-hold  200 200 @0 @quen) f24
   @^        @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld-next A-prtsc _
   _         @-_:  1    2    3  C-bspc esc  home up    end  pgup pgdn      _       _
   @quen     @.wn  @al4 @ct5 @sf6 0    bspc left down  rght bspc @fky      _
   _         @,:   @ch7 8    @ch9 del  tab  @srt @cde  @alc @mrc _
-            _     _              (tap-hold  200 200 spc @quen)                  
+            _     _              (tap-hold  200 200 spc @quen)  _                 
 )
 (deflayer symbols
 ;;****************   SYSMBOLS   ********************************************************
@@ -377,9 +387,9 @@ TODO space+w = tap ^ = ESC not used
   _         f1  @ff13 @ff14 f24
   _         @at1 @at2 @at3 @at4 @at5 @at6 @at7 @at8 @at9 @atm lrld-next A-prtsc _
   _         @!   @˝   @【  @】  @$   @&   @%   @?   #    @\   @@    _    _         
-  @atr      @`   @^   @[   @]   @'   @dsk S-7  -    @_   @.:  @€    _          
+  @atr      @`   @^   @[   @]f  @'   @dsk S-7  -    @_   @.:  @€    _          
   _         ´    @ch| @{   @ch} @+   @=   @*   @<   @>   @~   _               
-            _    _              ret
+            _    _              ret            @ff15
 )
 (deflayer vsymbols ;; macro and symbols triggered from the LEFT side - not used on v20 and not complete (unicode Õ)... are for ahk integration
   _         f1   @ff13   @ff14 f24
@@ -387,7 +397,7 @@ TODO space+w = tap ^ = ESC not used
   _  (unicode Ù) @˝   @【   @】   @$   @&   @%   @?   #    @\   _    _    _         
   _  (unicode Õ) @@   @[   @]   @'   @/   S-.  ,    .    @-_~ -    _          
   _         ´    @|   @{   @}   @+   @=   @*   @<   @>   ^    _               
-            _    _              _
+            _    _              _              _
 )
 (deflayer ksymbols ;; macro F-keys and (symbols) triggered from the RIGHT side (ff13)
 ;;****************   MACRO   ********************************************************
@@ -396,7 +406,7 @@ TODO space+w = tap ^ = ESC not used
   _         @cmdde   f1   f2   f3   f10    @&    @%   @tsc #   @\   _    _    _         
   _         @cmdiso  f4   f5   f6   f11    lmet  lsft ^    ^   @-_~ _    _          
   _         ´        f7   f8   f9   f12    lsft  lctl lalt _   ^    _               
-            _        _                _ 
+            _        _                _            _
 )
 (deflayer fkeys ;;triggered with ß from numbers
 ;;****************   F KEYS   ********************************************************
@@ -405,7 +415,7 @@ TODO space+w = tap ^ = ESC not used
   _         @-_: f1   f2   f3   f10  esc  home up    end  pgup pgdn _    _    
   @sy1      @.wn f4   f5   f6   f11  lmet lsft lctl  lalt lmet _    _ 
   _         @,   f7   f8   f9   f12  tab  @srt @cde  @alc @mrc _
-       _    _               _             
+       _    _               _                  _           
 )
 ;; TODO should mouse layer contain numpad? using QMK Mouse curreently
 (deflayer mouse
@@ -415,7 +425,7 @@ TODO space+w = tap ^ = ESC not used
   tab       XX   @slw @slw @slw XX  @quep @cll @ma↑ @clr z    q    +    #
   caps      XX   @clm @clr @cll XX   h    @ma← @ma↓ @ma→ h    ß    ret
   lsft      @msz lalt lctl lsft XX   @ms← @ms↑ @ms↓ @ms→ k    rsft
-            lmet lalt           @quep                           
+            lmet lalt           @quep              _                           
 )
 (deflayer mouseslow
 ;;****************   MOUSE   ********************************************************
@@ -424,9 +434,10 @@ TODO space+w = tap ^ = ESC not used
   tab       XX   @slw @slw @slw XX  @quep @cll @ms↑ @clr z    q    +    #
   caps      XX   @clm @clr @cll XX   h    @ms← @ms↓ @ms→ h    ß    ret
   lsft      @msz lalt lctl lsft XX   @ms← @ms↑ @ms↓ @ms→ k    rsft
-            lmet lalt           @quep
+            lmet lalt           @quep              _
 )
 (defalias
+  ff15 (tap-hold 1 200  (layer-switch numberline) (layer-toggle numberline))
   que (layer-switch base)
   quen (multi (layer-switch base) nlck)
   numfix (multi (layer-switch numfix) nlck)
@@ -439,6 +450,7 @@ TODO space+w = tap ^ = ESC not used
   ch9  (tap-hold 1 200 (chord exit79 9) @quen)
   ch|  (chord |} <)      ;; mods will be added later in defchord < is | 0 is }
   ch}  (tap-hold 1 200 (chord |} 0) (release-layer symbols)) ;; tap-hold to exit layer
+  ]f   (tap-hold 1 200 @] (release-layer symbols)) 
 )
 ;; from NUMFIX to BASE
 (defchords exit79 20
@@ -516,11 +528,11 @@ TODO space+w = tap ^ = ESC not used
   fky (layer-toggle fkeys)
   cwd (caps-word-custom 2000 
 		(a b c d e f g h i j k l m n o p q r s t u v w x y z ä ü ö)
-	    (1 2 3 bspc del up down left rght rsft -) ;; rsft must be exluded as they are used for triggering caps words
+	    (. 1 2 3 bspc del up down left rght rsft -) ;; rsft must be exluded as they are used for triggering caps words
   )
   cwl (caps-word-custom 2000 
 		(a b c d e f g h i j k l m n o p q r s t u v w x y z ä ü ö)
-	    (1 2 3 bspc del up down left rght lsft -) ;; lsft must be exluded as they are used for triggering caps words
+	    (. 1 2 3 bspc del up down left rght lsft -) ;; lsft must be exluded as they are used for triggering caps words
   )
   ff14 (tap-hold  200 200 
         (multi	
@@ -543,7 +555,8 @@ TODO space+w = tap ^ = ESC not used
   nav   (tap-hold  200 200 spc (fork @num @sym (rsft))) ;; RIGHT sft + RIGHT spc == symbols  
   nav-typing   (tap-hold  200 200 (multi @que spc) (fork @num @sym (rsft))) 
   ;; one shot modifiers
-  oss (one-shot 2000 lsft)
+  oss (tap-hold 200 300 @cwl lsft)
+  ;;oss (one-shot 2000 lsft)
   ocl (one-shot 2000 lctl) 
   oal (one-shot 2000 lalt)
   oml (one-shot 2000 lmet)
@@ -597,8 +610,12 @@ TODO space+w = tap ^ = ESC not used
 ;;      (on-idle-fakekey nosft_fk release 222 )
 ;;      (tap-hold 1 160 (fork e f (lctl rctl)) lsft) 
 ;; )
-  e] (tap-hold 1 160 (fork e f (lctl rctl)) lsft)
-  t (tap-hold 1 160 t rsft)  ;; rsft ,rctl have RDP problems without interception
+;;  e] (tap-hold 1 160 (fork e f (lctl rctl)) lsft)
+;; e] (tap-hold 1 160 (fork k (multi f @tp) (rsft)) lsft)
+;; e] (multi f @tp)
+;;;e] (tap-hold 1 160 (multi e @tp) lsft)
+e] (multi @tp (tap-hold 1 160 e lsft)) ;; als erstes muss der Wechsel nach typing erfolgen sonst EIn 
+  t  (tap-hold 1 160 t rsft)  ;; rsft ,rctl have RDP problems without interception
 ;;n   (tap-hold-release 1 140 (fork n (unicode n) (rsft) )(one-shot 400 rsft) )
 ;;  n (tap-hold 1 160 
 ;;	(fork
@@ -611,9 +628,11 @@ TODO space+w = tap ^ = ESC not used
 ;;	)
 ;;  rsft) ;; (fork n (unicode b) (rsft) ) rsft)  ;;(one-shot 500 rsft)) ;;(multi rsft lsft)) ;; this clean form avoids US -> Ujs bug when typing fast ;; BUG rsft has bugs on RDesktop multi fixes fjf->F but jfj->j stays
   
-  
+;; This FIXes for ei instead of are no longer needed I   
 ;;i[  (multi (on-press-fakekey nosft_fk press) (tap-hold 500 500 (fork i (macro (unicode e)(unicode i)) (lsft) ) lctl ) )
-  i[  (multi                                   (tap-hold 500 500 (fork i (macro (unicode e)(unicode i)) (lsft) ) lctl ) @tp )
+;;  i[  (multi                                   (tap-hold 500 500 (fork i (macro (unicode e)(unicode i)) (lsft) ) lctl ) ;;@tp )
+i[ (tap-hold 500 500 i lctl ) 
+  
   n  (tap-hold 500 500 n rctl )  ;; Bug in no interception rctl+y  to start ditto, then ditto will not act on keyboard input 
                                  ;; also RDP ignores rctl DIFFERENCE to rsft is: rctl is missing in defsrc
                                  ;; but adding it will not solve the issue Enter will start the search
@@ -643,6 +662,17 @@ TODO space+w = tap ^ = ESC not used
   n8 8 
   n9 9 
   n0 0
+  l1 (tap-hold 200 500 1 lmet)
+  l2 (tap-hold 200 500 2 lalt)
+  l3 (tap-hold 200 500 3 lctl)
+  l4 (tap-hold 200 500 4 lsft)
+  l5 (tap-hold 200 500 5 lmet)
+  l6 (tap-hold 200 500 6 lmet)
+  l7 (tap-hold 200 500 7 lsft)
+  l8 (tap-hold 200 500 8 lctl)
+  l9 (tap-hold 200 500 9 lalt)
+  l0 (tap-hold 200 500 0 lmet)
+  
   1@ (tap-hold 140 140 1 (multi (macro S-1 ) (tap-hold 200 400 XX (macro bspc @@ ))) )  
   2 (tap-hold 140 300 2 (multi @˝ (tap-hold 200 700 XX @˝ )) )
   ;; multi 3 3 because macro 3 3 is not working
