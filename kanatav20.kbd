@@ -202,7 +202,8 @@ TODO space+w = tap ^ = ESC not used
 (defalias
   ;; alias to cancel tap-hold keys if typing rapidly but restore after a shord idle period
   tp (multi
-    (layer-switch typing)
+    ;;(layer-switch typing)
+    (one-shot 35 (layer-toggle typing))
     (on-idle-fakekey to-base tap 35)
   )
   ;; shifted german keys - every standard definition  as (macro) to disable autorepeate if the key is use on tap-hold
@@ -286,23 +287,68 @@ TODO space+w = tap ^ = ESC not used
   @^ec      @1@  @2    @3`  @4    @5   @6   @7   @8   @9   @0   -    del  bspc
   @tab      @j!  @z˝   @u【 @a】  @y$  @p&  @f%  @l?  @m#  @w\  @q@  esc  @rtw
   @atx      @cwn @s    @i[  @e]   @o'  @d/  @t   @n   @r   @hwn @ß-  ret
-  @oss      @v`  @chx| @ü{  @ä}   @ö+  @b=  @g*  @,;< @.:> @k_~ @rsf
+  @ossb     @v`  @chx| @ü{  @ä}   @ö+  @b=  @g*  @,;< @.:> @k_~ @rsfb
             @oml @oal             @nav           @ff15   
 #|
             lmet lalt           @nav
  CTRL + SPACE + ESC => Exit KANATA immediatly
  lspace + rspace = Enter  / AltGr = DEL      |#
 )
+(deflayer notp
+  esc       f1   @ff13   @ff14 f24
+  @^ec      @1@  @2    @3`  @4    @5   @6   @7   @8   @9   @0   -    del  bspc
+  @tab      @j!  @!z˝   @u【 @!a】  @y$  @!p&  @!f%  @l?  @m#  @w\  @q@  esc  @rtw
+  @atx      @cwn @!s    @!i[  @!e]   @o'  @d/  @!t   @!n   @r   @hwn @ß-  ret
+  @oss     @v`  @chx| @ü{  @ä}   @ö+  @b=  @g*  @,;< @.:> @k_~ @rsf
+            @oml @oal             @nav           @ff15   
+)
+(deflayer caps
+  esc       f1   @ff13   @ff14 f24
+  @^ec      @1@  @2    @3`  @4    @5   @6   @7   @8   @9   @0   -    del  bspc
+  @tab      @J  @Z˝   @U【 @A】  @Y$  @P&  @F%  @L?  @M#  @W\  @Q@  esc  @rtw
+  @atx      @CWN @S    @I[  @E]   @O'  @D/  @T   @N   @R   @HWN @ß-  ret
+  @oss      @V`  @CHX| @Ü{  @Ä}   @Ö+  @B=  @G*  @,;< @.:> @K_~ @rsf
+            @oml @oal             (multi @nav @que)           @ff15   
+)
+(defalias
+J   S-j
+Z˝  (unicode Z)
+U【  S-u 
+A】  S-a
+Y$  (unicode Y)
+P&  S-p
+F%  S-f
+L?  S-l
+M#  (tap-hold 1 300 S-m #)
+W\  S-w
+Q@  S-q
+CWN  S-c
+S   S-s
+I[ S-i
+E]  S-e
+O' S-o
+D/ S-d
+T  S-t
+N  S-n
+R  S-r
+HWN  S-h
+V` S-v
+CHX| S-x
+Ü{ S-ü
+Ä}  S-ä
+Ö+ S-ö
+B= S-b
+G* S-g
+)
 ;; Typing layer prevents Upper Case within words when typing fast
-;; i must be forced to be unicode
 (deflayer typing
 ;;****************   typing   ********************************************************
   esc       f1   @ff13   @ff14 f24
-  @^ec      @1@  @2   @3`  @4   @5   @6   @7   @8   @9   @0   -    del  bspc
-  @tab      j   @z     u    a   @y    p    f    l    m    w   q    esc  @rtw
-  @atx      c    s (unicode i)    e    o    d    t    n    r    h   @ß-  ret
-  @oss      v    x    @ü{  @ä}  @ö+   b    g   @,;< @.:> @k_~ @rsf
-            lmet lalt           @nav-typing    @ff15              
+  @^ec      @1@             @2              @3`           @4             @5             @6             @7             @8             @9             @0            -             del  bspc
+  @tab      (unicode j)    (unicode z)     (unicode u)    (unicode a)   (unicode y)    (unicode p)    (unicode f)    (unicode l)    (unicode m)    (unicode w)   (unicode q)    esc  @rtw
+  @atx      (unicode c)    (unicode s)     (unicode i)    (unicode e)   (unicode o)    (unicode d)    (unicode t)    (unicode n)    (unicode r)    (unicode h)   @ß-            ret
+  @ossb     (unicode v)    (unicode x)     @ü{            @ä}           @ö+            (unicode b)    (unicode g)     @,;<           @.:>           @k_~ @rsf
+            lmet            lalt           @nav-typing    @ff15              
 )
 (deflayer numbers
 ;;****************   NUMBERS   ****************************************************
@@ -528,21 +574,22 @@ TODO space+w = tap ^ = ESC not used
   fky (layer-toggle fkeys)
   cwd (caps-word-custom 2000 
 		(a b c d e f g h i j k l m n o p q r s t u v w x y z ä ü ö)
-	    (. 1 2 3 bspc del up down left rght rsft -) ;; rsft must be exluded as they are used for triggering caps words
+	    (1 2 3 bspc del up down left rght rsft -) ;; rsft must be exluded as they are used for triggering caps words
   )
   cwl (caps-word-custom 2000 
 		(a b c d e f g h i j k l m n o p q r s t u v w x y z ä ü ö)
-	    (. 1 2 3 bspc del up down left rght lsft -) ;; lsft must be exluded as they are used for triggering caps words
+	    (1 2 3 bspc del up down left rght lsft -) ;; lsft must be exluded as they are used for triggering caps words
   )
+  cwlay (layer-switch caps)
   ff14 (tap-hold  200 200 
         (multi	
 		(fork 
 			(fork 
 			   spc
-			   @cwd
+			   @cwlay ;;@cwd
 			   (rsft)
 			)
-			@cwl
+			@cwlay ;;@cwl
 			(lsft)	
 		) )
 		(fork 
@@ -556,6 +603,7 @@ TODO space+w = tap ^ = ESC not used
   nav-typing   (tap-hold  200 200 (multi @que spc) (fork @num @sym (rsft))) 
   ;; one shot modifiers
   oss (tap-hold 200 300 @cwl lsft)
+  ossb (tap-hold 200 300 (layer-switch caps) lsft)
   ;;oss (one-shot 2000 lsft)
   ocl (one-shot 2000 lctl) 
   oal (one-shot 2000 lalt)
@@ -614,8 +662,14 @@ TODO space+w = tap ^ = ESC not used
 ;; e] (tap-hold 1 160 (fork k (multi f @tp) (rsft)) lsft)
 ;; e] (multi f @tp)
 ;;;e] (tap-hold 1 160 (multi e @tp) lsft)
-e] (multi @tp (tap-hold 1 160 e lsft)) ;; als erstes muss der Wechsel nach typing erfolgen sonst EIn 
-  t  (tap-hold 1 160 t rsft)  ;; rsft ,rctl have RDP problems without interception
+;; this LONG HOLD is delaying the Output of Uppercase letters -very bad tap-hold-press and tap-hold-release
+;;e]  (tap-hold 1 160 (multi e @tp) (multi lsft (tap-hold 1 900 XX (layer-toggle notp))) ) ;; als erstes muss der Wechsel nach typing erfolgen sonst EIn 
+;;t   (tap-hold 1 160 (multi t @tp) (multi rsft (tap-hold 1 900 XX (layer-toggle notp))) ) ;; rsft ,rctl have RDP problems without interception
+e]  (tap-hold 1 160 (multi e @tp) lsft ) ;; als erstes muss der Wechsel nach typing erfolgen sonst EIn 
+t   (tap-hold 1 160 (multi t @tp) rsft ) ;; rsft ,rctl have RDP problems without interception
+
+!e]  (tap-hold 1 160 e lsft ) ;; als erstes muss der Wechsel nach typing erfolgen sonst EIn 
+!t   (tap-hold 1 160 t rsft ) ;; rsft ,rctl have RDP problems without interception
 ;;n   (tap-hold-release 1 140 (fork n (unicode n) (rsft) )(one-shot 400 rsft) )
 ;;  n (tap-hold 1 160 
 ;;	(fork
@@ -630,18 +684,21 @@ e] (multi @tp (tap-hold 1 160 e lsft)) ;; als erstes muss der Wechsel nach typin
   
 ;; This FIXes for ei instead of are no longer needed I   
 ;;i[  (multi (on-press-fakekey nosft_fk press) (tap-hold 500 500 (fork i (macro (unicode e)(unicode i)) (lsft) ) lctl ) )
-;;  i[  (multi                                   (tap-hold 500 500 (fork i (macro (unicode e)(unicode i)) (lsft) ) lctl ) ;;@tp )
-i[ (tap-hold 500 500 i lctl ) 
-  
-  n  (tap-hold 500 500 n rctl )  ;; Bug in no interception rctl+y  to start ditto, then ditto will not act on keyboard input 
+;;  i[  (multi                                 (tap-hold 500 500 (fork i (macro (unicode e)(unicode i)) (lsft) ) lctl ) ;;@tp ) ;; with unicode typing this is not longer necessary
+i[  (tap-hold 500 500 (multi i @tp) lctl ) 
+!i[ (tap-hold 500 500 i lctl )
+ !n  (tap-hold 500 500 n rctl )    
+  n  (tap-hold 500 500 (multi n @tp) rctl )  ;; Bug in no interception rctl+y  to start ditto, then ditto will not act on keyboard input 
                                  ;; also RDP ignores rctl DIFFERENCE to rsft is: rctl is missing in defsrc
                                  ;; but adding it will not solve the issue Enter will start the search
-  s (tap-hold 1000 1000 s alt)
+  s  (tap-hold 1000 1000 (multi s @tp) alt)
+  !s (tap-hold 1000 1000 s alt)
   hwn (tap-hold 350 1000 h lmet)
   ß-  (tap-hold 1 180 ß (macro - ) )                                                                                ;; ß = [
   cwn (tap-hold 1000 1000 c lmet)
   r (tap-hold-release 450 1000 r lalt)
   rsf (tap-hold-release 350 500 - rsft)
+  rsfb (tap-hold-release 350 500 - (multi rsft (layer-toggle notp)))
   ;; number layer home row mods
   sf6 (tap-hold-release 200 300 6 lsft)
   ct5 (tap-hold-release 200 300 5 lctl)
@@ -693,16 +750,20 @@ i[ (tap-hold 500 500 i lctl )
   ;;q! (tap-dance 120 ((tap-hold 1 90 q (multi (macro S-1 ) (tap-hold 200 600 XX (macro bspc (unicode @) ))) )  (unicode @)  (unicode ä) ) )
   ;;j!  (tap-hold 1 100 (tap-dance-eager 100 (j (fork (macro bspc @@) RA-q (lctl rctl)) )) (multi @! (tap-hold 200 600 XX (macro bspc @@ )))  ) ;; q ! @    Great! tapdance can be nested inside tap-hold. Still timing problems on keybr.com!
   j!  (tap-dance-eager 150 ((tap-hold 1 120 j (multi @! (tap-hold 200 800 XX (macro bspc @@ )))) (fork (macro bspc @@) RA-q (lctl rctl)) ))  
-  z˝  (tap-hold 1 140 @z (multi (macro S-2 ) (tap-hold 200 400 XX (macro S-2 ))) )                         ;; " ""
+  z˝  (tap-hold 1 140 (multi @z @tp) (multi (macro S-2 ) (tap-hold 200 400 XX (macro S-2 ))) )                         ;; " ""
+  !z˝ (tap-hold 1 140 @z (multi (macro S-2 ) (tap-hold 200 400 XX (macro S-2 ))) )                         ;; " ""
   u【  (tap-hold 1 150 u (multi (macro S-8 ) (tap-hold 200 400 XX (macro S-9 ))))                           ;; (  ()
-  a】  (tap-hold 1 140 a (fork (macro-release-cancel S-9 600 bspc RA-9 ) C-a (lctl rctl)) )                   ;; ) [ todo find a better use
+  a】  (tap-hold 1 140 (multi a @tp) (fork (macro-release-cancel S-9 600 bspc RA-9 ) C-a (lctl rctl)) )                   ;; ) [ todo find a better use
+  !a】  (tap-hold 1 140 a (fork (macro-release-cancel S-9 600 bspc RA-9 ) C-a (lctl rctl)) )                   ;; ) [ todo find a better use
   y$  (tap-hold 1 140 @y (macro S-4))
-  p&  (tap-hold 1 160 p (multi (macro S-6 ) (tap-hold 200 800 XX (macro S-6 ))))                          ;; & &&
+  p&  (tap-hold 1 160 (multi p @tp) (multi (macro S-6 ) (tap-hold 200 800 XX (macro S-6 ))))                          ;; & &&
+  !p&  (tap-hold 1 160 p (multi (macro S-6 ) (tap-hold 200 800 XX (macro S-6 ))))                          ;; & &&
   l?  (tap-hold 1 140 l (multi @? (tap-hold 200 500 XX @? )))                                           ;; ? = S-[      i ? ??
 ;;k\  (tap-hold 1 140 k (multi @\ (tap-hold 200 800 XX @\ )) )  ;; fast reponsive
   w\  (tap-hold  1 100 (tap-dance-eager 100 (w (tap-hold 1 100 (macro w) (macro bspc @\\ @\\)) (tap-hold 1 100 (macro w w) w) )) (multi (macro @\\ ) (tap-hold 1 800 XX (macro @\\ ))) ) 
   aä  (tap-hold 1 120 a (macro-release-cancel ä 400 bspc S-= spc 600 bspc ä 600 bspc a 600 bspc))            ;; ä = '  `=S-]
-  f%  (tap-hold 1 140 f  (macro S-5 ))
+  f%  (tap-hold 1 140 (multi f @tp)  (macro S-5 ))
+  !f% (tap-hold 1 140 f  (macro S-5 ))
   m#  (tap-hold 1 140 m (macro # ))
   sß  (tap-hold 1 120 s (macro ß ) )                                                                               ;; ß = [
   q@  (tap-hold 1 120 q @@ ) 
@@ -729,6 +790,7 @@ i[ (tap-hold 500 500 i lctl )
   -_~  (tap-hold  1 100 (tap-dance 140 (/   (tap-hold 10 100 (macro / /)  @~) (tap-hold 10 100 (macro / / /) /) )) (multi (macro @_ ) (tap-hold 200 800 XX (macro bspc @~~ ))) )  ;; - _ ~
   -_:  (tap-hold  1 100 (tap-dance 140 (/   (tap-hold 10 100 (macro / /)  @:) (tap-hold 10 100 (macro / / /) /) )) (multi (macro @_ ) (tap-hold 200 800 XX (macro bspc S-. ))) )  ;; - _ :
   k_~  (tap-hold  1 140 (tap-dance-eager 140 (k (tap-hold 1 100 (macro k) (macro bspc @~~)) (tap-hold 1 100 (macro k k) k) )) (multi (macro @_ ) (tap-hold 1 800 XX (macro bspc @~~ ))) )  ;; - _ ~
+  K_~  (tap-hold  1 140 (tap-dance-eager 140 (S-k (tap-hold 1 100 (macro S-k) (macro bspc @~~)) (tap-hold 1 100 (macro S-k S-k) S-k) )) (multi (macro @_ ) (tap-hold 1 800 XX (macro bspc @~~ ))) )  ;; - _ ~
   ,:   (tap-hold  1 600 , @: )
   .:   (tap-hold  1 600 . @: )
 )
