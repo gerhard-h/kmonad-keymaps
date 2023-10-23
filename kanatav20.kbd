@@ -1,4 +1,5 @@
 #|
+2023-10-23 16:22 restart Ei Au 
  bug hanging ctrl key with AHK and RDP - (workaround) add lctl lctl to desktop swap makro
  idea (implemented): AHK funtionality to swap desktops without pressing ctl currently (multi lmet lalt ß)
  idea: deactivate autohotkey (to see if the problem persists) but than desktop cycling won't work 
@@ -272,19 +273,19 @@ TODO space+w = tap ^ = ESC not used
             lmet lalt           spc            f15                           
 )
 ;; DON'T mess with the @u【 @a】 spacing 
+;; INFO did lmet, lalt not being one-shot / not incluing lctl solve any problems? ANSWER didn't solve any problems
+;; BUG rsft+rspace=@sym not used and has bugs with RAlt []{}...
 (deflayer base
 ;;****************   BASE   ********************************************************
-;; TODO is @rtw / rsft+rspace=@sym / @ech / @y` / ever used?  / is @^ec used for esc?
-;; TODO did lmet, lalt not being one-shot / not incluing lctl solve any problems?
-;; TODO hold-q = SYM+V = s+i+q 
+;; TODO is @rtw / @v` / ever used?  / is @^ec used for esc?
 ;; TODO ONLY c s i n r h  have dbl_tap autorepeat
 ;; rsft+lspc = CAPS WORDS / lspc+D = DeskSwitch
 ;; F13 = right-B = macro & symbol layer (never used for symbols)
 ;; F14 = left-Space & symbol layer / lsft+F14 = number layer
 ;; feat: rpt-any to be tested
 ;;  @ech  ret hold does ctl via QMK
-  esc       f1   @ff13   @ff14 f24
-  @^ec      @1@  @2    @3`  @4    @5   @6   @7   @8   @9   @0   -    del  bspc
+  esc       f1   @ff13 @ff14s f24
+  @^        @1@  @2    @3`  @4    @5   @6   @7   @8   @9   @0   -    del  bspc
   @tab      @j!  @z˝   @u【 @a】  @y$  @p&  @f%  @l?  @m#  @w\  @q@  esc  @rtw
   @atx      @cwn @s    @i[  @e]   @o'  @d/  @t   @n   @r   @hwn @ß-  ret
   @ossb     @v`  @chx| @ü{  @ä}   @ö+  @b=  @g*  @,;< @.:> @k_~ @rsfb
@@ -296,7 +297,7 @@ TODO space+w = tap ^ = ESC not used
 )
 (deflayer notp
   esc       f1   @ff13   @ff14 f24
-  @^ec      @1@  @2    @3`  @4    @5   @6   @7   @8   @9   @0   -    del  bspc
+  @^        @1@  @2    @3`  @4    @5   @6   @7   @8   @9   @0   -    del  bspc
   @tab      @j!  @!z˝   @u【 @!a】  @y$  @!p&  @!f%  @l?  @m#  @w\  @q@  esc  @rtw
   @atx      @cwn @!s    @!i[  @!e]   @o'  @d/  @!t   @!n   @r   @hwn @ß-  ret
   @oss     @v`  @chx| @ü{  @ä}   @ö+  @b=  @g*  @,;< @.:> @k_~ @rsf
@@ -304,7 +305,7 @@ TODO space+w = tap ^ = ESC not used
 )
 (deflayer caps
   esc       f1   @ff13   @ff14 f24
-  @^ec      @1@  @2    @3`  @4    @5   @6   @7   @8   @9   @0   -    del  bspc
+  @^        @1@  @2    @3`  @4    @5   @6   @7   @8   @9   @0   -    del  bspc
   @tab      @J  @Z˝   @U【 @A】  @Y$  @P&  @F%  @L?  @M#  @W\  @Q@  esc  @rtw
   @atx      @CWN @S    @I[  @E]   @O'  @D/  @T   @N   @R   @HWN @ß-  ret
   @oss      @V`  @CHX| @Ü{  @Ä}   @Ö+  @B=  @G*  @,;< @.:> @K_~ @rsf
@@ -343,8 +344,8 @@ G* S-g
 ;; Typing layer prevents Upper Case within words when typing fast
 (deflayer typing
 ;;****************   typing   ********************************************************
-  esc       f1   @ff13   @ff14 f24
-  @^ec      @1@             @2              @3`           @4             @5             @6             @7             @8             @9             @0            -             del  bspc
+  esc       f1   @ff13   @ff14s f24
+  @^        @1@             @2              @3`           @4             @5             @6             @7             @8             @9             @0            -             del  bspc
   @tab      (unicode j)    (unicode z)     (unicode u)    (unicode a)   (unicode y)    (unicode p)    (unicode f)    (unicode l)    (unicode m)    (unicode w)   (unicode q)    esc  @rtw
   @atx      (unicode c)    (unicode s)     (unicode i)    (unicode e)   (unicode o)    (unicode d)    (unicode t)    (unicode n)    (unicode r)    (unicode h)   @ß-            ret
   @ossb     (unicode v)    (unicode x)     @ü{            @ä}           @ö+            (unicode b)    (unicode g)     @,;<           @.:>           @k_~ @rsf
@@ -563,7 +564,7 @@ G* S-g
 )
 
 (defalias  
-  ;; layer-toggle & switch-layer(stickyness)
+;; *** LAYER-TOGGLE & SWITCH-LAYER(STICKYNESS) ***
   num (layer-toggle numbers)
   numtab (layer-toggle numberstab)
   sym (layer-toggle symbols)
@@ -572,6 +573,8 @@ G* S-g
   sy1 (one-shot 2000 (layer-toggle symbols))
   syk (layer-toggle ksymbols)
   fky (layer-toggle fkeys)
+  cwlay (layer-switch caps)
+;; *** CAPS WORDS ***
   cwd (caps-word-custom 2000 
 		(a b c d e f g h i j k l m n o p q r s t u v w x y z ä ü ö)
 	    (1 2 3 bspc del up down left rght rsft -) ;; rsft must be exluded as they are used for triggering caps words
@@ -580,7 +583,14 @@ G* S-g
 		(a b c d e f g h i j k l m n o p q r s t u v w x y z ä ü ö)
 	    (1 2 3 bspc del up down left rght lsft -) ;; lsft must be exluded as they are used for triggering caps words
   )
-  cwlay (layer-switch caps)
+;; *** ONE SHOT MODIFIERS ***
+  oss (tap-hold 200 300 @cwl lsft)
+  ossb (tap-hold 200 300 (layer-switch caps) lsft)
+  osss (one-shot 2000 lsft)
+  ocl (one-shot 2000 lctl) 
+  oal (one-shot 2000 lalt)
+  oml (one-shot 2000 lmet)
+
   ff14 (tap-hold  200 200 
         (multi	
 		(fork 
@@ -598,17 +608,26 @@ G* S-g
 			(lsft)
 	    )
   ) ;; LEFT sft + LEFT spc == numbers
+    ff14s (tap-hold  200 200 
+        (multi	
+		(fork 
+			(fork 
+			   @osss
+			   @cwlay ;;@cwd
+			   (rsft)
+			)
+			@cwlay ;;@cwl
+			(lsft)	
+		) )
+		(fork 
+			(multi (layer-toggle numbers) (layer-toggle symbols))
+			(layer-toggle numbers)
+			(lsft)
+	    )
+  ) ;; Thumb shift
   ff13 (multi f21 (layer-toggle ksymbols)) ;; MACRO+SYSMBOLS TIP removing one-shot solves problems with hitting the key by accident
   nav   (tap-hold  200 200 spc (fork @num @sym (rsft))) ;; RIGHT sft + RIGHT spc == symbols  
   nav-typing   (tap-hold  200 200 (multi @que spc) (fork @num @sym (rsft))) 
-  ;; one shot modifiers
-  oss (tap-hold 200 300 @cwl lsft)
-  ossb (tap-hold 200 300 (layer-switch caps) lsft)
-  ;;oss (one-shot 2000 lsft)
-  ocl (one-shot 2000 lctl) 
-  oal (one-shot 2000 lalt)
-  oml (one-shot 2000 lmet)
-  
   ;; modifiers for numpad
   srt (tap-hold-release 200 5000 ret lsft)
   ;; cde  (multi @mus (macro f23)) lctl) ;; to trigger ahk mouse  or ctl
@@ -618,7 +637,7 @@ G* S-g
   mrc (tap-hold-release 200 5000 @mar lmet) ;; mouse rclick or win
 
   ;; outer/special keys
-  ech (tap-hold 140 400 esc (multi (macro home ) (tap-hold 400 900 XX (macro end ) )) )
+  ech (tap-hold 140 400 esc (multi (macro home ) (tap-hold 400 900 XX (macro end ) )) ) ;; not used
   ^ec (tap-hold 200 300 esc @^)
   tab (tap-hold-press  200 400 tab lctl )	;; TODO is ctl ever used?
   rtc (tap-hold-release 200 5000 ret lctl)
@@ -753,8 +772,8 @@ i[  (tap-hold 500 500 (multi i @tp) lctl )
   z˝  (tap-hold 1 140 (multi @z @tp) (multi (macro S-2 ) (tap-hold 200 400 XX (macro S-2 ))) )                         ;; " ""
   !z˝ (tap-hold 1 140 @z (multi (macro S-2 ) (tap-hold 200 400 XX (macro S-2 ))) )                         ;; " ""
   u【  (tap-hold 1 150 u (multi (macro S-8 ) (tap-hold 200 400 XX (macro S-9 ))))                           ;; (  ()
-  a】  (tap-hold 1 140 (multi a @tp) (fork (macro-release-cancel S-9 600 bspc RA-9 ) C-a (lctl rctl)) )                   ;; ) [ todo find a better use
-  !a】  (tap-hold 1 140 a (fork (macro-release-cancel S-9 600 bspc RA-9 ) C-a (lctl rctl)) )                   ;; ) [ todo find a better use
+  a】  (tap-hold 1 150 (multi a @tp) (fork (macro-release-cancel S-9 600 bspc RA-9 ) C-a (lctl rctl)) )                   ;; ) [ todo find a better use
+  !a】  (tap-hold 1 150 a (fork (macro-release-cancel S-9 600 bspc RA-9 ) C-a (lctl rctl)) )                   ;; ) [ todo find a better use
   y$  (tap-hold 1 140 @y (macro S-4))
   p&  (tap-hold 1 160 (multi p @tp) (multi (macro S-6 ) (tap-hold 200 800 XX (macro S-6 ))))                          ;; & &&
   !p&  (tap-hold 1 160 p (multi (macro S-6 ) (tap-hold 200 800 XX (macro S-6 ))))                          ;; & &&
