@@ -297,10 +297,10 @@ TODO space+w = tap ^ = ESC not used
 ;; feat: rpt-any to be tested
 ;; ret hold does ctl via QMK
   esc       f1   @ff13 f24
-  @^0        @1@  @2    @3`  @4    @5   @6   @7   @8   @9   @0   -    del  bspc
-  @tab      @j!  @z˝   @u【 @a】  @y$  @p&  @f#  @l?  @m\  @w%  @q@  esc  @rtw
+  @^0        @1@  @2    @3`  @4    @5   @6   @7   @8   @9   @0  @swh    del  bspc
+  @tab      @j!  @z˝   @u【 @a】  @y$  @p&  @f#  @l?  @m\  @w%  @q@ bspc  @rtw
   @atx      @cwn @s^   @i[  @e]   @o'  @d/  @t/   @n-  @r_   @hwn @ß-  ret
-  @ossb     @v`  @chx| @ü{  @ä}   @ö+  @b=  @g*  @,;< @.:> @k_~ @rsfb
+  @ossb     @v`  @cx|  @cü{ @cä}  @ö+  @b=  @g*  @,;< @.:>   @k_~ @rsfb
             @oml @oal  @ff14s     @nav           @ff15   
 #|
             lmet lalt           @nav
@@ -311,16 +311,16 @@ TODO space+w = tap ^ = ESC not used
 (deflayer notp
   esc       f1   @ff13 f24
   @^        @1@  @2    @3`  @4    @5   @6   @7   @8   @9   @0   -    del  bspc
-  @tab      @j!  @!z˝   @u【 @!a】  @y$  @!p&  @!f#  @l?  @m\  @w%  @q@  esc  @rtw
+  @tab      @j!  @!z˝   @u【 @!a】  @y$  @!p&  @!f#  @l?  @m\  @w%  @q@ bspc  @rtw
   @atx      @cwn @!s    @!i[  @!e]   @o'  @d/  @!t   @!n   @r_  @hwn @ß-  ret
-  @oss     @v`  @chx| @ü{  @ä}   @ö+  @b=  @g*  @,;< @.:> @k_~ @rsf
+  @oss      @v`  @cx| @ü{  @ä}   @ö+  @b=  @g*  @,;< @.:> @k_~ @rsf
             @oml @oal   @ff14         @nav           @ff15   
 )
 ;; *** UPPER CASE LAYER - use spc to exit -  hold spc to exit w/o spc TODO shift into lower case does not work ***
 (deflayer caps
   esc       f1   @ff13 f24
   @^        @1@  @2    @3`  @4    @5   @6   @7   @8   @9   @0   -    del  bspc
-  @tab      @J  @Z˝   @U【 @A】  @Y$  @P&  @F#  @L?  @M\  @W%  @Q@  esc  @rtw
+  @tab      @J  @Z˝   @U【 @A】  @Y$  @P&  @F#  @L?  @M\  @W%  @Q@  bspc @rtw
   @atx      @CWN @S    @I[  @E]   @O'  @D/  @T   @N   @R   @HWN @ß-  ret
   @oss      @V`  @CHX| @Ü{  @Ä}   @Ö+  @B=  @G*  @,;< @.:> @K_~ @rsf
             @oml @oal  @ff14      @nav           @ff15u   
@@ -361,9 +361,9 @@ G* (tap-hold 1 400 S-g @*)
 ;;****************   typing   ********************************************************
   esc       f1   @ff13  f24
   @^        @1@             @2              @3`           @4             @5             @6             @7             @8             @9             @0            -             del  bspc
-  @tab      (unicode j)    (unicode z)     (unicode u)    (unicode a)   (unicode y)    (unicode p)    (unicode f)       (unicode l)    (unicode m)    (unicode w)   (unicode q)    esc  @rtw
+  @tab      (unicode j)    (unicode z)     (unicode u)    (unicode a)   (unicode y)    (unicode p)    (unicode f)    (unicode l)    (unicode m)    (unicode w)   (unicode q)    bspc @rtw
   @atx      (unicode c)    (unicode s)     (unicode i)    (unicode e)   (unicode o)    (unicode d)    (unicode t)    (unicode n)    (unicode r)    (unicode h)   @ß-            ret
-  @ossb     (unicode v)    (unicode x)     @ü{            @ä}           @ö+            (unicode b)    (unicode g)     @,;<           @.:>           @k_~ @rsf
+  @ossb     (unicode v)    (unicode x)     @ü{            @ä}           @ö+            (unicode b)    (unicode g)     @,;<           @.:>          @k_~          @rsf
             lmet            lalt           @ff14s         @nav-typing   @ff15              
 )
 (defalias
@@ -378,7 +378,7 @@ G* (tap-hold 1 400 S-g @*)
   @^        @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld-next A-prtsc _
   _         @-_:  1    2    3  C-bspc esc  home up    end  pgup pgdn      _       _
   @sy1      @.wn  @al4 @ct5 @sf6 0    bspc left down  rght del  @fky      _
-  _         @,:   7    8    9    del  tab  @srt @cde  @alc @mrc _
+  _         @,:   7    8    9    del  tab  @srt @cde  @alc @mrc bspc
             _     _    0         _    @ff15              
 )
 ;; keypad alternativ TODO test usage
@@ -388,7 +388,7 @@ G* (tap-hold 1 400 S-g @*)
   @^ec      kp1  kp2   kp3  kp4   kp5  kp6  kp7  kp8  kp9  kp0  f11   f12 bspc
   @tab      f1   f2    f3   f4    f5   f6   f7   f8   f9   f10  f11   f12 @rtw
   @atx      @l1  @l2   @l3  @l4   @l5  @l6  @l7  @l8  @l9  @l0  esc   ret
-  @oss      @v`  @chx| @ü{  @ä}   @ö+  @b=  @g*  @,;< @.:> @-_~ @rsf
+  @oss      @v`  @cx|  @ü{  @ä}   @ö+  @b=  @g*  @,;< @.:> @-_~ @rsf
             @oml @oal  @ff14      (multi spc @que)          @que
 )
 ;; setting fakekeys for numberstab
@@ -512,8 +512,9 @@ G* (tap-hold 1 400 S-g @*)
   chf  (chord fkomma g)  ;; F24
   ch,  (chord fkomma ,)  
   ch.  (chord fkomma .)  ;; Q alternative
-  chx| (chord xä x)		;; sticky numbers
-  chä  (chord xä ä)
+  cx|  (chord xä x)		;; sticky numbers
+  cä}  (chord xä ä)
+  cü{  (chord xä ü)
   ch7  (chord exit79 7)	;; exit numbers
   ch9  (tap-hold 1 200 (chord exit79 9) @quen)
   ch|  (chord |} <)      ;; mods will be added later in defchord < is | 0 is }
@@ -526,11 +527,13 @@ G* (tap-hold 1 400 S-g @*)
   (   9   ) 9
   (7  9   ) @quen
 )
-;; from BASE to NUMFIX
-(defchords xä 20
-  (x      ) (tap-hold 1 120 x (multi @| (tap-hold 200 800 XX @| )) ) 
-  (   ä   ) ä
+;; from BASE to NUMFIX  THis seems to be the principal way : put chord in layer and call alias here (it also keeps the aliases clean) 
+(defchords xä 50
+  (x      ) @x|
+  (   ä   ) @ä}
   (x  ä   ) @numfix
+  (     ü ) @ü{
+  (x    ü ) del
 )
 ;; from SYMBOLS to NUMFIX CA(0) = }  CA(<) = | chord must be defined on the not modified keys
 (defchords |} 140
@@ -664,7 +667,7 @@ G* (tap-hold 1 400 S-g @*)
   ^0 (tap-hold 200 300 0 @^)
   tab (tap-hold-press  200 400 tab lctl )	;; TODO is ctl ever used?
   rtc (tap-hold-release 200 5000 ret lctl)
-  rtw (tap-hold-release 200 5000 ret lmet)
+  rtw del ;;(tap-hold-release 200 5000 ret lmet)
   rsd (tap-hold-release 200 240 @syv (multi rsft lsft)) ;; TODO not used ?! BUG rsft get ignored on RDesktop -> use lsft  or (multi rsft lsft) ?
   ral S-C-M-A-9 ;; release ALL key (BUG) kanata cannot release stuck keys from ahk (both tools with elevated rights) PRESS F24 FOR RELEASE ALL MODS
   
@@ -806,7 +809,7 @@ i[  (multi (tap-hold 500 500 (fork i (unicode i) (f17)) (multi @queh lctl) ) @tp
   !p& (tap-hold 1 160 p (multi (macro S-6 ) (tap-hold 200 800 XX (macro S-6 ))))                          ;; & &&
   l?  (multi (tap-hold 1 140 (multi @queh l) (multi @? (tap-hold 200 500 XX @? ))) @tp)                                          ;; ? = S-[      i ? ??
 ;;k\  (tap-hold 1 140 k (multi @\ (tap-hold 200 800 XX @\ )) )  ;; fast reponsive
-  m\  (multi (tap-hold  1 100 (multi @queh (tap-dance-eager 100 (m (tap-hold 1 260 (macro m) (macro bspc @\\ @\\)) (tap-hold 1 100 (macro m m) m) ))) (multi (macro @\\ ) (tap-hold 1 800 XX (macro @\\ ))) ) @tp)
+  m\  (multi (tap-hold  1 120 (multi @queh (tap-dance-eager 100 (m (tap-hold 1 260 (macro m) (macro bspc @\\ @\\)) (tap-hold 1 100 (macro m m) m) ))) (multi (macro @\\ ) (tap-hold 1 800 XX (macro @\\ ))) ) @tp)
   aä  (tap-hold 1 120 a (macro-release-cancel ä 400 bspc S-= spc 600 bspc ä 600 bspc a 600 bspc))            ;; ä = '  `=S-]
   f#  (multi (tap-hold 1 140 f (macro # )) @tp) 
   !f# (tap-hold 1 140 f  (macro # ))
@@ -815,11 +818,11 @@ i[  (multi (tap-hold 500 500 (fork i (unicode i) (f17)) (multi @queh lctl) ) @tp
   q@  (tap-hold 1 120 q @@ ) 
   o'  (tap-hold 1 160 o (multi @' (tap-hold 200 800 XX @' )) )                         ;; ' ''
   d/  (tap-hold 1 200 d (multi (macro S-7 ) (tap-hold 180 800 XX (macro S-7 ))) )                 ;; / // TODO do we want dbl_tap-hold keyrepeat //
-  x|  (tap-hold 1 120 @chx| (multi @| (tap-hold 200 800 XX @| )) )               ;; | || not used
+  x|  (tap-hold 1 120 x (fork (multi @| (tap-hold 200 800 XX @| )) del (ü 7))  )   ;; | || not used
   v`  (tap-hold 1 160 v (multi @` (tap-hold 200 800 XX @´ )) )
-  ü{  (tap-hold 1 140 ü (multi @{ (tap-hold 200 500 XX @} )))                      ;; { {}
+  ü{  (tap-hold 1 140 ü (fork (multi @{ (tap-hold 200 500 XX @} )) XX (x)))                      ;; { {}
   ;;ä}  (tap-hold-release-timeout 200 400 ä @syvv @} ) ;; not needed on v20 bc of second space bar
-  ä}  (tap-hold 1 140 @chä @} )
+  ä}  (tap-hold 1 140 ä @} )
   ö+  (tap-hold 1 180 ö (multi @+ (tap-hold 220 500 XX @+ )))                              ;; + = =  b + ++
 ;;p=  (tap-hold 1 240 p (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 1000 XX (macro S-0 ))  ))) ) ;; p = == === 
   b=  (tap-hold 1 180 (tap-dance-eager 180 (b (tap-hold 1 180 (macro b) (multi (macro bspc S-0 S-0) (tap-hold 260 600 XX (macro S-0 )))) (tap-hold 1 180 (macro b b) b) )) (multi (macro S-0 ) (tap-hold 260 400 XX (multi (macro S-0 ) (tap-hold 260 800 XX (macro S-0 ))  ))) )
@@ -841,21 +844,32 @@ i[  (multi (tap-hold 500 500 (fork i (unicode i) (f17)) (multi @queh lctl) ) @tp
   .:   (tap-hold  1 600 . @: )
 )
 
+(defvar
+  hb macro h b
+)
 
 (defalias  
  ;; macros
+ del2  (macro bspc rpt) 
  fashing (macro @n1 @n1 . @n1 @n1 . @n2 @n0 @n2 @n3 )
  geb (macro @n2 @n1 . @n1 @n2 . @n2 @n0 @n0 @n1 )
  iban (macro S-d  S-e  @n3 @n0 @n7 @n0 @n0 @n2 @n0 @n2 @n7 @n0 @n0 @n0 @n4 @n5 @n5 @n0 @n6 @n8 @n6 @n0 )
  plz (macro @n6 @n4 @n7 @n1 @n1 )
  tsc (macro @\\ @\\ t s c l i e n t @\\ c @\\ )
  esp (macro S-. d a t e)
+ psiso (cmd-output-keys powershell.exe -NoProfile -NoLogo -NonInteractiv -Command "echo '(' ((Get-Date -Format 'yyyy-MM-dd').toCharArray() -join ' ') ')'")
+  swh (switch
+    ((key-history ´ 1))  (fork (macro (unicode é) f17) (macro (unicode É) f17) (lsft rsft)) break
+	((key-history d 2) (key-history t 1)) (multi  bspc rpt @fashing) break
+    () XX break
+  )
+ 
  ;; Last lines  of script no leading spaces
-psiso (cmd-output-keys powershell.exe -NoProfile -NoLogo -NonInteractiv -Command "echo '(' ((Get-Date -Format 'yyyy-MM-dd').toCharArray() -join ' ') ')'") 
+ 
 cmdiso (cmd-output-keys cmd.exe /C timek.cmd) 
 ;;cmdiso (cmd "C:\Program Files\AutoHotkey\AutoHotkeyU64_UIA.exe" "isodate.ahk") ;; goes not work on new PC
 cmdde (cmd-output-keys cmd.exe /C timedek.cmd) 
-;; bash might be on windows an is much faster than wsl or powershell 
+;; bash might be on windows much faster than wsl or powershell 
 ;;bashiso (cmd-output-keys bash -c "date +'%F %R' | sed 's/./& /g' | sed 's/:/S-;/g' | sed 's/\(.\{20\}\)\(.*\)/\(\1 spc \2\)/'")
 dayiso (macro @n2 @n0 @n2 @n3 - @n0 @n3 - @n0 @n6   )
 dayde  (macro @n0 @n6 . @n0 @n3 . @n2 @n0 @n2 @n3  ))
