@@ -287,6 +287,7 @@ TODO space+w = tap ^ = ESC not used
 ;; DON'T mess with the @u【 @a】 spacing 
 ;; INFO did lmet, lalt not being one-shot / not incluing lctl solve any problems? ANSWER didn't solve any problems
 ;; BUG rsft+rspace=@sym not used and has bugs with RAlt []{}...
+;; feat: rpt will repeat the unmodified key / rpt-any fails to repeat complex tap-hold sequences
 (deflayer base
 ;;****************   BASE   ********************************************************
 ;; TODO is @rtw / @v` / ever used?  / is @^ec used for esc?
@@ -294,7 +295,6 @@ TODO space+w = tap ^ = ESC not used
 ;; rsft+lspc = CAPS WORDS / lspc+D = DeskSwitch
 ;; F13 = right-B = macro & symbol layer (never used for symbols)
 ;; F14 = left-Space & symbol layer / lsft+F14 = number layer
-;; feat: rpt-any to be tested
 ;; ret hold does ctl via QMK
   esc       f1   @ff13 f24
   @^0        @1@  @2    @3`  @4    @5   @6   @7   @8   @9   @0  @swh    del  bspc
@@ -327,34 +327,40 @@ TODO space+w = tap ^ = ESC not used
 )
 ;; *** UPPER CASE ALIAS ***
 (defalias
-J   (tap-hold 1 400 S-j @!)
-Z˝  (tap-hold 1 400 (unicode Z) @˝)
-U【  (tap-hold 1 400 S-u @【)
-A】  (tap-hold 1 400 S-a @】)
-Y$  (tap-hold 1 400 (unicode Y) @$)
-P&  (tap-hold 1 400 S-p @&)
-F#  (tap-hold 1 400 S-f #)
-L?  (tap-hold 1 400 S-l @?)
-M\  (tap-hold 1 300 S-m @\)
-W%  (tap-hold 1 400 S-w @%)
-Q@  (tap-hold 1 400 S-q @@)
-CWN (tap-hold 1 400 S-c @`)
-S   (tap-hold 1 400 S-s @^)
-I[ (tap-hold 1 400 S-i @[)
-E]  (tap-hold 1 400 S-e lsft )
-O' (tap-hold 1 400 S-o @')
-D/ (tap-hold 1 400 S-d @/)
-T   (tap-hold 1 400 S-t lsft )
-N  (tap-hold 1 400 S-n -)
-R  (tap-hold 1 400 S-r @_)
-HWN  (tap-hold 1 400 S-h S-.)
-V` (tap-hold 1 400 S-v ´)
-CHX| (tap-hold 1 400 S-x @|)
-Ü{ (tap-hold 1 400 S-ü @{)
-Ä}  (tap-hold 1 400 S-ä @})
-Ö+ (tap-hold 1 400 S-ö @+)
-B= (tap-hold 1 400 S-b @=)
-G* (tap-hold 1 400 S-g @*)
+J   (fork (tap-hold 1 300 S-j @!) (unmod j) (rsft lsft))
+Z˝  (fork (tap-hold 1 300 (unicode Z) @˝) (unmod z) (rsft lsft))
+U【  (fork (tap-hold 1 300 S-u @【) (unmod u) (rsft lsft))
+A】  (fork (tap-hold 1 300 S-a @】) (unmod a) (rsft lsft))
+Y$  (fork (tap-hold 1 300 (unicode Y) @$) (unmod y) (rsft lsft))
+P&  (fork (tap-hold 1 300 S-p @&) (unmod p) (rsft lsft))
+F#  (fork (tap-hold 1 300 S-f #) (unmod f) (rsft lsft))
+L?  (fork (tap-hold 1 300 S-l @?) (unmod l) (rsft lsft))
+M\  (fork (tap-hold 1 300 S-m @\) (unmod m) (rsft lsft))
+W%  (fork (tap-hold 1 300 S-w @%) (unmod w) (rsft lsft))
+Q@  (fork (tap-hold 1 300 S-q @@) (unmod q) (rsft lsft))
+CWN (fork (tap-hold 1 300 S-c @`) (unmod c) (rsft lsft))
+S   (fork (tap-hold 1 300 S-s @^) (unmod s) (rsft lsft))
+I[  (fork (tap-hold 1 300 S-i @[) (unmod i) (rsft lsft))
+E]  (switch
+        (rsft)  (tap-hold 1 300 (unmod e) (layer-switch base) ) break
+        ()  (tap-hold 1 300 S-e lsft) break 
+     )
+O'  (fork (tap-hold 1 300 S-o @') (unmod o) (rsft lsft))
+D/  (fork (tap-hold 1 300 S-d @/) (unmod d) (rsft lsft))
+T   (switch
+        (lsft)  (tap-hold 1 300 (unmod t) (layer-switch base) ) break
+        ()  (tap-hold 1 300 S-t rsft) break 
+     )
+N   (fork (tap-hold 1 300 S-n -) (unmod n) (rsft lsft))
+R   (fork (tap-hold 1 300 S-r @_) (unmod r) (rsft lsft))
+HWN (fork (tap-hold 1 300 S-h S-.) (unmod h) (rsft lsft))
+V`  (fork (tap-hold 1 300 S-v ´) (unmod v) (rsft lsft))
+CHX| (fork (tap-hold 1 300 S-x @|) (unmod x) (rsft lsft))
+Ü{  (fork (tap-hold 1 300 S-ü @{) (unmod ü) (rsft lsft))
+Ä}  (fork (tap-hold 1 300 S-ä @}) (unmod ä) (rsft lsft))
+Ö+  (fork (tap-hold 1 300 S-ö @+) (unmod ö) (rsft lsft))
+B=  (fork (tap-hold 1 300 S-b @=) (unmod b) (rsft lsft))
+G*  (fork (tap-hold 1 300 S-g @*) (unmod g) (rsft lsft))
 )
 ;; *** fast Typing layer - prevents Upper Case within words when typing fast ***
 (deflayer typing
@@ -742,7 +748,12 @@ i[  (multi (tap-hold 500 500 (fork i (unicode i) (f17)) (multi @queh lctl) ) @tp
   s^ (multi  (tap-hold 1000 1000 s (multi @queh alt)) @tp)
   !s (tap-hold 1000 1000 s alt)
   hwn (tap-hold 350 1000 h lmet)
-  ß-  (tap-hold 1 180 ß (macro - ) )                                                                                ;; ß = [
+  ß-  (tap-hold 1 180 
+		(switch
+			((key-history - 1)) - break
+			() ß break 
+		) 
+	  (macro - ) )                                                                                ;; ß = [
   cwn (tap-hold 1000 1000 c lmet)
   r_ (multi (tap-hold-release 450 1000 r (multi @queh lalt)) @tp)
   rsf (tap-hold-release 350 500 - rsft)
@@ -817,7 +828,13 @@ i[  (multi (tap-hold 500 500 (fork i (unicode i) (f17)) (multi @queh lctl) ) @tp
   sß  (tap-hold 1 120 s (macro ß ) )                                                                               ;; ß = [
   q@  (tap-hold 1 120 q @@ ) 
   o'  (tap-hold 1 160 o (multi @' (tap-hold 200 800 XX @' )) )                         ;; ' ''
-  d/  (tap-hold 1 200 d (multi (macro S-7 ) (tap-hold 180 800 XX (macro S-7 ))) )                 ;; / // TODO do we want dbl_tap-hold keyrepeat //
+  d/  (tap-hold 1 200 
+		(switch
+			((and (key-history lsft 2)(key-history 7 1))) S-7 break
+			() d break 
+		)  
+		(multi (macro S-7 ) 
+		(tap-hold 180 800 XX (macro S-7 ))) )
   x|  (tap-hold 1 120 x (fork (multi @| (tap-hold 200 800 XX @| )) del (ü 7))  )   ;; | || not used
   v`  (tap-hold 1 160 v (multi @` (tap-hold 200 800 XX @´ )) )
   ü{  (tap-hold 1 140 ü (fork (multi @{ (tap-hold 200 500 XX @} )) XX (x)))                      ;; { {}
@@ -825,17 +842,49 @@ i[  (multi (tap-hold 500 500 (fork i (unicode i) (f17)) (multi @queh lctl) ) @tp
   ä}  (tap-hold 1 140 ä @} )
   ö+  (tap-hold 1 180 ö (multi @+ (tap-hold 220 500 XX @+ )))                              ;; + = =  b + ++
 ;;p=  (tap-hold 1 240 p (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 1000 XX (macro S-0 ))  ))) ) ;; p = == === 
-  b=  (tap-hold 1 180 (tap-dance-eager 180 (b (tap-hold 1 180 (macro b) (multi (macro bspc S-0 S-0) (tap-hold 260 600 XX (macro S-0 )))) (tap-hold 1 180 (macro b b) b) )) (multi (macro S-0 ) (tap-hold 260 400 XX (multi (macro S-0 ) (tap-hold 260 800 XX (macro S-0 ))  ))) )
-  
-  g*  (tap-hold 1 160 @chf (multi (macro S-+ ) (tap-hold 1 800 XX S-+ )))  ;; * with long autorepeat - there must be a macro (@*) after the multi for the timeout do work
+;;b=  (tap-hold 1 180 (tap-dance-eager 180 (b (tap-hold 1 180 (macro b) (multi (macro bspc S-0 S-0) (tap-hold 260 600 XX (macro S-0 )))) (tap-hold 1 180 (macro b b) b) )) (multi (macro S-0 ) (tap-hold 260 400 XX (multi (macro S-0 ) (tap-hold 260 800 XX (macro S-0 ))  ))) )
+;; this enables an strange hold-hold-autorepeat on =
+ b=== (tap-hold 1 180 b (macro-release-cancel S-0 500 S-0 900 S-0))
+ b=  (switch
+		((and (key-history lsft 6) (key-history 0 5) (key-history lsft 4) (key-history 0 3) (key-history lsft 2) (key-history 0 1) )) b break
+        ((and (key-history lsft 2)(key-history 0 1))) S-0 break    
+		()	@b=== break
+  )
+  g*  (switch
+        ((and (key-history lsft 3)(key-history + 2)(key-history . 1))) S-+ break
+        ((and (key-history lsft 2)(key-history + 1))) S-+ break    
+		()	(tap-hold 1 160 @chf (multi (macro S-+ ) (tap-hold 1 800 XX S-+ )))  break ;; * with long autorepeat - there must be a macro (@*) after the multi for the timeout do work
+  )
 ;;,F24 (tap-dance 140 ((tap-hold 10 100 , (multi (macro S-, ) (tap-hold 200 400 XX (macro bspc @lth ))) )  (tap-hold 10 100 f20 (macro @lth))))  ;; ,, = F24 , ; <
 ;; .:> (tap-dance 140 ((tap-hold 10 100 . (multi (macro S-. ) (tap-hold 200 400 XX (macro bspc @gth ))) )  (tap-hold 10 100 (macro . .) (macro @gth)) (tap-hold 10 100 (macro . . .) .) ))  ;; . : >
 ;;  -_~ (tap-dance 140 ((tap-hold 10 100 - (multi (macro S-- ) (tap-hold 200 400 XX (macro bspc @til ))) )  (tap-hold 10 100 (macro - -) (macro @til)) (tap-hold 10 100 (macro - - -) -) ))  ;; - _ ~
 ;; nesting of tap-dance inside tap-hold is now possible
   ,F20 (tap-hold  1 100 (tap-dance 140 (, (tap-hold 10 100 f20 @<)))  (multi @;  (tap-hold 200 400 XX (macro bspc 102d ))) )  ;; ,, = F24 , ; <
   ,F18 (tap-hold  1 100 (tap-dance 140 ( f18  (tap-hold 100 100 (macro , ,) @<) (macro , , ,) ))  (multi @;  (tap-hold 200 400 XX (macro bspc 102d ))) )  ;; ,, = F24 , ; <
-  ,;<  (tap-hold  1 140 (tap-dance 140 (@ch, (tap-hold 10 100 (macro , ,)  @< ) (tap-hold 10 100 (macro , , ,) .) )) (multi @; (tap-hold 200 800 XX (macro bspc 102d ))) ) 
-  .:>  (tap-hold  1 100 (tap-dance 140 (@ch. (tap-hold 10 100 (macro . .)  @> ) (tap-hold 10 100 (macro . . .) .) )) (multi @: (tap-hold 200 800 XX (macro bspc S-102d ))) )    ;; . : >
+;;,;<  (tap-hold  1 140 (tap-dance 140 (@ch, (tap-hold 10 100 (macro , ,)  @< ) (tap-hold 10 100 (macro , , ,) .) )) (multi @; (tap-hold 200 800 XX (macro bspc 102d ))) ) 
+  ,;<  (tap-hold  1 140 (tap-dance 140 (
+							(switch
+								((and (key-history lsft 2)(key-history , 1))) S-, break
+								((and (or (key-history lsft 2)(key-history rsft 2)(key-history lalt 2)(key-history ralt 2)) (key-history 102d 1))) @ch, break
+								((key-history 102d 1)) @< break  
+								()	@ch, break 
+							)
+							(tap-hold 10 100 (macro , ,)  @< )
+							(tap-hold 10 100 (macro , , ,) .) ))
+			(multi @; (tap-hold 200 800 XX (macro bspc 102d ))) ) 
+		 
+  .:>  (tap-hold  1 100 (tap-dance 140 (
+							(switch
+								((and (key-history lsft 2)(key-history . 1))) S-. break
+								((and (or (key-history lalt 2)(key-history ralt 2)) (key-history 102d 1))) @ch. break
+								((and (key-history lsft 2)(key-history 102d 1))) @> break
+								((and (key-history 102d 1))) @> break
+								((and (key-history - 1))) @> break
+								()	@ch. break 
+							)
+							(tap-hold 10 100 (macro . .)  @> ) 
+							(tap-hold 10 100 (macro . . .) .) )) 
+			(multi @: (tap-hold 200 800 XX (macro bspc S-102d ))) )    ;; . : >
   -_~  (tap-hold  1 100 (tap-dance 140 (/   (tap-hold 10 100 (macro / /)  @~) (tap-hold 10 100 (macro / / /) /) )) (multi (macro @_ ) (tap-hold 200 800 XX (macro bspc @~~ ))) )  ;; - _ ~
   -_:  (tap-hold  1 100 (tap-dance 140 (/   (tap-hold 10 100 (macro / /)  @:) (tap-hold 10 100 (macro / / /) /) )) (multi (macro @_ ) (tap-hold 200 800 XX (macro bspc S-. ))) )  ;; - _ :
   k_~  (tap-hold  1 380 (tap-dance-eager 380 (k (tap-hold 1 300 (macro k) (macro bspc @~~)) (tap-hold 1 300 (macro k k) k) )) (multi (macro @_ ) (tap-hold 1 900 XX (macro bspc @~~ ))) )  ;; - _ ~
@@ -861,6 +910,12 @@ i[  (multi (tap-hold 500 500 (fork i (unicode i) (f17)) (multi @queh lctl) ) @tp
   swh (switch
     ((key-history ´ 1))  (fork (macro (unicode é) f17) (macro (unicode É) f17) (lsft rsft)) break
 	((key-history d 2) (key-history t 1)) (multi  bspc rpt @fashing) break
+	((and (key-history j 2) (key-history u 1 ))) (macro  j spc n o t spc m a t t e r s ) break
+	((and (key-history x 1) (key-history v 2 ))) (macro  x spc n o t spc m a t t e r s ) break
+	((and (key-history p 1 ) lsft)) (macro  u spc n o t spc m a t t e r s ) break
+	((key-history lsft 2)(key-history , 1)) (macro l s f t spc k o m m a) break
+	((key-history , 1)) (macro  k o m m a) break
+	((key-history < 1)) (macro  l e f t <) break
     () XX break
   )
  
