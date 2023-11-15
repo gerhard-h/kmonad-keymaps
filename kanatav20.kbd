@@ -261,6 +261,10 @@ TODO space+w = tap ^ = ESC not used
   ä (macro ')
   ü (macro [)
   ö (macro ;) 
+  ;; numlock on
+  nly (cmd-output-keys powershell.exe "if ($([console]::NumberLock) -match 'True') { echo '()' } else { echo '(nlck)' }")
+  ;; numlock off
+  nln (cmd-output-keys powershell.exe "if ($([console]::NumberLock) -match 'True') { echo '(nlck)' } else { echo '()' }")
 )
 
 #|(defsrc querty laptop
@@ -297,7 +301,7 @@ TODO space+w = tap ^ = ESC not used
 ;; F14 = left-Space & symbol layer / lsft+F14 = number layer
 ;; ret hold does ctl via QMK
   esc       f1   @ff13 f24
-  @^0        @1@  @2    @3`  @4    @5   @6   @7   @8   @9   @0  @swh    del  bspc
+  @^0        @1@  @2    @3`  @4    @5   @6   @7   @8   @9   @0 f19 @swh    bspc
   @tab      @j!  @z˝   @u【 @a】  @y$  @p&  @f#  @l?  @m\  @w%  @q@ bspc  @rtw
   @atx      @cwn @s^   @i[  @e]   @o'  @d/  @t/   @n-  @r_   @hwn @ß-  ret
   @ossb     @v`  @cx|  @cü{ @cä}  @ö+  @b=  @g*  @,;< @.:>   @k_~ @rsfb
@@ -327,6 +331,7 @@ TODO space+w = tap ^ = ESC not used
 )
 ;; *** UPPER CASE ALIAS ***
 (defalias
+cwlay (multi (layer-switch caps) @nly)
 J   (fork (tap-hold 1 300 S-j @!) (unmod j) (rsft lsft))
 Z˝  (fork (tap-hold 1 300 (unicode Z) @˝) (unmod z) (rsft lsft))
 U【  (fork (tap-hold 1 300 S-u @【) (unmod u) (rsft lsft))
@@ -439,7 +444,7 @@ G*  (fork (tap-hold 1 300 S-g @*) (unmod g) (rsft lsft))
   esc       f1   @ff13 f24
   ^         1    2     3     4     5      6    7    8    9    0    -    ´    bspc
   _         @aup up    esc   esc   C-bspc esc  home up   end  pgup pgdn      _       _
-  @sy1      left down  rght  rght  0      bspc left down rght bspc @fky      _
+  @sy1      left down  rght  rght  0      bspc left down rght del @fky      _
   _         @,:  down  down  down  del    tab  @srt @cde @alc @mrc _
             _     _    @ff14       _             @ff15                      
 )
@@ -449,7 +454,7 @@ G*  (fork (tap-hold 1 300 S-g @*) (unmod g) (rsft lsft))
   esc       f1   @ff13 f24
   @^        @at1  @at2 @at3 @at4 @at5 @at6 @at7 @at8  @at9 @atm lrld-next A-prtsc _
   _         @-_:  1    2    3  C-bspc esc  home up    end  pgup pgdn      _       _
-  @quen     @.wn  @al4 @ct5 @sf6 0    bspc left down  rght bspc @fky      _
+  @quen     @.wn  @al4 @ct5 @sf6 0    bspc left down  rght del @fky      _
   _         @,:   @ch7 8    @ch9 del  tab  @srt @cde  @alc @mrc _
             _     _   (tap-hold  200 200 @0 @quen)    (tap-hold  200 200 spc @quen)  _                 
 )
@@ -509,12 +514,12 @@ G*  (fork (tap-hold 1 300 S-g @*) (unmod g) (rsft lsft))
             lmet lalt   @ff14   @quep              _
 )
 (defalias
-  que (layer-switch base)
+  que (multi (layer-switch base) @nln)
   queh (layer-toggle base)
-  quen (multi (layer-switch base) nlck)
-  numfix (multi (layer-switch numfix) nlck)
+  quen (multi (layer-switch base) @nln)
+  numfix (multi (layer-switch numfix) @nly)
   ff15u (tap-hold 1 200  @que (layer-toggle numberline))
-  ff15 (tap-hold 1 200  (layer-switch numberline) (layer-toggle numberline))
+  ff15 (tap-hold 1 200  (multi @nly (layer-switch numberline)) (layer-toggle numberline))
   chf  (chord fkomma g)  ;; F24
   ch,  (chord fkomma ,)  
   ch.  (chord fkomma .)  ;; Q alternative
@@ -603,7 +608,6 @@ G*  (fork (tap-hold 1 300 S-g @*) (unmod g) (rsft lsft))
   sy1 (one-shot 2000 (layer-toggle symbols))
   syk (layer-toggle ksymbols)
   fky (layer-toggle fkeys)
-  cwlay (layer-switch caps)
 ;; *** CAPS WORDS ***
   cwd (caps-word-custom 2000 
 		(a b c d e f g h i j k l m n o p q r s t u v w x y z ä ü ö)
@@ -615,7 +619,7 @@ G*  (fork (tap-hold 1 300 S-g @*) (unmod g) (rsft lsft))
   )
 ;; *** ONE SHOT MODIFIERS ***
   oss (tap-hold 200 300 @cwl lsft)
-  ossb (tap-hold 200 300 (layer-switch caps) lsft)
+  ossb (tap-hold 200 300 @cwlay lsft)
   osss (one-shot 2000 lsft)
   ocl (one-shot 2000 lctl) 
   oal (one-shot 2000 lalt)
@@ -656,7 +660,7 @@ G*  (fork (tap-hold 1 300 S-g @*) (unmod g) (rsft lsft))
 			(lsft)
 	    )
   ) ;; Thumb shift
-  ff13 (multi f21 (layer-toggle ksymbols)) ;; MACRO+SYSMBOLS TIP removing one-shot solves problems with hitting the key by accident
+  ff13 (multi f21 @que (layer-toggle ksymbols)) ;; MACRO+F-Keys TIP removing one-shot solves problems with hitting the key by accident - F21 is not used in ahk
   nav   (tap-hold  200 200 spc (fork @num @sym (rsft))) ;; RIGHT sft + RIGHT spc == symbols  
   nav-typing   (tap-hold  200 200 (multi @que spc) (fork @num @sym (rsft))) 
   ;; modifiers for numpad
@@ -840,7 +844,13 @@ i[  (multi (tap-hold 500 500 (fork i (unicode i) (f17)) (multi @queh lctl) ) @tp
   ü{  (tap-hold 1 140 ü (fork (multi @{ (tap-hold 200 500 XX @} )) XX (x)))                      ;; { {}
   ;;ä}  (tap-hold-release-timeout 200 400 ä @syvv @} ) ;; not needed on v20 bc of second space bar
   ä}  (tap-hold 1 140 ä @} )
-  ö+  (tap-hold 1 180 ö (multi @+ (tap-hold 220 500 XX @+ )))                              ;; + = =  b + ++
+  ö+  (tap-hold 1 180 
+	  (switch
+			((and (key-history lsft 2)(key-history + 1))) ö break
+			((key-history + 1)) @+ break
+			() ö break 
+	  )  
+	  (multi @+ (tap-hold 220 500 XX @+ )))                              ;; + = =  b + ++
 ;;p=  (tap-hold 1 240 p (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 1000 XX (macro S-0 ))  ))) ) ;; p = == === 
 ;;b=  (tap-hold 1 180 (tap-dance-eager 180 (b (tap-hold 1 180 (macro b) (multi (macro bspc S-0 S-0) (tap-hold 260 600 XX (macro S-0 )))) (tap-hold 1 180 (macro b b) b) )) (multi (macro S-0 ) (tap-hold 260 400 XX (multi (macro S-0 ) (tap-hold 260 800 XX (macro S-0 ))  ))) )
 ;; this enables an strange hold-hold-autorepeat on =
