@@ -320,7 +320,7 @@ TODO space+w = tap ^ = ESC not used
   @tab      @j!  @z˝   @u【 @a】  @y$  @p&  @f#  @l?  @m\  @w%  @q@ bspc  @rtw
   @atx      @cwn @s^   @i[  @e]   @o'  @d/  @t/   @n-  @r_   @hwn @ß-  ret
   @osss     @x`  @cv|  @cü{ @cä}  @ö+  @b=  @g*  @,;< @.:>   @k_~ @rsfb
-            @oml @oal  @ff14s     @nav           @ff15   
+            @oml @oal  @ff14     @nav           @ff15   
 #|
             lmet lalt           @nav
  CTRL + SPACE + ESC => Exit KANATA immediatly
@@ -342,7 +342,7 @@ TODO space+w = tap ^ = ESC not used
   @tab      @J  @Z˝   @U【 @A】  @Y$  @P&  @F#  @L?  @M\  @W%  @Q@  bspc @rtw
   @atx      @CWN @S    @I[  @E]   @O'  @D/  @T   @N   @R   @HWN @ß-  ret
   @scabs    @X`  @CHV| @Ü{  @Ä}   @Ö+  @B=  @G*  @,;< @.:> @K_~ @rsf
-            @oml @oal  @ff14      @nav           @ff15u   
+            @oml @oal  @ff14c      @nav           @ff15u   
 )
 ;; *** UPPER CASE ALIAS ***
 (defalias
@@ -401,7 +401,7 @@ G*  (fork (tap-hold 1 300 S-g @*) (unshift g) (rsft lsft))
   @tab      (unmod   j)    (unmod   z)     (unmod u)    (unmod   a)   (unmod   y)    (unmod   p)    (unmod   f)    (unmod   l)    (unmod   m)    (unmod   w)   (unmod   q)    bspc @rtw
   @atx      (unmod   c)    (unmod   s)     (unmod   i)    (unmod   e)   (unmod   o)    (unmod   d)    (unmod   t)    (unmod   n)    (unmod   r)    (unmod   h)   @ß-            ret
   @osss     (unmod   v)    (unmod   x)     @ü{            @ä}           @ö+            (unmod   b)    (unmod   g)     @,;<           @.:>          @k_~          @rsf
-            lmet            lalt           @ff14s         @nav-typing   @ff15              
+            lmet            lalt           @ff14         @nav-typing   @ff15              
 )
 (defalias
  fast_f  (fork (unicode f) f (lsft rsft lctl rctl lalt ralt lmet rmet)) ;; not really needed TODO implement f17 trick for Fl
@@ -433,7 +433,7 @@ G*  (fork (tap-hold 1 300 S-g @*) (unshift g) (rsft lsft))
   _         @-_:  1    2    3   @delw esc  home up    end  pgup pgdn      _       _
   @sy1      @c.wn @al4 @ct5 @sf6 0    bspc left down  rght esc  @fky      _
   _         @,:x   7    8    9    del  tab  @srt @cde  @alc @mrc _
-            _     _    0         _    @ff15              
+            _     _    _         _    @ff15              
 )
 ;; keypad alternativ TODO test usage
 (deflayer numberline
@@ -670,12 +670,12 @@ G*  (fork (tap-hold 1 300 S-g @*) (unshift g) (rsft lsft))
   ocl (one-shot 2000 lctl) 
   oal (one-shot 2000 lalt)
   oml (one-shot 2000 lmet)
-  ;; F14 SPACE / LEFT sft + LEFT spc == numbers
+  ;; F14 LEFT sft + LEFT spc == numbers
   ff14 (tap-hold  200 200 
         (multi	
 		(fork 
 			(fork 
-			   spc
+			   ret
 			   @cwlayto ;;@cwd
 			   (rsft)
 			)
@@ -687,18 +687,16 @@ G*  (fork (tap-hold 1 300 S-g @*) (unshift g) (rsft lsft))
 			(layer-toggle numbers)
 			(lsft)
 	    )
-  ) 
-  ;;F14 RETURN / LEFT sft + LEFT spc == numbers
-    ff14s (tap-hold  200 200 
+  )
+  ff14c (tap-hold  200 200 
         (multi	
 		(fork 
 			(fork 
-			   ;;@osss
 			   ret
-			   @cwlayto ;;@cwd
+			   @cwlayout ;;@cwd
 			   (rsft)
 			)
-			@cwlayto ;;@cwl
+			@cwlayout ;;@cwl
 			(lsft)	
 		) )
 		(fork 
