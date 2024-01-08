@@ -305,10 +305,10 @@ INFO Lspace + S = ^
 ;; f1 unused / why is f24 declaration required? /   F13 = right-B  / F14 = left-Space
 (defsrc
   esc       f1   f13  f24
-  ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
-  tab       j    y    u    a    z    p    f    l    m    w    q    +    #
-  caps      c    s    i    e    o    d    t    n    r    h    ß    ret
-  lsft      x    v    ü    ä    ö    b    g    ,    .    k    rsft
+  ^         1    2    3    4    5    6    7    8    9    0    +    ´    bspc
+  tab       j    y    u    a    z    p    f    l    m    w    q    ß    #
+  caps      c    s    i    e    o    d    t    n    r    h    k    ret
+  lsft      x    v    ü    ä    ö    b    g    ,    .    -    rsft
             lmet lalt      f14       spc            f15                           
 )
 
@@ -325,10 +325,10 @@ INFO Lspace + S = ^
 ;; F14 = left-Space & symbol layer / lsft+F14 = number layer
 ;; ret hold does ctl via QMK
   esc       f1   @ff13 f24
-  @^0        @1@  @2    @3`  @4    @5   @6   @7   @8   @9   @0 @dp1 @swh    bspc
-  @tab      @j!  @z˝   @u【 @a】  @y$  @p&  @f#  @l?  @m\  @w%  @q@ bspc  @rtw
-  @atx      @cwn @s^   @i[  @e]   @o'  @d/  @t/   @n-  @r_   @hwn @ß-  ret
-  @osss     @x`  @cv|  @cü{ @cä}  @ö+  @b=  @g*  @,;< @.:>   @k_~ @rsfb
+  @^0        @1@  @2    @3`  @4    @5   @6   @7   @8   @9   @0 _  @swh    bspc
+  @tab      @j!  @z˝   @u【 @a】  @y$  @p&  @f#  @l?  @m\  @w%  @q@ ß  @rtw
+  @atx      @cwn @s^   @i[  @e]   @o'  @d/  @t/   @n-  @r_   @hwn k    ret
+  @osss     @x`  @cv|  @cü{ @cä}  @ö+  @b=  @g*  @,;< @.:>   @-_~ @rsfb
             @oml @oal  @ff14     @nav           @ff15   
 #|
             lmet lalt           @nav
