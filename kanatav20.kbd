@@ -325,7 +325,7 @@ INFO Lspace + S = ^
 ;; F14 = left-Space & symbol layer / lsft+F14 = number layer
 ;; ret hold does ctl via QMK
   esc       f1   @ff13 f24
-  @^0        @1@  @2    @3`  @4    @5   @6   @7   @8   @9   @0 _  @swh    bspc
+  @^0        @1@  @2    @3`  @4    @5   @6   @7   @8   @9   @0 @dp1  @swh    bspc
   @tab      @j!  @z˝   @u【 @a】  @y$  @p&  @f#  @l?  @m\  @w%  @q@ ß  @rtw
   @atx      @cwn @s^   @i[  @e]   @o'  @d/  @t/   @n-  @r_   @hwn k    ret
   @osss     @x`  @cv|  @cü{ @cä}  @ö+  @b=  @g*  @,;< @.:>   @-_~ @rsfb
@@ -339,18 +339,18 @@ INFO Lspace + S = ^
 (deflayer notp
   esc       f1   @ff13 f24
   @^        @1@  @2    @3`  @4    @5   @6   @7   @8   @9   @0   -    del  bspc
-  @tab      @j!  @!z˝   @u【 @!a】  @y$  @!p&  @!f#  @l?  @m\  @w%  @q@ bspc  @rtw
-  @atx      @cwn @!s    @!i[  @!e]   @o'  @d/  @!t   @!n   @r_  @hwn @ß-  ret
-  @oss      @x`  @cv| @ü{  @ä}   @ö+  @b=  @g*  @,;< @.:> @k_~ @rsf
+  @tab      @j!  @!z˝   @u【 @!a】  @y$  @!p&  @!f#  @l?  @m\  @w%  @q@ @ß-  @rtw
+  @atx      @cwn @!s    @!i[  @!e]   @o'  @d/  @!t   @!n   @r_  @hwn k  ret
+  @oss      @x`  @cv| @ü{  @ä}   @ö+  @b=  @g*  @,;< @.:> @-_~ @rsf
             @oml @oal   @ff14         @nav           @ff15   
 )
 ;; *** UPPER CASE LAYER - use spc to exit -  hold spc to exit w/o spc TODO shift into lower case does not work ***
 (deflayer caps
   esc       f1   @ff13 f24
   @^        @1@  @2    @3`  @4    @5   @6   @7   @8   @9   @0   -    del  bspc
-  @tab      @J  @Z˝   @U【 @A】  @Y$  @P&  @F#  @L?  @M\  @W%  @Q@  bspc @rtw
-  @atx      @CWN @S    @I[  @E]   @O'  @D/  @T   @N   @R   @HWN @ß-  ret
-  @scabs    @X`  @CHV| @Ü{  @Ä}   @Ö+  @B=  @G*  @,;< @.:> @K_~ @rsf
+  @tab      @J  @Z˝   @U【 @A】  @Y$  @P&  @F#  @L?  @M\  @W%  @Q@  @ß- @rtw
+  @atx      @CWN @S    @I[  @E]   @O'  @D/  @T   @N   @R   @HWN S-k  ret
+  @scabs    @X`  @CHV| @Ü{  @Ä}   @Ö+  @B=  @G*  @,;< @.:> @-_~ @rsf
             @oml @oal  @ff14c      @nav           @ff15u   
 )
 ;; *** UPPER CASE ALIAS ***
@@ -407,9 +407,9 @@ G*  (fork (tap-hold 1 200 S-g @*) (unshift g) (rsft lsft))
 ;;****************   typing   ********************************************************
   esc       f1   @ff13  f24
   @^        @1@             @2              @3`           @4             @5             @6             @7             @8             @9             @0            -             del  bspc
-  @tab      (unmod   j)    (unmod   z)     (unmod u)    (unmod   a)   (unmod   y)    (unmod   p)    (unmod   f)    (unmod   l)    (unmod   m)    (unmod   w)   (unmod   q)    bspc @rtw
-  @atx      (unmod   c)    (unmod   s)     (unmod   i)    (unmod   e)   (unmod   o)    (unmod   d)    (unmod   t)    (unmod   n)    (unmod   r)    (unmod   h)   @ß-            ret
-  @osss     (unmod   v)    (unmod   x)     @ü{            @ä}           @ö+            (unmod   b)    (unmod   g)     @,;<           @.:>          @k_~          @rsf
+  @tab      (unmod   j)    (unmod   z)     (unmod u)    (unmod   a)   (unmod   y)    (unmod   p)    (unmod   f)    (unmod   l)    (unmod   m)    (unmod   w)   (unmod   q) (unmod ß) @rtw
+  @atx      (unmod   c)    (unmod   s)     (unmod   i)    (unmod   e)   (unmod   o)    (unmod   d)    (unmod   t)    (unmod   n)    (unmod   r)    (unmod   h) (unmod   k)      ret
+  @osss     (unmod   v)    (unmod   x)     @ü{            @ä}           @ö+            (unmod   b)    (unmod   g)     @,;<           @.:>          @-_~          @rsf
             lmet            lalt           @ff14         @nav-typing   @ff15              
 )
 (defalias
@@ -996,14 +996,15 @@ i[  (multi (tap-hold 500 500 (fork i (unicode i) (f17)) (multi @queh lctl) ) @tp
 (defalias  
  ;; macros
  del2  (macro bspc rpt) 
- fashing (macro @n1 @n1 . @n1 @n1 . @n2 @n0 @n2 @n3 )
+ fashing (macro @n1 @n1 . @n1 @n1 . @n2 @n0 @n2 @n4 )
  geb (macro @n2 @n1 . @n1 @n2 . @n2 @n0 @n0 @n1 )
- iban (macro S-d  S-e  @n3 @n0 @n7 @n0 @n0 @n2 @n0 @n2 @n7 @n0 @n0 @n0 @n4 @n5 @n5 @n0 @n6 @n8 @n6 @n0 )
+ iban (macro S-d  S-e  @n2 @n0 @n3 @n7 @n0 @n1 @n0 @n0 @n5 @n0 @n0 @n0 @n0 @n4 @n4 @n5 @n0 @n5 @n0 @n7 )
  plz (macro @n6 @n4 @n7 @n1 @n1 )
  tsc (macro @\\ @\\ t s c l i e n t @\\ c @\\ )
  esp (macro S-. d a t e)
  psiso (cmd-output-keys powershell.exe -NoProfile -NoLogo -NonInteractiv -Command "echo '(' ((Get-Date -Format 'yyyy-MM-dd').toCharArray() -join ' ') ')'")
-  swh (switch
+ ;; **** HOW TO IMPLEMENT HOTSTRINGS **** 
+ swh (switch
     ((key-history ´ 1))  (fork (macro (unicode é) f17) (macro (unicode É) f17) (lsft rsft)) break
 	((key-history d 2) (key-history t 1)) (multi  bspc rpt @fashing) break
 	((and (key-history j 2) (key-history u 1 ))) (macro  j spc n o t spc m a t t e r s ) break
