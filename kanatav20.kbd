@@ -167,7 +167,7 @@ INFO Lspace + S = ^
   danger-enable-cmd yes
   ;;usecases for cmd: current date
   ;; process-unmapped-keys no ;; yes does not help with japanese keys ; did not help with RDP
-  process-unmapped-keys yes ;; WHY WHY WHY seit Nov 23 wegen dynamic-macro?!
+  process-unmapped-keys yes ;; WHY WHY WHY seit Nov 23 wegen dynamic-macro?! keine Probleme gesichtet
   ;; movemouse-smooth-diagonals yes
   
   ;; This configuration allows you to customize the length limit on dynamic macros.
@@ -275,9 +275,9 @@ INFO Lspace + S = ^
   < (macro 102d  ) ;; not really needed but having @< and @> looks consistent
   ;; change dead keys in normal keys
   ´ (macro = spc)	  ;; ´ 
-  ` (macro S-´ spc) ;;(unicode `)       ;; ` unicode also disables autorepeat
+  ` (macro S-´ spc)   ;;(unicode `)       ;; ` unicode also disables autorepeat
   ^ (unicode ^)       ;; ^ = \ - shifting (macro grv spc) will produce an incorrect space now: "° "
-  ° S-grv
+  ° (macro S-grv)
   , (macro ,)
   f20 (macro f20)
   f19 (macro f19)
@@ -728,7 +728,7 @@ G*  (fork (tap-hold 1 200 S-g @*) (unshift g) (rsft lsft))
   ;; outer/special keys
   ech (tap-hold 140 400 esc (multi (macro home ) (tap-hold 400 900 XX (macro end ) )) ) ;; not used
   ^ec (tap-hold 200 300 esc @^)
-  ^0 (tap-hold 200 300 0 @^)
+  ^0 (tap-hold 200 300 0 (fork @^ @° (lsft rsft)))
   tab (tap-hold-press  200 400 tab lctl )	;; TODO is ctl ever used?
   rtc (tap-hold-release 200 5000 ret lctl)
   rtw del ;;(tap-hold-release 200 5000 ret lmet)
