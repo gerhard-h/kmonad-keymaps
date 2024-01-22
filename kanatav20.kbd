@@ -353,9 +353,8 @@ INFO Lspace + S = ^
   @scabs    @X`  @CHV| @Ü{  @Ä}   @Ö+  @B=  @G*  @,;< @.:> @-_~ @rsf
             @oml @oal  @ff14c      @nav           @ff15u   
 )
-;; *** UPPER CASE ALIAS ***
+;; *** UPPER CASE ALIASES for caps layer ***
 (defalias
-;;cwlay (multi (layer-switch caps) @nly)
 cwlayto (multi (on-press-fakekey fkcaps toggle) @nly) ;;using toggle to be more error redundant
 cwlayout (multi (on-press-fakekey fkcaps release) @nln)
 J   (fork (tap-hold 1 200 S-j @!) (unshift j) (rsft lsft))
