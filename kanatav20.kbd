@@ -153,6 +153,9 @@ INFO Lspace + S = ^
   TEST like ,< use DBL-tap-Hold on more Long_Hold keys
 |#
 (defcfg
+   delegate-to-first-layer yes  ;;TODO seems correct but not sure it has an effect
+   ;;
+   concurrent-tap-hold no      ;;TODO does it make a difference - getting early autosymbols 
    sequence-timeout 3000
   ;; windows-interception-mouse-hwid "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0"
   ;; windows-altgr cancel-lctl-press ;; remove the lctl press that comes as a combo with ralt  with F24 mapping
@@ -180,6 +183,14 @@ INFO Lspace + S = ^
   ;; value is 5. This may need to be increased if some state changes, e.g. a
   ;; layer change is not happening at the right time.
   ;; dynamic-macro-delay-between-replay-actions 5
+  
+  movemouse-smooth-diagonals yes
+  ;;movemouse-inherit-accel-state yes
+  
+  ;; windows-interception-keyboard-hwids (
+  ;;   "70, 0, 60, 0"
+  ;;   "71, 72, 73, 74"
+  ;; )
   
 )
 ;;(deflocalkeys-wintercept
@@ -328,7 +339,7 @@ INFO Lspace + S = ^
   @^0        @1@  @2    @3`  @4    @5   @6   @7   @8   @9   @0 @dp1  @swh    bspc
   @tab      @j!  @z˝   @u【 @a】  @y$  @p&  @f#  @l?  @m\  @w%  @q@ ß  @rtw
   @atx      @cwn @s^   @i[  @e]   @o'  @d/  @t/   @n-  @r_   @hwn k    ret
-  @osss     @x`  @cv|  @cü{ @cä}  @ö+  @b=  @g*  @,;< @.:>   @-_~ @rsfb
+  _         @x`  @cv|  @cü{ @cä}  @ö+  @b=  @g*  @,;< @.:>   @-_~ @rsfb
             @oml @oal  @ff14     @nav           @ff15   
 #|
             lmet lalt           @nav
@@ -779,7 +790,8 @@ G*  (fork (tap-hold 1 200 S-g @*) (unshift g) (rsft lsft))
 ;; this LONG HOLD is delaying the Output of Uppercase letters -very bad tap-hold-press and tap-hold-release
 ;;e]  (tap-hold 1 160 (multi e @tp) (multi lsft (tap-hold 1 900 XX (layer-toggle notp))) ) ;; als erstes muss der Wechsel nach typing erfolgen sonst EIn 
 ;;t   (tap-hold 1 160 (multi t @tp) (multi rsft (tap-hold 1 900 XX (layer-toggle notp))) ) ;; rsft ,rctl have RDP problems without interception
-;;TODO send i to Lowercase if e is Upper 
+;;TODO send i to Lowercase if e is Upper
+;; TODO try to use tap-hold-except-keys instead 
 e]  (tap-hold 1 160 (fork e (multi e f17 @tpe) (rsft)) lsft ) ;;(tap-hold 1 160 (multi  @tp e) lsft ) ;; als erstes muss der Wechsel nach typing erfolgen sonst EIn 
 t/   (tap-hold 1 160 (multi t @tp) rsft ) ;; rsft ,rctl have RDP problems without interception
 
@@ -895,7 +907,8 @@ i[  (multi (tap-hold 500 500 (fork i (unicode i) (f17)) (multi @queh lctl) ) @tp
 ;;k\  (tap-hold 1 140 k (multi @\ (tap-hold 200 800 XX @\ )) )  ;; fast reponsive
   m\  (multi (tap-hold  1 120 (multi @queh (tap-dance-eager 100 (m (tap-hold 1 260 (macro m) (macro bspc @\\ @\\)) (tap-hold 1 100 (macro m m) m) ))) (multi (macro @\\ ) (tap-hold 1 800 XX (macro @\\ ))) ) @tp)
   aä  (tap-hold 1 120 a (macro-release-cancel ä 400 bspc S-= spc 600 bspc ä 600 bspc a 600 bspc))            ;; ä = '  `=S-]
-  f#  (multi (tap-hold 1 140 f (macro # )) @tp) 
+;; Shift protection - shifting a will disable the hold feature TODO this will not work fine with ctrl+sft+#
+  f#  (multi (fork (tap-hold 1 140 f (macro # )) (macro f) (lsft rsft)) @tp) 
   !f# (tap-hold 1 140 f  (macro # ))
   w%  (tap-hold 1 140 w (macro S-5 ))
   sß  (tap-hold 1 120 s (macro ß ) )                                                                               ;; ß = [
