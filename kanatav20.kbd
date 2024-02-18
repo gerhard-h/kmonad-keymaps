@@ -236,6 +236,23 @@ INFO Lspace + S = ^
 ;;  ä    222
 ;;  <    226
 ;;)
+(deftemplate key-hold-repeat (timehold time2ndhold keytap keyhold keyrepeat historymod modlesshistorykey)  
+    (tap-hold 1 $timehold 
+		(switch
+			((and (key-history $historymod 2)(key-history $modlesshistorykey 1))) $keyhold break
+			() $keytap break 
+		)  
+		(switch
+			(rsft lsft) (macro $keytap) break ;; Shift Prefer
+			()  (multi 	
+						(macro $keyhold ) 
+						(tap-hold 180 $time2ndhold XX ;;must 180 be a parameter?
+								(macro $keyrepeat )       ;;to do (), {},... keyrepeat cannot be a macro itself
+						)
+				) break
+		)
+	)
+)
 (defalias
   ;; alias to cancel tap-hold keys if typing rapidly but restore after a shord idle period
   tp (multi
@@ -337,8 +354,8 @@ INFO Lspace + S = ^
 ;; ret hold does ctl via QMK
   esc       f1   @ff13 f24
   @^0        @1@  @2    @3`  @4    @5   @6   @7   @8   @9   @0 @dp1  @swh    bspc
-  @tab      @j!  @z˝   @u【 @a】  @y$  @p&  @f#  @l?  @m\  @w%  @q@ ß  @rtw
-  @atx      @cwn @s^   @i[  @e]   @o'  @d/  @t/   @n-  @r_   @hwn k    ret
+  @tab      @j!  @z˝   @u【 @a】  @y$  @p&  @f#  @l?  @m\  @w%  @q@ @ß  @rtw
+  @atx      @cwn @s^   @i[  @e]   @o'  @d/  @t/   @n-  @r_   @hwn @k   ret
   _         @x`  @cv|  @cü{ @cä}  @ö+  @b=  @g*  @,;< @.:>   @-_~ @rsfb
             @oml @oal  @ff14     @nav           @ff15   
 #|
@@ -350,8 +367,8 @@ INFO Lspace + S = ^
 (deflayer notp
   esc       f1   @ff13 f24
   @^        @1@  @2    @3`  @4    @5   @6   @7   @8   @9   @0   -    del  bspc
-  @tab      @j!  @!z˝   @u【 @!a】  @y$  @!p&  @!f#  @l?  @m\  @w%  @q@ @ß-  @rtw
-  @atx      @cwn @!s    @!i[  @!e]   @o'  @d/  @!t   @!n   @r_  @hwn k  ret
+  @tab      @j!  @!z˝   @u【 @!a】  @y$  @!p&  @!f#  @l?  @m\  @w%  @q@ @ß  @rtw
+  @atx      @cwn @!s    @!i[  @!e]   @o'  @d/  @!t   @!n   @r_  @hwn @k  ret
   @oss      @x`  @cv| @ü{  @ä}   @ö+  @b=  @g*  @,;< @.:> @-_~ @rsf
             @oml @oal   @ff14         @nav           @ff15   
 )
@@ -360,56 +377,57 @@ INFO Lspace + S = ^
   esc       f1   @ff13 f24
   @^        @1@  @2    @3`  @4    @5   @6   @7   @8   @9   @0   -    del  bspc
   @tab      @J  @Z˝   @U【 @A】  @Y$  @P&  @F#  @L?  @M\  @W%  @Q@  @ß- @rtw
-  @atx      @CWN @S    @I[  @E]   @O'  @D/  @T   @N   @R   @HWN S-k  ret
+  @atx      @CWN @S    @I[  @E]   @O'  @D/  @T   @N   @R   @HWN   @K  ret
   @scabs    @X`  @CHV| @Ü{  @Ä}   @Ö+  @B=  @G*  @,;< @.:> @-_~ @rsf
             @oml @oal  @ff14c      @nav           @ff15u   
 )
 ;; *** UPPER CASE ALIASES for caps layer ***
 (defalias
-cwlayto (multi (on-press-fakekey fkcaps toggle) @nly) ;;using toggle to be more error redundant
+cwlayto  (multi (on-press-fakekey fkcaps toggle ) @nly) ;;using toggle to be more error redundant
 cwlayout (multi (on-press-fakekey fkcaps release) @nln)
-J   (fork (tap-hold 1 200 S-j @!) (unshift j) (rsft lsft))
-Z˝  (fork (tap-hold 1 200 (unicode Z) @˝) (unshift z) (rsft lsft))
-U【  (fork (tap-hold 1 200 S-u @【) (unshift u) (rsft lsft))
-A】  (fork (tap-hold 1 200 S-a @】) (unshift a) (rsft lsft))
 Y$  (switch
 		(rsft lsft) (unshift z) 		break
 		(rctl lctl) (unshift z)			break
 		() 	(tap-hold 1 200 (unicode Y) @$)	break
 )
-P&  (fork (tap-hold 1 200 S-p @&) (unshift p) (rsft lsft))
-F#  (fork (tap-hold 1 200 S-f #) (unshift f) (rsft lsft))
-L?  (fork (tap-hold 1 200 S-l @?) (unshift l) (rsft lsft))
-M\  (fork (tap-hold 1 200 S-m @\) (unshift m) (rsft lsft))
-W%  (fork (tap-hold 1 200 S-w @%) (unshift w) (rsft lsft))
-Q@  (fork (tap-hold 1 200 S-q @@) (unshift q) (rsft lsft))
 CWN (switch
 		(rsft lsft) (unshift c) 			break
 		(rctl lctl) (unshift c)				break
 		() 			(tap-hold 1 200 S-c @`)	break
 )
-S   (fork (tap-hold 1 200 S-s @^) (unshift s) (rsft lsft))
-I[  (fork (tap-hold 1 200 S-i @[) (unshift i) (rsft lsft))
 E]  (switch
         (rsft)  (tap-hold 1 200 (unshift e) (layer-switch base) ) break
         ()  (tap-hold 1 200 S-e lsft) break 
      )
-O'  (fork (tap-hold 1 200 S-o @') (unshift o) (rsft lsft))
-D/  (fork (tap-hold 1 200 S-d @/) (unshift d) (rsft lsft))
 T   (switch
         (lsft)  (tap-hold 1 200 (unshift t) (layer-switch base) ) break
         ()  (tap-hold 1 200 S-t rsft) break 
      )
-N   (fork (tap-hold 1 200 S-n -) (unshift n) (rsft lsft))
-R   (fork (tap-hold 1 200 S-r @_) (unshift r) (rsft lsft))
-HWN (fork (tap-hold 1 200 S-h S-.) (unshift h) (rsft lsft))
-X`  (fork (tap-hold 1 200 S-x ´) (unshift x) (rsft lsft))
-CHV| (fork (tap-hold 1 200 S-v @|) (unshift v) (rsft lsft))
-Ü{  (fork (tap-hold 1 200 S-ü @{) (unshift ü) (rsft lsft))
-Ä}  (fork (tap-hold 1 200 S-ä @}) (unshift ä) (rsft lsft))
-Ö+  (fork (tap-hold 1 200 S-ö @+) (unshift ö) (rsft lsft))
-B=  (fork (tap-hold 1 200 S-b @=) (unshift b) (rsft lsft))
-G*  (fork (tap-hold 1 200 S-g @*) (unshift g) (rsft lsft))
+K   (fork (macro S-k) (unshift k) (rsft lsft))
+J   (fork (tap-hold 1 200 S-j @!) (unshift j) (rsft lsft))
+Z˝  (fork (tap-hold 1 200 (unicode Z) @˝) (unshift z) (rsft lsft))
+U【  (fork (tap-hold 1 200 S-u @【)   (unshift u) (rsft lsft))
+A】  (fork (tap-hold 1 200 S-a @】)   (unshift a) (rsft lsft))	 
+S   (fork (tap-hold 1 200 S-s @^)   (unshift s) (rsft lsft))
+I[  (fork (tap-hold 1 200 S-i @[)   (unshift i) (rsft lsft))
+P&  (fork (tap-hold 1 200 S-p @&)   (unshift p) (rsft lsft))
+F#  (fork (tap-hold 1 200 S-f #)    (unshift f) (rsft lsft))
+L?  (fork (tap-hold 1 200 S-l @?)   (unshift l) (rsft lsft))
+M\  (fork (tap-hold 1 200 S-m @\)   (unshift m) (rsft lsft))
+W%  (fork (tap-hold 1 200 S-w @%)   (unshift w) (rsft lsft))
+Q@  (fork (tap-hold 1 200 S-q @@)   (unshift q) (rsft lsft))
+O'  (fork (tap-hold 1 200 S-o @')   (unshift o) (rsft lsft))
+D/  (fork (tap-hold 1 200 S-d @/)   (unshift d) (rsft lsft))
+N    (fork (tap-hold 1 200 S-n -)   (unshift n) (rsft lsft))
+R    (fork (tap-hold 1 200 S-r @_)  (unshift r) (rsft lsft))
+HWN  (fork (tap-hold 1 200 S-h S-.) (unshift h) (rsft lsft))
+X`   (fork (tap-hold 1 200 S-x ´)   (unshift x) (rsft lsft))
+CHV| (fork (tap-hold 1 200 S-v @|)  (unshift v) (rsft lsft))
+Ü{   (fork (tap-hold 1 200 S-ü @{)  (unshift ü) (rsft lsft))
+Ä}   (fork (tap-hold 1 200 S-ä @})  (unshift ä) (rsft lsft))
+Ö+   (fork (tap-hold 1 200 S-ö @+)  (unshift ö) (rsft lsft))
+B=   (fork (tap-hold 1 200 S-b @=)  (unshift b) (rsft lsft))
+G*   (fork (tap-hold 1 200 S-g @*)  (unshift g) (rsft lsft))
 )
 ;; *** fast Typing layer - prevents Upper Case within words when typing fast ***
 ;; unmod seems to solve RDP issues
@@ -577,6 +595,8 @@ G*  (fork (tap-hold 1 200 S-g @*) (unshift g) (rsft lsft))
   lsft      @msz lalt lctl lsft XX   @ms← @ms↑ @ms↓ @ms→ k    rsft
             lmet lalt   @ff14   @quep              _
 )
+
+
 (defalias
   que (multi (layer-switch base) @nln)
   queh (layer-toggle base)
@@ -905,7 +925,9 @@ i[  (multi (tap-hold 500 500 (fork i (unicode i) (f17)) (multi @queh lctl) ) @tp
   !p& (tap-hold 1 160 p (multi (macro S-6 ) (tap-hold 200 800 XX (macro S-6 ))))                          ;; & &&
   l?  (multi (tap-hold 1 140 (multi @queh l) (multi @? (tap-hold 200 500 XX @? ))) @tp)                                          ;; ? = S-[      i ? ??
 ;;k\  (tap-hold 1 140 k (multi @\ (tap-hold 200 800 XX @\ )) )  ;; fast reponsive
-  m\  (multi (tap-hold  1 120 (multi @queh (tap-dance-eager 100 (m (tap-hold 1 260 (macro m) (macro bspc @\\ @\\)) (tap-hold 1 100 (macro m m) m) ))) (multi (macro @\\ ) (tap-hold 1 800 XX (macro @\\ ))) ) @tp)
+  m\  (multi (fork (tap-hold  1 120 (multi @queh (tap-dance-eager 100 (m (tap-hold 1 260 (macro m) (macro bspc @\\ @\\)) (tap-hold 1 100 (macro m m) m) ))) (multi (macro @\\ ) (tap-hold 1 800 XX (macro @\\ ))) ) (macro m) (lsft rsft)) @tp)
+  ß   (macro (unshift ß))
+  k   (macro k)
   aä  (tap-hold 1 120 a (macro-release-cancel ä 400 bspc S-= spc 600 bspc ä 600 bspc a 600 bspc))            ;; ä = '  `=S-]
 ;; Shift protection - shifting a will disable the hold feature TODO this will not work fine with ctrl+sft+#
   f#  (multi (fork (tap-hold 1 140 f (macro # )) (macro f) (lsft rsft)) @tp) 
@@ -914,7 +936,7 @@ i[  (multi (tap-hold 500 500 (fork i (unicode i) (f17)) (multi @queh lctl) ) @tp
   sß  (tap-hold 1 120 s (macro ß ) )                                                                               ;; ß = [
   q@  (tap-hold 1 120 q @@ ) 
   o'  (tap-hold 1 160 o (multi @' (tap-hold 200 800 XX @' )) )                         ;; ' ''
-  d/  (tap-hold 1 200 
+  ddd/  (tap-hold 1 200 
 		(switch
 			((and (key-history lsft 2)(key-history 7 1))) S-7 break
 			() d break 
@@ -926,6 +948,7 @@ i[  (multi (tap-hold 500 500 (fork i (unicode i) (f17)) (multi @queh lctl) ) @tp
 			)
 		) 
 	  )
+  d/ (template-expand key-hold-repeat 200 800 d S-7 S-7 lsft 7)
   v|  (tap-hold 1 120 
       (switch
 			((and (key-history lsft 2)(key-history < 1))) v break
