@@ -1,5 +1,5 @@
 #|
-2023-10-23 16:22 restart Ei Au 
+2023-10-23 16:22 restart Ei Au   r e -> ALT + E 
 2023-10-24 no effect autohotkey espanso maybe effect citrix? powertoys?
 BUG hanging ctrl key with AHK and RDP
  idea: add "lctl lctl" to desktop swap makro (didn't work)
@@ -236,23 +236,36 @@ INFO Lspace + S = ^
 ;;  ä    222
 ;;  <    226
 ;;)
-(deftemplate key-hold-repeat (timehold time2ndhold keytap keyhold keyrepeat historymod modlesshistorykey)  
+(deftemplate key-hold-repeat (timehold time2ndhold keytap keyhold keyrepeat historymod modlesshistorykey combokeys comboout)  
     (tap-hold 1 $timehold 
 		(switch
 			((and (key-history $historymod 2)(key-history $modlesshistorykey 1))) $keyhold break
 			() $keytap break 
 		)  
 		(switch
+		    $combokeys $comboout break        ;; held with misstimed chords v + ü = del
 			(rsft lsft) (macro $keytap) break ;; Shift Prefer
 			()  (multi 	
-						(macro $keyhold ) 
-						(tap-hold 180 $time2ndhold XX ;;must 180 be a parameter?
-								(macro $keyrepeat )       ;;to do (), {},... keyrepeat cannot be a macro itself
-						)
+					(macro $keyhold ) 
+					(tap-hold 180 $time2ndhold XX ;;must 180 be a parameter?
+							(macro $keyrepeat )       ;;to do (), {},... keyrepeat cannot be a macro itself
+					)
 				) break
 		)
 	)
 )
+(deftemplate key-hold-nomod (timehold time2ndhold keytap keyhold )  ;; unused
+    (tap-hold 1 $timehold 
+		(switch
+			((key-history $keyhold 1)) $keyhold break
+			() $keytap break 
+		)  
+		(switch
+		   (rsft lsft) (macro $keytap) break ;; Shift Prefer
+		)
+	)
+)
+
 (defalias
   ;; alias to cancel tap-hold keys if typing rapidly but restore after a shord idle period
   tp (multi
@@ -273,7 +286,7 @@ INFO Lspace + S = ^
   ;; AltGr german keys  
   ~ (macro RA-+ )
   ~~ RA-+             ;; tilde most likly do be used inside another macros
-  | (macro RA-102d )
+  | RA-102d
   } (macro RA-0 )   ;; C-A- works with rdp but C-A- 7 8 9 0 shortcuts must be deleted in windows terminal 
   { (macro RA-7 )
   ] (macro RA-9 )
@@ -607,9 +620,9 @@ G*   (fork (tap-hold 1 200 S-g @*)  (unshift g) (rsft lsft))
   chf  (chord fkomma g)  ;; F24
   ch,  (chord fkomma ,)  
   ch.  (chord fkomma .)  ;; Q alternative
-  cv|  (chord xä v)		;; sticky numbers
-  cä}  (chord xä ä)
-  cü{  (chord xä ü)
+  cv|  (chord vüä v)		;; sticky numbers
+  cä}  (chord vüä ä)
+  cü{  (chord vüä ü)
   ch7  (chord exit79 7)	;; exit numbers
   ch9  (tap-hold 1 200 (chord exit79 9) @quen)
   ch|  (chord |} <)      ;; mods will be added later in defchord < is | 0 is }
@@ -623,12 +636,13 @@ G*   (fork (tap-hold 1 200 S-g @*)  (unshift g) (rsft lsft))
   (7  9   ) @quen
 )
 ;; from BASE to NUMFIX  THis seems to be the principal way : put chord in layer and call alias here (it also keeps the aliases clean) 
-(defchords xä 50
+(defchords vüä 50
   (v      ) @v|
   (   ä   ) @ä}
   (v  ä   ) @numfix
   (     ü ) @ü{
   (v    ü ) del
+  (   ä ü ) bspc
 )
 ;; from SYMBOLS to NUMFIX CA(0) = }  CA(<) = | chord must be defined on the not modified keys
 (defchords |} 140
@@ -911,16 +925,21 @@ i[  (multi (tap-hold 500 500 (fork i (unicode i) (f17)) (multi @queh lctl) ) @tp
   ;;q! (tap-dance 120 ((tap-hold 1 90 q (multi (macro S-1 ) (tap-hold 200 600 XX (macro bspc (unicode @) ))) )  (unicode @)  (unicode ä) ) )
   ;;j!  (tap-hold 1 100 (tap-dance-eager 100 (j (fork (macro bspc @@) RA-q (lctl rctl)) )) (multi @! (tap-hold 200 600 XX (macro bspc @@ )))  ) ;; q ! @    Great! tapdance can be nested inside tap-hold. Still timing problems on keybr.com!
   j!  (tap-dance-eager 150 ((tap-hold 1 120 j (multi @! (tap-hold 200 800 XX (macro bspc @@ )))) (fork (macro bspc @@) RA-q (lctl rctl)) ))  
-  z˝  (multi (tap-hold 1 140  @z (multi (macro S-2 ) (tap-hold 200 400 XX (macro S-2 ))) ) @tp)                         ;; " ""
-  !z˝ (tap-hold 1 140 @z (multi (macro S-2 ) (tap-hold 200 400 XX (macro S-2 ))) )                         ;; " ""
-  u【  (tap-hold 1 150 u (multi (macro S-8 ) (tap-hold 200 400 XX (macro S-9 ))))                           ;; (  ()
+  ;;z˝  (multi (tap-hold 1 140  @z (multi (macro S-2 ) (tap-hold 200 400 XX (macro S-2 ))) ) @tp)                         ;; " ""
+  ;;!z˝ (tap-hold 1 140 @z (multi (macro S-2 ) (tap-hold 200 400 XX (macro S-2 ))) )                         ;; " ""
+  z˝  (multi (template-expand key-hold-repeat 140 400 @z S-2  S-2 lsft 2 (kp9) x) @tp)                         ;; " ""
+  !z˝ (template-expand key-hold-repeat 140 400 @z S-2  S-2 lsft 2 (kp9) x)                 ;; " ""
+  ;;u【  (tap-hold 1 150 u (multi (macro S-8 ) (tap-hold 200 400 XX (macro S-9 ))))                           ;; (  ()
+  u【  (template-expand key-hold-repeat 150 400 u S-8  S-9 lsft 8 (kp9) x)                        ;; (  ()
   ;; a】 (multi (tap-hold 1 150  a  S-9) @tp) this order works with powertoys    
   ;; but causes problems with RDP ua vs au
-  a】 (multi (tap-hold 1 150  a  S-9) @tp)
+  ;;a】 (multi (tap-hold 1 150  a  (macro S-9)) @tp)
+  a】 (multi (template-expand key-hold-repeat 150 800 a S-9  f17 lsft 9 (kp9) x) @tp)
   ;; a】  (tap-hold 1 150 a (macro S-9)) ;; causes AU when typing fast
   ;; a】 LONG HOLD no Powertoys(tap-hold 1 150 (multi a @tp) (fork (macro-release-cancel S-9 600 bspc RA-9 ) C-a (lctl rctl)) )                   ;; ) [ todo find a better use
   !a】 (tap-hold 1 150 a (fork (macro-release-cancel S-9 600 bspc RA-9 ) C-a (lctl rctl)) )                   ;; ) [ todo find a better use
-  y$  (tap-hold 1 140 @y (macro S-4))
+  ;;y$  (tap-hold 1 140 @y (macro S-4))
+  y$  (template-expand key-hold-repeat 140 800 @y S-4  S-4 lsft 4 (kp9) x)
   p&  (tap-hold 1 160 (multi p @tp) (multi (macro S-6 ) (tap-hold 200 800 XX (macro S-6 ))))                          ;; & &&
   !p& (tap-hold 1 160 p (multi (macro S-6 ) (tap-hold 200 800 XX (macro S-6 ))))                          ;; & &&
   l?  (multi (tap-hold 1 140 (multi @queh l) (multi @? (tap-hold 200 500 XX @? ))) @tp)                                          ;; ? = S-[      i ? ??
@@ -928,50 +947,34 @@ i[  (multi (tap-hold 500 500 (fork i (unicode i) (f17)) (multi @queh lctl) ) @tp
   m\  (multi (fork (tap-hold  1 120 (multi @queh (tap-dance-eager 100 (m (tap-hold 1 260 (macro m) (macro bspc @\\ @\\)) (tap-hold 1 100 (macro m m) m) ))) (multi (macro @\\ ) (tap-hold 1 800 XX (macro @\\ ))) ) (macro m) (lsft rsft)) @tp)
   ß   (macro (unshift ß))
   k   (macro k)
-  aä  (tap-hold 1 120 a (macro-release-cancel ä 400 bspc S-= spc 600 bspc ä 600 bspc a 600 bspc))            ;; ä = '  `=S-]
 ;; Shift protection - shifting a will disable the hold feature TODO this will not work fine with ctrl+sft+#
-  f#  (multi (fork (tap-hold 1 140 f (macro # )) (macro f) (lsft rsft)) @tp) 
+  f#  (multi (fork (tap-hold 1 140 f (macro # )) (macro f) (lsft rsft)) @tp)  
   !f# (tap-hold 1 140 f  (macro # ))
-  w%  (tap-hold 1 140 w (macro S-5 ))
-  sß  (tap-hold 1 120 s (macro ß ) )                                                                               ;; ß = [
+  ;;w%  (tap-hold 1 140 w (macro S-5 ))
+  w%  (template-expand key-hold-repeat 140 800 w S-5  S-5 lsft 5 (kp9) x)
   q@  (tap-hold 1 120 q @@ ) 
-  o'  (tap-hold 1 160 o (multi @' (tap-hold 200 800 XX @' )) )                         ;; ' ''
-  ddd/  (tap-hold 1 200 
-		(switch
-			((and (key-history lsft 2)(key-history 7 1))) S-7 break
-			() d break 
-		)  
-		(multi 	
-			(macro S-7 ) 
-				(tap-hold 180 800 XX 
-					(macro S-7 )
-			)
-		) 
-	  )
-  d/ (template-expand key-hold-repeat 200 800 d S-7 S-7 lsft 7)
-  v|  (tap-hold 1 120 
-      (switch
-			((and (key-history lsft 2)(key-history < 1))) v break
-			((key-history < 1)) @| break
-			() v break 
-	  ) 
-      (fork (multi @| (tap-hold 200 800 XX @| )) del (ü 7))  )   ;; | || not used
+  o'  (template-expand key-hold-repeat 160 800 o S-#  S-# lsft # (kp9) x)
+  d/  (template-expand key-hold-repeat 200 800 d S-7  S-7 lsft 7 (kp9) x)
+  v|  (template-expand key-hold-repeat 200 800 v @| @| ralt < (ü 7) del)    ;; warum ü7 nicht ü8
   x`  (tap-hold 1 160
-	  (switch 
-		((and (key-history spc 1)(key-history lsft 3)(key-history ´ 2)))  @` break
-		() x break
+		(switch 
+			((and (key-history f17 1)(key-history ´ 3)(key-history spc 2)))  (multi lsft ´ spc f17) break
+			() x break
+		)
+		(fork (multi lsft ´ spc f17  (tap-hold 200 800 XX (multi (unicode ` ) (unicode ` )))) (macro S-x) (lsft rsft))
 	  )
-	  (multi @` (tap-hold 200 800 XX @´ )) )
-  ü{  (tap-hold 1 140 ü (fork (multi @{ (tap-hold 200 500 XX @} )) XX (x)))                      ;; { {}
+  ;;ü{  (tap-hold 1 140 ü (fork (multi @{ (tap-hold 200 500 XX @} )) XX (x)))                      ;; { {}
+  ü{ (template-expand key-hold-repeat 200 500 ü RA-7 RA-0 ralt 7 (v) XX)
   ;;ä}  (tap-hold-release-timeout 200 400 ä @syvv @} ) ;; not needed on v20 bc of second space bar
-  ä}  (tap-hold 1 140 ä @} )
+  ;;ä}  (tap-hold 1 140 ä @} )
+  ä}  (template-expand key-hold-repeat 140 800 ä RA-0 f17 ralt 0 (v) XX) ;; der v XX scheint überflüssig zu sein
   ö+  (tap-hold 1 180 
 	  (switch
 			((and (key-history lsft 2)(key-history + 1))) ö break
 			((key-history + 1)) @+ break
 			() ö break 
 	  )  
-	  (multi @+ (tap-hold 220 500 XX @+ )))                              ;; + = =  b + ++
+	  (fork (multi @+ (tap-hold 220 500 XX @+ )) @ö (lsft rsft)))                              ;; + = =  b + ++
 ;;p=  (tap-hold 1 240 p (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 1000 XX (macro S-0 ))  ))) ) ;; p = == === 
 ;;b=  (tap-hold 1 180 (tap-dance-eager 180 (b (tap-hold 1 180 (macro b) (multi (macro bspc S-0 S-0) (tap-hold 260 600 XX (macro S-0 )))) (tap-hold 1 180 (macro b b) b) )) (multi (macro S-0 ) (tap-hold 260 400 XX (multi (macro S-0 ) (tap-hold 260 800 XX (macro S-0 ))  ))) )
 ;; this enables an strange hold-hold-autorepeat on =
