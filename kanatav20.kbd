@@ -243,26 +243,67 @@ INFO Lspace + S = ^
 (deftemplate echo-me (ab)
 	(if-equal $ab $hb w)
 )
-(deftemplate key-hold-repeat (timehold time2ndhold keytap keyhold keyrepeat historymod modlesshistorykey combokeylist comboout)  
+(deftemplate key-hold-repeat (timehold time2ndhold keytap keyhold keyrepeat historykey3 historykey2 modlesshistorykey1 combokeylist comboout)  
 ;; TODO we could use (if-equal) to have a version that a) accept keys and wraps them in macro b) does not wrap c) nulltest the input vs XX to incude a line (XX reads better than (kp9) )
-    (tap-hold 1 $timehold 			
+;; Input must be keys not aliases not even @y or @z
+ (tap-dance-eager 150 (    
+    (tap-hold 1 $timehold 	
+		;; holding and then retapping will repeat the hold action
 		(switch
-			;;(if-not-equal $comboout $keytap () w break)
-			((and (key-history $historymod 2)(key-history $modlesshistorykey 1))) $keyhold break
-			() $keytap break 
+			(if-not-equal $historykey2 XX
+				(if-not-equal $historykey3 XX ((and (key-history $modlesshistorykey1 1)(key-history $historykey2 2)(key-history $historykey3 3))) $keyhold break )
+				(if-equal     $historykey3 XX ((and (key-history $modlesshistorykey1 1)(key-history $historykey2 2)                            )) $keyhold break )
+			)
+			(if-equal $historykey2 XX
+				(if-not-equal $historykey3 XX ((and (key-history $modlesshistorykey1 1)(key-history $historykey2 2)(key-history $historykey3 3))) $keyhold break )
+				((key-history $modlesshistorykey1 1))  $keyhold break
+			)
+			() $keytap break
 		)  
 		(switch
-		    $combokeylist $comboout break        ;; held with misstimed chords v + ü = del
+		    (if-not-equal $comboout kp9 $combokeylist $comboout break)        ;; held with misstimed chords v + ü = del
 			(rsft lsft) (macro $keytap) break ;; Shift Prefer
+			;;((key-history $keytap 1)) (macro bspc bspc) fallthrough		  ;; this has no timeout option => we only do it in second tap dance
+			;;((key-history $keytap 1)) $keyhold break
 			()  (multi 	
 					(macro $keyhold ) 
 					(tap-hold 180 $time2ndhold XX ;;must 180 be a parameter?
-							(macro $keyrepeat )       ;;to do (), {},... keyrepeat cannot be a macro itself
-							
+							(if-not-equal $keyrepeat XX (macro $keyrepeat ))      ;;to do (), {},... keyrepeat cannot be a macro itself
+							(if-equal $keyrepeat XX XX)
 					)
 				) break
 		)
 	)
+	;; here comes the second tap
+	(tap-hold 1 $timehold 	
+		;; holding and then retapping will repeat the hold action
+		(switch
+			(if-not-equal $historykey2 XX
+				(if-not-equal $historykey3 XX ((and (key-history $modlesshistorykey1 1)(key-history $historykey2 2)(key-history $historykey3 3))) $keyhold break )
+				(if-equal     $historykey3 XX ((and (key-history $modlesshistorykey1 1)(key-history $historykey2 2)                            )) $keyhold break )
+			)
+			(if-equal $historykey2 XX
+				(if-not-equal $historykey3 XX ((and (key-history $modlesshistorykey1 1)(key-history $historykey2 2)(key-history $historykey3 3))) $keyhold break )
+				((key-history $modlesshistorykey1 1))  $keyhold break
+			)
+			() $keytap break
+		)  
+		(switch
+		    ;;(if-not-equal $comboout kp9 $combokeylist $comboout break)        ;; here is the difference to tap-dance one
+			;;(rsft lsft) (macro $keytap) break ;; Shift Prefer					;; remove cases outside double-tap
+			((key-history $modlesshistorykey1 1)) $keyhold break				;; add double-tap-hold
+			((key-history $keytap 1)) (macro (unmod bspc) (unmod bspc)) fallthrough	 ;; double bspc has no explanation but is needed (including unmod) 
+			((key-history $keytap 1)) $keyhold break
+			()  (multi 	
+					(macro $keyhold ) 
+					(tap-hold 180 $time2ndhold XX ;;must 180 be a parameter?
+							(if-not-equal $keyrepeat XX (macro $keyrepeat ))      ;;to do (), {},... keyrepeat cannot be a macro itself
+							(if-equal $keyrepeat XX XX)
+					)
+				) break
+		)
+	)	
+ ))	
 )
 (deftemplate key-hold-nomod (timehold time2ndhold keytap keyhold )  ;; unused
     (tap-hold 1 $timehold 
@@ -934,39 +975,44 @@ i[  (multi (tap-hold 500 500 (fork i (unicode i) (f17)) (multi @queh lctl) ) @tp
   ;;q! (tap-hold 1 140 q (macro-release-cancel S-1 600 bspc (unicode @) 800 bspc S-1 800 bspc))                   ;; q ! @
   ;;q! (tap-dance 120 ((tap-hold 1 90 q (multi (macro S-1 ) (tap-hold 200 600 XX (macro bspc (unicode @) ))) )  (unicode @)  (unicode ä) ) )
   ;;j!  (tap-hold 1 100 (tap-dance-eager 100 (j (fork (macro bspc @@) RA-q (lctl rctl)) )) (multi @! (tap-hold 200 600 XX (macro bspc @@ )))  ) ;; q ! @    Great! tapdance can be nested inside tap-hold. Still timing problems on keybr.com!
-  j!  (tap-dance-eager 150 ((tap-hold 1 120 j (multi @! (tap-hold 200 800 XX (macro bspc @@ )))) (fork (macro bspc @@) RA-q (lctl rctl)) ))  
+  j!  (tap-hold 1 120 j (multi @! (tap-hold 200 800 XX (macro bspc @@ ))))
   ;;z˝  (multi (tap-hold 1 140  @z (multi (macro S-2 ) (tap-hold 200 400 XX (macro S-2 ))) ) @tp)                         ;; " ""
   ;;!z˝ (tap-hold 1 140 @z (multi (macro S-2 ) (tap-hold 200 400 XX (macro S-2 ))) )                         ;; " ""
-  z˝  (multi (template-expand key-hold-repeat 140 400 @z S-2  S-2 lsft 2 (kp9) x) @tp)                         ;; " ""
-  ;;z˝ (template-expand echo-me $hb)
-  !z˝ (template-expand key-hold-repeat 140 400 @z S-2  S-2 lsft 2 (kp9) x)                 ;; " ""
+  !z˝ (template-expand key-hold-repeat 140 400 y S-2  S-2 XX lsft 2 () kp9)
+  z˝  (multi @!z˝ @tp)             
   ;;u【  (tap-hold 1 150 u (multi (macro S-8 ) (tap-hold 200 400 XX (macro S-9 ))))                           ;; (  ()
-  u【  (template-expand key-hold-repeat 150 400 u S-8  S-9 lsft 8 (kp9) x)                        ;; (  ()
+  u【  (template-expand key-hold-repeat 150 400 u S-8  S-9 XX lsft 8 () kp9)                        ;; (  ()
   ;; a】 (multi (tap-hold 1 150  a  S-9) @tp) this order works with powertoys    
   ;; but causes problems with RDP ua vs au
   ;;a】 (multi (tap-hold 1 150  a  (macro S-9)) @tp)
-  a】 (multi (template-expand key-hold-repeat 150 800 a S-9  f17 lsft 9 (kp9) x) @tp)
+  ;;!a】 (tap-hold 1 150 a (fork (macro-release-cancel S-9 600 bspc RA-9 ) C-a (lctl rctl)) )                   ;; ) [ todo find a better use
+  !a】 (template-expand key-hold-repeat 150 800 a S-9 XX XX lsft 9 () kp9)
+  a】 (multi @!a】 @tp)
   ;; a】  (tap-hold 1 150 a (macro S-9)) ;; causes AU when typing fast
   ;; a】 LONG HOLD no Powertoys(tap-hold 1 150 (multi a @tp) (fork (macro-release-cancel S-9 600 bspc RA-9 ) C-a (lctl rctl)) )                   ;; ) [ todo find a better use
-  !a】 (tap-hold 1 150 a (fork (macro-release-cancel S-9 600 bspc RA-9 ) C-a (lctl rctl)) )                   ;; ) [ todo find a better use
   ;;y$  (tap-hold 1 140 @y (macro S-4))
-  y$  (template-expand key-hold-repeat 140 800 @y S-4  S-4 lsft 4 (kp9) x)
-  p&  (tap-hold 1 160 (multi p @tp) (multi (macro S-6 ) (tap-hold 200 800 XX (macro S-6 ))))                          ;; & &&
-  !p& (tap-hold 1 160 p (multi (macro S-6 ) (tap-hold 200 800 XX (macro S-6 ))))                          ;; & &&
+  y$  (template-expand key-hold-repeat 140 800 z S-4  S-4 XX lsft 4 () kp9)
+;;p&  (tap-hold 1 160 (multi p @tp) (multi (macro S-6 ) (tap-hold 200 800 XX (macro S-6 ))))                          ;; & &&
+;;!p& (tap-hold 1 160 p (multi (macro S-6 ) (tap-hold 200 800 XX (macro S-6 ))))                          ;; & &&
+ !p&  (template-expand key-hold-repeat 160 800 p S-6 S-6 XX lsft 6 () kp9)  ;; & TODO is switching @tp position relevante for RDP or Powertoys
+  p&  (multi @!p& @tp)
   l?  (multi (tap-hold 1 140 (multi @queh l) (multi @? (tap-hold 200 500 XX @? ))) @tp)                                          ;; ? = S-[      i ? ??
 ;;k\  (tap-hold 1 140 k (multi @\ (tap-hold 200 800 XX @\ )) )  ;; fast reponsive
-  m\  (multi (fork (tap-hold  1 120 (multi @queh (tap-dance-eager 100 (m (tap-hold 1 260 (macro m) (macro bspc @\\ @\\)) (tap-hold 1 100 (macro m m) m) ))) (multi (macro @\\ ) (tap-hold 1 800 XX (macro @\\ ))) ) (macro m) (lsft rsft)) @tp)
+;;m\  (multi (fork (tap-hold  1 120 (multi @queh (tap-dance-eager 100 (m (tap-hold 1 260 (macro m) (macro bspc @\\ @\\)) (tap-hold 1 100 (macro m m) m) ))) (multi (macro @\\ ) (tap-hold 1 800 XX (macro @\\ ))) ) (macro m) (lsft rsft)) @tp)
+  m\  (multi (template-expand key-hold-repeat 160 800 m RA-ß RA-ß XX ralt ß () kp9) @tp)
   ß   (macro (unshift ß))
   k   (macro k)
 ;; Shift protection - shifting a will disable the hold feature TODO this will not work fine with ctrl+sft+#
-  f#  (multi (fork (tap-hold 1 140 f (macro # )) (macro f) (lsft rsft)) @tp)  
-  !f# (tap-hold 1 140 f  (macro # ))
+;;  f#  (multi (fork (tap-hold 1 140 f (macro # )) (macro f) (lsft rsft)) @tp)  
+;;  !f# (tap-hold 1 140 f  (macro # ))
+!f# (template-expand key-hold-repeat 140 800 f # # XX XX # () kp9)
+f#  (multi @!f# @tp)
   ;;w%  (tap-hold 1 140 w (macro S-5 ))
-  w%  (template-expand key-hold-repeat 140 800 w S-5  S-5 lsft 5 (kp9) x)
-  q@  (tap-hold 1 160 q @@ ) 
-  o'  (template-expand key-hold-repeat 160 800 o S-#  S-# lsft # (kp9) x)
-  d/  (template-expand key-hold-repeat 200 800 d S-7  S-7 lsft 7 (kp9) x)
-  v|  (template-expand key-hold-repeat 200 800 v @| @| ralt < (ü 7) del)    ;; warum ü7 nicht ü8
+  w%  (template-expand key-hold-repeat 140 800 w S-5  S-5 XX lsft 5 () kp9)
+  q@  (template-expand key-hold-repeat 160 800 q RA-q XX XX ralt q () kp9) 
+  o'  (template-expand key-hold-repeat 160 800 o S-#  S-# XX lsft # () kp9)
+  d/  (template-expand key-hold-repeat 200 800 d S-7  S-7 XX lsft 7 () kp9)
+  v|  (template-expand key-hold-repeat 200 800 v @| @| XX ralt < (ü 7) del)    ;; warum ü7 nicht ü8
   x`  (tap-hold 1 160
 		(switch 
 			((and (key-history f17 1)(key-history ´ 3)(key-history spc 2)))  (multi lsft ´ spc f17) break
@@ -975,17 +1021,18 @@ i[  (multi (tap-hold 500 500 (fork i (unicode i) (f17)) (multi @queh lctl) ) @tp
 		(fork (multi lsft ´ spc f17  (tap-hold 200 800 XX (multi (unicode ` ) (unicode ` )))) (macro S-x) (lsft rsft))
 	  )
   ;;ü{  (tap-hold 1 140 ü (fork (multi @{ (tap-hold 200 500 XX @} )) XX (x)))                      ;; { {}
-  ü{ (template-expand key-hold-repeat 200 500 ü RA-7 RA-0 ralt 7 (v) XX)
+  ü{ (template-expand key-hold-repeat 200 500 ü RA-7 RA-0 XX ralt 7 (v) XX)
   ;;ä}  (tap-hold-release-timeout 200 400 ä @syvv @} ) ;; not needed on v20 bc of second space bar
   ;;ä}  (tap-hold 1 140 ä @} )
-  ä}  (template-expand key-hold-repeat 140 800 ä RA-0 f17 ralt 0 (v) XX) ;; der v XX scheint überflüssig zu sein
-  ö+  (tap-hold 1 180 
-	  (switch
-			((and (key-history lsft 2)(key-history + 1))) ö break
-			((key-history + 1)) @+ break
-			() ö break 
-	  )  
-	  (fork (multi @+ (tap-hold 220 500 XX @+ )) @ö (lsft rsft)))                              ;; + = =  b + ++
+  ä}  (template-expand key-hold-repeat 140 800 ä RA-0 XX XX ralt 0 (v) XX) ;; der v XX scheint überflüssig zu sein
+;;  ö+  (tap-hold 1 180 
+;;	  (switch
+;;			((and (key-history lsft 2)(key-history + 1))) ö break
+;;			((key-history + 1)) @+ break
+;;			() ö break 
+;;	  )  
+;;	  (fork (multi @+ (tap-hold 220 500 XX @+ )) @ö (lsft rsft)))                              ;; + = =  b + ++
+ ö+  (template-expand key-hold-repeat 180 800 ö + + XX XX + () kp9)
 ;;p=  (tap-hold 1 240 p (multi (macro S-0 ) (tap-hold 200 400 XX (multi (macro S-0 ) (tap-hold 200 1000 XX (macro S-0 ))  ))) ) ;; p = == === 
 ;;b=  (tap-hold 1 180 (tap-dance-eager 180 (b (tap-hold 1 180 (macro b) (multi (macro bspc S-0 S-0) (tap-hold 260 600 XX (macro S-0 )))) (tap-hold 1 180 (macro b b) b) )) (multi (macro S-0 ) (tap-hold 260 400 XX (multi (macro S-0 ) (tap-hold 260 800 XX (macro S-0 ))  ))) )
 ;; this enables an strange hold-hold-autorepeat on =
