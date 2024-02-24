@@ -236,19 +236,29 @@ INFO Lspace + S = ^
 ;;  ä    222
 ;;  <    226
 ;;)
-(deftemplate key-hold-repeat (timehold time2ndhold keytap keyhold keyrepeat historymod modlesshistorykey combokeys comboout)  
-    (tap-hold 1 $timehold 
+
+(defvar
+  hb a
+)
+(deftemplate echo-me (ab)
+	(if-equal $ab $hb w)
+)
+(deftemplate key-hold-repeat (timehold time2ndhold keytap keyhold keyrepeat historymod modlesshistorykey combokeylist comboout)  
+;; TODO we could use (if-equal) to have a version that a) accept keys and wraps them in macro b) does not wrap c) nulltest the input vs XX to incude a line (XX reads better than (kp9) )
+    (tap-hold 1 $timehold 			
 		(switch
+			;;(if-not-equal $comboout $keytap () w break)
 			((and (key-history $historymod 2)(key-history $modlesshistorykey 1))) $keyhold break
 			() $keytap break 
 		)  
 		(switch
-		    $combokeys $comboout break        ;; held with misstimed chords v + ü = del
+		    $combokeylist $comboout break        ;; held with misstimed chords v + ü = del
 			(rsft lsft) (macro $keytap) break ;; Shift Prefer
 			()  (multi 	
 					(macro $keyhold ) 
 					(tap-hold 180 $time2ndhold XX ;;must 180 be a parameter?
 							(macro $keyrepeat )       ;;to do (), {},... keyrepeat cannot be a macro itself
+							
 					)
 				) break
 		)
@@ -928,6 +938,7 @@ i[  (multi (tap-hold 500 500 (fork i (unicode i) (f17)) (multi @queh lctl) ) @tp
   ;;z˝  (multi (tap-hold 1 140  @z (multi (macro S-2 ) (tap-hold 200 400 XX (macro S-2 ))) ) @tp)                         ;; " ""
   ;;!z˝ (tap-hold 1 140 @z (multi (macro S-2 ) (tap-hold 200 400 XX (macro S-2 ))) )                         ;; " ""
   z˝  (multi (template-expand key-hold-repeat 140 400 @z S-2  S-2 lsft 2 (kp9) x) @tp)                         ;; " ""
+  ;;z˝ (template-expand echo-me $hb)
   !z˝ (template-expand key-hold-repeat 140 400 @z S-2  S-2 lsft 2 (kp9) x)                 ;; " ""
   ;;u【  (tap-hold 1 150 u (multi (macro S-8 ) (tap-hold 200 400 XX (macro S-9 ))))                           ;; (  ()
   u【  (template-expand key-hold-repeat 150 400 u S-8  S-9 lsft 8 (kp9) x)                        ;; (  ()
@@ -952,7 +963,7 @@ i[  (multi (tap-hold 500 500 (fork i (unicode i) (f17)) (multi @queh lctl) ) @tp
   !f# (tap-hold 1 140 f  (macro # ))
   ;;w%  (tap-hold 1 140 w (macro S-5 ))
   w%  (template-expand key-hold-repeat 140 800 w S-5  S-5 lsft 5 (kp9) x)
-  q@  (tap-hold 1 120 q @@ ) 
+  q@  (tap-hold 1 160 q @@ ) 
   o'  (template-expand key-hold-repeat 160 800 o S-#  S-# lsft # (kp9) x)
   d/  (template-expand key-hold-repeat 200 800 d S-7  S-7 lsft 7 (kp9) x)
   v|  (template-expand key-hold-repeat 200 800 v @| @| ralt < (ü 7) del)    ;; warum ü7 nicht ü8
@@ -1025,10 +1036,6 @@ i[  (multi (tap-hold 500 500 (fork i (unicode i) (f17)) (multi @queh lctl) ) @tp
   K_~  (tap-hold  1 140 (tap-dance-eager 140 (S-k (tap-hold 1 100 (macro S-k) (macro bspc @~~)) (tap-hold 1 100 (macro S-k S-k) S-k) )) (multi (macro @_ ) (tap-hold 1 800 XX (macro bspc @~~ ))) )  ;; - _ ~
   ,:   (tap-hold  1 600 , @: )
   .:   (tap-hold  1 600 . @: )
-)
-
-(defvar
-  hb macro h b
 )
 
 (defalias  
