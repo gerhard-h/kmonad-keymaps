@@ -216,7 +216,7 @@ INFO , + . = F24
   ;; dynamic-macro-delay-between-replay-actions 5
   
   movemouse-smooth-diagonals yes
-  ;;movemouse-inherit-accel-state yes
+  movemouse-inherit-accel-state yes
   
   ;; windows-interception-keyboard-hwids (
   ;;   "70, 0, 60, 0"
@@ -753,7 +753,7 @@ INFO , + . = F24
 ;; ret hold does ctl via QMK
   esc       f1   @.ff13 f24
   @.^0      @.1   @.2    @.3§  @.4    @.5   @.6     @.7    @.8    @.9    @.0     @.dp1   @.swh    bspc
-  @.tab     @.j!  @.z˝   @.u◖  @.a◗   @.y$  @.p&    @.f#   @.l?   @.m\   @.w%    @.q@    @.ß      @.rtw
+  @.tab     @.j!  @.z˝   @.u◖  @.a◗   @.y$  @.p&    @.f#   @.l?   @.m\   @.w%    @.q@    @.ß      @.mus
   @.atx     @.c⌘  @.s^   @.i[  @.e]   @.o'  @.d/    @.t/   @.n-   @.r_⎇  @.h⌘    @.k     ret
   _         @.x`  @.cv|  @.cü{ @.cä}  @.ö+  @.b=    @.g*   @,;<   @.:>   @-_~    @.rsfb
             @.oml @.oal  @.ff14             @.nav          @.ff15   
@@ -978,18 +978,8 @@ INFO , + . = F24
   _         ´         f7   f8   f9   f12    b        lctl   lalt    C-S-f   ^    _            
             _        _    @.ff14     _            _
 )
-(deflayer fkeys ;;triggered with "right of enter" from numbers TODO why use this layer?
-;;****************   F KEYS   ********************************************************
-  esc       f1   @.ff13    f24
-  esc      @.1   @.2  @.3§ @.4  @.5  @.6  @.7  @.8   @.9   @.0    _     sldr bspc
-  _        @-_:  f1   f2   f3   f10  esc  home ▲     end   pgup   pgdn  _    _    
-  @.sy1    @.⌘   f4   f5   f6   f11  lmet lsft lctl  lalt  lmet   _     _ 
-  _        ,   f7   f8   f9   f12  tab  @.⏎⇧ @.␡⎈  @.l🖰⎇ @.r🖰⌘ _
-       _    _    @.ff14      _                  _           
-)
-;; TODO should mouse layer contain numpad? using QMK Mouse curreently
 (deflayer mouse
-;;****************   MOUSE   ********************************************************
+;;****************   MOUSE FAST   ********************************************************
   esc       f1   @.ff13    f24
   ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
   tab       XX   @.slw @.slw @.slw XX  @.basecm @.cll @.🖰↑↑ @.clr z    q    +    #
@@ -998,7 +988,7 @@ INFO , + . = F24
             lmet lalt  @.ff14    @.basecm              _                           
 )
 (deflayer mouseslow
-;;****************   MOUSE   ********************************************************
+;;****************   MOUSE SLOW  ********************************************************
   esc       f1   @.ff13     f24
   ^         1    2    3    4    5    6    7    8    9    0    -    ´    bspc
   tab       XX   @.slw @.slw @.slw XX  @.basecm @.cll @.🖰↑ @.clr z    q    +    #
@@ -1029,16 +1019,7 @@ INFO , + . = F24
   ;; F23 (tap-hold 200 200 y (multi f24 sldr))  ;; works technically f24 triggers y itselft it must be hold for f24 ... feels bad
   .yms (tap-hold-release 200 200 z (multi @.mus A-C-M-p) )
   .msz (multi @.basen (macro z))
-  .msu (multi @.basen (macro u))
-  .mso (multi @.basen (macro o))
-  ;;  msf (multi @.basen (macro mltp A-C-p))
-  ;; msf (macro mlft 10 f17 100 lrld)
-  .msf (multi mlft f17  lrld)
-  .msd (multi @.basen (macro d))
-  .mss (multi @.basen (macro s))
   ;;Double Click is missing
-  
-  ;; mouse layer keys end 
 )
 
 (defalias  
