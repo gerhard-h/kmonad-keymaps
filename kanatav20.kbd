@@ -226,6 +226,7 @@ INFO , + . = F24
 )
 
 (defvirtualkeys
+  forkme  (movemouse-speed 20) ;;(tracking does not work)
   to-base (layer-switch base)
   vcaps   (layer-while-held CAPS)
   ;;*** NUMBERSTAB ***
@@ -490,20 +491,20 @@ INFO , + . = F24
 ;; BUG t   (tap-hold 1 $160 (multi t @.tp) (multi rsft (tap-hold 1 $900 XX (layer-while-held notp))) ) ;; rsft ,rctl have RDP problems without interception
 ;; TODO try to use tap-hold-except-keys instead 
 ;; TIP e and t have special treatment for fast typing layer
+;; TODO try something else than F17 .e]  (tap-hold 1 $160 (fork e (multi e F17 (on-press press-virtualkey forkme) (on-release release-virtualkey forkme) @.tpe) (rsft)) lsft ) ;;(tap-hold 1 $160 (multi  @.tp e) lsft ) ;; als erstes muss der Wechsel nach typing erfolgen sonst EIn 
   .e]  (tap-hold 1 $160 (fork e (multi e F17 @.tpe) (rsft)) lsft ) ;;(tap-hold 1 $160 (multi  @.tp e) lsft ) ;; als erstes muss der Wechsel nach typing erfolgen sonst EIn 
   .t/   (tap-hold 1 $160 (multi t @.tp) rsft ) ;; rsft ,rctl have RDP problems without interception
   ..e]  (tap-hold 1 $160 e lsft ) ;; als erstes muss der Wechsel nach typing erfolgen sonst EIn 
   ..t   (tap-hold 1 $160 t rsft ) ;; rsft ,rctl have RDP problems without interception  
-  .i[  (multi (tap-hold 1 $300 (fork i (unshift i) ( F17)) (multi @.base lctl) ) @.tp) 
+  .i[  (multi (tap-hold 1 $300 (fork i (unshift i) (F17)) (multi @.base lctl) ) @.tp) 
   ..i[ (tap-hold $500 $500 i lctl )
   ..[ (tap-hold $500 $500 @.[ lctl ) ;; used on symbol layer
   ..- (tap-hold $500 $500 - lctl )
   ..n  (tap-hold $500 $500 n rctl )    
   .n-  (multi (tap-hold 1 $300 n (multi @.base rctl) ) @.tp)
   ;; Bug in no interception rctl+y  to start ditto, then ditto will not act on keyboard input 
-  ;; also RDP ignores rctl DIFFERENCE to rsft is: rctl is missing in defsrc
-  ;; but adding it will not solve the issue Enter will start the search
-  .s^ (multi  (tap-hold 1000 1000 s (multi @.base alt)) @.tp)
+  ;; also RDP ignores rctl and rsft but adding to defsrc  will not solve the issue
+  .s^⎇ (multi  (tap-hold 1000 1000 s (multi @.base alt)) @.tp)
   .s⎇ (tap-hold 1000 1000 s alt)
   .h⌘ (tap-hold $350 1000 h lmet)
   .c⌘ (tap-hold 1000 1000 c lmet)
@@ -575,6 +576,7 @@ INFO , + . = F24
 		()	@.b=== break
   )
   .g*  (switch ;; g hold=* long=autorepeat
+		((input virtual forkme)) , break ;; TODO does nothing
         ((and (key-history lsft 3)(key-history + 2)(key-history . 1))) S-+ break
         ((and (key-history lsft 2)(key-history + 1))) S-+ break    
 		()	(tap-hold 1 $160 @.chg (multi (macro S-+ ) (tap-hold 1 $800 XX S-+ )))  break ;; there must be a macro (@.*) after the multi for the timeout do work
@@ -734,7 +736,7 @@ INFO , + . = F24
   esc       F1   @.ff13 F24
   @.^0      @.1   @.2    @.3   @.4    @.5   @.6     @.7    @.8    @.9    @.0     @.dp1   @.swh    bspc
   @.tab     @.j!  @.z˝   @.u◖  @.a◗   @.y$  @.p&    @.f#   @.l?   @.m\   @.w%    @.q@    @.ß      @.mus
-  @.atx     @.c⌘  @.s^   @.i[  @.e]   @.o'  @.d/    @.t/   @.n-   @.r_⎇  @.h⌘    @.k     ret
+  @.atx     @.c⌘  @.s^⎇  @.i[  @.e]   @.o'  @.d/    @.t/   @.n-   @.r_⎇  @.h⌘    @.k     ret
   _         @.x`  @.cv|  @.cü{ @.cä}  @.ö+  @.b=    @.g*   @,;<   @.:>   @-_~    @.rsfb
             @.oml @.oal  @.ff14             @.nav          @.ff15   
 #|
