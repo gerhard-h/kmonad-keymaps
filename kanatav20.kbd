@@ -223,6 +223,8 @@ INFO , + . = F24
   alt lalt
   tabb tab
 )
+
+
 ;;****** key-hold-repeat INFO base concept: ************************************************
 ;;**** re-tapping a key will repeat the last key produced by this key;                  ****
 ;;**** historykeys resambles keyrepeat broken up in its individual keystrokes(modifiers)****
@@ -232,6 +234,8 @@ INFO , + . = F24
 ;; TODO using RA- ralt may only work with "process-unmapped-keys yes" and wintercept
 ;; $historykey3 is currently unused. j!@ x```` b=== g*** ,;< .:> -_~ and homrow mods have there own implementation
 ;; TIP this template can be wraped in (multi ... @.tp) But for some scenarios (non windtercept / no powertoys / windows 11 ) may require calling @.tp from inside this template
+;; TODO is input-history better? most likely not because we care most about output-keys
+;; TODO is there a reason to replace tap-dance-eager with 
  (tap-dance-eager $150 (    
     (tap-hold 1 $timehold 	
 		;; I first TAP-DANCE holding and then retapping will repeat the hold action
@@ -735,7 +739,15 @@ INFO , + . = F24
 )
 ;; ************** GAME ***************** unused
 (deflayermap (game)
+  j q
+  u w
+  s a
+  i s
+  e d
+  z q
+  a e
   F14 spc
+  F15 (layer-switch base)
 )
 ;; *** Base layer variant that does not switch to fast typing layer used by RSFT ***
 (deflayer notp
@@ -864,7 +876,7 @@ INFO , + . = F24
 ;; Exit numfix with HOLD SPACE or HOLD Null or 7+9 or F13
 ;; INFO grv as dead key for â ô, LEFT_Spacebar = 0
   esc       F1   @.ff13 F24
-  grv       @.1   @.2   @.3   @.4   @.5    @.6  @.7   @.8    @.9   @.0     lrld-next A-prtsc _
+  grv       @.1   @.2   @.3   @.4   @.5    @.6  @.7   @.8    @.9   @.0     (layer-switch game) A-prtsc _
   _         @-_:  1     2     3     @.⎈␡   home home  ▲      end   pgup    pgdn      _       _
   @.sy1     @.⌘c  @.4⎇  @.5⎈  @.6⇧  0      bspc  ◀    ▼      ▶     esc     @.fky     _
   _         @,:x  @.ch7 @.ch8 @.ch9 del    tab  @.⏎⇧  @.␡⎈   @.l🖰⎇ @.r🖰⌘  _
