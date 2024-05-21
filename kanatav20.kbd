@@ -1,5 +1,5 @@
 #|
-TODO uses cases for key-timing and (input..)
+TODO uses cases for switch (not, key-timing, input, input-history)
 (defvar var1 a)
 (defsrc a)
 (deffakekeys vk1 XX)
@@ -56,19 +56,23 @@ TODO-Usage idea: SHIFT + ,. are never used
 TODO-Usage LSPACE + RSPACE = ENTER is never used -> mouse?
 
 ****** COMBOS Guide **************************************
-TODO F24 + E/I :: desktop cycle not used / don't work consistent input must be super fast
+TODO F24 + E/I :: AHK desktop cycle not used / don't work consistent input must be super fast
 INFO V + Ü = DEL
 INFO Ü + Ä = BSPC
+INFO Ü+Ä+V = C-BSPC
 INFO G + , = ESC
 INFO , + . = F24
 
 ***** Numberrow / dynamic-macro Guide **********
-1-5 dplay / 11 on baselayer dp0
-6-0 drecord
-    save
-	save 
+1-5 dynamic-macro play / 11 on baselayer dp0
+6-0 dynamic-macro record
+11  dynamic-macro save
+12	dynamic-macro save 
+j=F1,...q*F11,ß=F12
 	
-***************************************************
+*********************** can it be done with qmk ****************************
+;; RETRY via only 4 layers base, numbers-nav, symbols, mouse => no place for a normal kanata or querty layer
+;; VIA has 4 layers = base+ , nav , symbol, mouse but plain base is missing => replace symbol-layer by combos 
 ;; FEATURES kanata                versus                 QMK                                              QMK minimal portable requirements
 ;; - Home row mods                                       (Y) but timing problems                          Fallback abc layer (Fallback = no kanata available)
 ;; - Autosymbol: Tap_Hold                                 y TAP_HOLD / MOD_TAP                            Fallback abc (but not VIA) => Fallback Symbol layer
@@ -93,16 +97,15 @@ INFO , + . = F24
 ;; - bspc on ö	 (not used anymore) 					  - on ö or - on , _on =
 ;; - rdesktop alt-pgup requires interception?             pgup can be remapped
 ;;
-;; RETRY via only 4 layers base, numbers-nav, symbols, mouse => no place for a normal kanata or querty layer
 ;; INFO wich thumb activates nav? cursor keys seems to be used with right tumb on alice
 ;; BUG SC06F remap altgr to F24 in sharpkeys is not recognized by kanata
 ;; INFO double leader keying (multi F24 sldr) inconsistencies with sldr 
 ;; INFO sldr key not used
-;; INFO AltGr is a bad positionend key anyway - bspc but not used  
-;; TODO where to put delete? nav+ö VÜ nav+, |\ - key 
-;; INFO rpt just rpeats one key and no mods ... useless TODO rpt-any test
-;; TODO revisit win and esc otimization / rsft - vs rsft esc  / @.rtw vs esc_win
-;; TODO ctrl + Z single key ? but no need
+;; TODO-Usage AltGr is a bad positionend key anyway - bspc but not used  
+;; TODO where to put delete? nav+ö VÜ nav+, 
+;; INFO rpt just rpeats one key and no mods ... useless (rpt-any also)
+;; TODO revisit win and esc optimization / rsft - vs rsft esc  / @.rtw vs esc_win
+;; INFO ctrl + Z single key ? but no need
 ;; INFO combine @.tab with esc feels bad
    
    TIP If you want instant activation on a tap-hold you could try do something like: (multi (macro a) (tap-hold $100 $100 xx b))
@@ -110,7 +113,7 @@ INFO , + . = F24
    BUG AltGr + I = ahk menu seems to hang CTRL - SOLVED by excluding AltGr (and Ctrls) from defsrc (really?)	  
 |#
 (defcfg
-   delegate-to-first-layer yes  ;;TODO seems correct but not sure it has an effect
+   delegate-to-first-layer yes ;;INFO only for layer-switch; _ to reference to base layer seems correct (TODO simplyfy layers). has no effect on deflayermap.
    concurrent-tap-hold no      ;;INFO getting early autosymbols if yes 
    sequence-timeout 3000
   ;; windows-interception-mouse-hwid "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0"
@@ -121,10 +124,21 @@ INFO , + . = F24
   ;; not work too well with other applications that use WH_KEYBOARD_LL.
   ;; Known applications with issues: GWSL/VcXsrv
 
-  ;; Using a binary compiled with the cmd feature enabled
+  log-layer-changes    	yes	;;|no| overhead
+  tray-icon "base.ico" ;; should activate for layers without icons 
+  icon-match-layer-name yes ;;|yes| match layer name to icon files even without an explicit (icon name.ico) config
+
+  ;; Using a binary compiled with the cmd feature enabled - usecases: current date, NUMLOCK status
   danger-enable-cmd yes
-  ;;usecases for cmd: current date, NUMLOCK status
   process-unmapped-keys yes ;; WHY yes? yes does not help with japanese keys ; did not help with RDP; Used since Nov 2023 because of dynamic-macro?! TODO find the other reason
+  rapid-event-delay 5 ;; (5) This configuration applies to
+  ;; a) the release of one-shot-press activation
+  ;; b) the release of the tapped key in a tap-hold activation
+  
+  ;; hw V10 (k15 laptop) TODO missing so far
+  windows-interception-keyboard-hwids (
+  "72, 0, 73, 0, 68, 0, 92, 0, 86, 0, 73, 0, 68, 0, 95, 0, 51, 0, 52, 0, 51, 0, 52, 0, 38, 0, 80, 0, 73, 0, 68, 0, 95, 0, 48, 0, 51, 0, 65, 0, 49, 0, 38, 0, 82, 0, 69, 0, 86, 0, 95, 0, 48, 0, 49, 0, 48, 0, 50, 0, 38, 0, 77, 0, 73, 0, 95, 0, 48, 0, 48, 0, 0, 0, 72, 0, 73, 0, 68, 0, 92, 0, 86, 0, 73, 0, 68, 0, 95, 0, 51, 0, 52, 0, 51, 0, 52, 0, 38, 0, 80, 0, 73, 0, 68, 0, 95, 0, 48, 0, 51, 0, 65, 0, 49, 0, 38, 0, 77, 0, 73, 0, 95, 0, 48, 0, 48, 0, 0, 0, 72, 0, 73, 0, 68, 0, 92, 0, 86, 0, 73, 0, 68, 0, 95, 0, 51, 0, 52, 0, 51, 0, 52, 0, 38, 0, 85, 0, 80, 0, 58, 0, 48, 0, 48, 0, 48, 0, 49, 0, 95, 0, 85, 0, 58, 0, 48, 0, 48, 0, 48, 0, 54, 0, 0, 0, 72, 0, 73, 0, 68, 0, 95, 0, 68, 0, 69, 0, 86, 0, 73, 0, 67, 0, 69, 0, 95, 0, 83, 0, 89, 0, 83, 0, 84, 0, 69, 0, 77, 0, 95, 0, 75, 0, 69, 0, 89, 0, 66, 0, 79, 0, 65, 0, 82, 0, 68, 0, 0, 0, 72, 0, 73, 0, 68, 0, 95, 0, 68, 0, 69, 0, 86, 0, 73, 0, 67, 0, 69, 0, 95, 0, 85, 0, 80, 0, 58, 0, 48, 0, 48, 0, 48, 0, 49, 0, 95, 0, 85, 0, 58, 0, 48, 0, 48, 0, 48, 0, 54, 0, 0, 0, 72, 0, 73, 0, 68, 0, 95, 0, 68, 0, 69, 0, 86, 0, 73, 0, 67, 0, 69, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0"
+  )
   
   ;; This configuration allows you to customize the length limit on dynamic macros. The default limit is 128 keys.
   dynamic-macro-max-presses 20
@@ -137,16 +151,10 @@ INFO , + . = F24
   
   movemouse-smooth-diagonals yes
   movemouse-inherit-accel-state yes  ;; not much effect
-  
-  ;; windows-interception-keyboard-hwids (
-  ;;   "70, 0, 60, 0"
-  ;;   "71, 72, 73, 74"
-  ;; )
-  
 )
 (platform (wintercept)
 (defvar 
-  y y	;; INFO wintercept confuses y and z can be solved with deflocalkeys (can be removed?!) 
+  y y	;; INFO wintercept confuses y and z but can be solved with deflocalkeys, vars does not work in defsrc, ( => $z $y can be removed?!) 
   z z
   )
 )
@@ -158,26 +166,26 @@ INFO , + . = F24
 )
 (defvar 
   off Numpad9 ;; $off used to deactivate template-features TODO use noop keys instead
-  ;; timers
-  100 100
-  120 120
-  140 140
+  ;; timers - this is done to simplyfy adjustment of timing differences on different computers/keyboards 
+  100 100 ;; punctuation
+  120 120 ;; j!
+  140 140 ;; 1! " $ ? # % } ; and tap-dance punctuation
   145 145
-  150 150
-  160 160
-  180 180
-  200 200
+  150 150 ;; ( and )
+  160 160 ;; homerow shift and & \ @ '
+  180 180 ;; template and ö =
+  200 200 ;; layers numbers / | { caps-layer
   240 240
-  300 300
+  300 300 ;; homerow ctl
   340 340
   350 350
   400 400
   450 450
-  500 500
+  500 500 ;;==
   600 600
   700 700
   800 800
-  900 900 
+  900 900 ;;===
 )
 
 (deflocalkeys-wintercept
@@ -207,16 +215,22 @@ INFO , + . = F24
   ´    221
   ä    222
   <    226
-  y    89    ;; TODO check this numbers
+  y    89    ;; TODO check this numbers (should be flipped compared to wintercept)
   z    90
 )
-
+(defalias
+;; *** numlock on / off indicator for CAPS or other sticky layers *** BUG code must be doubled
+  .nly (cmd-output-keys powershell.exe "if ($([console]::NumberLock) -match 'True') { echo '()' } else { echo '(nlck)' }")
+  .nln (cmd-output-keys powershell.exe "if ($([console]::NumberLock) -match 'True') { echo '(nlck)' } else { echo '()' }")
+)
 (defvirtualkeys
+  ;; nlockon/off is only used for while-held scenarios
+  nlockon  (cmd-output-keys powershell.exe "if ($([console]::NumberLock) -match 'True') { echo '()' } else { echo '(nlck)' }")
+  nlockoff (cmd-output-keys powershell.exe "if ($([console]::NumberLock) -match 'True') { echo '(nlck)' } else { echo '()' }")
   mouselight M-S-f
-  ;;forkme  (movemouse-speed 20) ;;(tracking does not work)
   to-base (layer-switch base)
   vcaps   (layer-while-held CAPS)
-  ;;*** NUMBERSTAB ***
+  ;;*** NUMBERS/ALT TAB ***
   ctl lctl
   sft lsft
   met lmet
@@ -225,17 +239,18 @@ INFO , + . = F24
 )
 
 
-;;****** key-hold-repeat INFO base concept: ************************************************
+;;****** key-hold-repeat INFO base concept  ************************************************
 ;;**** re-tapping a key will repeat the last key produced by this key;                  ****
 ;;**** historykeys resambles keyrepeat broken up in its individual keystrokes(modifiers)****
-(deftemplate                     key-hold-repeat (timehold time2ndhold keytap keyhold keyrepeat historykey3 historykey2 modlesshistorykey1 combokeylist comboout) 
-;; examples v|  (template-expand key-hold-repeat  $200      $800         v      @.|      @.|        XX          ralt        <                  (ü 7)        del     ) 
-;; pass combokeylist ($off) XX to disable combo. The real combo must be build with chords / this is just for fixing misstiming the combo. Is this even usefull?
+(deftemplate  key-hold-repeat (timehold time2ndhold keytap keyhold keyrepeat historykey3 historykey2 modlesshistorykey1 combokeylist comboout) 
+;; sam v| (t! key-hold-repeat  $200      $800         v      @.|      @.|        XX          ralt        <                  (ü 7)        del     ) 
+;; pass combokeylist ($off) XX to disable combo feature. The real combo must be build with chords / this is just for fixing misstiming the combo. Is this even usefull?
 ;; TODO using RA- ralt may only work with "process-unmapped-keys yes" and wintercept
-;; $historykey3 is currently unused. j!@ x```` b=== g*** ,;< .:> -_~ and homrow mods have there own implementation
+;; $historykey3 is currently unused.
+;; j! x` b= g* ,;< .:> -_~ and homrow mods have there own implementation
 ;; TIP this template can be wraped in (multi ... @.tp) But for some scenarios (non windtercept / no powertoys / windows 11 ) may require calling @.tp from inside this template
 ;; TODO is input-history better? most likely not because we care most about output-keys
-;; TODO is there a reason to replace tap-dance-eager with 
+;; TODO is there a reason to replace tap-dance-eager with switch?  
  (tap-dance-eager $150 (    
     (tap-hold 1 $timehold 	
 		;; I first TAP-DANCE holding and then retapping will repeat the hold action
@@ -295,9 +310,6 @@ INFO , + . = F24
 
 (defalias
   .dsk (multi lmet lalt ß)  ;; AHK desktop switch must use MODS to be active within RDP  SYMBOL+M 
-  ;; *** numlock on / off for CAPS ***
-  .nly (cmd-output-keys powershell.exe "if ($([console]::NumberLock) -match 'True') { echo '()' } else { echo '(nlck)' }")
-  .nln (cmd-output-keys powershell.exe "if ($([console]::NumberLock) -match 'True') { echo '(nlck)' } else { echo '()' }")
   .CAPSon  (multi (on-press toggle-virtualkey  vcaps) @.nly) ;;using toggle to be more error redundant
   .CAPSoff (multi (on-press release-virtualkey vcaps) @.nln)
 ;; *** LAYER-TOGGLE & SWITCH-LAYER(STICKYNESS) ***
@@ -345,12 +357,12 @@ INFO , + . = F24
 			)
   )
 ;; *** Numberline(unused) + dynamic-macro ***  
-  .ff15 (tap-hold 1 $200  (multi @.nln (layer-switch numberline)) (layer-while-held numberline)) ;; no numlock warning when using keypad numbers possible
+  .ff15 (tap-hold 1 $200  (multi @.nly (layer-switch numberline)) (multi (layer-while-held numberline) (on-press tap-virtualkey  nlockon) (on-release tap-virtualkey  nlockoff) )) ;; no numlock warning when using keypad numbers possible
   .ff15c (tap-hold 1 $200  @.CAPSoff (layer-while-held numberline))
 
 ;; *** MACRO + F-Keys layer *** TIP removing one-shot solves problems with hitting the key by accident - F21 is not used in ahk in just consumes a key press TODO solve it without F21
   .ff13 (multi F21 (on-press release-virtualkey vcaps ) (layer-switch base) @.nln (layer-while-held fkeymacro))
-  .nav   (tap-hold  $200 $200 spc (fork @.num @.sym (rsft))) ;; RIGHT sft + RIGHT spc == symbols  
+  .nav   (tap-hold  $200 $200 spc (fork @.num (multi @.num @.sym) (rsft))) ;; RIGHT sft + RIGHT spc == symbols  
   .nav-typing   (tap-hold  $200 $200 (multi @.basen spc) (fork @.num @.sym (rsft))) 
 ;; *** ONE SHOT MODIFIERS ***
   .oss   (tap-hold $200 $300 @.cwl lsft) ;; use caps words on non base layer
@@ -380,11 +392,10 @@ INFO , + . = F24
   .{ RA-7
   .] RA-9
   .[ RA-8
-  .\ RA-ß             
-;;..\ (unicode \) ;; INFO has been better in some in environments in the past
+  .\ RA-ß         ;;(unicode \) INFO has been better in some environments in the past
   .ẞ RA-S-ß
   .€ (unicode € ) ;; (macro RA-e )
-  .@ RA-q         ;; INFO (unicode @ ) will mess up keyhistory but may be better on non intercept
+  .@ RA-q         ;; INFO (unicode @ ) will mess up keyhistory but may be better on non wintercept
   .² RA-2
   .³ RA-3
   .µ RA-m
@@ -402,17 +413,18 @@ INFO , + . = F24
   .; (macro S-, )
   .: (macro S-. )
   .> S-102d
-  .< 102d   ;; not really needed if < is a key but having @.< and @.> looks consistent
+  .< 102d   ;; not really needed because < is a deflocalkey but having @.< and @.> looks consistent
+  
   ;; **** dead keys to normal keys ****
-  .´ (macro = spc)	  ;; ´ 
-  .` (macro S-´ spc)   ;;(unicode `)       ;; ` unicode also disables autorepeat
+  .´ (macro = spc)
+  .` (macro S-´ spc)
   .^ (unicode ^)       ;; ^ = \ - shifting (macro grv spc) will produce an incorrect space now: "° " TODO unicode may prevent shortcuts
   .° (macro S-grv)
   ;;.F20 (macro F20) ;; ahk unused
   ;;.F19 (macro F19) ;; ahk unused
   ;;.ä (macro ') 
   ;;.ü (macro [)
-  ;;ö (macro ;) 
+  ;;.ö (macro ;) 
   
   ;; mouse buttons
   .🖰l mlft ;;M-C-A-f ;; using AHK to do the click
@@ -423,27 +435,27 @@ INFO , + . = F24
   ;; outer/special keys
   .tab (tap-hold-press  $200 $400 tab lctl )	;; TODO-usage is ctl ever used?
   .rtc (tap-hold-release $200 5000 ret lctl) ;; done with QMk
-  .rtw del
+  .rtw del ;; TODO find a use for this key
   .rsd (tap-hold-release $200 $240 @.syv (multi rsft lsft)) ;; TODO not used ?! BUG rsft get ignored on RDesktop -> use lsft  or (multi rsft lsft) ?
   .ral S-C-M-A-9 ;; release ALL key (BUG) kanata cannot release stuck keys from ahk (both tools with elevated rights) PRESS F24 FOR RELEASE ALL MODS
   
-  ;; normal number aliases in top row 
+  ;; *** AUTOSHIFT in number row ***
   ;;ech (tap-hold $140 $400 esc (multi (macro home ) (tap-hold $400 $900 XX (macro end ) )) ) ;; not used
-  ;;^ec (tap-hold $200 $300 esc @.^) ;; TODO not used replaced by esc but still a relict of 40% boards (fkeys/numberline)
-  ;; INFO "double-tap-hold 400" numbers will do autorepeat for numbers
+  ;;^ec (tap-hold $200 $300 esc @.^) ;; TODO not used replaced by esc. a relict of 40% boards (fkeys/numberline)
+  ;; INFO number rom with autorepeat
   .^0 (tap-hold $400 $300 0 (fork @.^ @.° (lsft rsft)))  
-  .1  (tap-hold $400 $500 1 (macro S-1 ))  ;;(tap-hold $400 $140 1 (multi (macro S-1 ) (tap-hold $200 $400 XX (macro bspc @.@ ))) )  ;; TODO one @ is enough ?
+  .1  (tap-hold $400 $500 1 (macro S-1 ))
   .2  (tap-hold $400 $300 2 (multi @.˝ (tap-hold $200 $700 XX @.˝ )) )
   .3  (tap-hold $400 $300 3 (macro S-3 ))
   .4  (tap-hold $400 $500 4 (macro S-4 ))
   .5  (tap-hold $400 $500 5 (macro S-5 ))
-  .6  (tap-hold $400 $500 6 (macro S-6 )) ;;(tap-hold $400 $300 6 (multi (macro S-6 ) (tap-hold $400 $400 XX (macro S-6 ))))
-  .7  (tap-hold $400 $500 7 (macro S-7 )) ;;(tap-hold $400 $300 7 (multi (macro S-7 ) (tap-hold $400 $400 XX (macro S-7 ))))
-  .8  (tap-hold $400 $500 8 (macro S-8 )) ;;(tap-hold $400 $300 8 (multi (macro S-8 ) (tap-hold $400 $400 XX (macro bspc RA-8 ))) )
-  .9  (tap-hold $400 $500 9 (macro S-9 )) ;;(tap-hold $400 $300 9 (multi (macro S-9 ) (tap-hold $200 $400 XX (macro bspc RA-9 ))) )
-  .0  0 ;;(tap-hold 10 $100 0 (multi (macro S-0 ) (tap-hold $200 $400 XX (multi (macro S-0 ) (tap-hold $200 $400 XX (macro S-0 ))  ))  ) )
+  .6  (tap-hold $400 $500 6 (macro S-6 ))
+  .7  (tap-hold $400 $500 7 (macro S-7 ))
+  .8  (tap-hold $400 $500 8 (macro S-8 ))
+  .9  (tap-hold $400 $500 9 (macro S-9 ))
+  .0  0
   
-  ;; number aliases (n0-n9 for use inside other macros)
+  ;; *** number aliases for use inside macros ***
   .n1 1
   .n2 2
   .n3 3
@@ -454,7 +466,7 @@ INFO , + . = F24
   .n8 8 
   .n9 9 
   .n0 0
-  ;; numberline aliases
+  ;; *** keypad/homerow mod aliases uses in layer numberline *** TODO NUMLOCK must be enforced
   .k1 (tap-hold $200 $500 Numpad1 lmet)
   .k2 (tap-hold $200 $500 Numpad2 lalt)
   .k3 (tap-hold $200 $500 Numpad3 lctl)
@@ -466,7 +478,7 @@ INFO , + . = F24
   .k9 (tap-hold $200 $500 Numpad9 lalt)
   .k0 (tap-hold $200 $500 Numpad0 lmet)
   
-  ;; dynamic-macro TODO test them
+  ;; *** dynamic-macro TODO  use them ***
   .dr1 (dynamic-macro-record 1)
   .dr2 (dynamic-macro-record 2)
   .dr3 (dynamic-macro-record 3)
@@ -481,16 +493,14 @@ INFO , + . = F24
   .dst (dynamic-macro-record-stop-truncate 1)
   
 ;; *** HOME ROW MODS *** 
-;; BUG e]  (tap-hold 1 $160 (multi e @.tp) (multi lsft (tap-hold 1 $900 XX (layer-while-held notp))) ) ;; als erstes muss der Wechsel nach typing erfolgen sonst EIn 
 ;; BUG t   (tap-hold 1 $160 (multi t @.tp) (multi rsft (tap-hold 1 $900 XX (layer-while-held notp))) ) ;; rsft ,rctl have RDP problems without interception
 ;; TODO try to use tap-hold-except-keys instead 
-;; TIP e and t have special treatment for fast typing layer
-;; TODO try something other than F17 (like noop keys) .e]  (tap-hold 1 $160 (fork e (multi e F17 (on-press press-virtualkey forkme) (on-release release-virtualkey forkme) @.tpe) (rsft)) lsft ) ;;(tap-hold 1 $160 (multi  @.tp e) lsft ) ;; als erstes muss der Wechsel nach typing erfolgen sonst EIn 
-  .e]   (tap-hold 1 $160 (fork e (multi e F17 @.tpe) (rsft)) lsft ) ;;(tap-hold 1 $160 (multi  @.tp e) lsft ) ;; als erstes muss der Wechsel nach typing erfolgen sonst EIn 
+;; INFO e and t have special treatment for fast typing layer
+  .e]   (tap-hold 1 $160 (fork e (multi e nop7 @.tpe) (rsft)) lsft ) ;;(tap-hold 1 $160 (multi  @.tp e) lsft ) ;; (outdated BUG) als erstes muss der Wechsel nach typing erfolgen sonst EIn 
   .t/   (tap-hold 1 $160 (multi t @.tp) rsft ) ;; rsft ,rctl have RDP problems without interception
   ..e]  (tap-hold 1 $160 e lsft ) ;; als erstes muss der Wechsel nach typing erfolgen sonst EIn 
   ..t   (tap-hold 1 $160 t rsft ) ;; rsft ,rctl have RDP problems without interception  
-  .i[   (multi (tap-hold 1 $300 (fork i (unicode i) (F17)) (multi @.base lctl) ) @.tp) ;; BUG unshift in stead of unicode leads to strange errors
+  .i[   (multi (tap-hold 1 $300 (fork i (unicode i) (nop7)) (multi @.base lctl) ) @.tp) ;; BUG unshift in stead of unicode leads to strange errors
   ..i[  (tap-hold $500 $500 i lctl )
   ..[   (tap-hold $500 $500 @.[ lctl ) ;; used on symbol layer
   ..-   (tap-hold $500 $500 - lctl )
@@ -531,38 +541,38 @@ INFO , + . = F24
 		) 
 		(multi (macro @.!) (tap-hold $200 $800 XX (macro bspc @.@ )))
   )
-  ..z˝  (template-expand key-hold-repeat $140 $400 $z @.˝ @.˝ XX lsft 2 ($off) XX)
+  ..z˝  (t! key-hold-repeat $140 $400 $z @.˝ @.˝ XX lsft 2 ($off) XX)
   .z˝tp (multi @..z˝ @.tp)             
-  ..u◖  (template-expand key-hold-repeat $150 $400 u @.◖  @.◗ XX lsft 8 ($off) XX)                        ;; (  ()
+  ..u◖  (t! key-hold-repeat $150 $400 u @.◖  @.◗ XX lsft 8 ($off) XX)                        ;; (  ()
   ;; TIP a◗ (multi (tap-hold 1 $150  a  S-9) @.tp) this order works with powertoys but causes problems with RDP ua vs au
   ;; TIP a◗ LONG HOLD with no Powertoys running (tap-hold 1 $150 (multi a @.tp) (fork (macro-release-cancel S-9 $600 bspc RA-9 ) C-a (lctl rctl)) )                   ;; ) [ todo find a better use
-  ..a◗  (template-expand key-hold-repeat $150 $800 a @.◗ XX XX lsft 9 ($off) XX)
+  ..a◗  (t! key-hold-repeat $150 $800 a @.◗ XX XX lsft 9 ($off) XX)
   .a◗   (multi @..a◗ @.tp)
-  .y$   (template-expand key-hold-repeat $140 $800 $y @.$ @.$ XX lsft 4 ($off) XX)
-  ..p&  (template-expand key-hold-repeat $160 $800 p @.& @.& XX lsft 6 ($off) XX)  ;; & TODO is switching @.tp position relevante for RDP or Powertoys
+  .y$   (t! key-hold-repeat $140 $800 $y @.$ @.$ XX lsft 4 ($off) XX)
+  ..p&  (t! key-hold-repeat $160 $800 p @.& @.& XX lsft 6 ($off) XX)  ;; & TODO is switching @.tp position relevante for RDP or Powertoys
   .p&   (multi @..p& @.tp)
-  .l?   (multi (template-expand key-hold-repeat $140 $800 l @.? @.? XX lsft ß ($off) XX) @.tp)     ;; ? = S-ß = S-[      i ? ??
-  .m\   (multi (template-expand key-hold-repeat $160 $800 m @.\ @.\ XX ralt ß ($off) XX) @.tp)
+  .l?   (multi (t! key-hold-repeat $140 $800 l @.? @.? XX lsft ß ($off) XX) @.tp)     ;; ? = S-ß = S-[      i ? ??
+  .m\   (multi (t! key-hold-repeat $160 $800 m @.\ @.\ XX ralt ß ($off) XX) @.tp)
   .ß    (macro (unshift ß))
   .k    (macro k)
-  ..f#  (template-expand key-hold-repeat $140 $800 f # XX XX XX # ($off) XX)
+  ..f#  (t! key-hold-repeat $140 $800 f # XX XX XX # ($off) XX)
   .f#   (multi @..f# @.tp)
-  .w%   (template-expand key-hold-repeat $140 $800 w @.%  @.% XX lsft 5 ($off) XX)
-  .q@   (template-expand key-hold-repeat $160 $800 q RA-q XX XX ralt q ($off) XX) 
-  .o'   (template-expand key-hold-repeat $160 $800 o S-#  S-# XX lsft # ($off) XX)
-  .d/   (template-expand key-hold-repeat $200 $800 d S-7  S-7 XX lsft 7 ($off) XX)
-  .v|   (template-expand key-hold-repeat $200 $800 v @.| @.| XX ralt < (ü 8) del) 
+  .w%   (t! key-hold-repeat $140 $800 w @.%  @.% XX lsft 5 ($off) XX)
+  .q@   (t! key-hold-repeat $160 $800 q RA-q XX XX ralt q ($off) XX) 
+  .o'   (t! key-hold-repeat $160 $800 o S-#  S-# XX lsft # ($off) XX)
+  .d/   (t! key-hold-repeat $200 $800 d S-7  S-7 XX lsft 7 ($off) XX)
+  .v|   (t! key-hold-repeat $200 $800 v @.| @.| XX ralt < (ü 8) del) 
   .x`   (tap-hold 1 160 ;; tap=x or hold=` or long=``` hold+tap...=`````` INFO no autorepeat
 			(switch 
-				((and (key-history F17 1)(key-history ´ 3)(key-history spc 2)))  (multi lsft ´ spc F17) break
+				((and (key-history nop7 1)(key-history ´ 3)(key-history spc 2)))  (multi lsft ´ spc nop7) break
 				() x break
 			)
-			(fork (multi lsft ´ spc F17  (tap-hold $200 $800 XX (multi (unicode ` ) (unicode ` )))) (macro S-x) (lsft rsft))
+			(fork (multi lsft ´ spc nop7  (tap-hold $200 $800 XX (multi (unicode ` ) (unicode ` )))) (macro S-x) (lsft rsft))
 	    )                   
-  .ü{   (template-expand key-hold-repeat $200 $500 ü RA-7 RA-0 XX ralt 7 (v) XX)								;; { {}
+  .ü{   (t! key-hold-repeat $200 $500 ü RA-7 RA-0 XX ralt 7 (v) XX)								;; { {}
   ;;INFO ä}  (tap-hold-release-timeout $200 $400 ä @.syvv @.} ) ;; layer activation if ä is comboed;  not needed on v20 bc of second space bar
-  .ä}   (template-expand key-hold-repeat $140 $800 ä RA-0 XX XX ralt 0 (v) XX) ;; der v XX scheint überflüssig zu sein
-  .ö+   (template-expand key-hold-repeat $180 $800 ö + + XX XX + ($off) XX)
+  .ä}   (t! key-hold-repeat $140 $800 ä RA-0 XX XX ralt 0 (v) XX) ;; der v XX scheint überflüssig zu sein
+  .ö+   (t! key-hold-repeat $180 $800 ö + + XX XX + ($off) XX)
   .b=== (tap-hold 1 $180 b (macro-release-cancel @.= $500 @.= $900 @.=))
   .b=   (switch ;; b = == === hold+hold= autorepeat =======
 			((and (key-history lsft 6) (key-history 0 5) (key-history lsft 4) (key-history 0 3) (key-history lsft 2) (key-history 0 1) )) b break
@@ -619,7 +629,8 @@ INFO , + . = F24
 						(switch
 							((and (key-history lsft 2)(key-history . 1))) S-. break    ;;  hold hold : :::::
 							((and (key-history lsft 2)(key-history 102d 1))) @.> break ;;??? hold > >>>>>
-							((key-history . 1)) . break                                   ;;         . .....
+							((key-history . 1)) .   break ;; . .....
+							((key-history - 1)) @.> break
 							()	(multi @.: (tap-hold $200 $800 XX (macro bspc @.> )))  break ;; Long_Hold
 						)			
 	   )
@@ -682,7 +693,7 @@ INFO , + . = F24
   (      . ) .
   (   ,  . ) F24
 )
-;; defsrc querty laptop + und ß sing ggf vertauscht 
+;; defsrc querty laptop + und ß (x und y) sind ggf. vertauscht 
 #|(defsrc querty laptop
   esc       F1   F13  F24
   ^         1    2    3    4    5    6    7    8    9    0    ß    ´    bspc
@@ -695,7 +706,7 @@ INFO , + . = F24
 ;; defsrc for ansi german NOTED layout  
 ;; If you are looking for other keys, the file src/keys/mod.rs should hopefully provide some insight.
 ;; z and y are FLIPPED, positioning has no meaning but must be consistent with other layers
-;; F1 unused / why is F24 declaration required? /   F13 = right-B  / F14 = left-Space
+;; F1 unused / F24 declaration is required with process-unmapped-keys no? /   F13 = right-B  / F14 = left-Space
 (platform (wintercept)
 (defsrc
   esc       F1   F13  F24
@@ -715,13 +726,14 @@ INFO , + . = F24
             lmet lalt      F14       spc            F15                           
 ))
 
-;; DON'T mess with the @.u◖ @.a◗ spacing 
 ;; INFO did lmet, lalt not being one-shot / not incluing lctl solve any problems? ANSWER didn't solve any problems
-;; TODO rsft+rspace + rstf-up = @.sym not used and has BUG with RAlt
+;; BUG/TODO-Usage rsft +... rspace +... rstf-up = @.sym not used and has BUG with RAlt-keys like [] if rsft is not released.
 ;; INFO feat: rpt will repeat the unmodified key / rpt-any fails to repeat complex tap-hold sequences
 (deflayer base
 ;;****************   BASE   ********************************************************
 ;; TODO ONLY c s i n r h  have dbl_tap autorepeat
+;; lspc + rspc = mouse
+;; rsft + rspc = symbols
 ;; sft+lspc = CAPSlayer / lspc+D = Desktop Cycle
 ;; F13 (right-B) = macro layer
 ;; F14 = left-Space = symbol layer / lsft+F14 = hold F14 = number layer
@@ -751,22 +763,22 @@ INFO , + . = F24
 )
 ;; *** Base layer variant that does not switch to fast typing layer used by RSFT ***
 (deflayer notp
-  esc        F1    @.ff13  F24
+  esc _ _ _
   @.^        @.1   @.2     @.3     @.4    @.5   @.6    @.7    @.8   @.9   @.0   -    del  bspc
-  @.tab      @.j!  @..z˝   @.u◖    @..a◗  @.y$  @..p&  @..f#  @.l?  @.m\  @.w%  @.q@ @.ß  @.rtw
-  @.atx      @.c⌘  @.s⎇    @..i[   @..e]  @.o'  @.d/   @..t   @..n  @.r_⎇ @.h⌘  @.k  ret
+  _          @.j!  @..z˝   @.u◖    @..a◗  @.y$  @..p&  @..f#  @.l?  @.m\  @.w%  @.q@ @.ß  @.rtw
+  _          @.c⌘  @.s⎇    @..i[   @..e]  @.o'  @.d/   @..t   @..n  @.r_⎇ @.h⌘  @.k  ret
   @.cabs     @.x`  @.cv|   @.ü{    @.ä}   @.ö+  @.b=   @.g*   @,;<  @.:>  @-_~  @.rsf
-             @.oml @.oal   @.ff14         @.nav           @.ff15   
+             _     _       _       _            _   
 )
 ;; *** UPPER CASE LAYER - use spc to exit -  hold spc to exit w/o spc TODO shift into lower case does not work ***
 ;; scabs Shift cabs and QMK lsft Home interfere
 (deflayer CAPS
-  esc        F1    @.ff13 F24
+  esc _ _ _
   @.^        @.1   @.2    @.3   @.4    @.5   @.6   @.7   @.8   @.9   @.0   -     del  bspc
-  @.tab      @.J   @.Z˝   @.U◖  @.A◗   @.Y$  @.P&  @.F#  @.L?  @.M\  @.W%  @.Q@  @.ß  @.rtw
-  @.atx      @.C⌘  @.S    @.I[  @.E]   @.O'  @.D/  @.T   @.N   @.R   @.H⌘  @.K   ret
+  _          @.J   @.Z˝   @.U◖  @.A◗   @.Y$  @.P&  @.F#  @.L?  @.M\  @.W%  @.Q@  @.ß  @.rtw
+  _          @.C⌘  @.S    @.I[  @.E]   @.O'  @.D/  @.T   @.N   @.R   @.H⌘  @.K   ret
   @.scabs    @.X`  @.CHV| @.Ü{  @.Ä}   @.Ö+  @.B=  @.G*  @,;<  @.:>  @-_~  @.rsf
-             @.oml @.oal  @.ff14c      @.nav           @.ff15c   
+             _     _      @.ff14c      _           @.ff15c   
 )
 ;; *** UPPER CASE ALIASES for CAPS layer ***
 (defalias
@@ -818,12 +830,12 @@ INFO , + . = F24
 ;; INFO unmod seems to solve RDP issues
 (deflayer typing
 ;;****************   typing   ********************************************************
-  esc     F1         @.ff13     F24
+  esc _ _ _
   @.^     @.1       @.2        @.3       @.4       @.5        @.6       @.7       @.8       @.9       @.0       -         del      bspc
-  @.tab  (unmod j) (unmod $z) (unmod u) (unmod a) (unmod $y) (unmod p) (unmod f) (unmod l) (unmod m) (unmod w) (unmod q) (unmod ß) @.rtw
-  @.atx  (unmod c) (unmod  s) (unmod i) (unmod e) (unmod  o) (unmod d) (unmod t) (unmod n) (unmod r) (unmod h) (unmod k)  ret
+  _      (unmod j) (unmod $z) (unmod u) (unmod a) (unmod $y) (unmod p) (unmod f) (unmod l) (unmod m) (unmod w) (unmod q) (unmod ß) @.rtw
+  _      (unmod c) (unmod  s) (unmod i) (unmod e) (unmod  o) (unmod d) (unmod t) (unmod n) (unmod r) (unmod h) (unmod k)  ret
   @.osss (unmod v) (unmod  x)  @.ü{      @.ä}      @.ö+      (unmod b) (unmod g)  @,;<      @.:>      @-_~      @.rsf
-          lmet         lalt           @.ff14       @.nav-typing  @.ff15              
+          lmet      lalt       _         @.nav-typing         _              
 )
 
 ;;***  NUMBERS   ***
@@ -863,12 +875,12 @@ INFO , + . = F24
 (deflayer numbers
 ;;****************   NUMBERS   ****************************************************
 ;; TODO-Usage: caps to sym / C-bspc = @.⎈␡ or 7+8+9  
-  esc       F1     @.ff13 F24
-  @.^       @.1    @.2    @.3   @.4   @.5     @.6   @.7   @.8   @.9   @.0    lrld-next A-prtsc _
+  esc _ _ _
+  @.^       @.1    @.2    @.3   @.4   @.5     @.6   @.7   @.8   @.9   @.0    @.cmdrld  A-prtsc _
   _         @-_:   1      2     3     @.⎈␡    esc   home  ▲     end   pgup   pgdn      _       _
   @.atr     @.⌘c   @.4⎇   @.5⎈  @.6⇧  0       bspc   ◀    ▼     ▶     lmet   @.fky     _
   _         @,:x   @.7v   @.ch8 @.ch9 del     tab   @.⏎⇧  @.␡⎈  @.l🖰⎇ @.r🖰⌘ _
-            _     _    _         _    @.ff15              
+            _     _    _         _    _              
 )
 ;; Exit numfix with CAPS or HOLD SPACE or HOLD Null or 7+9
 (deflayer numfix
@@ -880,7 +892,7 @@ INFO , + . = F24
   _         @-_:  1     2     3     @.⎈␡   home home  ▲      end   pgup    pgdn      _       _
   @.sy1     @.⌘c  @.4⎇  @.5⎈  @.6⇧  0      bspc  ◀    ▼      ▶     esc     @.fky     _
   _         @,:x  @.ch7 @.ch8 @.ch9 del    tab  @.⏎⇧  @.␡⎈   @.l🖰⎇ @.r🖰⌘  _
-            _     _   (tap-hold  $200 $200 @.0 @.basen)    (tap-hold  $200 $200 spc @.basen)  @.ff15                 
+            _     _   (tap-hold  $200 $200 @.0 @.basen)    (tap-hold  $200 $200 spc @.basen)  _                 
 )
 
 (defalias
@@ -914,88 +926,88 @@ INFO , + . = F24
 (deflayer numberstab
 ;;**************** NUMBERSTAB LEFT HAND COURSOR KEYS by Using aup   ********************************************************
 ;; TODO How usefull are the esc Keys?
-  esc       F1    @.ff13 F24
+  esc _ _ _
   grv       1     2    3     4     5      6    7    8    9    0    -    ´     bspc
   _         @.aup ▲    esc   esc   @.⎈␡ home home ▲   end   pgup  pgdn   _    _
   @.sy1     ◀     ▼    ▶     ▶     0      bspc ◀    ▼   ▶     esc   @.fky  _
   _         @,:x  ▼    ▼     ▼     del    tab  @.⏎⇧ @.␡⎈ @.l🖰⎇ @.r🖰⌘ _
-            _     _    @.ff14       _             @.ff15                      
+            _     _    _     _            _                      
 )
 (deflayer symbols
 ;;****************   SYSMBOLS (start typing fast or it will get switched to numbers)  ********************************************************
 ;; get to @.numfix by tap 7+9 / |+}
 ;; t = Desktop switch
 ;; ´ (S-´) as dead keys for é, è,...
-  _         F1     @.ff13 F24
-  _         @.at1  @.at2  @.at3  @.at4   @.at5    @.at6    @.at7    @.at8    @.at9   @.atm   lrld-next   A-prtsc    _
+  _         _      _ _
+  _         @.at1  @.at2  @.at3  @.at4   @.at5    @.at6    @.at7    @.at8    @.at9   @.atm   @.cmdrld    A-prtsc    _
   _         @.!    @.˝    @.◖   @.◗      @.$      @.&      #        @.?      @.\     @.%     @.@         _          _         
   @.atr     @.`    @.^    @..[   @..]    @.'      @./      @.dsk    @..-     @._     esc     @.€         _             
   _         ´      @.ch|  @.{    @.ch}   @.+      @.=      @.*      @.<      @.>     @.~     _               
-            _      _             @.ff14           @.mus+            @.ff15   
+            _      _             _                @.mus+            _    
 )
 (deflayer vsymbols ;; unused - symbols reached by hold of querty-v macro and symbols triggered from the LEFT side - not used on v20 and not complete (unicode Õ)... are for ahk integration
-  _         F1   @.ff13 F24
+  _ _ _ _
   _         _    _    _    _    _    _    _    _    _    _   _    _    _   
   _  (unicode Ù) @.˝   @.◖   @.◗   @.$   @.&   #    @.?   @.\   @.%   _    _    _         
   _  (unicode Õ) @.@   @.[   @.]   @.'   @./   S-.  ,    .    @-_~ -    _          
   _         ´    @.|   @.{   @.}   @.+   @.=   @.*   @.<   @.>   ^    _               
-            _    _      @.ff14        _              _
+            _    _     _           _           _
 )
 (deflayer numberline
 ;;***   Numberrow *** Functionrow *** Keypadrow  *** dynamic-macro *** TODO-Usage
 ;; TODO BUG numpad numbers don't work if layer is fixed because of the NUMLOCK Indicator
-  esc      F1    @.ff13 F24
+  esc _ _ _
   esc      @.dp1 @.dp2  @.dp3 @.dp4  @.dp5 @.dr1 @.dr2 @.dr3 @.dr4 @.dr5 @.dst @.dms bspc
-  @.tab    F1    F2     F3    F4     F5    F6    F7    F8    F9    F10   F11   F12   @.rtw
-  @.atx    @.k1  @.k2   @.k3  @.k4   @.k5  @.k6  @.k7  @.k8  @.k9  @.k0  esc   ret
+  _        F1    F2     F3    F4     F5    F6    F7    F8    F9    F10   F11   F12   @.rtw
+  _        @.k1  @.k2   @.k3  @.k4   @.k5  @.k6  @.k7  @.k8  @.k9  @.k0  esc   ret
   @.cabs   @.x`  @.cv|  @.ü{  @.ä}   @.ö+  @.b=  @.g*  @,;<  @.:>  @-_~  @.rsf
-           @.oml @.oal  @.ff14      (multi spc @.basen)          @.basen
+           _     _      _     (multi spc @.basen)      @.basen
 )
 (deflayer fkeymacro ;; macro F-keys and (symbols) triggered from the RIGHT side (ff13)
 ;;****************   MACRO   ********************************************************
 ;; b is on this layer to avoid typos
-  _         F1   @.ff13    F24
+  _ _ _ _
   _         @.fashing @.geb @.iban  @.plz   _        _      _       _       _    _    _    _    _
   _         @.cmdde   F1   F2   F3   F10    C-S-F5   C-S-f  @.tsc   @.\     #    _    _    _         
   @.sy1     @.cmdiso  F4   F5   F6   F11    lmet     lsft   lctl    lalt    @-_~ _    _          
   _         ´         F7   F8   F9   F12    b        lctl   lalt    C-S-f   ^    _            
-            _        _    @.ff14     _            _
+            _         _    _         _               _
 )
 (deflayer mousefast
 ;;****************   MOUSE FAST  ********************************************************
-  esc       F1   @.ff13    F24
-  ^         1    2     3     4      5     6        7   	    8     9		 0    -    ´    bspc
+  esc _ _ _
+  ^        1     2     3     4      5     6        7   	    8      9		 0    -    ´   bspc
   tab      @.%%% @.slw @.sl% @.sl%  @.sl% @.setu   @.cll	@.🖰↑↑↑ @.clr	 z    q    +   @.mus+
   caps     XX    @.clm @.clr @.cll  XX    @.set    @.🖰←←←	@.🖰↓↓↓ @.🖰→→→	 h    k    ret
   lsft     @.msz lalt  lctl  lsft   XX    @.setd   @.🖰←     @.🖰↑   @.🖰→	 @-_: rsft
-           lmet  lalt  @.clr       @.cll              _                           
+           lmet  lalt  @.clr                       @.cll     _                           
 )
 (deflayer mouse
 ;;****************   MOUSE   ********************************************************
-  esc       F1   @.ff13    F24
-  ^         1    2     3     4      5     6        7   	    8     9		 0    -    ´    bspc
-  tab      @.%%% @.slw @.sl% @.sl%  @.sl% @.basecm @.cll	@.🖰↑↑ @.clr	 z    q    +    @.mus+
-  caps     XX    @.clm @.clr @.cll  XX    @.set    @.🖰←←	@.🖰↓↓ @.🖰→→	 h    k    ret
-  lsft     @.msz lalt  lctl  lsft   XX    @.🖰←     @.🖰↑	    @.🖰↓  @.🖰→	 @-_: rsft
-           lmet  lalt  @.clr        @.cll              _                           
+  esc _ _ _
+  ^        1     2     3     4      5     6        	7   	8     9		 0    -    ´    bspc
+  tab      @.%%% @.slw @.sl% @.sl%  @.sl% @.basecm 	@.cll	@.🖰↑↑ @.clr	 z    q    +    @.mus+
+  caps     XX    @.clm @.clr @.cll  XX    @.set    	@.🖰←←	@.🖰↓↓ @.🖰→→	 h    k    ret
+  lsft     @.msz lalt  lctl  lsft   XX    @.🖰←     	@.🖰↑	@.🖰↓  @.🖰→	 @-_: rsft
+           lmet  lalt  @.clr                     	@.cll   _                           
 )
 (deflayer mouseslow
 ;;****************   MOUSE SLOW  ********************************************************
-  esc       F1    @.ff13 F24
-  ^         1     2      3      4      5     6        7     8   		9     0    -    ´    bspc
-  tab       @.%%% @.slw+ @.slw+ @.slw+ @.sl% @.basecm @.cll @.🖰↑		@.clr z    q    +    @.mus
-  caps      XX    @.clm  @.clr  @.cll  XX    @.set    @.🖰←  @.🖰↓		@.🖰→  h    k    ret
-  lsft      @.msz lalt   lctl   lsft   XX    @.🖰←+    @.🖰↑+ @.🖰↓+	    @.🖰→+ @-_: rsft
-            lmet  lalt   @.clr       @.cll              _
+  esc _ _ _
+  ^         1     2      3      4      5     6        	7     	8   	9     	0		-    ´    bspc
+  tab       @.%%% @.slw+ @.slw+ @.slw+ @.sl% @.basecm 	@.cll 	@.🖰↑	@.clr 	z    	q    +    @.mus
+  caps      XX    @.clm  @.clr  @.cll  XX    @.set    	@.🖰←  	@.🖰↓	@.🖰→  	h    	k    ret
+  lsft      @.msz lalt   lctl   lsft   XX    @.🖰←+    	@.🖰↑+ 	@.🖰↓+	@.🖰→+ 	@-_: 	rsft
+            lmet  lalt   @.clr       @.cll             	_
 )
 (deflayer mouseslow+
 ;;****************   MOUSE SLOW+  ********************************************************
-  esc       F1    @.ff13 F24
-  ^         1     2      3      4      5    6        7    	8    	9     0    -    ´    bspc
-  tab       @.%%% @.slw+ @.slw+ @.slw+ @.sl% @.basecm @.cll	@.🖰↑+	@.clr z    q    +    @.mus
-  caps      XX    @.clm  @.clr  @.cll  XX   @.set    @.🖰←+	@.🖰↓+	@.🖰→+ h    k    ret
-  lsft      @.msz lalt   lctl   lsft   XX   @.🖰←     @.🖰↑+	@.🖰↓+	@.🖰→+ @-_: rsft
-            lmet  lalt   @.clr       @.cll              _
+  esc _ _ _
+  ^         1     2      3      4      5    	6        	7    	8    	9     	0    -    ´    bspc
+  tab       @.%%% @.slw+ @.slw+ @.slw+ @.sl% 	@.basecm 	@.cll	@.🖰↑+	@.clr 	z    q    +    @.mus
+  caps      XX    @.clm  @.clr  @.cll  XX   	@.set    	@.🖰←+	@.🖰↓+	@.🖰→+ 	h    k    ret
+  lsft      @.msz lalt   lctl   lsft   XX   	@.🖰←    	@.🖰↑+	@.🖰↓+	@.🖰→+ 	@-_: rsft
+            lmet  lalt   @.clr       @.cll              	_
 )
 ;; mouse layer keys
 (defalias
@@ -1065,11 +1077,20 @@ INFO , + . = F24
   )
 
 ;; DATES
-  .psiso (cmd-output-keys powershell.exe -NoProfile -NoLogo -NonInteractiv -Command "echo '(' ((Get-Date -Format 'yyyy-MM-dd').toCharArray() -join ' ') ')'")
-  .cmdiso (cmd-output-keys cmd.exe /C timek.cmd)
-  .cmdde (cmd-output-keys cmd.exe /C timedek.cmd) 
+  .cmdiso (cmd-output-keys powershell.exe -NoProfile -NoLogo -NonInteractiv -Command r#"echo "(" ((Get-Date -Format "yyyy-MM-dd").toCharArray() -join " ") ")""#)
+  .cmdspeak (cmd speak.cmd
+   ;; PowerShell -NoProfile -NoLogo -Command Add-Type -AssemblyName System.Speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak('ai')
+  )
+  .cmdrld (multi (cmd test.cmd) lrld-next)   
+  .psisocmdiso (cmd-output-keys timek.cmd) ;; shell not needed (cmd-output-keys cmd.exe /C timek.cmd)
+  .cmdde  (cmd-output-keys timedek.cmd)
+ ;;.cmdde (cmd-output-keys cmd /C r#"echo ( ' t e s t )"# )
+ ;; .cmdde (cmd-output-keys cmd /C "echo ^( ' t e s t b )^" )
+;;   @SETLOCAL EnableDelayedExpansion
+;; @for /f "tokens=1-3 delims=. " %%a in ('date /T') do @set DT=%%a%%b%%c
+;; @echo ( %DT:~0,1% %DT:~1,1% . %DT:~2,1% %DT:~3,1% . %DT:~4,1% %DT:~5,1% %DT:~6,1% %DT:~7,1% )) 
 ;; bash might be on windows much faster than wsl or powershell with profile
-;;bashiso (cmd-output-keys bash -c "date +'%F %R' | sed 's/./& /g' | sed 's/:/S-;/g' | sed 's/\(.\{20\}\)\(.*\)/\(\1 spc \2\)/'")
+;; bashdt (cmd-output-keys bash -c "date +'%F %R' | sed 's/./& /g' | sed 's/:/S-;/g' | sed 's/\(.\{20\}\)\(.*\)/\(\1 spc \2\)/'")
 
 ;; unused Last lines of script no leading spaces to enable replacement (incudes would be easier)
 .dayiso (macro @.n2 @.n0 @.n2 @.n3 - @.n0 @.n3 - @.n0 @.n6   )
