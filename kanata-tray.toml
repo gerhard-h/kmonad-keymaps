@@ -1,0 +1,37 @@
+
+# See https://github.com/rszyma/kanata-tray for help with configuration.
+"$schema" = "https://raw.githubusercontent.com/rszyma/kanata-tray/v0.1.0/doc/config_schema.json"
+
+general.allow_concurrent_presets = false
+defaults.tcp_port = 5829
+
+[layer_icons]
+symbols = "braces-asterisk.ico"
+numbers = "numpadblack.ico"
+"*" = "sort-alpha-down.ico"
+mouseslow = "Mouse-move-down.ico"
+mouse = "Mouse-Options-Metro.ico"
+fkeys = "Letter-F.ico"
+ksymbols = "symbol.ico"
+numfix = "numpadblue.ico"
+caps = "basee.ico"
+numberline = "Iconarchive-Red-Orb-Alphabet-Number-9.ico"
+
+[defaults.layer_icons]
+symbols = "braces-asterisk.ico"
+numbers = "numpadblack.ico"
+"*" = "sort-alpha-down.ico"
+mouseslow = "Mouse-move-down.ico"
+mouse = "Mouse-Options-Metro.ico"
+fkeys = "Letter-F.ico"
+ksymbols = "symbol.ico"
+numfix = "numpadblue.ico"
+caps = "basee.ico"
+numberline = "Iconarchive-Red-Orb-Alphabet-Number-9.ico"
+
+[presets.'Default Preset']
+kanata_executable = 'C:\\path\\kmonad\\kanata.exe'
+kanata_config = 'C:\\path\\kmonad\\kanata.kbd'
+autorun = true
+
+

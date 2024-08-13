@@ -25,6 +25,18 @@ TODO uses cases for switch (not, key-timing, input, input-history)
   )
 )
 
+sadly, kanata configs of other people are really hard to read. But I still extracted this very cool use case for dynamic-macro of yours, I would never have come up with:
+
+switch to a pain layer for just typing (mimic defsrc)
+start recording dynamic-macro (without generating output)
+when leaving the layer (or entering any other layer) stop recording and do a switch based decision
+either the entered keys are a trigger/sequence for a special action - do it.
+or they are just normal typing - then just replay the dynamic-macro .
+all this can be multied to a normal key and requires no timeouts to trigger.
+
+since I don't use sequences I'm not sure if this could be done in a simpler fashion.
+ permalink https://github.com/DarkKronicle/nazarick/blob/31a5f623e008a8f1e0be360ecb43c69e3baef46b/modules/home/service/kanata/k65.kbd
+
 2023-10-23 16:22 TODO restart simpler version to achiev Ei Au   r e -> ALT + E 
 2023-10-24 no effect autohotkey espanso maybe effect citrix? powertoys?
 BUG hanging ctrl key with AHK and RDP ... now it is mostly hanging Alt. Adding "lctl lctl" to desktop swap makro didn't fix it
@@ -118,8 +130,8 @@ j=F1,...q*F11,ß=F12
 |#
 (defcfg
    delegate-to-first-layer yes ;;INFO only for layer-switch; _ to reference to base layer seems correct (TODO simplyfy layers). has no effect on deflayermap.
-   concurrent-tap-hold no      ;;INFO getting early autosymbols if yes 
-   sequence-timeout 3000
+   concurrent-tap-hold no      ;;INFO getting early autosymbols if yes eg. Hold-U + Tap-, gives (; instead of (, same for ({ instead of (ü TODO make a simulation to prove the problem.
+   sequence-timeout 3000       ;; sequence not used
   ;; windows-interception-mouse-hwid "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0"
   ;; windows-altgr cancel-lctl-press ;; remove the lctl press that comes as a combo with ralt  with F24 mapping
   ;; windows-altgr add-lctl-release  ;; add an lctl release when ralt is released           with standard Altgr 
@@ -128,7 +140,7 @@ j=F1,...q*F11,ß=F12
   ;; not work too well with other applications that use WH_KEYBOARD_LL.
   ;; Known applications with issues: GWSL/VcXsrv
 
-  log-layer-changes    	no	;;|no| overhead
+  ;;log-layer-changes    	no	;;|no| overhead vs debuging info in console
   tray-icon "base.ico" ;; should activate for layers without icons 
   icon-match-layer-name   	yes  	;;|yes| match layer name to icon files even without an explicit (icon name.ico) config
   tooltip-layer-changes   	no  	;;|false|
@@ -254,7 +266,13 @@ j=F1,...q*F11,ß=F12
   alt lalt
   tab tab   ;; this is allowed !
 )
-
+(deftemplate same-side-shift (defaultaction trigger action)
+	(switch
+		(rsft lctl rctl ralt lalt lmet rmet) $defaultaction break
+		($trigger) $action break
+		() $defaultaction break
+	)
+)
 
 ;;****** key-hold-repeat INFO base concept  ***********************************************************
 ;;**** re-tapping a key will repeat the last output produced by this key (wether tap or hold)      ****
@@ -532,10 +550,10 @@ j=F1,...q*F11,ß=F12
   .n-   (multi (tap-hold 1 $300 n (multi @.base rctl) ) @.tp)
   ;; Bug in no interception rctl+y  to start ditto, then ditto will not act on keyboard input 
   ;; also RDP ignores rctl and rsft but adding to defsrc  will not solve the issue
-  .s^⎇  (multi  (tap-hold 1000 1000 s (multi @.base alt)) @.tp)
+  .s^⎇  (multi  (tap-hold 1000 1000 (t! same-side-shift s lsft (multi (release-key lsft) end) ) (multi @.base alt)) @.tp)
   .s⎇   (tap-hold 1000 1000 s alt)
   .h⌘   (tap-hold $350 1000 h lmet)
-  .c⌘   (tap-hold 1000 1000 c lmet)
+  .c⌘   (tap-hold 1000 1000 (t! same-side-shift c lsft (unshift home)) lmet)
   .r_⎇  (multi (tap-hold-release $450 1000 r (multi @.base lalt)) @.tp)
   .rsf  (tap-hold-release $350 $500 - rsft)
   .rsfb (tap-hold-release $350 $500 - (multi rsft (layer-while-held notp)))
@@ -765,8 +783,8 @@ j=F1,...q*F11,ß=F12
 ;; F14 = left-Space = symbol layer / lsft+F14 = hold F14 = number layer
 ;; ret hold does ctl via QMK
   esc       F1    @.ff13 @.ff16 F24
-  @.^0      @.1   @.2    @.3   @.4    @.5   @.6     @.7    @.8    @.9    @.0     @.dp1   @.swh    bspc
-  @.tab     @.j!  @.z˝   @.u◖  @.a◗   @.y$  @.p&    @.f#   @.l?   @.m\   @.w%    @.q@    @.ß      @.mus+
+  @.^0      @.1   @.2    @.3   @.4    @.5   @.6     @.7    @.8    @.9    @.0     @.dp1   prtsc    bspc
+  @.tab     @.j!  @.z˝   @.u◖  @.a◗   @.y$  @.p&    @.f#   @.l?   @.m\   @.w%    @.q@    @.ß      (cmd powershell.exe -NoProfile -NoLogo -NonInteractive -Command r#"Add-Type -AssemblyName System.Speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak('nothing')"#)  
   @.atx     @.c⌘  @.s^⎇  @.i[  @.e]   @.o'  @.d/    @.t/   @.n-   @.r_⎇  @.h⌘    @.k     ret
   _         @.x`  @.cv|  @.cü{ @.cä}  @.ö+  @.b=    @.g*   @,;<   @.:>   @-_~    @.rsfb
             @.oml @.oal  @.ff14             @.nav          @.ff15   
@@ -905,7 +923,7 @@ j=F1,...q*F11,ß=F12
   @.^       @.1    @.2    @.3   @.4   @.5     @.6   @.7   @.8   @.9   @.0    @.cmdrld  A-prtsc _
   _         @-_:   1      2     3     @.⎈␡    esc   home  ▲     end   pgup   pgdn      _       _
   @.atr     @.⌘c   @.4⎇   @.5⎈  @.6⇧  0       bspc   ◀    ▼     ▶     lmet   @.fky     _
-  _         @,:x   @.7v   @.ch8 @.ch9 del     tab   @.⏎⇧  @.␡⎈  @.l🖰⎇ @.r🖰⌘ _
+  @.atp     @,:x   @.7v   @.ch8 @.ch9 del     tab   @.⏎⇧  @.␡⎈  @.l🖰⎇ @.r🖰⌘ _
             _     _    _         _    _              
 )
 ;; Exit numfix with CAPS or HOLD SPACE or HOLD Null or 7+9
@@ -924,7 +942,8 @@ j=F1,...q*F11,ß=F12
 (defalias
 ;;**************** NUMBERSTAB or LEFT HAND COURSOR KEYS by Using aup *********************************************
   .aup  (on-press release-virtualkey alt)  ;; to exit the alt-tab dialog but stay in the layer 
-  
+  .eah (fork home (multi esc @.aup) (lalt))
+  .eae (fork end  (multi esc @.aup) (lalt))
   .atxx (multi
 			(layer-while-held numberstab)
 			(on-press press-virtualkey alt )
@@ -932,32 +951,32 @@ j=F1,...q*F11,ß=F12
 			(on-press tap-virtualkey tab )
 			(on-release release-virtualkey alt )   
   ) 
-  ;; alt tab number - never used => try it on RDP TODO-Usage
-  .at1 (multi lalt pgup)
-  .at2 (multi lalt pgup pgup)
-  .at3 (multi lalt pgup pgup pgup)
-  .at4 (multi lalt pgup pgup pgup pgup)
-  .at5 (multi lalt pgup pgup pgup pgup pgup)
-  .at6 (multi lalt pgup pgup pgup pgup pgup pgup)
-  .at7 (multi lalt pgup pgup pgup pgup pgup pgup pgup)
-  .at8 (multi lalt pgup pgup pgup pgup pgup pgup pgup pgup)
-  .at9 (multi lalt pgup pgup pgup pgup pgup pgup pgup pgup pgup)
-  .atr (multi @.numtab lalt (macro pgup) ) ;; atx for RDP
   .atx (tap-hold $200 $150 (multi lalt tab) @.atxx ) ;; alt tab by hold caps
-  ;;atm (tap-dance $700 (@.at1 @.at2 @.at3 @.at4) ) Sequence now works but is inferior to the number row mapping
-  .atm  (tap-dance $500 ( A-tab (macro A-(tab 90 tab )) (macro A-(tab 90 tab  90 tab )) (macro A-(tab 90 tab  90 tab  90 tab )) ))
-  ;; BUG not working on remote desktop atp  (tap-dance $500 ( (macro A-pgup) (macro A-(pgup 90 pgup )) (macro A-(pgup 90 pgup  90 pgup )) (macro A-(pgup 90 pgup  90 pgup  90 pgup )) ))
+  .atr (multi @.numtab lalt (macro pgup) ) ;; atx for RDP
+  .atm  (tap-dance $300 ( A-tab (macro A-( 10 tab 10 tab )) (macro A-( 10 tab 100 tab  100 tab )) (macro A-( 10 tab 100 tab 100 tab 100 tab )) ))
+  .atp  (tap-dance $300 ( A-pgup (macro A-( 10 pgup 10 pgup )) (macro A-( 10 pgup 100 pgup  100 pgup )) (macro A-( 10 pgup 100 pgup 100 pgup 100 pgup )) )) ;;TODO try on RDP
+  
+  ;; alt tab number - (multi lalt tab tab ...) does not work anymore
+  .at1 A-tab                                                                        ;;(multi lalt tab)
+  .at2 (macro A-( 10 tab 100 tab ))                                                 ;;(multi lalt tab tab)
+  .at3 (macro A-( 10 tab 100 tab 100 tab         ))                                 ;;(multi lalt tab tab tab)
+  .at4 (macro A-( 10 tab 100 tab 100 tab 100 tab ))                                 ;;(multi lalt tab tab tab tab)
+  .at5 (macro A-( 10 tab 100 tab 100 tab 100 tab  100 tab))                         ;;(multi lalt tab tab tab tab tab)
+  .at6 (macro A-( 10 tab 100 tab 100 tab 100 tab  100 tab 100 tab))                 ;;(multi lalt tab tab tab tab tab tab)
+  .at7 (macro A-( 10 tab 100 tab 100 tab 100 tab  100 tab 100 tab 100 tab))         ;;(multi lalt tab tab tab tab tab tab tab)
+  .at8 (macro A-( 10 tab 100 tab 100 tab 100 tab  100 tab 100 tab 100 tab 100 tab)) ;;(multi lalt tab tab tab tab tab tab tab tab)
+  .at9 (macro A-( 10 tab 100 tab 100 tab 100 tab  100 tab 100 tab 100 tab 100 tab 100 tab)) ;;(multi lalt tab tab tab tab tab tab tab tab tab)
 
 )
 (deflayer (numberstab icon numberstab.ico)
 ;;**************** NUMBERSTAB LEFT HAND COURSOR KEYS by Using aup   ********************************************************
 ;; TODO How usefull are the esc Keys?
   esc _ _ _ _
-  grv       1     2    3     4     5      6    7    8    9    0    -    ´     bspc
-  _         @.aup ▲    esc   esc   @.⎈␡ home home ▲   end   pgup  pgdn   _    _
-  @.sy1     ◀     ▼    ▶     ▶     0      bspc ◀    ▼   ▶     esc   @.fky  _
-  _         @,:x  ▼    ▼     ▼     del    tab  @.⏎⇧ @.␡⎈ @.l🖰⎇ @.r🖰⌘ _
-            _     _    _     _            _                      
+  grv       1     2    3      4     5      6    7    8   9     0     -      ´    bspc
+  _         @.eah ▲    @.eae  esc   @.⎈␡   home home ▲   end   pgup  pgdn   _    _
+  @.sy1     ◀     ▼    ▶      ▶     0      bspc ◀    ▼   ▶     esc   @.fky  _
+  _         @,:x  ▼    ▼      ▼     del    tab  @.⏎⇧ @.␡⎈ @.l🖰⎇ @.r🖰⌘ _
+            _     _    _      _            _                      
 )
 (deflayer (symbols icon symbols.ico)
 ;;****************   SYSMBOLS (start typing fast or it will get switched to numbers)  ********************************************************
