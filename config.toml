@@ -1,0 +1,29 @@
+
+# See https://github.com/rszyma/kanata-tray for help with configuration.
+
+configurations = ["C:\\path\\kmonad\\kanata.kbd"]
+
+executables = ["C:\\path\\kmonad\\kanata.exe"]
+
+[layer_icons]
+symbols = "symbols.ico"
+numbers = "numbers.ico"
+numberstab = "numberstab.ico"
+"*" = "sort-alpha-down.ico"
+mouseslow = "mouseslow.ico"
+mousefast = "mousefast.ico"
+mouse = "mouse.ico"
+mouseextraslow = "mouseextraslow.ico"
+fkeys = "fkeymacro.ico"
+fkeymacro = "fkeymacro.ico"
+ksymbols = "symbol.ico"
+numfix = "numfix.ico"
+caps = "caps.ico"
+numberline = "numberline.ico"
+
+
+
+[general]
+include_executables_from_system_path = false
+include_configs_from_default_locations = true
+launch_on_start = true

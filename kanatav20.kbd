@@ -186,6 +186,7 @@ j=F1,...q*F11,ß=F12
 (defvar 
   y y
   z z
+  ;; TODO use variables for rsft rctl to handle non interception RDP cases 
   )
 )
 (defvar 
@@ -538,11 +539,11 @@ j=F1,...q*F11,ß=F12
 ;; BUG t   (tap-hold 1 $160 (multi t @.tp) (multi rsft (tap-hold 1 $900 XX (layer-while-held notp))) ) ;; rsft ,rctl have RDP problems without interception
 ;; TODO try to use tap-hold-except-keys instead 
 ;; INFO e and t have special treatment for fast typing layer
-  .e]   (tap-hold 1 $180 (fork e (multi e nop7 @.tpe) (rsft)) lsft ) ;;(tap-hold 1 $160 (multi  @.tp e) lsft ) ;; (outdated BUG) als erstes muss der Wechsel nach typing erfolgen sonst EIn 
+  .e]   (tap-hold 1 $180 (fork e (multi e nop7 @.tpe) (rsft)) (multi nop6 lsft) ) ;;(tap-hold 1 $160 (multi  @.tp e) lsft ) ;; (outdated BUG) als erstes muss der Wechsel nach typing erfolgen sonst EIn 
   .t/   (tap-hold 1 $160 (multi t @.tp) rsft ) ;; rsft ,rctl have RDP problems without interception
   ..e]  (tap-hold 1 $160 e lsft ) ;; als erstes muss der Wechsel nach typing erfolgen sonst EIn 
   ..t   (tap-hold 1 $160 t rsft ) ;; rsft ,rctl have RDP problems without interception  
-  .i[   (multi (tap-hold 1 $300 (fork i (unicode i) (nop7)) (multi @.base lctl) ) @.tp) ;; BUG unshift in stead of unicode leads to strange errors
+  .i[   (multi (tap-hold 1 $300 (fork (fork i spc (nop6)) (unicode i) (nop7)) (multi @.base lctl) ) @.tp) ;; BUG unshift in stead of unicode leads to strange errors Usage lsft + i = space
   ..i[  (tap-hold $500 $500 i lctl )
   ..[   (tap-hold $500 $500 @.[ lctl ) ;; used on symbol layer
   ..-   (tap-hold $500 $500 - lctl )
@@ -550,10 +551,10 @@ j=F1,...q*F11,ß=F12
   .n-   (multi (tap-hold 1 $300 n (multi @.base rctl) ) @.tp)
   ;; Bug in no interception rctl+y  to start ditto, then ditto will not act on keyboard input 
   ;; also RDP ignores rctl and rsft but adding to defsrc  will not solve the issue
-  .s^⎇  (multi  (tap-hold 1000 1000 (t! same-side-shift s lsft (multi (release-key lsft) end) ) (multi @.base alt)) @.tp)
+  .s^⎇  (tap-hold 1000 1000 (t! same-side-shift (multi  s @.tp) nop6 (unmod end) ) (multi @.base alt)) ;; must multi tp be the first action?
   .s⎇   (tap-hold 1000 1000 s alt)
   .h⌘   (tap-hold $350 1000 h lmet)
-  .c⌘   (tap-hold 1000 1000 (t! same-side-shift c lsft (unshift home)) lmet)
+  .c⌘   (tap-hold 1000 1000 (t! same-side-shift c nop6 (unmod home)) lmet)
   .r_⎇  (multi (tap-hold-release $450 1000 r (multi @.base lalt)) @.tp)
   .rsf  (tap-hold-release $350 $500 - rsft)
   .rsfb (tap-hold-release $350 $500 - (multi rsft (layer-while-held notp)))
@@ -791,7 +792,7 @@ j=F1,...q*F11,ß=F12
 #|
             lmet lalt           @.nav
  CTRL + SPACE + ESC => Exit KANATA immediatly
- lspace + rspace = Enter  / AltGr = DEL      |#
+ AltGr = F15 or qmk symbols|#
 )
 ;; ************** GAME ***************** unused
 (deflayermap (game)
@@ -969,7 +970,7 @@ j=F1,...q*F11,ß=F12
 
 )
 (deflayer (numberstab icon numberstab.ico)
-;;**************** NUMBERSTAB LEFT HAND COURSOR KEYS by Using aup   ********************************************************
+;;**************** NUMBERSTAB LEFT HAND COURSOR KEYS by Using aup ********************************************************
 ;; TODO How usefull are the esc Keys?
   esc _ _ _ _
   grv       1     2    3      4     5      6    7    8   9     0     -      ´    bspc
@@ -980,7 +981,7 @@ j=F1,...q*F11,ß=F12
 )
 (deflayer (symbols icon symbols.ico)
 ;;****************   SYSMBOLS (start typing fast or it will get switched to numbers)  ********************************************************
-;; get to @.numfix by tap 7+9 / |+}
+;; get to @.numfix by tapping <7> + <9> or <|> + <}>
 ;; t = Desktop switch
 ;; ´ (S-´) as dead keys for é, è,...
   _ _ _ _ _
