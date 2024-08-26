@@ -1,4 +1,38 @@
 #|
+TOC
+start size
+0001 133	Documentation/ideas
+0133 055	defcfg
+0188 033	defvar			platform specific characters, timeouts
+0221 031	deflocalkeys
+0252 026	global aliases virtualkeys: numlock, mods,...
+0278 082!	templates		
+0359 079!	aliases	for layers
+0437 116!	aliases for (shifted) symbol, tap-hold for numbers, keypad, outerkeys, dynamic-macros
+0553 019	aliases for home row mods
+0574 017	aliases for chord activation 
+0591 125	aliases for j!, letter that invoke templates, k, ß, x`, b=, g*, ,;< .:> 
+0716 059!	chords
+0775 017	defsrc
+0792 023	layer base
+0815 015	layer GAME
+0830 011	layer notp (no fast typing support)
+0841 056!	layer CAPS
+0897 011	layer fast typing
+0908 047	layer numbers & aliases
+0955 013	layer numbers fixed
+0968 039	layer alt tab & aliases
+1007 020	layer symbols
+1027 011	layer Numberrow *** Functionrow *** Keypadrow  *** dynamic-macro ***
+1038 011	layer macro F-keys
+1049 085!	layers for Mouse
+1134 039	more macro sequence definitions
+1175
+
+0133 120 lines	defcfg defvar deflocalkeys
+0252 580 lines	aliases(440) templates(80) chords(60)
+0775 300 lines	layers
+
 TODO uses cases for switch (not, key-timing, input, input-history)
 (defvar var1 a)
 (defsrc a)
@@ -561,11 +595,14 @@ j=F1,...q*F11,ß=F12
 
   ;; chords
   .chg  (chord fkomma g)  ;; F24
-  .ch,  (chord fkomma ,)  
+  .ch,  (chord fkomma ko)  
   .ch.  (chord fkomma .)  ;; Q alternative
-  .cv|  (chord vüä v)		;; sticky numbers
-  .cä}  (chord vüä ä)
-  .cü{  (chord vüä ü)
+  _v|   (chord vüä v)		;; sticky numbers
+  _ä}   (chord vüä ä)
+  _ü{   (chord vüä ü)
+  _V|   (chord VÜÄ v)		;; sticky numbers
+  _Ä}   (chord VÜÄ ä)
+  _Ü{   (chord VÜÄ ü)
   .ch7  (chord exit79 7)	;; exit numbers
   .ch8  (chord exit79 8)
   .ch9  (tap-hold 1 $200 (chord exit79 9) @.basen)
@@ -718,10 +755,19 @@ j=F1,...q*F11,ß=F12
   (   ä ü ) bspc
   (v  ä ü ) C-bspc
 )
+(defchords VÜÄ 50
+  (v      ) @.V|
+  (   ä   ) @.Ä}
+  (v  ä   ) (multi @.CAPSoff @.numfix)
+  (     ü ) @.Ü{
+  (v    ü ) del
+  (   ä ü ) bspc
+  (v  ä ü ) C-bspc
+)
 (defchords zu $150 ;; long timer to use combos to prevent accidential hold
   ($z     ) @.z˝tp
   (   u   ) @..u◖
-  ($z u   ) (macro $z u)
+  ($z u   ) (macro $z (unmod u))
 )
 ;; from SYMBOLS to NUMFIX CA(0) = }  CA(<) = | chord must be defined on the not modified keys
 ;; not needed anymore
@@ -732,11 +778,11 @@ j=F1,...q*F11,ß=F12
 )
 ;; TODO F24 and ESC are not really used
 (defchords fkomma 20
-  (g       ) g
-  (   ,    ) ,
-  (g  ,    ) esc
-  (      . ) .
-  (   ,  . ) F24
+  (g        ) g
+  (   ko    ) ,
+  (g  ko    ) esc
+  (       . ) .
+  (   ko  . ) F24
 )
 ;; defsrc querty laptop + und ß (x und y) sind ggf. vertauscht 
 #|(defsrc querty laptop
@@ -785,9 +831,9 @@ j=F1,...q*F11,ß=F12
 ;; ret hold does ctl via QMK
   esc       F1    @.ff13 @.ff16 F24
   @.^0      @.1   @.2    @.3   @.4    @.5   @.6     @.7    @.8    @.9    @.0     @.dp1   prtsc    bspc
-  @.tab     @.j!  @.z˝   @.u◖  @.a◗   @.y$  @.p&    @.f#   @.l?   @.m\   @.w%    @.q@    @.ß      (cmd powershell.exe -NoProfile -NoLogo -NonInteractive -Command r#"Add-Type -AssemblyName System.Speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak('nothing')"#)  
+  @.tab     @.j!  @.z˝   @.u◖  @.a◗   @.y$  @.p&    @.f#   @.l?   @.m\   @.w%    @.q@    @.ß      F24
   @.atx     @.c⌘  @.s^⎇  @.i[  @.e]   @.o'  @.d/    @.t/   @.n-   @.r_⎇  @.h⌘    @.k     ret
-  _         @.x`  @.cv|  @.cü{ @.cä}  @.ö+  @.b=    @.g*   @,;<   @.:>   @-_~    @.rsfb
+  _         @.x`  @_v|   @_ü{  @_ä}   @.ö+  @.b=    @.g*   @,;<   @.:>   @-_~    @.rsfb
             @.oml @.oal  @.ff14             @.nav          @.ff15   
 #|
             lmet lalt           @.nav
@@ -812,7 +858,7 @@ j=F1,...q*F11,ß=F12
   @.^        @.1   @.2     @.3     @.4    @.5   @.6    @.7    @.8   @.9   @.0   -    del  bspc
   _          @.j!  @..z˝   @.u◖    @..a◗  @.y$  @..p&  @..f#  @.l?  @.m\  @.w%  @.q@ @.ß  @.rtw
   _          @.c⌘  @.s⎇    @..i[   @..e]  @.o'  @.d/   @..t   @..n  @.r_⎇ @.h⌘  @.k  ret
-  @.cabs     @.x`  @.cv|   @.ü{    @.ä}   @.ö+  @.b=   @.g*   @,;<  @.:>  @-_~  @.rsf
+  @.cabs     @.x`  @_v|    @_ü{    @_ä}   @.ö+  @.b=   @.g*   @,;<  @.:>  @-_~  @.rsf
              _     _       _       _            _   
 )
 ;; *** UPPER CASE LAYER - use spc to exit -  hold spc to exit w/o spc TODO shift into lower case does not work ***
@@ -822,7 +868,7 @@ j=F1,...q*F11,ß=F12
   @.^        @.1   @.2    @.3   @.4    @.5   @.6   @.7   @.8   @.9   @.0   -     del  bspc
   _          @.J   @.Z˝   @.U◖  @.A◗   @.Y$  @.P&  @.F#  @.L?  @.M\  @.W%  @.Q@  @.ß  @.rtw
   _          @.C⌘  @.S    @.I[  @.E]   @.O'  @.D/  @.T   @.N   @.R   @.H⌘  @.K   ret
-  @.scabs    @.X`  @.CHV| @.Ü{  @.Ä}   @.Ö+  @.B=  @.G*  @,;<  @.:>  @-_~  @.rsf
+  @.scabs    @.X`  @_V|   @_Ü{  @_Ä}   @.Ö+  @.B=  @.G*  @,;<  @.:>  @-_~  @.rsf
              _     _      @.ff14c      _           @.ff15c   
 )
 ;; *** UPPER CASE ALIASES for CAPS layer ***
@@ -864,7 +910,7 @@ j=F1,...q*F11,ß=F12
   .R   (fork (tap-hold 1 $200 S-r (macro @._))   (unshift r) (rsft lsft))
   .H⌘  (fork (tap-hold 1 $200 S-h (macro S-.))   (unshift h) (rsft lsft))
   .X`  (fork (tap-hold 1 $200 S-x (macro ´))     (unshift x) (rsft lsft))
-  .CHV| (fork (tap-hold 1 $200 S-v (macro @.|))  (unshift v) (rsft lsft))
+  .V|  (fork (tap-hold 1 $200 S-v (macro @.|))   (unshift v) (rsft lsft))
   .Ü{  (fork (tap-hold 1 $200 S-ü (macro @.{))   (unshift ü) (rsft lsft))
   .Ä}  (fork (tap-hold 1 $200 S-ä (macro @.}))   (unshift ä) (rsft lsft))
   .Ö+  (fork (tap-hold 1 $200 S-ö (macro @.+))   (unshift ö) (rsft lsft))
@@ -886,8 +932,8 @@ j=F1,...q*F11,ß=F12
 ;;***  NUMBERS   ***
 (defalias
   .⎈␡ (switch
-	(lctl rctl) $y break
-	() C-bspc break
+		(lctl rctl) $y break
+		() C-bspc break
   )
 ;; @.7v ,:x .⌘c to enable copy paste
   .7v	(switch  ;; prefer paste = ctl+v on number layer over ctl+7
@@ -1006,7 +1052,7 @@ j=F1,...q*F11,ß=F12
   esc      @.dp1 @.dp2  @.dp3 @.dp4  @.dp5 @.dr1 @.dr2 @.dr3 @.dr4 @.dr5 @.dst @.dms bspc
   _        F1    F2     F3    F4     F5    F6    F7    F8    F9    F10   F11   F12   @.rtw
   _        @.k1  @.k2   @.k3  @.k4   @.k5  @.k6  @.k7  @.k8  @.k9  @.k0  esc   ret
-  @.cabs   @.x`  @.cv|  @.ü{  @.ä}   @.ö+  @.b=  @.g*  @,;<  @.:>  @-_~  @.rsf
+  @.cabs   @.x`  @_v|   @_ü{  @_ä}   @.ö+  @.b=  @.g*  @,;<  @.:>  @-_~  @.rsf
            _     _      _     (multi spc @.basen)      @.basen
 )
 (deflayer (fkeymacro icon fkeymacro.ico);; macro F-keys and (symbols) triggered from the RIGHT side (ff13)
@@ -1128,9 +1174,8 @@ j=F1,...q*F11,ß=F12
 
 ;; DATES
   .psiso (cmd-output-keys powershell.exe -NoProfile -NoLogo -NonInteractive -Command r#"echo "(" ((Get-Date -Format "yyyy-MM-dd").toCharArray() -join " ") ")""#)
-  .cmdspeak (cmd speak.cmd
-   ;; PowerShell -NoProfile -NoLogo -Command Add-Type -AssemblyName System.Speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak('ai')
-  )
+  .cmdspeak (cmd speak.cmd)
+  .saynothing (cmd powershell.exe -NoProfile -NoLogo -NonInteractive -Command r#"Add-Type -AssemblyName System.Speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak('nothing')"#)
   .cmdrld (multi (cmd test.cmd) lrld-next)   
   ;;.cmdiso (cmd-output-keys timek.cmd) ;; shell not needed (cmd-output-keys cmd.exe /C timek.cmd)
   .cmdiso (cmd AutoHotkey dtiso.ah2)
