@@ -383,6 +383,9 @@ j=F1,...q*F11,ß=F12
   nlockon  (cmd AutoHotkey numlockon.ah2)
   nlockoff (cmd AutoHotkey numlockoff.ah2)
   
+  caps caps
+  nop1  nop1
+  cap2	nop2
   mouselight M-S-f
   to-base (layer-switch base)
   vcaps   (layer-while-held CAPS)
@@ -401,7 +404,14 @@ j=F1,...q*F11,ß=F12
 		() $defaultaction break
 	)
 )
-
+(deftemplate capscount (letter)
+	(switch
+		() $letter fallthrough
+		((and nop1 lsft)(and nop1 rsft)) (on-press press-vkey sft) break
+		(lsft rsft) (on-press press-vkey nop1) break
+		() (on-press release-vkey nop1) break
+	)
+)		
 ;;****** key-hold-repeat INFO base concept  ***********************************************************
 ;;**** re-tapping a key will repeat the last output produced by this key (wether tap or hold)      ****
 ;;**** historykeys resambles keyrepeat broken up into all its individual keystrokes/modifiers      ****
@@ -417,7 +427,7 @@ j=F1,...q*F11,ß=F12
  (tap-dance-eager $150 (    
     (tap-hold 1 $timehold 	
 		;; I.a first tap of TAP-DANCE holding and then retapping will repeat the hold action (not the long-hold)
-		(switch
+        (switch
 		    ;;(if-not-in-list $off ($combokeylist) $combokeylist $comboout break) ;; test for combo
 			(if-not-equal $historykey2 XX
 				(if-not-equal $historykey3 XX ((and (key-history $modlesshistorykey1 1)(key-history $historykey2 2)(key-history $historykey3 3))) $keyhold break )
@@ -426,8 +436,12 @@ j=F1,...q*F11,ß=F12
 			(if-equal $historykey2 XX
 				((key-history $modlesshistorykey1 1))  $keyhold break
 			)
-			() $keytap break
-		)  
+			() $keytap fallthrough
+			((and nop1 lsft)(and nop1 rsft)) (multi (on-press press-vkey sft)) break
+			(lsft rsft) (multi (on-press press-vkey nop1)) break
+			() (multi (on-press release-vkey nop1)) break
+			
+		)
 		;; I.b hold of first tap of TAP-DANCE - manual Shift overwrites hold / no autorepeat / long-hold for (), {},...
 		(switch
 		    (if-not-in-list $off ($combokeylist) $combokeylist $comboout break)        ;; held with misstimed chords v + ü = del
@@ -529,11 +543,17 @@ j=F1,...q*F11,ß=F12
 ;; *** MACRO + F-Keys layer *** TIP removing one-shot solves problems with hitting the key by accident - F21 is not used in ahk in just consumes a key press TODO solve it without F21
   .ff13 (multi F21 
                (on-press release-virtualkey vcaps )
+			   (on-press release-virtualkey caps )
+			   (on-press release-virtualkey sft )
+			   (on-press release-virtualkey nop1 )
+			   (on-press release-virtualkey cap2 )
 			   (layer-switch base)
 			   @.nln
 			   (layer-while-held fkeymacro)
 		)
-  .nav   (tap-hold  $200 $200 spc (fork (multi nop1 @.num) (multi @.num @.sym) (rsft))) ;; RIGHT sft + RIGHT spc == symbols ; nop1 signals layer switch 
+  .nav   (tap-hold  $200 $200 
+	(fork spc (multi spc (on-release release-vkey sft) (on-release release-vkey nop1)) (nop1)) 
+	(fork (multi nop3 @.num (on-release release-vkey sft) (on-release release-vkey nop1)) (multi @.num @.sym (on-release release-vkey sft) (on-release release-vkey nop1)) (rsft))) ;; RIGHT sft + RIGHT spc == symbols ; nop1 signals layer switch 
   .nav-typing   (tap-hold  $200 $200 (multi @.basen spc) (fork @.num @.sym (rsft))) 
 ;; *** ONE SHOT MODIFIERS ***
   .oss   (tap-hold $200 $300 @.cwl lsft) ;; use caps words on non base layer
@@ -708,6 +728,9 @@ j=F1,...q*F11,ß=F12
   ..]   (tap-hold 1 $200 @.] (release-layer symbols)) ;; Go bach to number layer TODO remember this
   _z˝   (chord zu $z)
   _u◖   (chord zu u)
+  ;; test keys
+  ff# (t! capscount f)
+  ll? (t! capscount l)
   
   ;; normal keys
   .j!   (tap-hold 1 $120 
@@ -762,7 +785,7 @@ j=F1,...q*F11,ß=F12
 			((and (key-history lsft 2)(key-history + 1))) S-+ break    
 			()	(tap-hold 1 $160 @_g (multi (macro S-+ ) (tap-hold 1 $800 XX S-+ )))  break ;; there must be a macro (@.*) after the multi for the timeout do work
 		)
-;; TODO layer-toggle shoud break key-history - implemented in @nav by multi nop1
+;; TODO layer-toggle shoud break key-history - implemented in @nav by multi nop3
   ,;<  (tap-hold  1 $140 (tap-dance $140 (
 							(switch
 								((and (key-history lsft 2)(key-history , 1))) S-, break
