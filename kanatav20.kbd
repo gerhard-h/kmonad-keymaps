@@ -239,7 +239,7 @@ j=F1,...q*F11,ß=F12
   ;; windows-interception-mouse-hwid "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0"
   ;; windows-altgr cancel-lctl-press ;; remove the lctl press that comes as a combo with ralt  with F24 mapping
   ;; windows-altgr add-lctl-release  ;; add an lctl release when ralt is released           with standard Altgr 
-  ;; HINT: on windows don't map altgr to avoid both options from above 
+  ;; HINT GH: on windows don't map altgr to avoid both options from above 
   ;; NOTE: even with these workarounds, putting lctl+ralt in your defsrc may
   ;; not work too well with other applications that use WH_KEYBOARD_LL.
   ;; Known applications with issues: GWSL/VcXsrv
@@ -300,7 +300,7 @@ j=F1,...q*F11,ß=F12
   )
 )
 (defvar
-  off Numpad9 ;; $off used to deactivate template-features TODO use noop keys instead
+  off nop0 ;; $off used to deactivate template-features
   ;; timers - this is done to simplyfy adjustment of timing differences on different computers/keyboards 
   100 100 ;; punctuation
   120 120 ;; j!
@@ -375,29 +375,33 @@ j=F1,...q*F11,ß=F12
  .nly (cmd AutoHotkey numlockon.ah2)
  ;;.nln (cmd-output-keys powershell.exe -NoProfile -NoLogo -NonInteractive "if ($([console]::NumberLock) -match 'True') { echo '(nlck)' } else { echo '()' }")
  .nln (cmd AutoHotkey numlockoff.ah2)
+ ;; sftoff to deactivate self made DoubleCaps TODO-Usage vs anoying
  .sftoff (multi  (on-press release-vkey nop1) (on-press release-vkey nop2) (on-press release-vkey sft))
 )
 (defvirtualkeys
-  ;; nlockon/off is only used for while-held scenarios
+  ;;nlockon/off is used over .nly/n in while-held scenarios
   ;;nlockon  (cmd-output-keys powershell.exe "if ($([console]::NumberLock) -match 'True') { echo '()' } else { echo '(nlck)' }")
   ;;nlockoff (cmd-output-keys powershell.exe "if ($([console]::NumberLock) -match 'True') { echo '(nlck)' } else { echo '()' }")
   nlockon  (cmd AutoHotkey numlockon.ah2)
   nlockoff (cmd AutoHotkey numlockoff.ah2)
-  
-  caps caps
-  nop1  nop1 ;; pressed if last letter was Upper Case 
-  nop2	nop2 ;; pressed if vkey sft is also pressed to be used in fork not needed if  (switch ((input virtual sft)) is used instead
-  mouselight M-S-f
-  to-base (layer-switch base)
-  vcaps   (layer-while-held CAPS)
   ;;*** NUMBERS/ALT TAB ***
   ctl lctl
   sft lsft
   met lmet
   alt lalt
-  tab tab   ;; this is allowed !
+  tab tab
+  ;; *** DoubleCaps *** 
+  caps caps  ;; unused
+  nop1  nop1 ;; pressed if last letter was Upper Case 
+  nop2	nop2 ;; pressed if vkey sft is also pressed to be used in fork not needed if  (switch ((input virtual sft)) is used instead
+  on-idle-action (macro-release-cancel 5000  (on-press release-vkey nop1) (on-press release-vkey nop2) (on-press release-vkey sft))
+  ;; misc
+  mouselight M-S-f
+  to-base (layer-switch base)
+  vcaps   (layer-while-held CAPS)
+
 )
-;; TODO-Usage
+;; TODO-Usage E-i -> spc E-s -> End E-c -> Home
 (deftemplate same-side-lshift (defaultaction trigger action)
 	(switch
 		(rsft lctl rctl ralt lalt lmet rmet) $defaultaction break ;; lshift is missing from the list 
@@ -420,7 +424,7 @@ j=F1,...q*F11,ß=F12
 ;; sam v| (t! key-hold-repeat  $200      $800         v      @.|      @.|        XX          ralt        <                  (ü 7)        del     ) 
 ;; pass combokeylist ($off) XX to disable combo feature. The real combo must be build with chords / this is just for fixing misstiming the combo. Is this even usefull?
 ;; TODO using RA- ralt may only work with "process-unmapped-keys yes" and wintercept
-;; $historykey3 is currently unused.
+;; $historykey3 is currently used to disabel symbol repeat for </div TODO should then be a list 
 ;; j! x` b= g* ,;< .:> -_~ and homrow mods have there own implementation
 ;; TIP this template can be wraped in (multi ... @.tp) But for some scenarios (non windtercept / no powertoys / windows 11 ) may require calling @.tp from inside this template
 ;; TODO is input-history better than key-history? most likely not because we care most about output-keys
@@ -429,31 +433,37 @@ j=F1,...q*F11,ß=F12
     (tap-hold 1 $timehold 	
 		;; I.a first tap of TAP-DANCE holding and then retapping will repeat the hold action (not the long-hold)
         (switch
-			((and nop2 (key-timing 1 greater-than 5000))) 
-			(macro
-				(on-press release-vkey nop1)
-				(on-press release-vkey sft)
-				(on-press release-vkey nop2)
-			) fallthrough
-			((and nop2 (key-timing 1 greater-than 5000))) 
-			(multi
-				(release-key lsft)
-				(release-key nop1)
-				(release-key nop2)
-			) fallthrough
+			;;0. clear idle timer
+			;;() (on-press release-vkey on-idle-action) fallthrough 
 			
 		    ;;(if-not-in-list $off ($combokeylist) $combokeylist $comboout break) ;; test for combo
 			(if-not-equal $historykey2 XX
-				(if-not-equal $historykey3 XX ((and (key-history $modlesshistorykey1 1)(key-history $historykey2 2)(key-history $historykey3 3))) $keyhold break )
-				(if-equal     $historykey3 XX ((and (key-history $modlesshistorykey1 1)(key-history $historykey2 2)                            )) $keyhold break )
+				;; $historykey3 prevents symbol repeat for </div </d // /d
+				(if-not-equal $historykey3 XX (
+				                               (and (key-history $modlesshistorykey1 1)(key-history $historykey2 2)(key-history $historykey3 3))
+											   ) $keytap break )
+				(if-not-equal $historykey3 XX (
+				                               (and (key-history $modlesshistorykey1 1)(key-history $historykey2 2))
+											   ) $keyhold break )							   
+				(if-equal     $historykey3 XX ((and (key-history $modlesshistorykey1 1)(key-history $historykey2 2))
+                                			   ) $keyhold break )
 			)
 			(if-equal $historykey2 XX
 				((key-history $modlesshistorykey1 1))  $keyhold break
 			)
-			() $keytap fallthrough
-			((and nop1 lsft)(and nop1 rsft)) (multi (on-press press-vkey sft) (on-press press-vkey nop2)) break
-			((and (or lsft rsft) (not nop1 nop2))) (on-press press-vkey nop1) break
-			() (on-press release-vkey nop1) break
+			() $keytap break
+			;; 1. press key and reset deactivation timer
+			;;() (fork $keytap (multi lsft $keytap (on-press press-vkey on-idle-action)) (nop2))  fallthrough  ;;reverse-release-order TODO nop2 fork only relevant when not using vkey sft
+			;; 3. activate sft, remember it by nop2, set deactivation timer
+			;;((and nop1 lsft)(and nop1 rsft)) (multi 
+			;;									(on-press press-vkey sft) 
+			;;									(on-press press-vkey nop2)
+			;;									(on-press press-vkey on-idle-action)
+			;;								 ) break
+			;; 2. remember a uppercase was used								 
+			;;((and (or lsft rsft) (not nop1 nop2))) (on-press press-vkey nop1) break ;;comment this line to deactivate DOubleCAps
+			;; 1.1 else forget about it
+			;;() (on-press release-vkey nop1) break
 			
 		)
 		;; I.b hold of first tap of TAP-DANCE - manual Shift overwrites hold / no autorepeat / long-hold for (), {},...
@@ -473,14 +483,38 @@ j=F1,...q*F11,ß=F12
 	(tap-hold 1 $timehold 	
 		;; II.a this is identical to I.a
 		(switch
+			;;0. clear idle timer
+			;;() (on-press release-vkey on-idle-action) fallthrough 
+			
+		    ;;(if-not-in-list $off ($combokeylist) $combokeylist $comboout break) ;; test for combo
 			(if-not-equal $historykey2 XX
-				(if-not-equal $historykey3 XX ((and (key-history $modlesshistorykey1 1)(key-history $historykey2 2)(key-history $historykey3 3))) $keyhold break )
-				(if-equal     $historykey3 XX ((and (key-history $modlesshistorykey1 1)(key-history $historykey2 2)                            )) $keyhold break )
+				;; $historykey3 prevents symbol repeat for </div </d // /d
+				(if-not-equal $historykey3 XX (
+				                               (and (key-history $modlesshistorykey1 1)(key-history $historykey2 2)(key-history $historykey3 3))
+											   ) $keytap break )
+				(if-not-equal $historykey3 XX (
+				                               (and (key-history $modlesshistorykey1 1)(key-history $historykey2 2))
+											   ) $keyhold break )							   
+				(if-equal     $historykey3 XX ((and (key-history $modlesshistorykey1 1)(key-history $historykey2 2))
+                                			   ) $keyhold break )
 			)
 			(if-equal $historykey2 XX
 				((key-history $modlesshistorykey1 1))  $keyhold break
 			)
 			() $keytap break
+			;; 1. press key and reset deactivation timer
+			;;() (fork $keytap (multi lsft $keytap (on-press press-vkey on-idle-action)) (nop2))  fallthrough  ;;reverse-release-order TODO nop2 fork only relevant when not using vkey sft
+			;; 3. activate sft, remember it by nop2, set deactivation timer
+			;;((and nop1 lsft)(and nop1 rsft)) (multi 
+			;;									(on-press press-vkey sft) 
+			;;									(on-press press-vkey nop2)
+			;;									(on-press press-vkey on-idle-action)
+			;;								 ) break
+			;; 2. remember a uppercase was used								 
+			;;((and (or lsft rsft) (not nop1 nop2))) (on-press press-vkey nop1) break ;;comment this line to deactivate DOubleCAps
+			;; 1.1 else forget about it
+			;;() (on-press release-vkey nop1) break
+			
 		)
 		;; II.b no need for manual Shift protection / autorepeat enabled
 		(switch
@@ -528,8 +562,13 @@ j=F1,...q*F11,ß=F12
    )
 
 ;; *** LEFT_Spacebar = F14 : RETURN *** SYMBOLS *** LEFT_Shift + LEFT_Spacebar_hold == numbers ; Shift + LEFT_Spacebar_tap == CAPS-layer ***
-  .ff14 (tap-hold  $200 $200  
-			(fork ret @.CAPSon (rsft lsft))	
+  .ff14 (tap-hold  $200 $200
+			(switch
+				(nop1 nop2) (unmod (lsft) ret) fallthrough
+				(nop1 nop2) @.sftoff break
+				(rsft lsft) @.CAPSon break
+				() ret break
+			)
 			(fork 
 				(multi (layer-while-held numbers) 
 					   (tap-hold-release-timeout 0 1100
@@ -554,16 +593,40 @@ j=F1,...q*F11,ß=F12
   .ff15 (tap-hold 1 $200  (multi @.nly (layer-switch numberline)) (multi (layer-while-held numberline) (on-press tap-vkey  nlockon) (on-release tap-vkey  nlockoff) )) ;; no numlock warning when using keypad numbers possible
   .ff15c (tap-hold 1 $200  @.CAPSoff (layer-while-held numberline))
 
-;; *** MACRO + F-Keys layer *** TIP removing one-shot solves problems with hitting the key by accident - F21 is not used in ahk in just consumes a key press TODO solve it without F21
-  .ff13 (multi F21 
+;; *** MACRO + F-Keys layer *** TIP removing one-shot solves problems with hitting the key by accident
+  .ff13 
+		(tap-hold $200 $200 
+			(multi 
                (on-press release-vkey vcaps )
 			   (on-press release-vkey caps )
 			   (on-press release-vkey sft )
 			   (on-press release-vkey nop1 )
 			   (on-press release-vkey nop2 )
+			   (on-press release-vkey on-idle-action)
+			   (layer-switch base)
+			   @.nln
+			   (release-key lctl)
+			   (release-key rctl)
+			   (release-key lsft)
+			   (release-key rsft)
+			   (release-key lalt)
+			   (release-key ralt)
+			   (release-key lmet)
+			   (release-key rmet)
+			   esc		;; TODO-Usage TODO-Usage
+			)
+			(multi 
+			   F21  ;; F21 is not used in ahk it just consumes a key press TODO why?
+               (on-press release-vkey vcaps )
+			   (on-press release-vkey caps )
+			   (on-press release-vkey sft )
+			   (on-press release-vkey nop1 )
+			   (on-press release-vkey nop2 )
+			   (on-press release-vkey on-idle-action)
 			   (layer-switch base)
 			   @.nln
 			   (layer-while-held fkeymacro)
+			)
 		)
   .nav   (tap-hold  $200 $200 
 	(fork spc (multi spc @.sftoff) (nop1 nop2)) 
@@ -576,7 +639,7 @@ j=F1,...q*F11,ß=F12
   .osss  (one-shot 2000 lsft)
 ;;.ocl   (one-shot 2000 lctl) 
   .oal   lalt ;; not used but causes trouble when hit by accident (one-shot 2000 lalt)
-  .oml   (one-shot 2000 lmet) ;; TODO-usage
+  .oml   (one-shot 2000 lmet) ;; TODO-Usage
 
   ;; disalble tap-hold keys if typing rapidly but reenable after a shord idle period
   .tp (multi
@@ -641,8 +704,10 @@ j=F1,...q*F11,ß=F12
   
   
   ;; outer/special keys
-  .tab (tap-hold-press  $200 $400 tab lctl )	;; TODO-usage is ctl ever used?
+  ..tab (tap-hold-press  $200 $400 tab lctl )
+  .tab (fork @..tab (multi @.sftoff @..tab) (nop1 nop2)) 	;; TODO-Usage is ctl ever used?
   .rtc (tap-hold-release $200 5000 ret lctl) ;; done with QMk
+  .ret (multi @.sftoff ret) ;; BUG QMK might still do ctl+sft but is minor
   .rtw del ;; TODO find a use for this key
   .rsd (tap-hold-release $200 $240 @.syv (multi rsft lsft)) ;; TODO not used ?! BUG rsft get ignored on RDesktop -> use lsft  or (multi rsft lsft) ?
   .ral S-C-M-A-9 ;; release ALL key (BUG) kanata cannot release stuck keys from ahk (both tools with elevated rights) PRESS F24 FOR RELEASE ALL MODS
@@ -781,7 +846,7 @@ j=F1,...q*F11,ß=F12
   .w%   (t! key-hold-repeat $140 $800 w @.%  @.% XX lsft 5 ($off) XX)
   .q@   (t! key-hold-repeat $160 $800 q RA-q XX XX ralt q ($off) XX) 
   .o'   (t! key-hold-repeat $160 $800 o S-#  S-# XX lsft # ($off) XX)
-  .d/   (t! key-hold-repeat $200 $800 d S-7  S-7 XX lsft 7 ($off) XX)
+  .d/   (t! key-hold-repeat $200 $800 d S-7  S-7 < lsft 7 ($off) XX)
   .v|   (t! key-hold-repeat $200 $800 v @.| @.| XX ralt < (ü 8) del) 
   .x`   (tap-hold 1 160 ;; tap=x or hold=` or long=``` hold+tap...=`````` INFO no autorepeat
 			(switch 
@@ -990,7 +1055,7 @@ j=F1,...q*F11,ß=F12
 ;; BUG/TODO-Usage rsft +... rspace +... rstf-up = @.sym not used and has BUG with RAlt-keys like [] if rsft is not released.
 ;; INFO feat: rpt will repeat the unmodified key / rpt-any fails to repeat complex tap-hold sequences
 (deflayer base
-;;****************   BASE   ********************************************************
+;;****************   .BASE.   ********************************************************
 ;; TODO ONLY c s i n r h  have dbl_tap autorepeat
 ;; lspc + rspc = mouse
 ;; rsft + rspc = symbols
@@ -1001,7 +1066,7 @@ j=F1,...q*F11,ß=F12
   esc       F1    @.ff13 @.ff16 F24
   @.^0     @.1   @.2    @.3   @.4    @.5   @.6     @.7    @.8    @.9    @.0     @.dp1   prtsc    bspc
   @.tab     @.j!  @_z˝   @_u◖  @.a◗   @.y$  @.p&    @.f#   @.l?   @.m\   @.w%    @.q@    @.ß      F24
-  @.atx     @.c⌘  @.s^⎇  @.i[  @.e]   @.o'  @.d/    @.t/   @.n-   @.r_⎇  @.h⌘    @.k     ret
+  @.atx     @.c⌘  @.s^⎇  @.i[  @.e]   @.o'  @.d/    @.t/   @.n-   @.r_⎇  @.h⌘    @.k     @.ret
   _         @.x`  @_v|   @_ü{  @_ä}   @.ö+  @.b=    @_g*   @,;<   @.:>   @-_~    @.rsfb
             @.oml @.oal  @.ff14             @.nav          @.ff15   
 #|

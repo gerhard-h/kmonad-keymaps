@@ -1,0 +1,51 @@
+;; Idea: auto activate caps-words after pressing to uppercase letters. 
+
+(defcfg
+   process-unmapped-keys yes 
+)
+
+(defvirtualkeys
+  nop1  nop1 ;; pressed if last letter was Upper Case 
+  nop2  nop2 ;; a virtual key tap will stop caps-word but not hinder its start
+  on-idle-action (macro-release-cancel 5000  (on-press release-vkey nop1) ) ;; not needed but it makes absolutly sure nop1 releases afters some time
+)
+(deftemplate capscount (letter)
+	(switch
+		;; 1. press the key
+		() $letter fallthrough
+		;; 3. if this the last two letters where shifted activate caps-words
+		((and nop1 lsft)(and nop1 rsft))
+			(multi  
+				(caps-word-custom 2000 
+					(a b c d e f g h i j k l m n o p q r s t u v w x y z )
+					(lsft rsft nop1 ) ;; shifts and nop1 must be exluded as they are used while triggering caps-words
+				)
+				(on-press release-vkey nop1)
+			) break
+		;; 2. press nop1 to remember the last key was shifted
+		((and (or lsft rsft) (not nop1 ))) (on-press press-vkey nop1) breakshifted 
+		;; 1.1. else stop remembering and reset the counter
+		() (on-press release-vkey nop1) break
+	)
+)
+
+(defsrc
+  a b c d e f g h i j k l m n o p q r s t u v w x y z lsft rsft              
+)
+;; just wrap every letter in capscount
+(defalias
+ a (t! capscount a)
+ b (t! capscount b)
+ c (t! capscount c) j (t! capscount j) z (t! capscount z) u (t! capscount u)  y (t! capscount y) p (t! capscount p) f (t! capscount f) l (t! capscount l) m (t! capscount m) w (t! capscount w) q (t! capscount q) s (t! capscount s) i (t! capscount i) e (t! capscount e) o (t! capscount o) d (t! capscount d) t (t! capscount t) n (t! capscount n) r (t! capscount r) h (t! capscount h) k (t! capscount k)  x (t! capscount x) v (t! capscount v) g (t! capscount g)
+)
+;; shift is down during caps-word activation, so we use nop2 to deactivate caps-word 
+(defalias
+ lsft	(multi (on-press tap-vkey nop2) lsft) 
+ rsft	(multi (on-press tap-vkey nop2) rsft)
+)
+
+(deflayer base
+ @a  @b  @c  @d  @e  @f  @g  @h  @i  @j  @k  @l  @m  @n  @o  @p  @q  @r  @s  @t  @u  @v  @w  @x  @y  @z  
+ @lsft
+ @rsft
+)
