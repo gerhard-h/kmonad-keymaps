@@ -1,4 +1,4 @@
-;; Idea: auto activate caps-words after pressing to uppercase letters. 
+;; Idea: auto activate caps-words after pressing to uppercase letters in sequence 
 
 (defcfg
    process-unmapped-keys yes 
@@ -7,7 +7,7 @@
 (defvirtualkeys
   nop1  nop1 ;; pressed if last letter was Upper Case 
   nop2  nop2 ;; a virtual key tap will stop caps-word but not hinder its start
-  on-idle-action (macro-release-cancel 5000  (on-press release-vkey nop1) ) ;; not needed but it makes absolutly sure nop1 releases afters some time
+  ;;on-idle-action (macro-release-cancel 5000  (on-press release-vkey nop1) ) ;; a timer might be usefull when using caps or lsft instead of capswords
 )
 (deftemplate capscount (letter)
 	(switch
@@ -22,8 +22,8 @@
 				)
 				(on-press release-vkey nop1)
 			) break
-		;; 2. press nop1 to remember the last key was shifted
-		((and (or lsft rsft) (not nop1 ))) (on-press press-vkey nop1) breakshifted 
+		;; 2. remember the last key was shifted by pressing nop1
+		((and (or lsft rsft) (not nop1 ))) (on-press press-vkey nop1) break
 		;; 1.1. else stop remembering and reset the counter
 		() (on-press release-vkey nop1) break
 	)

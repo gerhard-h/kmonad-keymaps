@@ -226,6 +226,7 @@ j=F1,...q*F11,ß=F12
    BUG AltGr + I = ahk menu seems to hang CTRL - SOLVED by excluding AltGr (and Ctrls) from defsrc (really?)	  
 |#
 (defcfg
+   chords-v2-min-idle-experimental 170
    process-unmapped-keys yes ;; WHY yes?
    ;;yes does not help with japanese keys ; did not help with RDP sticky keys;
    ;;Used since Nov 2023 maybe because of dynamic-macros?! 
@@ -945,6 +946,12 @@ j=F1,...q*F11,ß=F12
 							(layer-while-held symbols)
 							(layer-while-held symbols) (layer-while-held numbers))
 		)
+)
+
+(defchordsv2-experimental
+  (n r) bspc 30 all-released  (game)
+  (t n) esc  30 all-released  (game)
+  (r h) del  30 all-released  (game)
 )
 ;; from NUMFIX to BASE
 (defchords exit79 20
