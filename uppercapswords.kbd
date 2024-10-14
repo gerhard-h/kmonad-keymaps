@@ -13,6 +13,12 @@
 	(switch
 		;; 1. press the key
 		() $letter fallthrough
+		;; 1.0.1 cancel if another key was pressed or to much time has passed     
+		((and nop1 (not(or
+		(and (key-history nop1 1 ) (key-timing 1 less-than 500 )) 
+		(and (key-history nop1 2 ) (key-timing 2 less-than 500 )) 
+		(and (key-history nop1 3 ) (key-timing 3 less-than 800 )) 
+		)))) (multi (on-press release-vkey nop1)) break
 		;; 3. if this the last two letters where shifted activate caps-words
 		((and nop1 lsft)(and nop1 rsft))
 			(multi  
