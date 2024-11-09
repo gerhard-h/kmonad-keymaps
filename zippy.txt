@@ -1,0 +1,14 @@
+dy	day
+dy 1	Monday
+dy 2	Tuesday
+abc	alphabet
+gi	git
+gi f p	git fetch -p
+gi s	git status
+gi c	git checkout
+gi c b	git checkout -b
+gi p	git push
+gi l	git pull
+whe	where
+whi	while
+wi	winter
