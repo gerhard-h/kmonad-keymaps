@@ -500,12 +500,17 @@ j=F1,...q*F11,ß=F12
 		    ;;DISABLED (if-not-in-list $off ($combokeylist) $combokeylist $comboout break)        ;; held with misstimed chords v + ü = del
 			(rsft lsft) (macro $keytap) break ;; Shift Prefer / Shift protection - shifting will disable the hold feature TODO this will not work fine with ctrl+sft+#
 			()  (multi 	
-					(macro-release-cancel $keyhold ) 
-					(tap-hold $180 $time2ndhold XX ;;must $180 be a parameter?
-							(if-not-equal $keyrepeat XX (macro-release-cancel $keyrepeat ))      ;;to do (), {},... keyrepeat cannot be a macro itself
+					(macro $keyhold ) 
+					(tap-hold $180 $time2ndhold XX
+							;; TODO we could cancel this by taping a vkey that checks key-history 1 = keyhold			
+							(if-not-equal $keyrepeat XX (macro $keyrepeat ))      ;;INFO (), {},... keyrepeat cannot be a macro itself
 							(if-equal $keyrepeat XX XX)
 					)
 				) break
+			;;BUG I.b.2 LONG hold - macro-release-cancel wont cancel only if keyhold=keyrepeat 
+			;;()  (if-not-equal $keyrepeat XX (macro-cancel-on-press $keyhold $time2ndhold $keyrepeat))
+			;; 	 (if-equal     $keyrepeat XX (macro-cancel-on-press $keyhold ))
+			;; 	 break
 		)
 	)
 	;; II. second tap of TAP-DANCE
@@ -830,9 +835,6 @@ j=F1,...q*F11,ß=F12
   .rsfb (tap-hold-release $350 $500 - (multi rsft (layer-while-held notp)))
 
   ;; chords
-  _g    (chord fkomma g)  ;; F24
-  _,    (chord fkomma ko)  
-  _.    (chord fkomma .)  ;; Q alternative
   _v|   (chord vüä v)		;; sticky numbers
   _ä}   (chord vüä ä)
   _ü{   (chord vüä ü)
@@ -845,8 +847,8 @@ j=F1,...q*F11,ß=F12
   _|    (chord |} <)      ;; mods will be added later in defchord < is | 0 is }
   _}    (tap-hold 1 $200 (chord |} 0) (release-layer symbols)) ;; tap-hold to exit layer
   ..]   (tap-hold 1 $200 @.] (release-layer symbols)) ;; Go bach to number layer TODO remember this
-  _z˝   (chord zu $z)
-  _u◖   (chord zu u)
+  _z˝   (chord zw $z)
+  _w    (chord zw w)
   ;; test keys
   ff# (t! capscount f)
   ll? (t! capscount l)
@@ -860,9 +862,9 @@ j=F1,...q*F11,ß=F12
 		) 
 		(multi (macro @.!) (tap-hold $200 $800 XX (macro bspc @.@ )))
   )
-  ..z˝  (t! key-hold-repeat $140 $400 $z @.˝ @.˝ XX lsft 2 ($off) XX)
+  ..z˝  (t! key-hold-repeat $140 $800 $z @.%  @.% XX lsft 5 ($off) XX)
   .z˝tp (multi @..z˝ @.tp)             
-  ..u◖  (t! key-hold-repeat $150 $400 u @.◖  @.◗ XX lsft 8 ($off) XX)                        ;; (  ()
+  .u◖  (t! key-hold-repeat $150 $400 u @.◖  @.◗ XX lsft 8 ($off) XX)                        ;; (  ()
   ;; TIP a◗ (multi (tap-hold 1 $150  a  S-9) @.tp) this order works with powertoys but causes problems with RDP ua vs au
   ;; TIP a◗ LONG HOLD with no Powertoys running (tap-hold 1 $150 (multi a @.tp) (fork (macro-release-cancel S-9 $600 bspc RA-9 ) C-a (lctl rctl)) )                   ;; ) [ todo find a better use
   ..a◗  (t! key-hold-repeat $150 $800 a @.◗ XX XX lsft 9 ($off) XX)
@@ -876,7 +878,7 @@ j=F1,...q*F11,ß=F12
   .k    (macro k)
   ..f#  (t! key-hold-repeat $140 $800 f # XX XX XX # ($off) XX)
   .f#   (multi @..f# @.tp)
-  .w%   (t! key-hold-repeat $140 $800 w @.%  @.% XX lsft 5 ($off) XX)
+  .w%   (t! key-hold-repeat $140 $400 w @.˝ @.˝ XX lsft 2 ($off) XX)
   .q@   (t! key-hold-repeat $160 $800 q RA-q XX XX ralt q ($off) XX) 
   .o'   (t! key-hold-repeat $160 $800 o S-#  S-# XX lsft # ($off) XX)
   .d/   (t! key-hold-repeat $200 $800 d S-7  S-7 < lsft 7 ($off) XX)
@@ -902,7 +904,7 @@ j=F1,...q*F11,ß=F12
 			;;((input virtual forkme)) , break ;; TODO does nothing
 			((and (key-history lsft 3)(key-history + 2)(key-history . 1))) S-+ break
 			((and (key-history lsft 2)(key-history + 1))) S-+ break    
-			()	(tap-hold 1 $160 @_g (multi (macro S-+ ) (tap-hold 1 $800 XX S-+ )))  break ;; there must be a macro (@.*) after the multi for the timeout do work
+			()	(tap-hold 1 $160 g (multi (macro S-+ ) (tap-hold 1 $800 XX S-+ )))  break ;; there must be a macro (@.*) after the multi for the timeout do work
 		)
 ;; TODO layer-toggle shoud break key-history - implemented in @nav by multi nop3
   ,;<  (tap-hold  1 $140 (tap-dance $140 (
@@ -913,9 +915,9 @@ j=F1,...q*F11,ß=F12
 								((input virtual nop2)) , fallthrough ;;BUG unmod unshift don't work
 								((input virtual nop2)) @.sftoff  break
 								((and (key-history lsft 2)(key-history , 1))) S-, break
-								((and (or (key-history lsft 2)(key-history rsft 2)(key-history lalt 2)(key-history ralt 2)) (key-history 102d 1))) @_, break
+								((and (or (key-history lsft 2)(key-history rsft 2)(key-history lalt 2)(key-history ralt 2)) (key-history 102d 1))) , break
 								((key-history 102d 1)) @.< break  
-								()	@_, break 
+								()	, break 
 							)
 							(tap-hold 10 $100 (switch
 												((and (key-history lsft 2)(key-history , 1))) (macro S-, S-,) break
@@ -938,11 +940,11 @@ j=F1,...q*F11,ß=F12
   .:>  (tap-hold  1 $100 (tap-dance $140 (
 							(switch
 								((and (key-history lsft 2)(key-history . 1))) S-. break
-								((and (or (key-history lalt 2)(key-history ralt 2)) (key-history 102d 1))) @_. break
+								((and (or (key-history lalt 2)(key-history ralt 2)) (key-history 102d 1))) . break
 								((and (key-history lsft 2)(key-history 102d 1))) @.> break
 								((and (key-history 102d 1))) @.> break
 								((and (key-history - 1))) @.> break
-								()	@_. break 
+								()	. break 
 							)
 							(tap-hold 10 $100 (switch                                         ;; double-tap-hold = > tripple-tap-hold = .......
 												((and (key-history lsft 2)(key-history . 1))) (macro S-. S-.) break
@@ -1011,13 +1013,14 @@ j=F1,...q*F11,ß=F12
 							(layer-while-held symbols)
 							(layer-while-held symbols) (layer-while-held numbers))
 		)
+  .prtsc (tap-hold 0 600 XX prtsc)		
 )
 
 
 (defchordsv2
-  (n r) bspc 30 all-released  (game)
-  (t n) esc  30 all-released  (game)
-  (r h) del  30 all-released  (game)
+  (n r) del 30 all-released  (game)
+  (t n) bspc 30 all-released  (game)
+  (g w) esc 30 all-released  (game)
 )
 ;; from NUMFIX to BASE
 (defchords exit79 20
@@ -1048,10 +1051,10 @@ j=F1,...q*F11,ß=F12
   (   ä ü ) bspc
   (v  ä ü ) C-bspc
 )
-(defchords zu $150 ;; long timer to use combos to prevent accidential hold
+(defchords zw $150 ;; long timer to use combos to prevent accidential hold
   ($z     ) @.z˝tp
-  (   u   ) @..u◖
-  ($z u   ) (macro $z (unmod u))
+  (   w   ) @.w%
+  ($z w   ) (macro $z (unmod w))
 )
 ;; from SYMBOLS to NUMFIX CA(0) = }  CA(<) = | chord must be defined on the not modified keys
 ;; not needed anymore
@@ -1059,14 +1062,6 @@ j=F1,...q*F11,ß=F12
   (0      ) @.}
   (   <   ) @.|
   (0  <   ) @.numfix
-)
-;; TODO F24 and ESC are not really used
-(defchords fkomma 20
-  (g        ) g
-  (   ko    ) ,
-  (g  ko    ) esc
-  (       . ) .
-  (   ko  . ) F24
 )
 ;; defsrc querty laptop + und ß (x und y) sind ggf. vertauscht 
 #|(defsrc querty laptop
@@ -1086,9 +1081,9 @@ j=F1,...q*F11,ß=F12
 (defsrc
   esc       F1   F13  F16  F24
   grv         1    2    3    4    5    6    7    8    9    0    +    ´    ⌫
-  tab       j    z    u    a    y    p    f    l    m    w    q    ß    #
+  tab       -    ,    u    a    .    p    f    l    m    y    q    ß    #
   caps      c    s    i    e    o    d    t    n    r    h    k    ret
-  lsft 102d x    v    ü    ä    ö    b    g    ,    .    -    rsft
+  lsft 102d x    v    ü    ä    ö    b    g    w    z    j    rsft
             lmet lalt      F14       spc            F15 ralt                           
 ))
 ;; there is no platform difference currently as y z are handeled in deflocalkeys
@@ -1096,33 +1091,20 @@ j=F1,...q*F11,ß=F12
 (defsrc
   esc       F1   F13  F16  F24
   ^         1    2    3    4    5    6    7    8    9    0    +    ´    ⌫
-  tab       j    z    u    a    y    p    f    l    m    w    q    ß    #
+  tab       -    ,    u    a    .    p    f    l    m    y    q    ß    #
   caps      c    s    i    e    o    d    t    n    r    h    k    ret
-  lsft 102d x    v    ü    ä    ö    b    g    ,    .    -    rsft
+  lsft 102d x    v    ü    ä    ö    b    g    w    z    j    rsft
             lmet lalt      F14       spc            F15 ralt                           
 ))
 (platform (winiov2)
 (defsrc
   esc       F1   F13  F16  F24
   ^         1    2    3    4    5    6    7    8    9    0    +    ´    ⌫
-  tab       j    y    u    a    z    p    f    l    m    w    q    ß    #
+  tab       -    ,    u    a    .    p    f    l    m    z    q    ß    #
   caps      c    s    i    e    o    d    t    n    r    h    k    ret
-  lsft 102d x    v    ü    ä    ö    b    g    ,    .    -    rsft
+  lsft 102d x    v    ü    ä    ö    b    g    w    y    j    rsft
             lmet lalt      F14       spc            F15 ralt                           
 ))
-
-(defvirtualkeys
-    ã (unicode ã)
-	Ã (unicode Ã)
-)
-
-(defseq
-    ã (S-1 a)
-    Ã (S-1 S-a)
-)
-;;(macro (sequence 2500 hidden-delay-type) 10 S-grv)
-;; or (macro sldr 10 S-grv)
-
 
 ;; INFO did lmet, lalt not being one-shot / not incluing lctl solve any problems? ANSWER didn't solve any problems
 ;; BUG/TODO-Usage rsft +... rspace +... rstf-up = @.sym not used and has BUG with RAlt-keys like [] if rsft is not released.
@@ -1137,10 +1119,10 @@ j=F1,...q*F11,ß=F12
 ;; F14 = left-Space = symbol layer / lsft+F14 = hold F14 = number layer
 ;; ret hold does ctl via QMK
   esc       F1    @.ff13 @.ff16 F24
-  @.^0      @.1   @.2    @.3   @.4    @.5   @.6     @.7    @.8    @.9    @.0     @.dp1   (layer-switch letters)    bspc
-  @.tab     @.j!  @_z˝   @_u◖  @.a◗   @.y$  @.p&    @.f#   @.l?   @.m\   @.w%    @.q@    @.ß      F24
-  @.atx     @.c⌘  @.s^⎇  @.i[  @.e]   @.o'  @.d/    @.t/   @.n-   @.r_⎇  @.h⌘    @.k     @.ret
-  _ @.atm   @.x`  @_v|   @_ü{  @_ä}   @.ö+  @.b=    @_g*   @,;<   @.:>   @-_~    @.rsfb
+  @.^0      @.1   @.2    @.3   @.4    @.5   @.6     @.7    @.8    @.9     @.0     @.dp1   @.prtsc    bspc
+  @.tab     @-_~  @,;<   @.u◖  @.a◗   @.:>  @.p&    @.f#   @.l?   @.m\    @.y$    @.q@    @.ß      F24
+  @.atx     @.c⌘  @.s^⎇  @.i[  @.e]   @.o'  @.d/    @.t/   @.n-   @.r_⎇   @.h⌘    @.k     @.ret
+  _ @.atm   @.x`  @_v|   @_ü{  @_ä}   @.ö+  @.b=    @_g*   @_w    @_z˝    @.j!    @.rsfb
             @.oml @.oal  @.ff14             @.nav          @.ff15 ralt   
 #|
             lmet lalt           @.nav
@@ -1157,12 +1139,12 @@ j=F1,...q*F11,ß=F12
 )			
 ;; ************** GAME ***************** unused
 (deflayermap (game)
-  j q
+  - q
   u w
   s a
   i s
   e d
-  z q
+  , q
   a e
   F14 spc
   F15 (layer-switch base)
@@ -1170,10 +1152,10 @@ j=F1,...q*F11,ß=F12
 ;; *** Base layer variant that does not switch to fast typing layer used by RSFT ***
 (deflayer notp
   esc _ _ _ _
-  @.^        @.1   @.2     @.3     @.4    @.5   @.6    @.7    @.8   @.9   @.0   -    del  bspc
-  _          @.j!  @..z˝   @_u◖    @..a◗  @.y$  @..p&  @..f#  @.l?  @.m\  @.w%  @.q@ @.ß  @.rtw
-  _          @.c⌘  @.s⎇    @..i[   @..e]  @.o'  @.d/   @..t   @..n  @.r_⎇ @.h⌘  @.k  ret
-  @.cabs _   @.x`  @_v|    @_ü{    @_ä}   @.ö+  @.b=   @_g*   @,;<  @.:>  @-_~  @.rsf
+  @.^        @.1   @.2     @.3     @.4    @.5   @.6    @.7    @.8   @.9    @.0   -    del  bspc
+  _          @-_~  @,;<    @.u◖    @..a◗  @.:>  @..p&  @..f#  @.l?  @.m\   @.y$  @.q@ @.ß  @.rtw
+  _          @.c⌘  @.s⎇    @..i[   @..e]  @.o'  @.d/   @..t   @..n  @.r_⎇  @.h⌘  @.k  ret
+  @.cabs _   @.x`  @_v|    @_ü{    @_ä}   @.ö+  @.b=   @_g*   @.w%  @..z˝  @.j!  @.rsf
              _     _       _       _            _ ralt   
 )
 ;; *** UPPER CASE LAYER - use spc to exit -  hold spc to exit w/o spc TODO shift into lower case does not work ***
@@ -1181,9 +1163,9 @@ j=F1,...q*F11,ß=F12
 (deflayer (CAPS icon caps.ico)
   esc _ _ _ _
   @.^        @.1   @.2    @.3   @.4    @.5   @.6   @.7   @.8   @.9   @.0   -     del  bspc
-  _          @.J   @.Z˝   @.U◖  @.A◗   @.Y$  @.P&  @.F#  @.L?  @.M\  @.W%  @.Q@  @.ß  @.rtw
+  _          @-_~  @,;<   @.U◖  @.A◗   @.:>  @.P&  @.F#  @.L?  @.M\  @.Y$  @.Q@  @.ß  @.rtw
   _          @.C⌘  @.S    @.I[  @.E]   @.O'  @.D/  @.T   @.N   @.R   @.H⌘  @.K   ret
-  @.scabs _  @.X`  @_V|   @_Ü{  @_Ä}   @.Ö+  @.B=  @.G*  @,;<  @.:>  @-_~  @.rsf
+  @.scabs _  @.X`  @_V|   @_Ü{  @_Ä}   @.Ö+  @.B=  @.G*  @.W%  @.Z˝  @.J  @.rsf
              _     _      @.ff14c      _           @.ff15c ralt   
 )
 ;; *** UPPER CASE ALIASES for CAPS layer ***
@@ -1206,7 +1188,7 @@ j=F1,...q*F11,ß=F12
           (lsft)  (tap-hold 1 $200 (unshift t) (layer-switch base) ) break
           ()  (tap-hold 1 $200 S-t rsft)  break 
        )
-  .Z˝  (fork (tap-hold 1 $200 (unicode Z) (macro @.˝)) (unshift z) (rsft lsft))
+  .Z˝  (fork (tap-hold 1 $200 (unicode Z) (macro @.%)) (unshift z) (rsft lsft))
   .K   (fork (macro S-k)                         (unshift k) (rsft lsft))
   .J   (fork (tap-hold 1 $200 S-j (macro @.!))   (unshift j) (rsft lsft))
   .U◖  (fork (tap-hold 1 $200 S-u (macro @.◖))   (unshift u) (rsft lsft))
@@ -1217,7 +1199,7 @@ j=F1,...q*F11,ß=F12
   .F#  (fork (tap-hold 1 $200 S-f (macro #))     (unshift f) (rsft lsft))
   .L?  (fork (tap-hold 1 $200 S-l (macro @.?))   (unshift l) (rsft lsft))
   .M\  (fork (tap-hold 1 $200 S-m (macro @.\))   (unshift m) (rsft lsft))
-  .W%  (fork (tap-hold 1 $200 S-w (macro @.%))   (unshift w) (rsft lsft))
+  .W%  (fork (tap-hold 1 $200 S-w (macro @.˝))   (unshift w) (rsft lsft))
   .Q@  (fork (tap-hold 1 $200 S-q (macro @.@))   (unshift q) (rsft lsft))
   .O'  (fork (tap-hold 1 $200 S-o (macro @.'))   (unshift o) (rsft lsft))
   .D/  (fork (tap-hold 1 $200 S-d (macro @./))   (unshift d) (rsft lsft))
@@ -1237,10 +1219,10 @@ j=F1,...q*F11,ß=F12
 (deflayer typing
 ;;****************   typing   ********************************************************
   esc _ _ _ _
-  @.^       @.1       @.2        @.3       @.4       @.5        @.6       @.7       @.8       @.9       @.0       -         del      bspc
-  _        (unmod j) (unmod $z) (unmod u) (unmod a) (unmod $y) (unmod p) (unmod f) (unmod l) (unmod m) (unmod w) (unmod q) (unmod ß) @.rtw
-  _        (unmod c) (unmod  s) (unmod i) (unmod e) (unmod  o) (unmod d) (unmod t) (unmod n) (unmod r) (unmod h) (unmod k)  ret
-  @.osss _ (unmod v) (unmod  x)  @.ü{      @.ä}      @.ö+      (unmod b) (unmod g)  @,;<      @.:>      @-_~      @.rsf
+  @.^       @.1       @.2        @.3       @.4       @.5        @.6       @.7       @.8       @.9       @.0         -         del      bspc
+  _         @-_~      @,;<      (unmod u) (unmod a)  @.:>      (unmod p) (unmod f) (unmod l) (unmod m)  (unmod $y) (unmod q) (unmod ß) @.rtw
+  _        (unmod c) (unmod  s) (unmod i) (unmod e) (unmod  o) (unmod d) (unmod t) (unmod n) (unmod r)  (unmod h)  (unmod k)  ret
+  @.osss _ (unmod v) (unmod  x)  @.ü{      @.ä}      @.ö+      (unmod b) (unmod g) (unmod w) (unmod $z) (unmod j)   @.rsf
             lmet      lalt       _         @.nav-typing         _ ralt              
 )
 
@@ -1464,25 +1446,25 @@ j=F1,...q*F11,ß=F12
   ;;TODO Double Click is missing
 )
 
-(defzippy-experimental
-  zippy.txt
-  on-first-press-chord-deadline 1500
-  idle-reactivate-time          500
-  smart-space full
-  smart-space-punctuation (? ! . , ; :)
-  output-character-mappings (
-    ! S-1
-    ? S-ß
-    % S-5
-    "(" S-9
-    ")" S-0
-    : S-.
-    > S-<
-    r#"""# S-2
-    | AG-<
-    _ S--
-  )
-)
+;; (defzippy-experimental
+;;   zippy.txt
+;;   on-first-press-chord-deadline 1500
+;;   idle-reactivate-time          500
+;;   smart-space full
+;;   smart-space-punctuation (? ! . , ; :)
+;;   output-character-mappings (
+;;     ! S-1
+;;     ? S-ß
+;;     % S-5
+;;     "(" S-9
+;;     ")" S-0
+;;     : S-.
+;;     > S-<
+;;     r#"""# S-2
+;;     | AG-<
+;;     _ S--
+;;   )
+;; )
 
 (defalias  
   ;; macros
