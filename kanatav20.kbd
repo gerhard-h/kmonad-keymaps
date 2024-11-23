@@ -11,7 +11,7 @@ start size
 0437 116!	aliases for (shifted) symbol, tap-hold for numbers, keypad, outerkeys, dynamic-macros
 0553 019	aliases for home row mods
 0574 017	aliases for chord activation 
-0591 125	aliases for j!, letter that invoke templates, k, ß, x`, b=, g*, ,;< .:> 
+0591 125	aliases for j!, letter that invoke templates, k, ß, x`, b=, g*, ,;> .:< 
 0716 059!	chords
 0775 017	defsrc
 0792 023	layer base
@@ -449,7 +449,7 @@ j=F1,...q*F11,ß=F12
 ;; sam v| (t! key-hold-repeat  $200      $800         v      @.|      @.|        XX          ralt        <                  (ü 7)        del     ) 
 ;; TODO using RA- ralt may only work with "process-unmapped-keys yes" and wintercept
 ;; $historykey3 is currently used to disabel symbol repeat for </div TODO should then be a list 
-;; j! x` b= g* ,;< .:> -_~ and homrow mods have there own implementation
+;; j! x` b= g* ,;> .:< -_~ and homrow mods have there own implementation
 ;; TIP this template can be wraped in (multi ... @.tp) But for some scenarios (non windtercept / no powertoys / windows 11 ) may require calling @.tp from inside this template
 ;; TODO is input-history better than key-history? most likely not because we care most about output-keys
 ;; TODO is there a reason to replace tap-dance-eager with switch?  
@@ -907,7 +907,7 @@ j=F1,...q*F11,ß=F12
 			()	(tap-hold 1 $160 g (multi (macro S-+ ) (tap-hold 1 $800 XX S-+ )))  break ;; there must be a macro (@.*) after the multi for the timeout do work
 		)
 ;; TODO layer-toggle shoud break key-history - implemented in @nav by multi nop3
-  ,;<  (tap-hold  1 $140 (tap-dance $140 (
+  ,;>  (tap-hold  1 $160 (tap-dance $160 (
 							(switch
 								((input virtual nop2)) (on-press release-vkey nop1)  fallthrough
 								((input virtual nop2)) (on-press release-vkey sft)  fallthrough
@@ -916,53 +916,53 @@ j=F1,...q*F11,ß=F12
 								((input virtual nop2)) @.sftoff  break
 								((and (key-history lsft 2)(key-history , 1))) S-, break
 								((and (or (key-history lsft 2)(key-history rsft 2)(key-history lalt 2)(key-history ralt 2)) (key-history 102d 1))) , break
-								((key-history 102d 1)) @.< break  
+								((key-history 102d 1)) @.> break  
 								()	, break 
 							)
-							(tap-hold 10 $100 (switch
+							(tap-hold 10 $140 (switch
 												((and (key-history lsft 2)(key-history , 1))) (macro S-, S-,) break
-												((key-history 102d 1)) (macro @.< @.<) break
+												((key-history 102d 1)) (macro @.> @.>) break
 												() (macro , ,) break
 											 )
-											 (macro @.<)                               ;;  double-tap-hold < 
+											 (macro @.>)                               ;;  double-tap-hold < 
 							)
 						  )
 						)
 						;; hold
 						(switch
 							((and (key-history lsft 2)(key-history , 1))) S-, break    ;;  hold hold ; ;;;;;
-							((key-history 102d 1)) @.< break ;;??? hold < <<<<<
+							((key-history 102d 1)) @.> break ;;??? hold < <<<<<
 							((and (key-history , 2)(key-history , 1))) , break         ;;  tap hold  , ,,,,, (autorepeat)
-							()	(multi @.; (tap-hold $200 $800 XX (macro bspc @.< )))  break ;; Long_Hold
+							()	(multi @.; (tap-hold $200 $800 XX (macro bspc @.> )))  break ;; Long_Hold
 						)	
 		) 
 		 
-  .:>  (tap-hold  1 $100 (tap-dance $140 (
+  .:<  (tap-hold  1 $160 (tap-dance $140 (
 							(switch
 								((and (key-history lsft 2)(key-history . 1))) S-. break
 								((and (or (key-history lalt 2)(key-history ralt 2)) (key-history 102d 1))) . break
-								((and (key-history lsft 2)(key-history 102d 1))) @.> break
-								((and (key-history 102d 1))) @.> break
-								((and (key-history - 1))) @.> break
+								((and (key-history lsft 2)(key-history 102d 1))) @.< break
+								((and (key-history 102d 1))) @.< break
+								((and (key-history - 1))) @.< break
 								()	. break 
 							)
-							(tap-hold 10 $100 (switch                                         ;; double-tap-hold = > tripple-tap-hold = .......
+							(tap-hold 10 $160 (switch                                         ;; double-tap-hold = > tripple-tap-hold = .......
 												((and (key-history lsft 2)(key-history . 1))) (macro S-. S-.) break
-												((key-history 102d 1)) (macro @.> @.>) break
+												((key-history 102d 1)) (macro @.< @.<) break
 												() (macro . .) break
 											 )
-											 (macro @.>)
+											 (macro @.<)
 							)    
 						)) 
 						(switch
 							((and (key-history lsft 2)(key-history . 1))) S-. break    ;;  hold hold : :::::
-							((and (key-history lsft 2)(key-history 102d 1))) @.> break ;;??? hold > >>>>>
+							((and (key-history lsft 2)(key-history 102d 1))) @.< break ;;??? hold > >>>>>
 							((key-history . 1)) .   break ;; . .....
-							((key-history - 1)) @.> break ;; -> with hold >
-							()	(multi @.: (tap-hold $200 $800 XX (macro bspc @.> )))  break ;; Long_Hold
+							((key-history - 1)) @.< break ;; -> with hold >
+							()	(multi @.: (tap-hold $200 $800 XX (macro bspc @.< )))  break ;; Long_Hold
 						)			
 	   )
-  -_~old  (tap-hold  1 $100 ;; slash/ is dash-  ~ is RA-+ TODO no double-tap-hold is that consistent?
+  -_~old  (tap-hold  1 $120 ;; slash/ is dash-  ~ is RA-+ TODO no double-tap-hold is that consistent?
 			(switch
 				((and (key-history ralt 2)(key-history + 1))) @.~ break
 				((and (key-history lsft 2)(key-history / 1))) S-/ break    
@@ -975,7 +975,7 @@ j=F1,...q*F11,ß=F12
 				() (multi (macro @._) (tap-hold $200 $800 XX (macro bspc @.~ ))) break
 			)
 	   )
-   -_~  (tap-hold  1 $100 (tap-dance $140 ( ;; slash/ is dash-  ~ is RA-+
+   -_~  (tap-hold  1 $120 (tap-dance $160 ( ;; slash/ is dash-  ~ is RA-+
 							;; 1. tap
 							(switch
 								((and (key-history lsft 2)(key-history / 1))) S-/ break
@@ -984,7 +984,7 @@ j=F1,...q*F11,ß=F12
 								() / break 
 							)
 							;; 2. tap
-							(tap-hold 10 $100 (switch  ;; double-tap-hold is ~ tripple-tap-hold is --- ---
+							(tap-hold 10 $120 (switch  ;; double-tap-hold is ~ tripple-tap-hold is --- ---
 												((and (key-history lsft 2)(key-history / 1))) (macro S-/ S-/ ) break
 												((and (or (key-history lalt 2)(key-history ralt 2))(key-history + 1))) (macro @.~  @.~ ) break
 												() (macro / / ) break
@@ -992,7 +992,7 @@ j=F1,...q*F11,ß=F12
 											  (macro @.~)
 							)
 							;; 3. tap
-							(tap-hold 10 $100 (switch  ;; double-tap-hold is ~ tripple-tap-hold is --- ---
+							(tap-hold 10 $120 (switch  ;; double-tap-hold is ~ tripple-tap-hold is --- ---
 												((and (key-history lsft 2)(key-history / 1))) (macro S-/ S-/ S-/ ) break
 												((and (or (key-history lalt 2)(key-history ralt 2))(key-history + 1))) (macro @.~  @.~ @.~) break
 												() (macro / / / ) break
@@ -1081,7 +1081,7 @@ j=F1,...q*F11,ß=F12
 (defsrc
   esc       F1   F13  F16  F24
   grv         1    2    3    4    5    6    7    8    9    0    +    ´    ⌫
-  tab       -    ,    u    a    .    p    f    l    m    y    q    ß    #
+  tab       -    .    u    a    ,    p    f    l    m    y    q    ß    #
   caps      c    s    i    e    o    d    t    n    r    h    k    ret
   lsft 102d x    v    ü    ä    ö    b    g    w    z    j    rsft
             lmet lalt      F14       spc            F15 ralt                           
@@ -1091,7 +1091,7 @@ j=F1,...q*F11,ß=F12
 (defsrc
   esc       F1   F13  F16  F24
   ^         1    2    3    4    5    6    7    8    9    0    +    ´    ⌫
-  tab       -    ,    u    a    .    p    f    l    m    y    q    ß    #
+  tab       -    .    u    a    ,    p    f    l    m    y    q    ß    #
   caps      c    s    i    e    o    d    t    n    r    h    k    ret
   lsft 102d x    v    ü    ä    ö    b    g    w    z    j    rsft
             lmet lalt      F14       spc            F15 ralt                           
@@ -1100,7 +1100,7 @@ j=F1,...q*F11,ß=F12
 (defsrc
   esc       F1   F13  F16  F24
   ^         1    2    3    4    5    6    7    8    9    0    +    ´    ⌫
-  tab       -    ,    u    a    .    p    f    l    m    z    q    ß    #
+  tab       -    .    u    a    ,    p    f    l    m    z    q    ß    #
   caps      c    s    i    e    o    d    t    n    r    h    k    ret
   lsft 102d x    v    ü    ä    ö    b    g    w    y    j    rsft
             lmet lalt      F14       spc            F15 ralt                           
@@ -1120,7 +1120,7 @@ j=F1,...q*F11,ß=F12
 ;; ret hold does ctl via QMK
   esc       F1    @.ff13 @.ff16 F24
   @.^0      @.1   @.2    @.3   @.4    @.5   @.6     @.7    @.8    @.9     @.0     @.dp1   @.prtsc    bspc
-  @.tab     @-_~  @,;<   @.u◖  @.a◗   @.:>  @.p&    @.f#   @.l?   @.m\    @.y$    @.q@    @.ß      F24
+  @.tab     @-_~  @.:<   @.u◖  @.a◗   @,;>  @.p&    @.f#   @.l?   @.m\    @.y$    @.q@    @.ß      F24
   @.atx     @.c⌘  @.s^⎇  @.i[  @.e]   @.o'  @.d/    @.t/   @.n-   @.r_⎇   @.h⌘    @.k     @.ret
   _ @.atm   @.x`  @_v|   @_ü{  @_ä}   @.ö+  @.b=    @_g*   @_w    @_z˝    @.j!    @.rsfb
             @.oml @.oal  @.ff14             @.nav          @.ff15 ralt   
@@ -1153,7 +1153,7 @@ j=F1,...q*F11,ß=F12
 (deflayer notp
   esc _ _ _ _
   @.^        @.1   @.2     @.3     @.4    @.5   @.6    @.7    @.8   @.9    @.0   -    del  bspc
-  _          @-_~  @,;<    @.u◖    @..a◗  @.:>  @..p&  @..f#  @.l?  @.m\   @.y$  @.q@ @.ß  @.rtw
+  _          @-_~  @.:<    @.u◖    @..a◗  @,;>  @..p&  @..f#  @.l?  @.m\   @.y$  @.q@ @.ß  @.rtw
   _          @.c⌘  @.s⎇    @..i[   @..e]  @.o'  @.d/   @..t   @..n  @.r_⎇  @.h⌘  @.k  ret
   @.cabs _   @.x`  @_v|    @_ü{    @_ä}   @.ö+  @.b=   @_g*   @.w%  @..z˝  @.j!  @.rsf
              _     _       _       _            _ ralt   
@@ -1163,7 +1163,7 @@ j=F1,...q*F11,ß=F12
 (deflayer (CAPS icon caps.ico)
   esc _ _ _ _
   @.^        @.1   @.2    @.3   @.4    @.5   @.6   @.7   @.8   @.9   @.0   -     del  bspc
-  _          @-_~  @,;<   @.U◖  @.A◗   @.:>  @.P&  @.F#  @.L?  @.M\  @.Y$  @.Q@  @.ß  @.rtw
+  _          @-_~  @.:<   @.U◖  @.A◗   @,;>  @.P&  @.F#  @.L?  @.M\  @.Y$  @.Q@  @.ß  @.rtw
   _          @.C⌘  @.S    @.I[  @.E]   @.O'  @.D/  @.T   @.N   @.R   @.H⌘  @.K   ret
   @.scabs _  @.X`  @_V|   @_Ü{  @_Ä}   @.Ö+  @.B=  @.G*  @.W%  @.Z˝  @.J  @.rsf
              _     _      @.ff14c      _           @.ff15c ralt   
@@ -1220,7 +1220,7 @@ j=F1,...q*F11,ß=F12
 ;;****************   typing   ********************************************************
   esc _ _ _ _
   @.^       @.1       @.2        @.3       @.4       @.5        @.6       @.7       @.8       @.9       @.0         -         del      bspc
-  _         @-_~      @,;<      (unmod u) (unmod a)  @.:>      (unmod p) (unmod f) (unmod l) (unmod m)  (unmod $y) (unmod q) (unmod ß) @.rtw
+  _         @-_~      @.:<      (unmod u) (unmod a)  @,;>      (unmod p) (unmod f) (unmod l) (unmod m)  (unmod $y) (unmod q) (unmod ß) @.rtw
   _        (unmod c) (unmod  s) (unmod i) (unmod e) (unmod  o) (unmod d) (unmod t) (unmod n) (unmod r)  (unmod h)  (unmod k)  ret
   @.osss _ (unmod v) (unmod  x)  @.ü{      @.ä}      @.ö+      (unmod b) (unmod g) (unmod w) (unmod $z) (unmod j)   @.rsf
             lmet      lalt       _         @.nav-typing         _ ralt              
@@ -1349,16 +1349,16 @@ j=F1,...q*F11,ß=F12
   esc      @.dp1 @.dp2  @.dp3 @.dp4  @.dp5 @.dr1 @.dr2 @.dr3 @.dr4 @.dr5 @.dst @.dms bspc
   _        F1    F2     F3    F4     F5    F6    F7    F8    F9    F10   F11   F12   @.rtw
   _        @.k1  @.k2   @.k3  @.k4   @.k5  @.k6  @.k7  @.k8  @.k9  @.k0  esc   ret
-  @.cabs _ @.x`  @_v|   @_ü{  @_ä}   @.ö+  @.b=  @_g*  @,;<  @.:>  @-_~  @.rsf
+  @.cabs _ @.x`  @_v|   @_ü{  @_ä}   @.ö+  @.b=  @_g*  @,;>  @.:<  @-_~  @.rsf
            _     _      _     (multi spc @.basen)      @.basen ralt
 )
 (deflayer (fkeymacro icon fkeymacro.ico);; macro F-keys and (symbols) triggered from the RIGHT side (ff13)
 ;;****************   MACRO   ********************************************************
 ;; b is on this layer to avoid typos 4      5        6      7       8
   _ _ _ _ _
-  _         @.fashing @.geb @.iban  @.plz   _        M-tab  M-tab   _       _    _    _    _    _
+  _         @.geb @.fashing @.iban  @.plz   _        M-tab  M-tab   _       _    _    _    _    _
   _         @.cmdde   F1   F2   F3   F10    C-S-F5   C-S-f  @.tsc   @.\     #    _    _    _         
-  @.sy1     @.psiso  F4   F5   F6   F11    lmet     lsft   lctl    lalt    @-_~ _    _          
+  @.sy1     @.psiso   F4   F5   F6   F11    lmet     lsft   lctl    lalt    @-_~ _    _          
   _    _    ´         F7   F8   F9   F12    b        lctl   lalt    C-S-f   ^    _            
             _         _    _         _               _ ralt
 )
@@ -1469,7 +1469,7 @@ j=F1,...q*F11,ß=F12
 (defalias  
   ;; macros
   .del2  (macro bspc rpt) 
-  .fashing (macro @.n1 @.n1 . @.n1 @.n1 . @.n2 @.n0 @.n2 @.n4 )
+  .fashing (macro @.n1 @.n1 . @.n1 @.n1 . @.n2 @.n0 @.n2 @.n5 ) ;; 11.11.2025
   .geb (macro @.n2 @.n1 . @.n1 @.n2 . @.n2 @.n0 @.n0 @.n1 )
   .iban (macro S-d  S-e  @.n2 @.n0 @.n3 @.n7 @.n0 @.n1 @.n0 @.n0 @.n5 @.n0 @.n0 @.n0 @.n0 @.n4 @.n4 @.n5 @.n0 @.n5 @.n0 @.n7 )
   .plz (macro @.n6 @.n4 @.n7 @.n1 @.n1 )
