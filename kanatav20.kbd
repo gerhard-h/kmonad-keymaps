@@ -628,8 +628,9 @@ j=F1,...q*F11,ß=F12
 				(lsft)
 			)
   )
-;; *** Numberline(unused) + dynamic-macro ***  
-  .ff15 (tap-hold 1 $200  (multi @.nly (layer-switch numberline)) (multi (layer-while-held numberline) (on-press tap-vkey  nlockon) (on-release tap-vkey  nlockoff) )) ;; no numlock warning when using keypad numbers possible
+;; *** Numberline(unused) + dynamic-macro (unused) ***  
+  ;;.ff15 (tap-hold 1 $200  (multi @.nly (layer-switch numberline)) (multi (layer-while-held numberline) (on-press tap-vkey  nlockon) (on-release tap-vkey  nlockoff) )) ;; no numlock warning when using keypad numbers possible
+  .ff15 (tap-hold 1 $200  (tap-dance $300 ((on-release tap-vkey  nlockoff) (multi @.nly (layer-switch numberline)))) (multi (layer-while-held numberline) (on-press tap-vkey  nlockon) (on-release tap-vkey  nlockoff) )) ;; no numlock warning when using keypad numbers possible
   .ff15c (tap-hold 1 $200  @.CAPSoff (layer-while-held numberline))
 
 ;; *** MACRO + F-Keys layer *** TIP removing one-shot solves problems with hitting the key by accident
@@ -753,10 +754,10 @@ j=F1,...q*F11,ß=F12
   ;; *** AUTOSHIFT in number row ***
   ;;ech (tap-hold $140 $400 esc (multi (macro home ) (tap-hold $400 $900 XX (macro end ) )) ) ;; not used
   ;;^ec (tap-hold $200 $300 esc @.^) ;; TODO not used replaced by esc. a relict of 40% boards (fkeys/numberline)
-  ;; INFO number rom with autorepeat
+  ;; INFO number row with autorepeat
   .^0 (tap-hold $400 $300 (fork 0 (unshift 0) (nop2)) (fork @.^ @.° (lsft rsft)))  
   .1  (tap-hold $400 $500 (fork 1 (unshift 1) (nop2)) (macro S-1 ))
-  .2  (tap-hold $400 $300 (fork 2 (unshift 2) (nop2)) (multi @.˝ (tap-hold $200 $700 XX @.˝ )) )
+  .2  (tap-hold $400 $300 (fork 2 (unshift 2) (nop2)) (macro-release-cancel @.˝ $400 @.˝ ))
   .3  (tap-hold $400 $300 (fork 3 (unshift 3) (nop2)) (macro S-3 ))
   .4  (tap-hold $400 $500 (fork 4 (unshift 4) (nop2)) (macro S-4 ))
   .5  (tap-hold $400 $500 (fork 5 (unshift 5) (nop2)) (macro S-5 ))
@@ -766,17 +767,6 @@ j=F1,...q*F11,ß=F12
   .9  (tap-hold $400 $500 (fork 9 (unshift 9) (nop2)) (macro S-9 ))
   .0  0
   
-  ;; *** number aliases for use inside macros ***
-  .n1 1
-  .n2 2
-  .n3 3
-  .n4 4 
-  .n5 5 
-  .n6 6 
-  .n7 7 
-  .n8 8 
-  .n9 9 
-  .n0 0
   ;; *** keypad/homerow mod aliases uses in layer numberline *** TODO NUMLOCK must be enforced
   .k1 (tap-hold $200 $500 Numpad1 lmet)
   .k2 (tap-hold $200 $500 Numpad2 lalt)
@@ -847,8 +837,8 @@ j=F1,...q*F11,ß=F12
   _|    (chord |} <)      ;; mods will be added later in defchord < is | 0 is }
   _}    (tap-hold 1 $200 (chord |} 0) (release-layer symbols)) ;; tap-hold to exit layer
   ..]   (tap-hold 1 $200 @.] (release-layer symbols)) ;; Go bach to number layer TODO remember this
-  _z˝   (chord zw $z)
-  _w    (chord zw w)
+  _z$   (chord zw $z)
+  _w˝   (chord zw w)
   ;; test keys
   ff# (t! capscount f)
   ll? (t! capscount l)
@@ -862,23 +852,23 @@ j=F1,...q*F11,ß=F12
 		) 
 		(multi (macro @.!) (tap-hold $200 $800 XX (macro bspc @.@ )))
   )
-  ..z˝  (t! key-hold-repeat $140 $800 $z @.%  @.% XX lsft 5 ($off) XX)
-  .z˝tp (multi @..z˝ @.tp)             
+  ..z$  (t! key-hold-repeat $140 $800 $z @.$  @.$ XX lsft 4 ($off) XX)
+  .z˝tp (multi @..z$ @.tp)             
   .u◖  (t! key-hold-repeat $150 $400 u @.◖  @.◗ XX lsft 8 ($off) XX)                        ;; (  ()
   ;; TIP a◗ (multi (tap-hold 1 $150  a  S-9) @.tp) this order works with powertoys but causes problems with RDP ua vs au
   ;; TIP a◗ LONG HOLD with no Powertoys running (tap-hold 1 $150 (multi a @.tp) (fork (macro-release-cancel S-9 $600 bspc RA-9 ) C-a (lctl rctl)) )                   ;; ) [ todo find a better use
   ..a◗  (t! key-hold-repeat $150 $800 a @.◗ XX XX lsft 9 ($off) XX)
   .a◗   (fork (multi @..a◗ @.tp) (macro a 10 c) (lctl rctl)) ;; do automatic copy C-(ac) after C-a
-  .y$   (t! key-hold-repeat $140 $800 $y @.$ @.$ XX lsft 4 ($off) XX)
+  .y%   (multi (t! key-hold-repeat $160 $800 $y @.% @.% XX lsft 5 ($off) XX) @.tp)
   ..p&  (t! key-hold-repeat $160 $800 p @.& @.& XX lsft 6 ($off) XX)  ;; & TODO is switching @.tp position relevante for RDP or Powertoys
   .p&   (multi @..p& @.tp)
   .l?   (multi (t! key-hold-repeat $140 $800 l @.? @.? XX lsft ß ($off) XX) @.tp)     ;; ? = S-ß = S-[      i ? ??
-  .m\   (multi (t! key-hold-repeat $160 $800 m @.\ @.\ XX ralt ß ($off) XX) @.tp)
+  .m\   (t! key-hold-repeat $140 $800 m @.\ @.\ XX ralt ß ($off) XX)
   .ß    (macro (unshift ß))
   .k    (macro k)
   ..f#  (t! key-hold-repeat $140 $800 f # XX XX XX # ($off) XX)
   .f#   (multi @..f# @.tp)
-  .w%   (t! key-hold-repeat $140 $400 w @.˝ @.˝ XX lsft 2 ($off) XX)
+  .w˝   (t! key-hold-repeat $140 $400 w @.˝ @.˝ XX lsft 2 ($off) XX)
   .q@   (t! key-hold-repeat $160 $800 q RA-q XX XX ralt q ($off) XX) 
   .o'   (t! key-hold-repeat $160 $800 o S-#  S-# XX lsft # ($off) XX)
   .d/   (t! key-hold-repeat $200 $800 d S-7  S-7 < lsft 7 ($off) XX)
@@ -1018,8 +1008,8 @@ j=F1,...q*F11,ß=F12
 
 
 (defchordsv2
-  (n r) del 30 all-released  (game)
-  (t n) bspc 30 all-released  (game)
+  (n r) del 30 all-released  (game numbers)
+  (t n) bspc 30 all-released  (game numbers) 
   (g w) esc 30 all-released  (game)
 )
 ;; from NUMFIX to BASE
@@ -1053,7 +1043,7 @@ j=F1,...q*F11,ß=F12
 )
 (defchords zw $150 ;; long timer to use combos to prevent accidential hold
   ($z     ) @.z˝tp
-  (   w   ) @.w%
+  (   w   ) @.w˝
   ($z w   ) (macro $z (unmod w))
 )
 ;; from SYMBOLS to NUMFIX CA(0) = }  CA(<) = | chord must be defined on the not modified keys
@@ -1120,9 +1110,9 @@ j=F1,...q*F11,ß=F12
 ;; ret hold does ctl via QMK
   esc       F1    @.ff13 @.ff16 F24
   @.^0      @.1   @.2    @.3   @.4    @.5   @.6     @.7    @.8    @.9     @.0     @.dp1   @.prtsc    bspc
-  @.tab     @-_~  @.:<   @.u◖  @.a◗   @,;>  @.p&    @.f#   @.l?   @.m\    @.y$    @.q@    @.ß      F24
+  @.tab     @-_~  @.:<   @.u◖  @.a◗   @,;>  @.p&    @.f#   @.l?   @.m\    @.y%    @.q@    @.ß      F24
   @.atx     @.c⌘  @.s^⎇  @.i[  @.e]   @.o'  @.d/    @.t/   @.n-   @.r_⎇   @.h⌘    @.k     @.ret
-  _ @.atm   @.x`  @_v|   @_ü{  @_ä}   @.ö+  @.b=    @_g*   @_w    @_z˝    @.j!    @.rsfb
+  _ @.atm   @.x`  @_v|   @_ü{  @_ä}   @.ö+  @.b=    @_g*   @_w˝   @_z$    @.j!    @.rsfb
             @.oml @.oal  @.ff14             @.nav          @.ff15 ralt   
 #|
             lmet lalt           @.nav
@@ -1153,9 +1143,9 @@ j=F1,...q*F11,ß=F12
 (deflayer notp
   esc _ _ _ _
   @.^        @.1   @.2     @.3     @.4    @.5   @.6    @.7    @.8   @.9    @.0   -    del  bspc
-  _          @-_~  @.:<    @.u◖    @..a◗  @,;>  @..p&  @..f#  @.l?  @.m\   @.y$  @.q@ @.ß  @.rtw
+  _          @-_~  @.:<    @.u◖    @..a◗  @,;>  @..p&  @..f#  @.l?  @.m\   @.y%  @.q@ @.ß  @.rtw
   _          @.c⌘  @.s⎇    @..i[   @..e]  @.o'  @.d/   @..t   @..n  @.r_⎇  @.h⌘  @.k  ret
-  @.cabs _   @.x`  @_v|    @_ü{    @_ä}   @.ö+  @.b=   @_g*   @.w%  @..z˝  @.j!  @.rsf
+  @.cabs _   @.x`  @_v|    @_ü{    @_ä}   @.ö+  @.b=   @_g*   @.w˝  @..z$  @.j!  @.rsf
              _     _       _       _            _ ralt   
 )
 ;; *** UPPER CASE LAYER - use spc to exit -  hold spc to exit w/o spc TODO shift into lower case does not work ***
@@ -1163,17 +1153,17 @@ j=F1,...q*F11,ß=F12
 (deflayer (CAPS icon caps.ico)
   esc _ _ _ _
   @.^        @.1   @.2    @.3   @.4    @.5   @.6   @.7   @.8   @.9   @.0   -     del  bspc
-  _          @-_~  @.:<   @.U◖  @.A◗   @,;>  @.P&  @.F#  @.L?  @.M\  @.Y$  @.Q@  @.ß  @.rtw
+  _          @-_~  @.:<   @.U◖  @.A◗   @,;>  @.P&  @.F#  @.L?  @.M\  @.Y%  @.Q@  @.ß  @.rtw
   _          @.C⌘  @.S    @.I[  @.E]   @.O'  @.D/  @.T   @.N   @.R   @.H⌘  @.K   ret
-  @.scabs _  @.X`  @_V|   @_Ü{  @_Ä}   @.Ö+  @.B=  @.G*  @.W%  @.Z˝  @.J  @.rsf
+  @.scabs _  @.X`  @_V|   @_Ü{  @_Ä}   @.Ö+  @.B=  @.G*  @.W˝  @.Z$  @.J  @.rsf
              _     _      @.ff14c      _           @.ff15c ralt   
 )
 ;; *** UPPER CASE ALIASES for CAPS layer ***
 (defalias
-  .Y$  (switch
+  .Y%  (switch
   		(rsft lsft) (unshift $y) 		break
   		(rctl lctl) (unshift $y)		break
-  		() 	(tap-hold 1 $200 (unicode Y) (macro @.$))	break
+  		() 	(tap-hold 1 $200 (unicode Y) (macro @.%))	break
   )
   .C⌘ (switch
   		(rsft lsft) (unshift c) 		break ;; Shift on caps-layer become lowercase again
@@ -1188,7 +1178,7 @@ j=F1,...q*F11,ß=F12
           (lsft)  (tap-hold 1 $200 (unshift t) (layer-switch base) ) break
           ()  (tap-hold 1 $200 S-t rsft)  break 
        )
-  .Z˝  (fork (tap-hold 1 $200 (unicode Z) (macro @.%)) (unshift z) (rsft lsft))
+  .Z$  (fork (tap-hold 1 $200 (unicode Z) (macro @.$)) (unshift z) (rsft lsft))
   .K   (fork (macro S-k)                         (unshift k) (rsft lsft))
   .J   (fork (tap-hold 1 $200 S-j (macro @.!))   (unshift j) (rsft lsft))
   .U◖  (fork (tap-hold 1 $200 S-u (macro @.◖))   (unshift u) (rsft lsft))
@@ -1199,7 +1189,7 @@ j=F1,...q*F11,ß=F12
   .F#  (fork (tap-hold 1 $200 S-f (macro #))     (unshift f) (rsft lsft))
   .L?  (fork (tap-hold 1 $200 S-l (macro @.?))   (unshift l) (rsft lsft))
   .M\  (fork (tap-hold 1 $200 S-m (macro @.\))   (unshift m) (rsft lsft))
-  .W%  (fork (tap-hold 1 $200 S-w (macro @.˝))   (unshift w) (rsft lsft))
+  .W˝  (fork (tap-hold 1 $200 S-w (macro @.˝))   (unshift w) (rsft lsft))
   .Q@  (fork (tap-hold 1 $200 S-q (macro @.@))   (unshift q) (rsft lsft))
   .O'  (fork (tap-hold 1 $200 S-o (macro @.'))   (unshift o) (rsft lsft))
   .D/  (fork (tap-hold 1 $200 S-d (macro @./))   (unshift d) (rsft lsft))
@@ -1404,8 +1394,8 @@ j=F1,...q*F11,ß=F12
   .mus+ (multi (layer-switch mousefast) (on-release tap-vkey mouselight)) ;; powertoys mouse spotlight
   .mus  (multi (layer-switch mouse    ) (on-release tap-vkey mouselight))
   .ff16 (tap-dance-eager $150 (
-             (tap-hold  $200 $200 @.mus+ XX) ;; holding activates QMK mouse
-			 (tap-hold  $200 $200 @.basen XX)
+			XX
+            (tap-hold  $200 $200 @.mus+ XX) ;; holding activates QMK mouse
 	    ))
   .slw (layer-while-held mouseslow)
   .slw+ (layer-while-held mouseextraslow)
@@ -1469,10 +1459,10 @@ j=F1,...q*F11,ß=F12
 (defalias  
   ;; macros
   .del2  (macro bspc rpt) 
-  .fashing (macro @.n1 @.n1 . @.n1 @.n1 . @.n2 @.n0 @.n2 @.n5 ) ;; 11.11.2025
-  .geb (macro @.n2 @.n1 . @.n1 @.n2 . @.n2 @.n0 @.n0 @.n1 )
-  .iban (macro S-d  S-e  @.n2 @.n0 @.n3 @.n7 @.n0 @.n1 @.n0 @.n0 @.n5 @.n0 @.n0 @.n0 @.n0 @.n4 @.n4 @.n5 @.n0 @.n5 @.n0 @.n7 )
-  .plz (macro @.n6 @.n4 @.n7 @.n1 @.n1 )
+  .fashing (macro Digit1 Digit1 . Digit1 Digit1 . Digit2 Digit0 Digit2 Digit5 ) ;; 11.11.2025
+  .geb (macro Digit2 Digit1 . Digit1 Digit2 . Digit2 Digit0 Digit0 Digit1 )
+  .iban (macro S-d  S-e  Digit2 Digit0 Digit3 Digit7 Digit0 Digit1 Digit0 Digit0 Digit5 Digit0 Digit0 Digit0 Digit0 Digit4 Digit4 Digit5 Digit0 Digit5 Digit0 Digit7 )
+  .plz (macro Digit6 Digit4 Digit7 Digit1 Digit1 )
   .tsc (macro @.\ @.\ t s c l i e n t @.\ c @.\ )
 ;;.esp (macro S-. d a t e) ;; SAMPLE trigger espanso
  
@@ -1506,5 +1496,5 @@ j=F1,...q*F11,ß=F12
 ;; bashdt (cmd-output-keys bash -c "date +'%F %R' | sed 's/./& /g' | sed 's/:/S-;/g' | sed 's/\(.\{20\}\)\(.*\)/\(\1 spc \2\)/'")
 
 ;; unused Last lines of script no leading spaces to enable replacement (incudes would be easier)
-.dayiso (macro @.n2 @.n0 @.n2 @.n3 - @.n0 @.n3 - @.n0 @.n6   )
-.dayde  (macro @.n0 @.n6 . @.n0 @.n3 . @.n2 @.n0 @.n2 @.n3  ))
+.dayiso (macro Digit2 Digit0 Digit2 Digit3 - Digit0 Digit3 - Digit0 Digit6   )
+.dayde  (macro Digit0 Digit6 . Digit0 Digit3 . Digit2 Digit0 Digit2 Digit3  ))
