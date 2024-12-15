@@ -525,30 +525,22 @@ j=F1,...q*F11,ß=F12
 			
 		)
 		;; I.b hold of first tap of TAP-DANCE - manual Shift overwrites hold / no autorepeat / long-hold for (), {},...
-		(switch
-			;;DISABLED pass combokeylist ($off) XX to disable combo feature. The real combo must be build with chords, this is just for fixing misstiming the combo. Is this even usefull?
-		    ;;DISABLED (if-not-in-list $off ($combokeylist) $combokeylist $comboout break)        ;; held with misstimed chords v + ü = del
-			(rsft lsft) (macro $keytap) break ;; Shift Prefer / Shift protection - shifting will disable the hold feature TODO this will not work fine with ctrl+sft+#
-			
-			()  (multi
-					(if-not-equal $keyrepeat XX (macro-release-cancel-and-cancel-on-press $keyhold $time2ndhold $keyrepeat 1000 bspc bspc))
-					(if-equal $keyrepeat XX (macro-release-cancel-and-cancel-on-press $keyhold 1000 bspc))
-				)	break
-			
-			
-			;;()  (multi 	
-			;;		(macro $keyhold ) 
-			;;		(tap-hold $180 $time2ndhold XX
-			;;				;; TODO we could cancel this by taping a vkey that checks key-history 1 = keyhold			
-			;;				(if-not-equal $keyrepeat XX (macro-release-cancel-and-cancel-on-press $keyrepeat 1000 (on-press tap-vkey bspcnonalpa) (on-press tap-vkey bspcnonalpa)))      ;;INFO (), {},... keyrepeat cannot be a macro itself
-			;;				(if-equal $keyrepeat XX (macro-release-cancel-and-cancel-on-press $800 (on-press tap-vkey bspcnonalpa)))
-			;;		)
-			;;	) break
+		(if-equal     $keyrepeat XX
+			(switch
+				(rsft lsft) (macro $keytap) break 
+				()   	 (macro-release-cancel-and-cancel-on-press $keyhold 1000 bspc)			break			
+			)
+		)
+		
+		(if-not-equal $keyrepeat XX 	
+			(switch
+				;;DISABLED pass combokeylist ($off) XX to disable combo feature. The real combo must be build with chords, this is just for fixing misstiming the combo. Is this even usefull?
+				;;DISABLED (if-not-in-list $off ($combokeylist) $combokeylist $comboout break)        ;; held with misstimed chords v + ü = del
+				(rsft lsft) (macro $keytap) break ;; Shift Prefer / Shift protection - shifting will disable the hold feature TODO this will not work fine with ctrl+sft+#
 				
-			;;BUG I.b.2 LONG hold - macro-release-cancel wont cancel only if keyhold=keyrepeat 
-			;;()  (if-not-equal $keyrepeat XX (macro-cancel-on-press $keyhold $time2ndhold $keyrepeat))
-			;; 	 (if-equal     $keyrepeat XX (macro-cancel-on-press $keyhold ))
-			;; 	 break
+				()  (macro-release-cancel-and-cancel-on-press $keyhold $time2ndhold $keyrepeat 1000 bspc bspc)	break
+				
+			)
 		)
 	)
 	;; II. second tap of TAP-DANCE
@@ -609,8 +601,136 @@ j=F1,...q*F11,ß=F12
 		)
 	)
 	;; TODO? add a third tap-dance for autorepeat letters / special or game layer might be better because all keys can be auto repeated
- ))	
-)
+ )	
+))
+(deftemplate  key-hold-repeat-tp (timehold time2ndhold keytap keyhold keyrepeat historykey3 historykey2 modlesshistorykey1 combokeylist comboout) 
+;; sam v| (t! key-hold-repeat  $200      $800         v      @.|      @.|        XX          ralt        <                  (ü 7)        del     ) 
+;; TODO using RA- ralt may only work with "process-unmapped-keys yes" and wintercept
+;; $historykey3 is currently used to disabel symbol repeat for </div TODO should then be a list 
+;; j! x` b= g* ,;> .:< -_~ and homrow mods have there own implementation
+;; TIP this template can be wraped in (multi ... @.tp) But for some scenarios (non windtercept / no powertoys / windows 11 ) may require calling @.tp from inside this template
+;; TODO is input-history better than key-history? most likely not because we care most about output-keys
+;; TODO is there a reason to replace tap-dance-eager with switch?  
+ (tap-dance-eager $150 (    
+    (tap-hold 0 $timehold 	
+		;; I.a first tap of TAP-DANCE holding and then retapping will repeat the hold action (not the long-hold)
+        (switch
+			;;0. clear idle timer
+			;;() (on-press release-vkey on-idle-action) fallthrough 
+			(if-not-equal $historykey2 XX
+				;; $historykey3 prevents symbol repeat for </div </d // /d
+				(if-not-equal $historykey3 XX (
+				                               (and (key-history $modlesshistorykey1 1)(key-history $historykey2 2)(key-history $historykey3 3))
+											   ) $keytap break )
+				(if-not-equal $historykey3 XX (
+				                               (and (key-history $modlesshistorykey1 1)(key-history $historykey2 2))
+											   ) $keyhold break )							   
+				(if-equal     $historykey3 XX ((and (key-history $modlesshistorykey1 1)(key-history $historykey2 2))
+                                			   ) $keyhold break )
+			)
+			(if-equal $historykey2 XX
+				((key-history $modlesshistorykey1 1))  $keyhold break
+			)
+			() (multi $keytap @.tp) break
+			;; 1. press key and reset deactivation timer
+			;;() (fork $keytap (multi lsft $keytap (on-press press-vkey on-idle-action)) (nop2))  fallthrough  ;;reverse-release-order TODO nop2 fork only relevant when not using vkey sft
+			;; 1.0.1 cancel if another key was pressed or to much time has passed     
+			;;((and nop1 (not(or
+			;;(and (key-history nop1 1 ) (key-timing 1 less-than 500 )) 
+			;;(and (key-history nop1 2 ) (key-timing 2 less-than 500 )) 
+			;;(and (key-history nop1 3 ) (key-timing 3 less-than 800 )) 
+			;;)))) (multi (on-press release-vkey nop1)) break
+			;; 3. activate sft, remember it by nop2, set deactivation timer
+			;;((and nop1 lsft)(and nop1 rsft)) (multi 
+			;;									(on-press press-vkey sft) 
+			;;									(on-press press-vkey nop2)
+			;;									(on-press press-vkey on-idle-action)
+			;;								 ) break
+			;; 2. remember a uppercase was used								 
+			;;((and (or lsft rsft) (not nop1 nop2))) (on-press press-vkey nop1) break ;;comment this line to deactivate DOubleCAps
+			;; 1.1 else forget about it
+			;;() (on-press release-vkey nop1) break
+			
+		)
+		;; I.b hold of first tap of TAP-DANCE - manual Shift overwrites hold / no autorepeat / long-hold for (), {},...
+		(if-equal     $keyrepeat XX
+			(switch
+				(rsft lsft) (multi (macro $keytap) @.tp) break 
+				()   	 (macro-release-cancel-and-cancel-on-press $keyhold 1000 bspc)			break			
+			)
+		)
+		
+		(if-not-equal $keyrepeat XX 	
+			(switch
+				;;DISABLED pass combokeylist ($off) XX to disable combo feature. The real combo must be build with chords, this is just for fixing misstiming the combo. Is this even usefull?
+				;;DISABLED (if-not-in-list $off ($combokeylist) $combokeylist $comboout break)        ;; held with misstimed chords v + ü = del
+				(rsft lsft) (multi (macro $keytap) @.tp) break ;; Shift Prefer / Shift protection - shifting will disable the hold feature TODO this will not work fine with ctrl+sft+#
+				
+				()  (macro-release-cancel-and-cancel-on-press $keyhold $time2ndhold $keyrepeat 1000 bspc bspc)	break
+				
+			)
+		)
+	)
+	;; II. second tap of TAP-DANCE
+	(tap-hold 1 $timehold 	
+		;; II.a this is identical to I.a
+		(switch
+			;;0. clear idle timer
+			;;() (on-press release-vkey on-idle-action) fallthrough 
+			(if-not-equal $historykey2 XX
+				;; $historykey3 prevents symbol repeat for </div </d // /d
+				(if-not-equal $historykey3 XX (
+				                               (and (key-history $modlesshistorykey1 1)(key-history $historykey2 2)(key-history $historykey3 3))
+											   ) $keytap break )
+				(if-not-equal $historykey3 XX (
+				                               (and (key-history $modlesshistorykey1 1)(key-history $historykey2 2))
+											   ) $keyhold break )							   
+				(if-equal     $historykey3 XX ((and (key-history $modlesshistorykey1 1)(key-history $historykey2 2))
+                                			   ) $keyhold break )
+			)
+			(if-equal $historykey2 XX
+				((key-history $modlesshistorykey1 1))  $keyhold break
+			)
+			() (multi $keytap @.tp) break
+			;; 1. press key and reset deactivation timer
+			;;() (fork $keytap (multi lsft $keytap (on-press press-vkey on-idle-action)) (nop2))  fallthrough  ;;reverse-release-order TODO nop2 fork only relevant when not using vkey sft
+			;; 1.0.1 cancel if another key was pressed or to much time has passed     
+			;;((and nop1 (not(or
+			;;(and (key-history nop1 1 ) (key-timing 1 less-than 500 )) 
+			;;(and (key-history nop1 2 ) (key-timing 2 less-than 500 )) 
+			;;(and (key-history nop1 3 ) (key-timing 3 less-than 800 )) 
+			;;)))) (multi (on-press release-vkey nop1)) break
+			;; 3. activate sft, remember it by nop2, set deactivation timer
+			;;((and nop1 lsft)(and nop1 rsft)) (multi 
+			;;									(on-press press-vkey sft) 
+			;;									(on-press press-vkey nop2)
+			;;									(on-press press-vkey on-idle-action)
+			;;								 ) break
+			;; 2. remember a uppercase was used								 
+			;;((and (or lsft rsft) (not nop1 nop2))) (on-press press-vkey nop1) break ;;comment this line to deactivate DOubleCAps
+			;; 1.1 else forget about it
+			;;() (on-press release-vkey nop1) break
+			
+		)
+		;; II.b no need for manual Shift protection / autorepeat enabled
+		(switch
+		    ;;DISABLED (if-not-in-list $off ($combokeylist) $combokeylist $comboout break)
+			;; !!! here is the difference to tap-dance one !!! 
+			((key-history $modlesshistorykey1 1)) $keyhold break				     ;; add double-tap-hold 
+			((key-history $keytap 1)) (macro (unmod bspc) (unmod bspc)) fallthrough	 ;; double bspc has no explanation but is needed (including unmod) 
+			((key-history $keytap 1)) $keyhold break
+			()  (multi 	
+					(macro $keyhold ) 
+					(tap-hold $180 $time2ndhold XX ;;must $180 be a parameter?
+							(if-not-equal $keyrepeat XX (macro $keyrepeat ))      ;;to do (), {},... keyrepeat cannot be a macro itself
+							(if-equal $keyrepeat XX XX)
+					)
+				) break
+		)
+	)
+	;; TODO? add a third tap-dance for autorepeat letters / special or game layer might be better because all keys can be auto repeated
+ )	
+))
 (defalias
   .dsk (multi lmet lalt ß)  ;; AHK desktop switch must use MODS to be active within RDP  SYMBOL+M 
   .CAPSon  (multi (on-press toggle-vkey  vcaps) @.nly) ;;using toggle to be more error redundant
@@ -722,7 +842,8 @@ j=F1,...q*F11,ß=F12
   .oml   (one-shot 2000 lmet) ;; TODO-Usage
 
   ;; disalble tap-hold keys if typing rapidly but reenable after a shord idle period
-  .tp (multi
+  .tpoff XX
+  .tp  (multi
     ;;(layer-switch typing) ;; one-shot fixes Tte into TE 
 	(one-shot 95 (layer-while-held typing))
     (on-idle  95 tap-vkey to-base )
@@ -893,22 +1014,22 @@ j=F1,...q*F11,ß=F12
 		) 
 		(multi (macro @.!) (tap-hold $200 $800 XX (macro bspc @.@ )))
   )
-  ..z$  (t! key-hold-repeat $140 $800 $z @.$  @.$ XX lsft 4 ($off) XX)
-  .z˝tp (multi @..z$ @.tp)             
+  ..z$  (t! key-hold-repeat $140 $800 $z @.$  XX XX lsft 4 ($off) XX)
+  .z˝tp (t! key-hold-repeat-tp $140 $800 $z @.$  XX XX lsft 4 ($off) XX)             
   .u◖  (t! key-hold-repeat $150 $400 u @.◖  @.◗ XX lsft 8 ($off) XX)                        ;; (  ()
   ;; TIP a◗ (multi (tap-hold 1 $150  a  S-9) @.tp) this order works with powertoys but causes problems with RDP ua vs au
   ;; TIP a◗ LONG HOLD with no Powertoys running (tap-hold 1 $150 (multi a @.tp) (fork (macro-release-cancel S-9 $600 bspc RA-9 ) C-a (lctl rctl)) )                   ;; ) [ todo find a better use
   ..a◗  (t! key-hold-repeat $150 $800 a @.◗ XX XX lsft 9 ($off) XX)
-  .a◗   (fork (multi @..a◗ @.tp) (macro a 10 c) (lctl rctl)) ;; do automatic copy C-(ac) after C-a
-  .y%   (multi (t! key-hold-repeat $160 $800 $y @.% @.% XX lsft 5 ($off) XX) @.tp)
+  .a◗   (fork (t! key-hold-repeat-tp $150 $800 a @.◗ XX XX lsft 9 ($off) XX) (macro a 10 c) (lctl rctl)) ;; do automatic copy C-(ac) after C-a
+  .y%   (t! key-hold-repeat-tp $160 $800 $y @.% @.% XX lsft 5 ($off) XX)
   ..p&  (t! key-hold-repeat $160 $800 p @.& @.& XX lsft 6 ($off) XX)  ;; & TODO is switching @.tp position relevante for RDP or Powertoys
-  .p&   (multi @..p& @.tp)
-  .l?   (multi (t! key-hold-repeat $140 $800 l @.? @.? XX lsft ß ($off) XX) @.tp)     ;; ? = S-ß = S-[      i ? ??
+  .p&   (t! key-hold-repeat-tp $160 $800 p @.& @.& XX lsft 6 ($off) XX)
+  .l?   (t! key-hold-repeat-tp $140 $800 l @.? @.? XX lsft ß ($off) XX)   ;; ? = S-ß = S-[      i ? ??
   .m\   (t! key-hold-repeat $140 $800 m @.\ @.\ XX ralt ß ($off) XX)
   .ß    (macro (unshift ß))
   .k    (macro k)
   ..f#  (t! key-hold-repeat $140 $800 f # XX XX XX # ($off) XX)
-  .f#   (multi @..f# @.tp)
+  .f#   (t! key-hold-repeat-tp $140 $800 f # XX XX XX # ($off) XX);;(multi @..f# @.tp)
   .w˝   (t! key-hold-repeat $140 $400 w @.˝ @.˝ XX lsft 2 ($off) XX)
   .q@   (t! key-hold-repeat $160 $800 q RA-q XX XX ralt q ($off) XX) 
   .o'   (t! key-hold-repeat $160 $800 o S-#  S-# XX lsft # ($off) XX)
