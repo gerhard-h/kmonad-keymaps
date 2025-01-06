@@ -559,7 +559,7 @@
   .u◖  (t! key-hold-repeat $150 $400 u @.◖  @.◗ XX lsft 8 ($off) XX)                        ;; (  ()
   ;; TIP a◗ (multi (tap-hold 1 $150  a  S-9) @.tp) this order works with powertoys but causes problems with RDP ua vs au
   ;; TIP a◗ LONG HOLD with no Powertoys running (tap-hold 1 $150 (multi a @.tp) (fork (macro-release-cancel S-9 $600 bspc RA-9 ) C-a (lctl rctl)) )                   ;; ) [ todo find a better use
-  ..a◗  (t! key-hold-repeat $150 $800 a @.◗ XX XX lsft 9 ($off) XX)
+  ..a◗  (t! key-hold-repeat $160 $800 a @.◗ XX XX lsft 9 ($off) XX)
   .a◗   (fork @..a◗ (macro a 10 c) (lctl rctl)) ;; do automatic copy C-(ac) after C-a
   .y%   (t! key-hold-repeat $160 $800 $y @.% @.% XX lsft 5 ($off) XX)
   .p&   (t! key-hold-repeat $160 $800 p @.& @.& XX lsft 6 ($off) XX)
