@@ -189,7 +189,7 @@
 	)
 )
 ;; TODO decide on the correct fast typing solution
-#|
+
 (deftemplate homerowmod (timeouttap timeouthold char mod)
   (switch 
     ((key-timing 3 less-than 140)) $char break
@@ -209,8 +209,8 @@
     () (tap-hold-release 0 $timeouthold  $char $mod) break
   )
 )
-|#
 
+#|
 (deftemplate homerowmod (timeouttap timeouthold keytap keyhold)
 	;;(tap-hold-except-keys $timeouttap $timeouthold 
 	(tap-hold $timeouttap $timeouthold 
@@ -232,7 +232,7 @@
 		$keyhold
 	)
 )
-
+|#
 
 ;;****** key-hold-repeat INFO base concept  ***********************************************************
 ;;**** re-tapping a key will repeat the last output produced by this key (wether tap or hold)      ****
@@ -412,7 +412,8 @@
   .oml   (one-shot 2000 lmet) ;; TODO-Usage
 
   ;; disalble tap-hold keys if typing rapidly but reenable after a shord idle period
-  .tp  (multi
+  .tp nop6
+  .tpoff  (multi
     ;;(layer-switch typing) ;; causes a P3 issue with Ffj instead of FJ         
 	(one-shot 95 (layer-while-held typing)) ;; solves P3 only in the FJ case
     (on-idle  95 tap-vkey to-base )
