@@ -79,8 +79,8 @@
 )
 (platform (winiov2)
 (defvar 
-  y y ;; the flip is needed on QUERTY keyboards
-  z z 
+  y z ;; the flip is needed on QUERTY keyboards on non QUERTY defsrc also needs to be switched
+  z y 
   )
 )
 (defvar
@@ -189,7 +189,7 @@
 	)
 )
 ;; TODO decide on the correct fast typing solution
-
+#|
 (deftemplate homerowmod (timeouttap timeouthold char mod)
   (switch 
     ((key-timing 3 less-than 140)) $char break
@@ -216,14 +216,21 @@
     () (tap-hold-release 0 $timeouthold  $char $mod) break
   )
 )
+|#
 
-#|
 (deftemplate homerowmod (timeouttap timeouthold keytap keyhold)
 	;;(tap-hold-except-keys $timeouttap $timeouthold 
 	(tap-hold $timeouttap $timeouthold 
 		(multi $keytap  @.tp) 
 		$keyhold
 		;;(a)
+	)
+)
+(deftemplate homerowmodexcept (timeouttap timeouthold keytap keyhold typinglist)
+	(tap-hold-except-keys $timeouttap $timeouthold 
+		(multi $keytap  @.tp) 
+		$keyhold
+		$typinglist
 	)
 )
 (deftemplate homerowmodright (timeouttap timeouthold keytap keyhold keyhold2)
@@ -239,7 +246,7 @@
 		$keyhold
 	)
 )
-|#
+
 
 ;;****** key-hold-repeat INFO base concept  ***********************************************************
 ;;**** re-tapping a key will repeat the last output produced by this key (wether tap or hold)      ****
@@ -419,8 +426,8 @@
   .oml   (one-shot 2000 lmet) ;; TODO-Usage
 
   ;; disalble tap-hold keys if typing rapidly but reenable after a shord idle period
-  .tp (macro nop6)
-  .tpoff  (multi
+  .tpof (macro nop6)
+  .tp  (multi
     ;;(layer-switch typing) ;; causes a P3 issue with Ffj instead of FJ         
 	(one-shot 95 (layer-while-held typing)) ;; solves P3 only in the FJ case
     (on-idle  95 tap-vkey to-base )
@@ -525,7 +532,7 @@
   
 ;; *** HOME ROW MODS *** 
 ;; BUG t   (tap-hold 1 $160 (multi t @.tp) (multi rsft (tap-hold 1 $900 XX (layer-while-held notp))) ) ;; rsft ,rctl have RDP problems without interception
-  .e] (t! homerowmodexcept 0 $160 e lsft (i))
+  .e] (t! homerowmod 0 $160 e lsft )
   .t/    (t! homerowmodright 0 $160 t lsft rsft) 
   .i[    (t! homerowmodexcept 0 $300 i lctl (e))
   ..i[  (tap-hold $500 $500 i lctl )
@@ -756,9 +763,9 @@
 (defsrc
   esc       F1   F13  F16  F24
   ^         1    2    3    4    5    6    7    8    9    0    +    ´    ⌫
-  tab       -    .    u    a    ,    p    f    l    m    y    q    ß    #
+  tab       -    .    u    a    ,    p    f    l    m    z    q    ß    #
   caps      c    s    i    e    o    d    t    n    r    h    k    ret
-  lsft 102d x    v    ü    ä    ö    b    g    w    z    j    rsft
+  lsft 102d x    v    ü    ä    ö    b    g    w    y    j    rsft
             lmet lalt      F14       spc            F15 ralt                           
 ))
 
