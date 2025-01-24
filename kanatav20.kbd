@@ -227,7 +227,7 @@
 	)
 )
 (deftemplate homerowmodexcept (timeouttap timeouthold keytap keyhold typinglist)
-	(tap-hold-except-keys $timeouttap $timeouthold 
+	(tap-hold-release-keys $timeouttap $timeouthold 
 		(multi $keytap  @.tp) 
 		$keyhold
 		$typinglist
@@ -281,14 +281,30 @@
 		;; I.b hold of first tap of TAP-DANCE - manual Shift overwrites hold / no autorepeat / long-hold for (), {},...
 		(if-equal     $keyrepeat XX
 				(switch
-					(rsft lsft) (multi (macro $keytap) @.tp) break 
+					(rsft lsft) 
+						(if-equal $keytap a
+							(multi ralt lctl (macro(unshift 9)))
+						)
+						(if-not-equal $keytap a
+							(multi (macro $keytap) @.tp)
+						)
+					break 
 					()   	 (macro-release-cancel-and-cancel-on-press $keyhold 1000 bspc)			break			
-				)
+				)	
 		)
 		(if-not-equal $keyrepeat XX 
 			(if-equal     $keyrepeat3 XX  ;; for ===
 				(switch
-					(rsft lsft) (multi (macro $keytap) @.tp) break ;; Shift Prefer / Shift protection - shifting will disable the hold feature TODO this will not work fine with ctrl+sft+#
+					(rsft lsft) 
+						(if-equal $keytap u
+							(multi ralt lctl (macro(unshift 8)))
+						)
+						(if-not-equal $keytap u
+							(multi (macro $keytap) @.tp)
+						)
+					break
+				
+					;;(rsft lsft) (multi (macro $keytap) @.tp) break ;; Shift Prefer / Shift protection - shifting will disable the hold feature TODO this will not work fine with ctrl+sft+#
 					()  (macro-release-cancel-and-cancel-on-press $keyhold $time2ndhold $keyrepeat 1000 bspc bspc)	break
 				)
 			)
@@ -532,7 +548,7 @@
   
 ;; *** HOME ROW MODS *** 
 ;; BUG t   (tap-hold 1 $160 (multi t @.tp) (multi rsft (tap-hold 1 $900 XX (layer-while-held notp))) ) ;; rsft ,rctl have RDP problems without interception
-  .e] (t! homerowmod 0 $160 e lsft )
+  .e] (t! homerowmodexcept 0 $160 e lsft (i))
   .t/    (t! homerowmodright 0 $160 t lsft rsft) 
   .i[    (t! homerowmodexcept 0 $300 i lctl (e))
   ..i[  (tap-hold $500 $500 i lctl )
@@ -683,10 +699,10 @@
   (n r) del 30 all-released  (game numbers)
   (t n) bspc 30 all-released  (game numbers)
   (t n r) C-bspc 30 all-released  (game numbers)
-  (t r) esc 30 all-released (game numbers)
-  (s i) esc 30 all-released (game numbers)
-  ;;(e i) (macro e i) 30 all-released (game numbers)  
-  (g w) esc 30 all-released  (game)
+  (t r) esc 20 all-released (game numbers)
+  (s e) esc 30 all-released (game numbers)
+  (e i) (multi lsft lctl) 15 all-released (game numbers)  
+  ;;(g w) esc 30 all-released  (game)
 )
 ;; from NUMFIX to BASE
 (defchords exit79 20
