@@ -255,7 +255,7 @@
 ;; sam v| (t! key-hold-repeat  $200      $800         v      @.|      @.|        XX          ralt        <                  (ü 7)        del     ) 
 ;; TODO using RA- ralt may only work with "process-unmapped-keys yes" and wintercept
 ;; $historykey3 is currently only used to disabel symbol repeat for / in </div TODO should then be a list 
-;; x& ,;> .:< -_~ and homrow mods have there own implementation
+;; y` ,;> .:< -_~ and homrow mods have there own implementation
 ;; TIP this template can be wraped in (multi ... @.tp) But for some scenarios (non windtercept / no powertoys / windows 11 ) may require calling @.tp from inside this template  
  (tap-dance-eager $150 (    
     (tap-hold 200 $timehold 	;; autorepeat for letters is possible  but maybe not needed
@@ -566,9 +566,9 @@
   _-~   (chord vüä -)		;; sticky numbers
   _:<   (chord vüä .)
   _;>   (chord vüä ,)
-  _V|   (chord VÜÄ v)		;; sticky numbers
-  _Ä}   (chord VÜÄ ä)
-  _Ü{   (chord VÜÄ ü)
+  DOT   (chord VÜÄ .)		;; sticky numbers
+  COM   (chord VÜÄ ,)
+  DSH   (chord VÜÄ -)
   _7    (chord exit79 7)	;; exit numbers
   _8    (chord exit79 8)
   _9    (tap-hold 1 $200 (chord exit79 9) @.basen)
@@ -577,25 +577,25 @@
   ..]   (tap-hold 1 $200 @.] (release-layer symbols)) ;; Go back to number layer TODO remember this
   
   ;; normal keys
-  .f!  (t! key-hold-repeat $140 $800  f S-1  XX XX lsft 1 ($off) XX)
-  .z˝  (t! key-hold-repeat $140 $800 $z @.˝ @.˝ XX lsft 4 ($off) XX)
+  .j!  (t! key-hold-repeat $140 $800  j S-1  XX XX lsft 1 ($off) XX)
+  .ü˝  (t! key-hold-repeat $140 $800 ü @.˝ @.˝ XX lsft 4 ($off) XX)
   .u◖  (t! key-hold-repeat $150 $400 u @.◖  @.◗ XX lsft 8 ($off) XX)                        ;; (  ()
   ;; TIP a◗ (multi (tap-hold 1 $150  a  S-9) @.tp) this order works with powertoys but causes problems with RDP ua vs au
   ;; TIP a◗ LONG HOLD with no Powertoys running (tap-hold 1 $150 (multi a @.tp) (fork (macro-release-cancel S-9 $600 bspc RA-9 ) C-a (lctl rctl)) )                   ;; ) [ todo find a better use
   ..a◗  (t! key-hold-repeat $150 $800 a @.◗ XX XX lsft 9 ($off) XX)
   .a◗   (fork @..a◗ (macro a 10 c) (lctl rctl)) ;; do automatic copy C-(ac) after C-a
-  .j%   (t! key-hold-repeat $160 $800 j @.% @.% XX lsft 5 ($off) XX)
-  .x&   (t! key-hold-repeat $160 $800 x @.& @.& XX lsft 6 ($off) XX)
+  .v%   (t! key-hold-repeat $160 $800 v @.% @.% XX lsft 5 ($off) XX)
+  .p&   (t! key-hold-repeat $160 $800 p @.& @.& XX lsft 6 ($off) XX)
   .l?   (t! key-hold-repeat $140 $800 l @.? @.? XX lsft ß ($off) XX)   ;; ? = S-ß = S-[      i ? ??
   .m\   (t! key-hold-repeat $140 $800 m @.\ @.\ XX ralt ß ($off) XX)
   .ß    (macro (unshift ß))
   .k    (macro k)
-  .p#   (t! key-hold-repeat $140 $800 p # XX XX XX # ($off) XX)
+  .f#   (t! key-hold-repeat $140 $800 f # XX XX XX # ($off) XX)
   .w$   (t! key-hold-repeat $140 $400 w @.$ @.$ XX lsft 2 ($off) XX)
   .q@   (t! key-hold-repeat $160 $800 q RA-q XX XX ralt q ($off) XX) 
   .o'   (t! key-hold-repeat $160 $800 o S-#  S-# XX lsft # ($off) XX)
   .d/   (t! key-hold-repeat $200 $800 d S-7  S-7 < lsft 7 ($off) XX)
-  .v|   (t! key-hold-repeat $200 $800 v @.| @.| XX ralt < ($off) XX) 
+  .z|   (t! key-hold-repeat $200 $800 $z @.| @.| XX ralt < ($off) XX) 
   .y`   (tap-hold 1 160 ;; tap=y or hold=` or long=``` hold+tap...=`````` INFO no autorepeat
 			(switch 
 				((and (key-history nop5 1)(key-history ´ 3)(key-history spc 2)))  (multi lsft ´ spc nop5) break
@@ -603,7 +603,7 @@
 			)
 			(fork (multi lsft ´ spc nop5  (tap-hold $200 $800 XX (multi (unicode ` ) (unicode ` )))) (unicode Y) (lsft rsft))
 	    )                   
-  .ü{   (t! key-hold-repeat $200 $500 ü RA-7 RA-0 XX ralt 7 ($off) XX)								;; { {}
+  .x{   (t! key-hold-repeat $200 $500 x RA-7 RA-0 XX ralt 7 ($off) XX)								;; { {}
   ;;INFO ä}  (tap-hold-release-timeout $200 $400 ä @.syvv @.} ) ;; layer activation if ä is comboed;  not needed on V10 bc of second space bar
   .ä}   (t! key-hold-repeat $140 $800 ä RA-0 XX XX ralt 0 ($off) XX) ;; der v XX scheint überflüssig zu sein
   .ö+   (t! key-hold-repeat $180 $800 ö + + XX XX + ($off) XX)
@@ -611,20 +611,20 @@
   .g*	(t! key-hold-repeat $160 $800 g S-+ XX  XX lsft + ($off) XX)
   .b=   (t! key-hold-repeat $160 $600 b S-0 S-0 XX lsft 0 ($off) S-0)
   ;; TODO layer-toggle,... shoud break key-history - implemented in @nav by multi nop3
-  .:>  (tap-hold  1 $160 (tap-dance $160 (
+  ,;>  (tap-hold  1 $160 (tap-dance $160 (
 							(switch
 								(lsft rsft) 102d break ;; TODO if there are any C-S-, shortcuts we have to check for non shift modifier first
-								((and (key-history lsft 2)(key-history . 1))) S-. break
+								((and (key-history lsft 2)(key-history , 1))) S-, break
 								((and (or (key-history lsft 2)(key-history rsft 2)(key-history lalt 2)(key-history ralt 2)) (key-history 102d 1)))  @.> break
 								((key-history 102d 1)) @.> break 
 								((and (key-history - 1))) @.> break			
-								()	. break 
+								()	, break 
 							)
 							(tap-hold 10 $140 (switch
 												(lsft rsft) 102d break
-												((and (key-history lsft 2)(key-history . 1))) (macro S-. S-.) break
+												((and (key-history lsft 2)(key-history , 1))) (macro S-, S-,) break
 												((key-history 102d 1)) (macro @.> @.>) break
-												() (macro . .) break
+												() (macro , ,) break
 											 )
 											 (macro @.>)                               ;;  double-tap-hold < 
 							)
@@ -633,36 +633,36 @@
 						;; hold
 						(switch
 							(lsft rsft) 102d break
-							((and (key-history lsft 2)(key-history . 1)))  (macro-release-cancel-and-cancel-on-press S-, $800  bspc @.> $800 bspc .   $800 bspc ) break
-							((key-history 102d 1))                         (macro-release-cancel-and-cancel-on-press @.> $800  bspc .   $800 bspc S-. $800 bspc ) break
-							((key-history  -   1))                         (macro-release-cancel-and-cancel-on-press @.> $800  bspc .   $800 bspc S-. $800 bspc ) break
-							()	                                           (macro-release-cancel-and-cancel-on-press S-. $800 bspc @.> $800 bspc )  break ;; Long_Hold
+							((and (key-history lsft 2)(key-history , 1)))  (macro-release-cancel-and-cancel-on-press S-, $800  bspc @.> $800 bspc ,   $800 bspc ) break
+							((key-history 102d 1))                         (macro-release-cancel-and-cancel-on-press @.> $800  bspc ,   $800 bspc S-, $800 bspc ) break
+							((key-history  -   1))                         (macro-release-cancel-and-cancel-on-press @.> $800  bspc ,   $800 bspc S-, $800 bspc ) break
+							()	                                           (macro-release-cancel-and-cancel-on-press S-, $800 bspc @.> $800 bspc )  break ;; Long_Hold
 						)	
 		) 
 		 
-  ,;<  (tap-hold  1 $160 (tap-dance $140 (
+  .:<  (tap-hold  1 $160 (tap-dance $140 (
 							(switch
 								(lsft rsft) (unmod 102d) break
-								((and (key-history lsft 2)(key-history , 1))) S-, break
-								((and (or (key-history lalt 2)(key-history ralt 2)) (key-history 102d 1))) , break
+								((and (key-history lsft 2)(key-history . 1))) S-. break
+								((and (or (key-history lalt 2)(key-history ralt 2)) (key-history 102d 1))) . break
 								((and (key-history lsft 2)(key-history 102d 1))) @.< break
 								((and (key-history 102d 1))) @.< break
-								()	, break 
+								()	. break 
 							)
 							(tap-hold 10 $160 (switch                                         ;; double-tap-hold = > tripple-tap-hold = .......
 												(lsft rsft) (unicode <) break
-												((and (key-history lsft 2)(key-history , 1))) (macro S-, S-,) break
+												((and (key-history lsft 2)(key-history . 1))) (macro S-. S-.) break
 												((key-history 102d 1)) (macro @.< @.<) break
-												() (macro , ,) break
+												() (macro . .) break
 											 )
 											 (unicode <)
 							)    
 						)) 
 						(switch
 							(lsft rsft) (unmod 102d) break
-							((and (key-history lsft 2)(key-history , 1)))    (macro-release-cancel-and-cancel-on-press S-, $800  bspc @.< $800 bspc ,   $800 bspc ) break
-							((and (key-history lsft 2)(key-history 102d 1))) (macro-release-cancel-and-cancel-on-press @.< $800  bspc ,   $800 bspc S-, $800 bspc ) break
-							()                                               (macro-release-cancel-and-cancel-on-press S-, $800  bspc @.< $800 bspc) break 
+							((and (key-history lsft 2)(key-history . 1)))    (macro-release-cancel-and-cancel-on-press S-. $800  bspc @.< $800 bspc .   $800 bspc ) break
+							((and (key-history lsft 2)(key-history 102d 1))) (macro-release-cancel-and-cancel-on-press @.< $800  bspc .   $800 bspc S-. $800 bspc ) break
+							()                                               (macro-release-cancel-and-cancel-on-press S-. $800  bspc @.< $800 bspc) break 
 						)			
 	   )
    -_~  (tap-hold  1 $120 (tap-dance $160 ( ;; slash/ is dash-  ~ is RA-+
@@ -726,22 +726,22 @@
 )
 ;; from BASE to NUMFIX  THis seems to be the principal way : put chord in layer and call alias here (it also keeps the aliases clean) 
 (defchords vüä 50
-  (-      ) @-_~
-  (   ,   ) @,;<
-  (-  ,   ) del
-  (     . ) @.:>
-  (-    . ) @.numfix
-  (   , . ) bspc
-  (-  , . ) C-bspc
+  (.      ) @.:<
+  (   ,   ) @,;>
+  (.  ,   ) del
+  (     - ) @-_~
+  (.    - ) @.numfix
+  (   , - ) bspc
+  (.  , - ) C-bspc
 )
 (defchords VÜÄ 50
-  (v      ) @.V|
-  (   ä   ) @.Ä}
-  (v  ä   ) (multi @.CAPSoff @.numfix)
-  (     ü ) @.Ü{
-  (v    ü ) del
-  (   ä ü ) bspc
-  (v  ä ü ) C-bspc
+  (.      ) @-_~
+  (   ,   ) @,;>
+  (.  ,   ) del
+  (     - ) @.:<
+  (.    - ) (multi @.CAPSoff @.numfix)
+  (   , - ) bspc
+  (.  , - ) C-bspc
 )
 ;; from SYMBOLS to NUMFIX CA(0) = }  CA(<) = | chord must be defined on the not modified keys
 ;; not needed anymore
@@ -789,9 +789,9 @@
 (defsrc
   esc       F1   F13  F16  F24
   ^         1    2    3    4    5    6    7    8    9    0    +    ´    ⌫
-  tab       ü    y    u    a    ä    x    p    l    m    j    q    ß    #
+  tab       x    ü    u    a    ä    p    f    l    m    v    q    ß    #
   caps      c    s    i    e    o    d    t    n    r    h    k   ret
-  lsft 102d z    -    ,    .    ö    b    g    w    v    f    rsft
+  lsft 102d z     .   ,    -    ö    b    g    w    y    j    rsft
             lmet lalt      F14       spc            F15 ralt                           
 ))
 
@@ -808,9 +808,9 @@
 ;; ret hold does ctl via QMK
   esc       F1    @.ff13 @.ff16 F24
   @.^0      @.1   @.2    @.3   @.4    @.5   @.6     @.7    @.8    @.9     @.0     @.dp1   @.prnt  bspc
-  @.tab     @.ü{  @.z˝   @.u◖  @.a◗   @.ä}  @.x&    @.p#   @.l?   @.m\    @.j%    @.q@    @.ß     F24
+  @.tab     @.x{  @.ü˝   @.u◖  @.a◗   @.ä}  @.p&    @.f#   @.l?   @.m\    @.v%    @.q@    @.ß     F24
   @.atx     @.c⌘  @.s^⎇  @.i[  @.e]   @.o'  @.d/    @.t/   @.n-   @.r_⎇   @.h⌘    @.k     @.ret
-  _ @.atm   @.y`  @_-~   @_;>  @_:<   @.ö+  @.b=    @.g*   @.w$   @.v|    @.f!    @.rsf
+  _ @.atm   @.y`  @_:<   @_;>  @_-~   @.ö+  @.b=    @.g*   @.w$   @.z|    @.j!    @.rsf
             @.oml @.oal  @.ff14             @.nav         @.ff15 ralt   
 #|
  CTRL + SPACE + ESC => Exit KANATA immediatly
@@ -823,9 +823,9 @@
   esc _ _ _ _
 ;;@.^       @.1       @.2        @.3       @.4       @.5        @.6       @.7       @.8       @.9       @.0         -         del      bspc
   @.^       XX        XX         XX        XX        XX         XX        XX        XX        XX        XX          -         del      bspc
-  _        (unmod ü) (unmod $z) (unmod u) (unmod a) (unmod ä) (unmod x) (unmod p) (unmod l) (unmod m)  (unmod j)  (unmod q) (unmod ß) @.rtw
+  _        (unmod x) (unmod ü)  (unmod u) (unmod a) (unmod ä) (unmod p) (unmod f) (unmod l) (unmod m)  (unmod v)  (unmod q) (unmod ß) @.rtw
   _        (unmod c) (unmod  s) (unmod i) (unmod e) (unmod o) (unmod d) (unmod t) (unmod n) (unmod r)  (unmod h)  (unmod k)  ret
-  @.osss _ (unmod $y) @-_~       @,;<      @.:>     (unmod ö) (unmod b) (unmod g) (unmod w) (unmod v)  (unmod f)   @.rsf
+  @.osss _ (unmod $y) @.:<       @,;>      @-_~     (unmod ö) (unmod b) (unmod g) (unmod w) (unmod $z) (unmod j)   @.rsf
             lmet      lalt       _         @.nav-typing         _ ralt              
 )
 
@@ -856,9 +856,9 @@
 (deflayer (CAPS icon caps.ico)
   esc _ _ _ _
   @.^        @.1   @.2    @.3   @.4    @.5   @.6   @.7   @.8   @.9   @.0   -     del  bspc
-  _          @-_~  @.:>   @.U◖  @.A◗   @,;<  @.P#  @.F!  @.L?  @.M\  @.Y`  @.Q@  @.ß  @.rtw
+  _          @.X{  @.Ü˝   @.U◖  @.A◗   @.Ä}  @.P#  @.F!  @.L?  @.M\  @.V%  @.Q@  @.ß  @.rtw
   _          @.C⌘  @.S    @.I[  @.E]   @.O'  @.D/  @.T   @.N   @.R   @.H⌘  @.K   ret
-  @.scabs _  @.Y`  @_V|   @_Ü{  @_Ä}   @.Ö+  @.B=  @.G*  @.W$  @.Z˝  @.J%  @.rsf
+  @.scabs _  @.Y`  @DOT   @COM  @DSH   @.Ö+  @.B=  @.G*  @.W$  @.Z|  @.J!  @.rsf
              _     _      @.ff14c      _           @.ff15c ralt   
 )
 ;; *** UPPER CASE ALIASES for CAPS layer ***
@@ -881,9 +881,9 @@
           (lsft)  (tap-hold 1 $200 (unshift t) (layer-switch base) ) break
           ()  (tap-hold 1 $200 S-t rsft)  break 
        )
-  .Z˝  (fork (tap-hold 1 $200 (unicode Z) (macro @.˝)) (unshift $z) (rsft lsft))
+  .Z|  (fork (tap-hold 1 $200 (unicode Z) (macro @.|)) (unshift $z) (rsft lsft))
   .K   (fork (macro S-k)                         (unshift k) (rsft lsft))
-  .J%   (fork (tap-hold 1 $200 S-j (macro @.%))   (unshift j) (rsft lsft))
+  .J!   (fork (tap-hold 1 $200 S-j (macro @.!))   (unshift j) (rsft lsft))
   .U◖  (fork (tap-hold 1 $200 S-u (macro @.◖))   (unshift u) (rsft lsft))
   .A◗  (fork (tap-hold 1 $200 S-a (macro @.◗))   (unshift a) (rsft lsft))	 
   .S   (fork (tap-hold 1 $200 S-s (macro @.^))   (unshift s) (rsft lsft))
@@ -899,9 +899,10 @@
   .N   (fork (tap-hold 1 $200 S-n (macro -))     (unshift n) (rsft lsft))
   .R   (fork (tap-hold 1 $200 S-r (macro @._))   (unshift r) (rsft lsft))
   .H⌘  (fork (tap-hold 1 $200 S-h (macro S-.))   (unshift h) (rsft lsft))
-  .Y`  (fork (tap-hold 1 $200 (unicode Y) (macro ´))     (unshift $y) (rsft lsft))
-  .V|  (fork (tap-hold 1 $200 S-v (macro @.|))   (unshift v) (rsft lsft))
-  .Ü{  (fork (tap-hold 1 $200 S-ü (unicode {))   (unshift ü) (rsft lsft))
+  .Y`  (fork (tap-hold 1 $200 (unicode Y) (unicode ´))     (unshift $y) (rsft lsft))
+  .V%  (fork (tap-hold 1 $200 S-v (macro @.%))   (unshift v) (rsft lsft))
+  .Ü˝  (fork (tap-hold 1 $200 S-ü (macro S-2))   (unshift ü) (rsft lsft))
+  .X{  (fork (tap-hold 1 $200 S-x (unicode {))   (unshift x) (rsft lsft))
   .Ä}  (fork (tap-hold 1 $200 S-ä (macro @.}))   (unshift ä) (rsft lsft))
   .Ö+  (fork (tap-hold 1 $200 S-ö (macro @.+))   (unshift ö) (rsft lsft))
   .B=  (fork (tap-hold 1 $200 S-b (macro @.=))   (unshift b) (rsft lsft))
@@ -1030,7 +1031,7 @@
   esc      @.dp1 @.dp2  @.dp3 @.dp4  @.dp5 @.dr1 @.dr2 @.dr3 @.dr4 @.dr5 @.dst @.dms bspc
   _        F1    F2     F3    F4     F5    F6    F7    F8    F9    F10   F11   F12   @.rtw
   _        @.k1  @.k2   @.k3  @.k4   @.k5  @.k6  @.k7  @.k8  @.k9  @.k0  esc   ret
-  @.cabs _ @.x&  @.v|   @.ü{  @.ä}   @.ö+  @.b=  @.g*  @,;<  @.:>  @-_~  @.rsf
+  @.cabs _ @.p&  @.v%   @.x{  @.ä}   @.ö+  @.b=  @.g*  @,;>  @.:<  @-_~  @.rsf
            _     _      _     (multi spc @.basen)      @.basen ralt
 )
 (deflayer (fkeymacro icon fkeymacro.ico);; macro F-keys and (symbols) triggered from the RIGHT side (ff13) or fixed from numbers
