@@ -283,7 +283,7 @@
 				(switch
 					(rsft lsft) 
 						(if-equal $keytap a
-							(multi ralt lctl (macro(unshift 9)))
+							(multi ralt lctl (macro(unshift 9))) ;; hardcoded S+Hold(a)=]
 						)
 						(if-not-equal $keytap a
 							(multi (macro $keytap) @.tp)
@@ -297,7 +297,7 @@
 				(switch
 					(rsft lsft) 
 						(if-equal $keytap u
-							(multi ralt lctl (macro(unshift 8)))
+							(multi ralt lctl (macro(unshift 8))) ;; hardcoded S+Hold(u)=[
 						)
 						(if-not-equal $keytap u
 							(multi (macro $keytap) @.tp)
@@ -577,14 +577,14 @@
   ..]   (tap-hold 1 $200 @.] (release-layer symbols)) ;; Go back to number layer TODO remember this
   
   ;; normal keys
-  .j!  (t! key-hold-repeat $140 $800  j S-1  XX XX lsft 1 ($off) XX)
+  .v!  (t! key-hold-repeat $140 $800  v S-1  XX XX lsft 1 ($off) XX)
   .ü˝  (t! key-hold-repeat $140 $800 ü @.˝ @.˝ XX lsft 4 ($off) XX)
   .u◖  (t! key-hold-repeat $150 $400 u @.◖  @.◗ XX lsft 8 ($off) XX)                        ;; (  ()
   ;; TIP a◗ (multi (tap-hold 1 $150  a  S-9) @.tp) this order works with powertoys but causes problems with RDP ua vs au
   ;; TIP a◗ LONG HOLD with no Powertoys running (tap-hold 1 $150 (multi a @.tp) (fork (macro-release-cancel S-9 $600 bspc RA-9 ) C-a (lctl rctl)) )                   ;; ) [ todo find a better use
   ..a◗  (t! key-hold-repeat $150 $800 a @.◗ XX XX lsft 9 ($off) XX)
   .a◗   (fork @..a◗ (macro a 10 c) (lctl rctl)) ;; do automatic copy C-(ac) after C-a
-  .v%   (t! key-hold-repeat $160 $800 v @.% @.% XX lsft 5 ($off) XX)
+  .j%   (t! key-hold-repeat $160 $800 j @.% @.% XX lsft 5 ($off) XX)
   .p&   (t! key-hold-repeat $160 $800 p @.& @.& XX lsft 6 ($off) XX)
   .l?   (t! key-hold-repeat $140 $800 l @.? @.? XX lsft ß ($off) XX)   ;; ? = S-ß = S-[      i ? ??
   .m\   (t! key-hold-repeat $140 $800 m @.\ @.\ XX ralt ß ($off) XX)
@@ -709,11 +709,11 @@
   (n r) del 30 all-released  (game numbers)
   (t n) bspc 30 all-released  (game numbers)
   (t n r) C-bspc 30 all-released  (game numbers)
-  (t r) esc 20 all-released (game numbers)
-  (s e) esc 30 all-released (game numbers)
+  (s e) esc 20 all-released (game numbers)
   (e i) (multi lsft lctl) 15 all-released (game numbers)  
-  ;;(g w) esc 30 all-released  (game)
-)
+  (t r) esc 20 all-released (game numbers)
+  
+  )
 ;; from NUMFIX to BASE
 (defchords exit79 20
   (7    ) 7
@@ -789,9 +789,9 @@
 (defsrc
   esc       F1   F13  F16  F24
   ^         1    2    3    4    5    6    7    8    9    0    +    ´    ⌫
-  tab       x    ü    u    a    ä    p    f    l    m    v    q    ß    #
+  tab       x    ü    u    a    ä    p    f    l    m    j    q    ß    #
   caps      c    s    i    e    o    d    t    n    r    h    k   ret
-  lsft 102d z     .   ,    -    ö    b    g    w    y    j    rsft
+  lsft 102d z     .   ,    -    ö    b    g    w    y    v    rsft
             lmet lalt      F14       spc            F15 ralt                           
 ))
 
@@ -808,9 +808,9 @@
 ;; ret hold does ctl via QMK
   esc       F1    @.ff13 @.ff16 F24
   @.^0      @.1   @.2    @.3   @.4    @.5   @.6     @.7    @.8    @.9     @.0     @.dp1   @.prnt  bspc
-  @.tab     @.x{  @.ü˝   @.u◖  @.a◗   @.ä}  @.p&    @.f#   @.l?   @.m\    @.v%    @.q@    @.ß     F24
+  @.tab     @.x{  @.ü˝   @.u◖  @.a◗   @.ä}  @.p&    @.f#   @.l?   @.m\    @.j%    @.q@    @.ß     F24
   @.atx     @.c⌘  @.s^⎇  @.i[  @.e]   @.o'  @.d/    @.t/   @.n-   @.r_⎇   @.h⌘    @.k     @.ret
-  _ @.atm   @.y`  @_:<   @_;>  @_-~   @.ö+  @.b=    @.g*   @.w$   @.z|    @.j!    @.rsf
+  _ @.atm   @.y`  @_:<   @_;>  @_-~   @.ö+  @.b=    @.g*   @.w$   @.z|    @.v!    @.rsf
             @.oml @.oal  @.ff14             @.nav         @.ff15 ralt   
 #|
  CTRL + SPACE + ESC => Exit KANATA immediatly
@@ -823,9 +823,9 @@
   esc _ _ _ _
 ;;@.^       @.1       @.2        @.3       @.4       @.5        @.6       @.7       @.8       @.9       @.0         -         del      bspc
   @.^       XX        XX         XX        XX        XX         XX        XX        XX        XX        XX          -         del      bspc
-  _        (unmod x) (unmod ü)  (unmod u) (unmod a) (unmod ä) (unmod p) (unmod f) (unmod l) (unmod m)  (unmod v)  (unmod q) (unmod ß) @.rtw
+  _        (unmod x) (unmod ü)  (unmod u) (unmod a) (unmod ä) (unmod p) (unmod f) (unmod l) (unmod m)  (unmod j)  (unmod q) (unmod ß) @.rtw
   _        (unmod c) (unmod  s) (unmod i) (unmod e) (unmod o) (unmod d) (unmod t) (unmod n) (unmod r)  (unmod h)  (unmod k)  ret
-  @.osss _ (unmod $y) @.:<       @,;>      @-_~     (unmod ö) (unmod b) (unmod g) (unmod w) (unmod $z) (unmod j)   @.rsf
+  @.osss _ (unmod $y) @.:<       @,;>      @-_~     (unmod ö) (unmod b) (unmod g) (unmod w) (unmod $z) (unmod v)   @.rsf
             lmet      lalt       _         @.nav-typing         _ ralt              
 )
 
@@ -856,9 +856,9 @@
 (deflayer (CAPS icon caps.ico)
   esc _ _ _ _
   @.^        @.1   @.2    @.3   @.4    @.5   @.6   @.7   @.8   @.9   @.0   -     del  bspc
-  _          @.X{  @.Ü˝   @.U◖  @.A◗   @.Ä}  @.P#  @.F!  @.L?  @.M\  @.V%  @.Q@  @.ß  @.rtw
+  _          @.X{  @.Ü˝   @.U◖  @.A◗   @.Ä}  @.P&  @.F#  @.L?  @.M\  @.J%  @.Q@  @.ß  @.rtw
   _          @.C⌘  @.S    @.I[  @.E]   @.O'  @.D/  @.T   @.N   @.R   @.H⌘  @.K   ret
-  @.scabs _  @.Y`  @DOT   @COM  @DSH   @.Ö+  @.B=  @.G*  @.W$  @.Z|  @.J!  @.rsf
+  @.scabs _  @.Y`  @DOT   @COM  @DSH   @.Ö+  @.B=  @.G*  @.W$  @.Z|  @.V!  @.rsf
              _     _      @.ff14c      _           @.ff15c ralt   
 )
 ;; *** UPPER CASE ALIASES for CAPS layer ***
@@ -883,13 +883,13 @@
        )
   .Z|  (fork (tap-hold 1 $200 (unicode Z) (macro @.|)) (unshift $z) (rsft lsft))
   .K   (fork (macro S-k)                         (unshift k) (rsft lsft))
-  .J!   (fork (tap-hold 1 $200 S-j (macro @.!))   (unshift j) (rsft lsft))
+  .V!   (fork (tap-hold 1 $200 S-v (macro @.!))  (unshift v) (rsft lsft))
   .U◖  (fork (tap-hold 1 $200 S-u (macro @.◖))   (unshift u) (rsft lsft))
   .A◗  (fork (tap-hold 1 $200 S-a (macro @.◗))   (unshift a) (rsft lsft))	 
   .S   (fork (tap-hold 1 $200 S-s (macro @.^))   (unshift s) (rsft lsft))
   .I[  (fork (tap-hold 1 $200 S-i (macro @.[))   (unshift i) (rsft lsft))
-  .P#  (fork (tap-hold 1 $200 S-p (macro @.&))   (unshift p) (rsft lsft))
-  .F!  (fork (tap-hold 1 $200 S-f (macro #))     (unshift f) (rsft lsft))
+  .P&  (fork (tap-hold 1 $200 S-p (macro @.&))   (unshift p) (rsft lsft))
+  .F#  (fork (tap-hold 1 $200 S-f (macro #))     (unshift f) (rsft lsft))
   .L?  (fork (tap-hold 1 $200 S-l (macro @.?))   (unshift l) (rsft lsft))
   .M\  (fork (tap-hold 1 $200 S-m (macro @.\))   (unshift m) (rsft lsft))
   .W$  (fork (tap-hold 1 $200 S-w (macro @.$))   (unshift w) (rsft lsft))
@@ -899,8 +899,8 @@
   .N   (fork (tap-hold 1 $200 S-n (macro -))     (unshift n) (rsft lsft))
   .R   (fork (tap-hold 1 $200 S-r (macro @._))   (unshift r) (rsft lsft))
   .H⌘  (fork (tap-hold 1 $200 S-h (macro S-.))   (unshift h) (rsft lsft))
-  .Y`  (fork (tap-hold 1 $200 (unicode Y) (unicode ´))     (unshift $y) (rsft lsft))
-  .V%  (fork (tap-hold 1 $200 S-v (macro @.%))   (unshift v) (rsft lsft))
+  .Y`  (fork (tap-hold 1 $200 (unicode Y) (unicode ´)) (unshift $y) (rsft lsft))
+  .J%  (fork (tap-hold 1 $200 S-j (macro @.%))   (unshift j) (rsft lsft))
   .Ü˝  (fork (tap-hold 1 $200 S-ü (macro S-2))   (unshift ü) (rsft lsft))
   .X{  (fork (tap-hold 1 $200 S-x (unicode {))   (unshift x) (rsft lsft))
   .Ä}  (fork (tap-hold 1 $200 S-ä (macro @.}))   (unshift ä) (rsft lsft))
@@ -1031,7 +1031,7 @@
   esc      @.dp1 @.dp2  @.dp3 @.dp4  @.dp5 @.dr1 @.dr2 @.dr3 @.dr4 @.dr5 @.dst @.dms bspc
   _        F1    F2     F3    F4     F5    F6    F7    F8    F9    F10   F11   F12   @.rtw
   _        @.k1  @.k2   @.k3  @.k4   @.k5  @.k6  @.k7  @.k8  @.k9  @.k0  esc   ret
-  @.cabs _ @.p&  @.v%   @.x{  @.ä}   @.ö+  @.b=  @.g*  @,;>  @.:<  @-_~  @.rsf
+  @.cabs _ @.p&  @.j%   @.v!  @.ä}   @.ö+  @.b=  @.g*  @,;>  @.:<  @-_~  @.rsf
            _     _      _     (multi spc @.basen)      @.basen ralt
 )
 (deflayer (fkeymacro icon fkeymacro.ico);; macro F-keys and (symbols) triggered from the RIGHT side (ff13) or fixed from numbers
