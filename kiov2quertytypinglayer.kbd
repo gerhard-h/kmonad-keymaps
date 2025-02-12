@@ -84,6 +84,7 @@
   )
 )
 (defvar
+  rmetwiniov2 lmet
   i d
   e f
   off nop0 ;; $off used to deactivate template-features
@@ -235,12 +236,23 @@
 		$typinglist
 	)
 )
+
+(platform (wintercept)
+	(deftemplate homerowmodright (timeouttap timeouthold keytap keyhold keyhold2)
+		(tap-hold $timeouttap $timeouthold 
+			(multi $keytap  @.tp)
+			$keyhold2
+		)
+	)
+)
+(platform (winiov2 win)
 (deftemplate homerowmodright (timeouttap timeouthold keytap keyhold keyhold2)
     ;; This is only used to fix an RDP issue with Win IO v2 where rsft is ignored
 	(tap-hold $timeouttap $timeouthold 
 		(multi $keytap  @.tp) 
 		(multi $keyhold $keyhold2)
 	)
+)
 )
 (deftemplate homerowmodrel (timeouttap timeouthold keytap keyhold)
 	(tap-hold-release $timeouttap $timeouthold 
@@ -559,7 +571,7 @@
   .n-    (t! homerowmod 1 $300 n rctl)
   ;; Bug in no interception rctl+y  to start ditto, then ditto will not act on keyboard input 
   .s^⎇   (t! homerowmodrel 1 $450 s lalt)
-  .h⌘   (t! homerowmodrel 1 550 h lmet)
+  .h⌘   (t! homerowmodrel 1 550 h $rmetwiniov2)
   .c⌘   (t! homerowmod 1 $450 c lmet)
   .r_⎇  (t! homerowmodrel 1 $450 r lalt)
   .rsf  (tap-hold-release $350 $500 - rsft)
@@ -715,7 +727,7 @@
   (d f) (multi lsft lctl) 15 all-released (game numbers)
   (s f) esc 20 all-released (game numbers)
   
-  (s d) ret 30 all-released (game numbers)
+  (s d) ret 20 all-released (game numbers)
 )
 ;; from NUMFIX to BASE
 (defchords exit79 20
@@ -730,21 +742,21 @@
 ;; from BASE to NUMFIX  THis seems to be the principal way : put chord in layer and call alias here (it also keeps the aliases clean) 
 (defchords vüä 50
   (.      ) @.:<
+  (   -   ) @-_~
+  (.  -   ) del
   (   ,   ) @,;>
-  (.  ,   ) del
-  (     - ) @-_~
-  (.    - ) @.numfix
-  (   , - ) bspc
-  (.  , - ) C-bspc
+  (.    , ) @.numfix
+  (   - , ) bspc
+  (.  - , ) C-bspc
 )
 (defchords VÜÄ 50
-  (.      ) @-_~
+  (.      ) @.:<
+  (   -   ) @-_~
+  (.  -   ) del
   (   ,   ) @,;>
-  (.  ,   ) del
-  (     - ) @.:<
-  (.    - ) (multi @.CAPSoff @.numfix)
-  (   , - ) bspc
-  (.  , - ) C-bspc
+  (.    , ) (multi @.CAPSoff @.numfix)
+  (   - , ) bspc
+  (.  - , ) C-bspc
 )
 ;; from SYMBOLS to NUMFIX CA(0) = }  CA(<) = | chord must be defined on the not modified keys
 ;; not needed anymore
@@ -772,10 +784,10 @@
 (platform (wintercept)
 (defsrc
   esc       F1   F13  F16  F24
-  grv         1    2    3    4    5    6    7    8    9    0    +    ´    ⌫
-  tab       -    .    u    a    ,    p    f    l    m    y    q    ß    #
+  ^         1    2    3    4    5    6    7    8    9    0    +    ´    ⌫
+  tab       x    ü    u    a    ä    p    f    l    m    j    q    ß    #
   caps      c    s    i    e    o    d    t    n    r    h    k    ret
-  lsft 102d x    v    ü    ä    ö    b    g    w    z    j    rsft
+  lsft 102d y    .    -    ,    ö    b    g    w    z    v    rsft
             lmet lalt      F14       spc            F15 ralt                           
 ))
 (platform (win)
@@ -793,7 +805,7 @@
   ^         1    2    3    4    5    6    7    8    9    0    +    ´    ⌫
   tab       x    ü    u    a    ä    p    f    l    m    j    q    ß    #
   caps      c    s    i    e    o    d    t    n    r    h    k    ret
-  lsft 102d z     .   ,    -    ö    b    g    w    y    v    rsft
+  lsft 102d z    .    -    ,    ö    b    g    w    y    v    rsft
             lmet lalt      F14       spc            F15 ralt                           
 ))
 |#
@@ -812,7 +824,7 @@
   @.^0      @.1   @.2    @.3   @.4    @.5   @.6     @.7    @.8    @.9     @.0     @.dp1   @.prnt  bspc
   @.tab     @.x{  @.ü˝   @.u◖  @.a◗   @.ä}  @.p&    @.f#   @.l?   @.m\    @.j%    @.q@    @.ß     F24
   @.atx     @.c⌘  @.s^⎇  @.i[  @.e]   @.o'  @.d/    @.t/   @.n-   @.r_⎇   @.h⌘    @.k     @.ret
-  _ @.atm   @.y`  @_:<   @_;>  @_-~   @.ö+  @.b=    @.g*   @.w$   @.z|    @.v!    @.rsf
+  _ @.atm   @.y`  @_:<   @_-~  @_;>   @.ö+  @.b=    @.g*   @.w$   @.z|    @.v!    @.rsf
             @.oml @.oal  @.ff14             @.nav          @.ff15 ralt   
 #|
  CTRL + SPACE + ESC => Exit KANATA immediatly
@@ -827,7 +839,7 @@
   @.^       XX        XX         XX        XX        XX         XX        XX        XX        XX        XX          -         del      bspc
   _        (unmod x) (unmod ü)  (unmod u) (unmod a) (unmod ä) (unmod p) (unmod f) (unmod l) (unmod m)  (unmod j)  (unmod q) (unmod ß) @.rtw
   _        (unmod c) (unmod  s) (unmod i) (unmod e) (unmod o) (unmod d) (unmod t) (unmod n) (unmod r)  (unmod h)  (unmod k)  ret
-  @.osss _ (unmod $y) @.:<       @,;>      @-_~     (unmod ö) (unmod b) (unmod g) (unmod w) (unmod $z) (unmod v)   @.rsf
+  @.osss _ (unmod $y) @.:<       @-_~      @,;>     (unmod ö) (unmod b) (unmod g) (unmod w) (unmod $z) (unmod v)   @.rsf
             lmet      lalt       _         @.nav-typing         _ ralt              
 )
 
@@ -860,7 +872,7 @@
   @.^        @.1   @.2    @.3   @.4    @.5   @.6   @.7   @.8   @.9   @.0   -     del  bspc
   _          @.X{  @.Ü˝   @.U◖  @.A◗   @.Ä}  @.P&  @.F#  @.L?  @.M\  @.J%  @.Q@  @.ß  @.rtw
   _          @.C⌘  @.S    @.I[  @.E]   @.O'  @.D/  @.T   @.N   @.R   @.H⌘  @.K   ret
-  @.scabs _  @.Y`  @DOT   @COM  @DSH   @.Ö+  @.B=  @.G*  @.W$  @.Z|  @.V!  @.rsf
+  @.scabs _  @.Y`  @DOT   @DSH  @COM  @.Ö+  @.B=  @.G*  @.W$  @.Z|  @.V!  @.rsf
              _     _      @.ff14c      _           @.ff15c ralt   
 )
 ;; *** UPPER CASE ALIASES for CAPS layer ***
