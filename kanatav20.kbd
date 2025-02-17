@@ -374,6 +374,7 @@
   .CAPSoff (multi (on-press release-vkey vcaps) @.nln)
 ;; *** LAYER-TOGGLE & SWITCH-LAYER(STICKYNESS) ***
   .num    (layer-while-held numbers)
+  .numos  (one-shot 400 (layer-while-held numbers))
   .numtab (layer-while-held numberstab)
   .sym    (layer-while-held symbols)
   .syv    (one-shot 2000 (layer-while-held vsymbols))
@@ -445,7 +446,9 @@
   .nav  (tap-hold  $240 $240 
 			spc
 			(fork (multi (macro nop3) @.fkey @.num) (multi @.num @.sym) (rsft))
+			;;(fork (multi (macro nop3) @.fkey @.numos (one-shot-pause-processing 5)) (multi @.num @.sym) (rsft));; causes troubles in mixes like h8a1
 		) ;; RIGHT sft + RIGHT spc == symbols ; nop3 signals layer switch 
+		;; one-shot might not help at all maybe I need combos
   .nav-typing   (tap-hold  $200 $200 (multi @.basen spc) (fork @.num @.sym (rsft))) 
 ;; *** ONE SHOT MODIFIERS ***
   .cabs  (tap-hold $200 $300 @.CAPSon lsft)
@@ -585,7 +588,8 @@
   DSH   (chord VÜÄ -)
   _7    (chord exit79 7)	;; exit numbers
   _8    (chord exit79 8)
-  _9    (tap-hold 1 $200 (chord exit79 9) @.basen)
+  _9    (chord exit79 9)    
+  _9ex  (tap-hold 1 $200 (chord exit79 9) @.basen) ;; exit numbersfixed
   _|    (chord |} <)      ;; mods will be added later in defchord < is | 0 is }
   _}    (tap-hold 1 $200 (chord |} 0) (release-layer symbols)) ;; tap-hold to exit layer
   ..]   (tap-hold 1 $200 @.] (release-layer symbols)) ;; Go back to number layer TODO remember this
@@ -726,6 +730,8 @@
   (s e) esc 20 all-released (game numbers)
   (e i) (multi lsft lctl) 15 all-released (game numbers)  
   (t r) esc 20 all-released (game numbers)
+  
+  (spc ,) 9 20 all-released (game numbers)
   
   )
 ;; from NUMFIX to BASE
@@ -976,7 +982,7 @@
   grv       @.1   @.2   @.3   @.4   @.5    @.6  @.7   @.8    @.9   @.0     (layer-switch game) A-prnt _
   _         @-_:  1     2     3     @.⎈␡   home home  ▲      end   pgup    pgdn      _       _
   @.sy1     @.⌘c  @.4⎇  @.5⎈  @.6⇧  0      bspc  ◀    ▼      ▶     esc     @.fkyx    _
-  _    _    @,:x  @_7   @_8   @_9   del    tab  @.⏎⇧  @.␡⎈   @.l🖰⎇ @.r🖰⌘  _
+  _    _    @,:x  @_7   @_8   @_9ex del    tab  @.⏎⇧  @.␡⎈   @.l🖰⎇ @.r🖰⌘  _
             _     _   (tap-hold  $200 $200 Digit0 @.basen)    (tap-hold  $200 $200 spc @.basen)  _ ralt                 
 )
 
@@ -1026,9 +1032,9 @@
 ;; ´ (S-´) as dead keys for é, è,... not working with winiov2 or 1.8
   _ _ _ _ _
   _         @.at1  @.at2  @.at3  @.at4   @.at5    @.at6    @.at7    @.at8    @.at9   @.atm   @.cmdrld    A-prnt    _
-  _         @.~    @.<    @.◖    @.◗     @.>      @.&      #        @.?      @.\     @.%     @.@         _         _         
+  _         @.{    @.˝    @.◖    @.◗     @_}      @.&      #        @.?      @.\     @.%     @.@         _         _         
   @.atr     @.`    @.^    @..[   @..]    @.'      @./      @.dsk    @..-     @._     esc     @.€         _             
-  _    _    ´      @_|    @.{    @_}     @.+      @.=      @.*      @.˝      @.$     @.!     _               
+  _    _    ´      @.<    @.~   @.>      @.+      @.=      @.*      @.$      @_|     @.!     _               
             _      _             _                esc               _ ralt    
 )
 (deflayer vsymbols ;; unused - symbols reached by hold of querty-v macro and symbols triggered from the LEFT side - not used on V10 and not complete (unicode Õ)... are for ahk integration
