@@ -26,6 +26,7 @@
   ;; NOTE: even with these workarounds, putting lctl+ralt in your defsrc may
   ;; not work too well with other applications that use WH_KEYBOARD_LL.
   ;; Known applications with issues: GWSL/VcXsrv
+  ;; I also fiddled around with my mouse software (Logitech/Razer) and with autohotkey to avoid altgr. And there were rumors on not mapping/using Logitech G-Shitf key.
 
   log-layer-changes  yes  ;; overhead vs info in console
 
@@ -236,11 +237,26 @@
     $typinglist
   )
 )
+(deftemplate homerowshiftexcept (timeouttap timeouthold keytap keyhold typinglist)
+  (tap-hold-release-keys 0 $timeouthold
+    $keytap ;; TODO do (multi e @.tp) if last key != E / S-e
+    $keyhold
+    $typinglist
+  )
+)
 
 (platform (wintercept)
   (deftemplate homerowmodright (timeouttap timeouthold keytap keyhold keyhold2)
     (tap-hold $timeouttap $timeouthold
       (multi $keytap  @.tp)
+      $keyhold2
+    )
+  )
+)
+(platform (wintercept)
+  (deftemplate homerowshiftright (timeouttap timeouthold keytap keyhold keyhold2)
+    (tap-hold 0 $timeouthold
+      $keytap ;; TODO do @.tp if last key != T / S-t
       $keyhold2
     )
   )
@@ -461,9 +477,9 @@
   ;; disalble tap-hold keys if typing rapidly but reenable after a shord idle period
   .tpof (macro nop6)
   .tp  (multi
-    ;;(layer-switch typing) ;; causes a P3 issue with Ffj instead of FJ => use one-shot instead
-    (one-shot 95 (layer-while-held typing)) ;; solves P3 only in the FJ case
-    (on-idle  95 tap-vkey to-base )
+    (layer-switch typing) ;; causes a P3 issue with Ffj/Eet instead of FJ/ET => use one-shot instead
+    ;;(one-shot 295 (layer-while-held typing)) ;; 95 solves P3 only in the FJ/ET case
+    (on-idle  295 tap-vkey to-base )
   )
   ;; modded german key aliases
   .' S-#
@@ -565,9 +581,9 @@
 
 ;; *** HOME ROW MODS ***
 ;; BUG rsft, rsft ,rctl have RDP problems without interception
-  .e]   (t! homerowmodexcept 0 $160 e lsft ($i))
-  .t_dk (t! homerowmodright 0 $160 t lsft rsft)
-  .i[   (t! homerowmodexcept 0 $300 i lctl ($e))
+  .e]   (t! homerowshiftexcept 0 $160 e lsft ($i))
+  .t_dk (t! homerowshiftright 0 $160 t lsft rsft)
+  .i[   (t! homerowmodexcept 0 $300 i lctl ($e d))
   ..i[  (tap-hold $500 $500 i lctl )
   ..[   (tap-hold $500 $500 @.[ lctl ) ;; used on symbol layer
   ..-   (tap-hold $500 $500 - lctl )
@@ -577,7 +593,7 @@
   .h⌘   (t! homerowmod 1 550 h $rmetwiniov2)
   .c⌘   (t! homerowmod 1 $450 c lmet)
   .r_⎇  (t! homerowmodrel 1 $450 r lalt)
-  .rsf  (tap-hold-release $350 $500 - rsft)
+  .rsf  rsft ;;(tap-hold-release $350 $500 - rsft)
 
   ;; chords
   _-~   (chord vüä -)        ;; sticky numbers
@@ -595,7 +611,7 @@
   ..]   (tap-hold 1 $200 @.] (release-layer symbols)) ;; Go back to number layer TODO remember this
 
   ;; normal keys
-  .v#  (t! key-hold-repeat $140 $800  v # XX XX XX # ($off) XX)
+  .v!  (t! key-hold-repeat $140 $800  v S-1  XX XX lsft 1 ($off) XX)
   .ü˝  (t! key-hold-repeat $140 $800 ü @.˝ @.˝ XX lsft 4 ($off) XX)
   .u◖  (t! key-hold-repeat $150 $400 u @.◖  @.◗ XX lsft 8 ($off) XX)                        ;; (  ()
   ;; TIP a◗ (multi (tap-hold 1 $150  a  S-9) @.tp) this order works with powertoys but causes problems with RDP ua vs au
@@ -608,7 +624,7 @@
   .m\   (t! key-hold-repeat $140 $800 m @.\ @.\ XX ralt ß ($off) XX)
   .ß    (macro (unshift ß))
   .k    (macro k)
-  .f!   (t! key-hold-repeat $140 $800 f S-1  XX XX lsft 1 ($off) XX)
+  .f#   (t! key-hold-repeat $140 $800 f # XX XX XX # ($off) XX)
   .w$   (t! key-hold-repeat $160 $400 w @.$ @.$ XX lsft 2 ($off) XX)
   .q@   (t! key-hold-repeat $160 $800 q RA-q XX XX ralt q ($off) XX)
   .o'   (t! key-hold-repeat $160 $800 o S-#  S-# XX lsft # ($off) XX)
@@ -660,6 +676,7 @@
 
   .:<  (tap-hold  1 $160 (tap-dance $140 (
                             (switch
+                                (lctl rctl) v break
                                 (lsft rsft) (unmod 102d) break
                                 ((and (key-history lsft 2)(key-history . 1))) S-. break
                                 ((and (or (key-history lalt 2)(key-history ralt 2)) (key-history 102d 1))) . break
@@ -677,6 +694,7 @@
                             )
                         ))
                         (switch
+                            (lctl rctl) v break
                             (lsft rsft) (unmod 102d) break
                             ((and (key-history lsft 2)(key-history . 1)))    (macro-release-cancel-and-cancel-on-press S-. $800  bspc @.< $800 bspc .   $800 bspc ) break
                             ((and (key-history lsft 2)(key-history 102d 1))) (macro-release-cancel-and-cancel-on-press @.< $800  bspc .   $800 bspc S-. $800 bspc ) break
@@ -727,10 +745,16 @@
   (n r) del 30 all-released  (game numbers)
   (t n) bspc 30 all-released  (game numbers)
   (t n r) C-bspc 30 all-released  (game numbers)
-  (s e) esc 20 all-released (game numbers)
+  (o e) esc 20 all-released (game numbers)
   (e i) (multi lsft lctl) 15 all-released (game numbers)
-  (t r) esc 20 all-released (game numbers)
-
+  (t d) esc 20 all-released (game numbers)
+  ;;(n s) (macro n s) 20 all-released (game numbers)
+  #|TODO needed (s n) (macro s n) 20 all-released (game numbers)
+    in most cases kanata will do that the right thing anyway but I just realized chording homrow-mod K/Ctrl and S/Alt results in
+    ctl +alt instead of ctl + s but for D/Ctrl and S/Alt ctl + alt is the expected result
+    Maybe I should implement a rule in kanata to only allow combining mods on the same side of the keyboard, but that would not fix fast typing issues.
+    I could define a chord, but there is a symetrie problem if done this simple
+  |#
   (spc ,) 9 20 all-released (game numbers)
 
   )
@@ -828,9 +852,9 @@
 ;; ret hold does ctl via QMK
   esc       F1    @.ff13 @.ff16 F24
   @.^0      @.1   @.2    @.3   @.4    @.5   @.6     @.7    @.8    @.9     @.0     @.dp1   @.prnt  bspc
-  @.tab     @.x{  @.ü˝   @.u◖  @.a◗   @.ä}  @.p&    @.f!   @.l?   @.m\    @.j%    @.q@    @.ß     F24
+  @.tab     @.x{  @.ü˝   @.u◖  @.a◗   @.ä}  @.p&    @.f#   @.l?   @.m\    @.j%    @.q@    @.ß     F24
   @.atx     @.c⌘  @.s^⎇  @.i[  @.e]   @.o'  @.d/    @.t_dk @.n-   @.r_⎇   @.h⌘    @.k     @.ret
-  _ @.atm   @.y`  @_:<   @_-~  @_;>   @.ö+  @.b=    @.g*   @.w$   @.z|    @.v#    @.rsf
+  _ @.atm   @.y`  @_:<   @_-~  @_;>   @.ö+  @.b=    @.g*   @.w$   @.z|    @.v!    @.rsf
             @.oml @.oal  @.ff14             @.nav         @.ff15 ralt
 #|
  CTRL + SPACE + ESC => Exit KANATA immediatly
@@ -838,6 +862,16 @@
 )
 ;; *** fast Typing layer - prevents Upper Case within words when typing fast ***
 ;; INFO unmod seems to solve RDP issues
+(defalias
+  .e_type (switch
+             ((and (or (key-history lsft 2)(key-history rsft 2)) (key-history e 1))) (tap-hold  0 160 e lsft) break  
+             () (unmod e) break
+  )
+  .t_type (switch
+             ((and (or (key-history lsft 2)(key-history rsft 2)) (key-history t 1))) (tap-hold  0 160 t rsft) break  
+             () (unmod t) break
+  )
+)
 (deflayer typing
 ;;****************   typing   ********************************************************
   esc _ _ _ _
@@ -876,9 +910,9 @@
 (deflayer (CAPS icon caps.ico)
   esc _ _ _ _
   @.^        @.1   @.2    @.3   @.4    @.5   @.6   @.7   @.8   @.9   @.0   -     del  bspc
-  _          @.X{  @.Ü˝   @.U◖  @.A◗   @.Ä}  @.P&  @.F!  @.L?  @.M\  @.J%  @.Q@  @.ß  @.rtw
+  _          @.X{  @.Ü˝   @.U◖  @.A◗   @.Ä}  @.P&  @.F#  @.L?  @.M\  @.J%  @.Q@  @.ß  @.rtw
   _          @.C⌘  @.S    @.I[  @.E]   @.O'  @.D/  @.T   @.N   @.R   @.H⌘  @.K   ret
-  @.scabs _  @.Y`  @DOT   @DSH  @COM  @.Ö+  @.B=  @.G*  @.W$  @.Z|  @.V#  @.rsf
+  @.scabs _  @.Y`  @DOT   @DSH  @COM  @.Ö+  @.B=  @.G*  @.W$  @.Z|  @.V!  @.rsf
              _     _      @.ff14c      _           @.ff15c ralt
 )
 ;; *** UPPER CASE ALIASES for CAPS layer ***
@@ -903,13 +937,13 @@
        )
   .Z|  (fork (tap-hold 1 $200 (unicode Z) (macro @.|)) (unshift $z) (rsft lsft))
   .K   (fork (macro S-k)                         (unshift k) (rsft lsft))
-  .V#   (fork (tap-hold 1 $200 S-v (macro #))  (unshift v) (rsft lsft))
+  .V!  (fork (tap-hold 1 $200 S-v (macro @.!))   (unshift v) (rsft lsft))
   .U◖  (fork (tap-hold 1 $200 S-u (macro @.◖))   (unshift u) (rsft lsft))
   .A◗  (fork (tap-hold 1 $200 S-a (macro @.◗))   (unshift a) (rsft lsft))
   .S   (fork (tap-hold 1 $200 S-s (macro @.^))   (unshift s) (rsft lsft))
   .I[  (fork (tap-hold 1 $200 S-i (macro @.[))   (unshift i) (rsft lsft))
   .P&  (fork (tap-hold 1 $200 S-p (macro @.&))   (unshift p) (rsft lsft))
-  .F!  (fork (tap-hold 1 $200 S-f (macro @.!))     (unshift f) (rsft lsft))
+  .F#  (fork (tap-hold 1 $200 S-f (macro #  ))   (unshift f) (rsft lsft))
   .L?  (fork (tap-hold 1 $200 S-l (macro @.?))   (unshift l) (rsft lsft))
   .M\  (fork (tap-hold 1 $200 S-m (macro @.\))   (unshift m) (rsft lsft))
   .W$  (fork (tap-hold 1 $200 S-w (macro @.$))   (unshift w) (rsft lsft))
@@ -1030,11 +1064,12 @@
 ;; get to @.numfix by tapping <7> + <9> or <|> + <}>
 ;; t = Desktop switch
 ;; ´ (S-´) as dead keys for é, è,... not working with winiov2 or 1.8
+;; TODO-Usage left-Space + right-Space => ESC
   _ _ _ _ _
   _         @.at1  @.at2  @.at3  @.at4   @.at5    @.at6    @.at7    @.at8    @.at9   @.atm   @.cmdrld    A-prnt    _
-  _         @.{    @.˝    @.◖    @.◗     @_}      @.&      @.!      @.?      @.\     @.%     @.@         _         _
-  @.atr     @.`    @.^    @..[   @..]    @.'      @./      @.dsk    @..-     @._     esc     @.€         _
-  _    _    ´      @.<    @.~   @.>      @.+      @.=      @.*      @.$      @_|     #       _
+  _         @.{    @.˝    @.◖    @.◗     @_}      @.&      #        @.?      @.\     @.%     @.@         _         _
+  @.atr     @.`    #      @..[   @..]    @.'      @./      @.dsk    @..-     @._     esc     @.€         _
+  _    _    ´      @.<    @.~   @.>      @.+      @.=      @.*      @.$      @_|     @.!      _
             _      _             _                esc               _ ralt
 )
 (deflayer vsymbols ;; unused - symbols reached by hold of querty-v macro and symbols triggered from the LEFT side - not used on V10 and not complete (unicode Õ)... are for ahk integration
@@ -1051,7 +1086,7 @@
   esc      @.dp1 @.dp2  @.dp3 @.dp4  @.dp5 @.dr1 @.dr2 @.dr3 @.dr4 @.dr5 @.dst @.dms bspc
   _        F1    F2     F3    F4     F5    F6    F7    F8    F9    F10   F11   F12   @.rtw
   _        @.k1  @.k2   @.k3  @.k4   @.k5  @.k6  @.k7  @.k8  @.k9  @.k0  esc   ret
-  @.cabs _ @.p&  @.j%   @.v#  @.ä}   @.ö+  @.b=  @.g*  @,;>  @.:<  @-_~  @.rsf
+  @.cabs _ @.p&  @.j%   @.v!  @.ä}   @.ö+  @.b=  @.g*  @,;>  @.:<  @-_~  @.rsf
            _     _      _     (multi spc @.basen)      @.basen ralt
 )
 (deflayer (fkeymacro icon fkeymacro.ico);; macro F-keys and (symbols) triggered from the RIGHT side (ff13) or fixed from numbers
