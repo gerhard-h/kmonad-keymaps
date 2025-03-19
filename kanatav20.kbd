@@ -1,14 +1,15 @@
-;; Problems with home row mods (examples asume QUERTY and shifting with index fingers)
-;; P1 unwanted mod activation
-;; P2 shifted rolls [ER instead of Er] (human not fast enought to release shift in time)
-;; P3 shift finger overload [fof or fo instead of Of] (human releases shift to early to speed up the follow up f)
+#|
+So after defining a timer as virtual key
+(defvirtualkey my-timer (macro-release-cancel 500 ...
 
-;; Solution (status)
-;; P1 solved by typing layer and by higher hold-timeouts for non shift modifiers
-;; P2 solved by typing layer (if you want or not)
-;; P3 only solved for FJ - other cases require learning the correct timeing
+    pressing it (multi (on-... release-vkey my-timer)(on-... press-vkey my-timer)) will (re)start the timer
+    releasing it (on-... release-vkey my-timer) will stops the timer - only works with macro-release-cancel not with normal macro
+    clean it up: if the timer is not canceled my-timer keeps in the pressed state (wich matters if you also have on-idle functionality). To work around this add (on-... release-vkey my-timer) to some appropriate actions.
 
-;; timeings should work fine for 40 to 80 words per minute; if you are slower or new to home row mods increasing them might help in getting started
+I would have never come up with this, but it is exactly what I wanted from a timer system. thanks.
+
+|#
+
 (defcfg
    chords-v2-min-idle 170
    process-unmapped-keys yes
@@ -222,13 +223,10 @@
   )
 )
 |#
-
 (deftemplate homerowmod (timeouttap timeouthold keytap keyhold)
-  ;;(tap-hold-except-keys $timeouttap $timeouthold
   (tap-hold $timeouttap $timeouthold
     (multi $keytap  @.tp)
     $keyhold
-    ;;(a)
   )
 )
 (deftemplate homerowmodexcept (timeouttap timeouthold keytap keyhold typinglist)
@@ -280,9 +278,17 @@
 
 (deftemplate orderedchord (first second)
   (switch
-    ((input-history real $first 1)) (multi lsft $second) break
-    ((input-history real $second 1)) (macro $second $first) break
+    ((input-history real $first 2)) (macro $first $second) break
+    ((input-history real $second 2)) (macro $second $first) break
     () XX break
+  )
+)
+
+(deftemplate orderedshift (first second)
+  (switch
+    ((input-history real $first 2)) (multi lsft $second) break
+    ((input-history real $second 2)) (macro $second $first) break
+    () q break
   )
 )
 
@@ -401,8 +407,6 @@
   .numos  (one-shot 400 (layer-while-held numbers))
   .numtab (layer-while-held numberstab)
   .sym    (layer-while-held symbols)
-  .syv    (one-shot 2000 (layer-while-held vsymbols))
-  .syvv   (layer-while-held vsymbols)
   .sy1    (one-shot 2000 (layer-while-held symbols))
   .fkey   (layer-while-held fkeymacro)
   .fkyx   (layer-switch fkeymacro)
@@ -483,7 +487,7 @@
   .oml   (one-shot 2000 lmet) ;; TODO-Usage
 
   ;; disalble tap-hold keys if typing rapidly but reenable after a shord idle period
-  .tpof (macro nop6)
+  .tpoff XX
   .tp (switch
       (lsft rsft) XX break ;; this solves FJ/ET Problem by delaying the Flip to the fast typing layer after the Uppercase character
       ()  (multi
@@ -548,7 +552,6 @@
   .rtc (tap-hold-release $200 5000 ret lctl) ;; done with QMk
   .ret ret ;; BUG QMK might still do ctl+sft but is minor
   .rtw del ;; TODO find a use for this key
-  .rsd (tap-hold-release $200 $240 @.syv (multi rsft lsft)) ;; TODO not used ?! BUG rsft get ignored on RDesktop -> use lsft  or (multi rsft lsft) ?
   .ral S-C-M-A-9 ;; release ALL key (BUG) kanata cannot release stuck keys from ahk (both tools with elevated rights) PRESS F24 FOR RELEASE ALL MODS
 
   ;; *** AUTOSHIFT in number row ***  ;; INFO number row with autorepeat
@@ -593,18 +596,18 @@
 ;; *** HOME ROW MODS ***
 ;; BUG rsft, rsft ,rctl have RDP problems without interception
 ;;  .e]   (t! homerowmodexcept 0 $160 e lsft ($i))
-    .e]   (t! homerowmod 0 $150 e lsft)
+    .e]   (t! homerowmod 0 $140 e lsft)
 
 ;;  .t_dk (t! homerowmodright 0 $160 t lsft rsft)
-  .t_dk (t! homerowmodright 0 $150 t lsft rsft)
+  .t_dk (t! homerowmodright 0 $140 t lsft rsft)
   
 ;;  .i[   (t! homerowmodexcept 0 $300 i lctl ($e d))
-  .i[   (t! homerowmod 0 $300 i lctl)
+  .i[   (t! homerowmod 0 250 i lctl)
   
   ..i[  (tap-hold $500 $500 i lctl )
   ..[   (tap-hold $500 $500 @.[ lctl ) ;; used on symbol layer
   ..-   (tap-hold $500 $500 - lctl )
-  .n-   (t! homerowmod 1 $300 n rctl)
+  .n-   (t! homerowmod 1 250 n rctl)
 ;; Bug in no interception rctl+y  to start ditto, then ditto will not act on keyboard input
 ;;  .s^⎇  (t! homerowmodrel 1 $450 s lalt)
   .s^⎇  (t! homerowmod 1 $450 s lalt)
@@ -647,7 +650,7 @@
   .m\   (t! key-hold-repeat $140 $800 m @.\ @.\ XX ralt ß ($off) XX)
   .ß    (macro (unshift ß))
   .k    (macro k)
-  .f#   (t! key-hold-repeat $140 $800 f # XX XX XX # ($off) XX)
+  .f#   (t! key-hold-repeat $200 $800 f # XX XX XX # ($off) XX)
   .w$   (t! key-hold-repeat $160 $400 w @.$ @.$ XX lsft 2 ($off) XX)
   .q@   (t! key-hold-repeat $160 $800 q RA-q XX XX ralt q ($off) XX)
   .o'   (t! key-hold-repeat $160 $800 o S-#  S-# XX lsft # ($off) XX)
@@ -769,7 +772,7 @@
   (t n) bspc 30 all-released  (game numbers)
   (t n r) C-bspc 30 all-released  (game numbers)
   (i -) esc 20 all-released (game numbers)
-  (e i) (multi lsft lctl) 15 all-released (game numbers)
+  (e i) (t! orderedchord e i) 75 first-release (game numbers)    
   (n g) esc 20 all-released (game numbers)
   ;;(n s) (macro n s) 20 all-released (game numbers)
   #|TODO needed (s n) (macro s n) 20 all-released (game numbers)
@@ -780,33 +783,34 @@
   |#
   (spc ,) 9 20 all-released (game numbers)
   
-  (e p) (t! orderedchord e p) 45 all-released (game numbers)
-  (e f) (t! orderedchord e f) 45 all-released (game numbers)
-  (e l) (t! orderedchord e l) 45 all-released (game numbers)
-  (e m) (t! orderedchord e m) 45 all-released (game numbers) ;; 45 meinen Minen
-  (e j) (t! orderedchord e j) 45 all-released (game numbers)
-  (e q) (t! orderedchord e q) 45 all-released (game numbers)
-  (e d) (t! orderedchord e d) 45 all-released (game numbers)
-  (e n) (t! orderedchord e n) 45 all-released (game numbers) ;; 35 einen ein.N
-  (e r) (t! orderedchord e r) 45 all-released (game numbers)
-  (e h) (t! orderedchord e h) 45 all-released (game numbers)
-  (e k) (t! orderedchord e k) 45 all-released (game numbers)
-  (e b) (t! orderedchord e b) 45 all-released (game numbers) ;; 45 beiden BeiDn
-  (e g) (t! orderedchord e g) 45 all-released (game numbers)
-  (e w) (t! orderedchord e w) 45 all-released (game numbers)
-  (e z) (t! orderedchord e z) 45 all-released (game numbers)
-  (e v) (t! orderedchord e v) 45 all-released (game numbers)
-  (t x) (t! orderedchord t x) 45 all-released (game numbers)
-  (t ü) (t! orderedchord t ü) 45 all-released (game numbers)
-  (t u) (t! orderedchord t u) 45 all-released (game numbers)
-  (t a) (t! orderedchord t a) 45 all-released (game numbers)
-  (t ä) (t! orderedchord t ä) 45 all-released (game numbers)
-  (t s) (t! orderedchord t s) 45 all-released (game numbers)
-  (t c) (t! orderedchord t c) 45 all-released (game numbers)
-  (t i) (t! orderedchord t i) 45 all-released (game numbers)
-  (t o) (t! orderedchord t o) 45 all-released (game numbers)
-  (t y) (t! orderedchord t y) 45 all-released (game numbers)
-  (t ö) (t! orderedchord t ö) 45 all-released (game numbers)
+  ;;  Upperchord
+  (e p) (t! orderedshift e p) 45 all-released (game numbers)
+  (e f) (t! orderedshift e f) 45 all-released (game numbers)
+  (e l) (t! orderedshift e l) 45 all-released (game numbers)
+  (e m) (t! orderedshift e m) 45 all-released (game numbers) ;; 45 meinen Minen
+  (e j) (t! orderedshift e j) 45 all-released (game numbers)
+  (e q) (t! orderedshift e q) 45 all-released (game numbers)
+  (e d) (t! orderedshift e d) 45 all-released (game numbers) ;; 45 verschwinDn
+  (e n) (t! orderedshift e n) 45 all-released (game numbers) ;; 35 einen ein.N
+  (e r) (t! orderedshift e r) 45 all-released (game numbers)
+  (e h) (t! orderedshift e h) 45 all-released (game numbers)
+  (e k) (t! orderedshift e k) 45 all-released (game numbers)
+  (e b) (t! orderedshift e b) 45 all-released (game numbers) ;; 45 beiden BeiDn
+  (e g) (t! orderedshift e g) 45 all-released (game numbers)
+  (e w) (t! orderedshift e w) 45 all-released (game numbers)
+  (e z) (t! orderedshift e z) 45 all-released (game numbers)
+  (e v) (t! orderedshift e v) 45 all-released (game numbers)
+  (t x) (t! orderedshift t x) 45 all-released (game numbers)
+  (t ü) (t! orderedshift t ü) 45 all-released (game numbers)
+  (t u) (t! orderedshift t u) 45 all-released (game numbers)
+  (t a) (t! orderedshift t a) 45 all-released (game numbers)
+  (t ä) (t! orderedshift t ä) 45 all-released (game numbers)
+  (t s) (t! orderedshift t s) 45 all-released (game numbers)
+  (t c) (t! orderedshift t c) 45 all-released (game numbers)
+  (t i) (t! orderedshift t i) 45 all-released (game numbers)
+  (t o) (t! orderedshift t o) 45 all-released (game numbers)
+  (t y) (t! orderedshift t y) 45 all-released (game numbers)
+  (t ö) (t! orderedshift t ö) 45 all-released (game numbers)
 
   )
 ;; from NUMFIX to BASE
@@ -912,39 +916,26 @@
  AltGr = F15 or qmk symbols|#
 )
 ;; *** fast Typing layer - prevents Upper Case within words when typing fast ***
-;; INFO unmod seems to solve RDP issues
+;; (INFO) unmod seems to solve RDP issues
 (defalias
   .e_type (switch  ;; unused
              ((and (or (key-history lsft 2)(key-history rsft 2)) (key-history e 1))) (tap-hold  0 160 e lsft) break  
              () (unmod e) break
   )
-  .t_type (switch  ;; unused
-             ((and (or (key-history lsft 2)(key-history rsft 2)) (key-history t 1))) (tap-hold  0 160 t rsft) break  
-             () (unmod t) break
-  )
   .unmodü (tap-hold  0 160 (unmod ü) (macro @.˝))
 )
-(deflayer typingunmo
+
 ;;****************   typing   ********************************************************
 ;; TODO define tap holds for tying layer?
-  esc _ _ _ _
-;;@.^       @.1       @.2        @.3       @.4       @.5        @.6       @.7       @.8       @.9       @.0         -         del      bspc
-  @.^0      XX        XX         XX        XX        XX         XX        XX        XX        XX        XX          -         del      bspc
-  _        (unmod x)  @.unmodü  (unmod u) (unmod a) (unmod ä) (unmod p) (unmod f) (unmod l) (unmod m)  (unmod j)  (unmod q) (unmod ß) @.rtw
-  _        (unmod c) (unmod  s) (unmod i) (unmod e) (unmod o) (unmod d) (unmod t) (unmod n) (unmod r)  (unmod h)  (unmod k)  ret
-  @.osss _ (unmod $y) @.:<       @-_~      @,;>     (unmod ö) (unmod b) (unmod g) (unmod w) (unmod $z) (unmod v)   @.rsf
-            lmet      lalt        _        @.nav-typing         _ ralt
+(deflayer typing
+  esc         F1    XX  XX  XX
+  @.^0        XX    XX        XX      XX     XX    XX   XX   XX   XX   XX   XX      prnt    bspc
+  @.tab        x    @.unmodü  u       a      ä     p    f    l    m    j    q       ß       F24
+  XX           c    s         i       e      o     d    t    n    r    h    k       @.ret
+  @.osss  XX        $y        @.:<    @-_~   @,;>  ö    b    g    w   $z    v    @.rsf
+              XX    XX    @.ff14          @.nav-typing          XX XX
 )
 
-;;letters = typing variant without unmod
-(deflayer typing
-  esc       F1    @.ff13 @.ff16 F24
-  @.^0     XX    XX        XX      XX   XX   XX   XX   XX   XX   XX  @.dp1   prnt    bspc
-  @.tab     x    @.unmodü  u       a    ä    p    f    l    m    j    q       ß       F24
-  XX        c    s         i       e    o    d    t    n    r    h    k       @.ret
-  _  XX    $y    @.:<      @-_~    @,;> ö    b    g    w   $z    v    XX
-           XX    XX    @.ff14     @.nav-typing          XX XX
-)
 ;; ************** GAME ***************** unused
 (deflayermap (game)
   - q
@@ -1125,14 +1116,7 @@
   _    _    ´      @.<    @.~   @.>      @.+      @.=      @.*      @.$      @_|     #       _
             _      _             _                esc               _ ralt
 )
-(deflayer vsymbols ;; unused - symbols reached by hold of querty-v macro and symbols triggered from the LEFT side - not used on V10 and not complete (unicode Õ)... are for ahk integration
-  _ _ _ _ _
-  _         _    _    _    _    _    _    _    _    _    _   _    _    _
-  _  (unicode Ù) @.˝   @.◖   @.◗   @.$   @.&   #    @.?   @.\   @.%   _    _    _
-  _  (unicode Õ) @.@   @.[   @.]   @.'   @./   S-.  ,    .    @-_~ -    _
-  _     _   ´    @.|   @.{   @.}   @.+   @.=   @.*   @.<   @.>   ^    _
-            _    _     _           _           _ ralt
-)
+
 (deflayer (numberline icon numberline.ico)
 ;;***   Numberrow *** Functionrow *** Keypadrow  *** dynamic-macro *** TODO-Usage
   esc _ _ _ _
@@ -1142,6 +1126,7 @@
   @.cabs _ @.p&  @.j%   @.v!  @.ä}   @.ö+  @.b=  @.g*  @,;>  @.:<  @-_~  @.rsf
            _     _      _     (multi spc @.basen)      @.basen ralt
 )
+
 (deflayer (fkeymacro icon fkeymacro.ico);; macro F-keys and (symbols) triggered from the RIGHT side (ff13) or fixed from numbers
 ;;****************   MACRO   ********************************************************
 ;; b is on this layer to avoid typos 4      5        6      7       8
@@ -1152,6 +1137,7 @@
   _    _    ´         F7   F8   F9   F12    b        lctl   lalt    C-S-f   ^    _
             _         _    _         _               _ ralt
 )
+
 (deflayer (mousefast icon mousefast.ico)
 ;;****************   MOUSE FAST  ********************************************************
   esc _ _ _ _
@@ -1161,6 +1147,7 @@
   lsft  _  @.msz lalt  lctl  lsft   XX    @.setd   @.🖰←     @.🖰↑   @.🖰→     @-_: rsft
            lmet  lalt  @.clr                       @.cll     _ ralt
 )
+
 (deflayer (mouse icon mouse.ico)
 ;;****************   MOUSE   ********************************************************
   esc _ _ _ _
@@ -1170,6 +1157,7 @@
   lsft  _  @.msz lalt  lctl  lsft   XX    @.🖰←         @.🖰↑    @.🖰↓  @.🖰→     @-_: rsft
            lmet  lalt  @.clr                         @.cll   _ ralt
 )
+
 (deflayer (mouseslow icon mouseslow.ico)
 ;;****************   MOUSE SLOW  ********************************************************
   esc _ _ _ _
@@ -1179,6 +1167,7 @@
   lsft  _   @.msz lalt   lctl   lsft   XX    @.🖰←+        @.🖰↑+     @.🖰↓+    @.🖰→+     @-_:     rsft
             lmet  lalt   @.clr       @.cll                 _ ralt
 )
+
 (deflayer (mouseextraslow icon mouseextraslow.ico)
 ;;****************   MOUSE EXTRA SLOW  ********************************************************
   esc _ _ _ _
