@@ -167,6 +167,10 @@ I would have never come up with this, but it is exactly what I wanted from a tim
  .nly (cmd AutoHotkey numlockon.ah2)
  ;;.nln (cmd-output-keys powershell.exe -NoProfile -NoLogo -NonInteractive "if ($([console]::NumberLock) -match 'True') { echo '(NumLock)' } else { echo '()' }")
  .nln (cmd AutoHotkey numlockoff.ah2)
+ .cwd (caps-word-custom 2000 
+		(a b c d e f g h i j k l m n o p q r s t u v w x y z ä ü ö)
+	    (1 2 3 bspc del up down left rght -) ;; rsft must be exluded as they are used for triggering caps words
+  )
 )
 (defvirtualkeys
   ;;nlockon/off is used over .nly/n in while-held scenarios
@@ -194,35 +198,7 @@ I would have never come up with this, but it is exactly what I wanted from a tim
     () $defaultaction break
   )
 )
-;; TODO decide on the correct fast typing solution
-#|
-(deftemplate homerowmod (timeouttap timeouthold char mod)
-  (switch
-    ((key-timing 3 less-than 140)) $char break
-    () (tap-hold-release 0 $timeouthold  $char $mod) break
-  )
-)
-(deftemplate homerowmodexcept (timeouttap timeouthold char mod typinglist)
-  (switch
-    ((key-timing 3 less-than 140)) $char break
-    ;;() (tap-hold-except-keys 0 $timeouthold  $char $mod $typinglist) break
-  () (tap-hold-release 0 $timeouthold  $char $mod) break
-  )
-)
-(deftemplate homerowmodright (timeouttap timeouthold char mod mod2)
-  ;; This is only used to fix an RDP issue with Win IO v2 where rsft is ignored
-  (switch
-    ((key-timing 3 less-than 140)) $char break
-    () (tap-hold-release 0 $timeouthold  $char (multi $mod $mod2)) break
-  )
-)
-(deftemplate homerowmodrel (timeouttap timeouthold char mod)
-  (switch
-    ((key-timing 3 less-than 450)) $char break
-    () (tap-hold-release 0 $timeouthold  $char $mod) break
-  )
-)
-|#
+
 (deftemplate homerowmod (timeouttap timeouthold keytap keyhold)
   (tap-hold $timeouttap $timeouthold
     (multi $keytap  @.tp)
@@ -233,14 +209,7 @@ I would have never come up with this, but it is exactly what I wanted from a tim
   (tap-hold-release-keys $timeouttap $timeouthold
     (multi $keytap  @.tp)
     $keyhold
-    $typinglist
-  )
-)
-(deftemplate homerowshiftexcept (timeouttap timeouthold keytap keyhold typinglist)
-  (tap-hold-release-keys 0 $timeouthold
-    $keytap ;; TODO do (multi $keytap @.tp) if last key != S-$keytap
-    $keyhold
-    $typinglist
+    $typinglist ;; Activates $keytap early if a key within $typinglist is pressed before hold activates.
   )
 )
 
@@ -252,14 +221,6 @@ I would have never come up with this, but it is exactly what I wanted from a tim
     )
   )
 )
-(platform (wintercept)
-  (deftemplate homerowshiftright (timeouttap timeouthold keytap keyhold keyhold2)
-    (tap-hold 0 $timeouthold
-      $keytap ;; TODO do @.tp if last key != T / S-t
-      $keyhold2
-    )
-  )
-)
 (platform (winiov2 win)
   (deftemplate homerowmodright (timeouttap timeouthold keytap keyhold keyhold2)
     ;; This is only used to fix an RDP issue with Win IO v2 where rsft is ignored
@@ -267,12 +228,6 @@ I would have never come up with this, but it is exactly what I wanted from a tim
       (multi $keytap  @.tp)
       (multi $keyhold $keyhold2)
     )
-  )
-)
-(deftemplate homerowmodrel (timeouttap timeouthold keytap keyhold)
-  (tap-hold-release $timeouttap $timeouthold
-    (multi $keytap  @.tp)
-    $keyhold
   )
 )
 
@@ -595,14 +550,14 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 
 ;; *** HOME ROW MODS ***
 ;; BUG rsft, rsft ,rctl have RDP problems without interception
-;;  .e]   (t! homerowmodexcept 0 $160 e lsft ($i))
-    .e]   (t! homerowmod 0 $140 e lsft)
+      .e]   (t! homerowmodexcept 0 $160 e lsft ($i))
+;;    .e]   (t! homerowmod 0 $140 e lsft)
 
 ;;  .t_dk (t! homerowmodright 0 $160 t lsft rsft)
   .t_dk (t! homerowmodright 0 $140 t lsft rsft)
   
-;;  .i[   (t! homerowmodexcept 0 $300 i lctl ($e d))
-  .i[   (t! homerowmod 0 250 i lctl)
+    .i[   (t! homerowmodexcept 0 250 i lctl ($e d n))
+;;  .i[   (t! homerowmod 0 250 i lctl)
   
   ..i[  (tap-hold $500 $500 i lctl )
   ..[   (tap-hold $500 $500 @.[ lctl ) ;; used on symbol layer
@@ -772,7 +727,7 @@ I would have never come up with this, but it is exactly what I wanted from a tim
   (t n) bspc 30 all-released  (game numbers)
   (t n r) C-bspc 30 all-released  (game numbers)
   (i -) esc 20 all-released (game numbers)
-  (e i) (t! orderedchord e i) 75 first-release (game numbers)    
+  ;;(e i) (t! orderedchord e i) 75 first-release (game numbers)    
   (n g) esc 20 all-released (game numbers)
   ;;(n s) (macro n s) 20 all-released (game numbers)
   #|TODO needed (s n) (macro s n) 20 all-released (game numbers)
@@ -784,6 +739,7 @@ I would have never come up with this, but it is exactly what I wanted from a tim
   (spc ,) 9 20 all-released (game numbers)
   
   ;;  Upperchord
+#|
   (e p) (t! orderedshift e p) 45 all-released (game numbers)
   (e f) (t! orderedshift e f) 45 all-released (game numbers)
   (e l) (t! orderedshift e l) 45 all-released (game numbers)
@@ -811,7 +767,7 @@ I would have never come up with this, but it is exactly what I wanted from a tim
   (t o) (t! orderedshift t o) 45 all-released (game numbers)
   (t y) (t! orderedshift t y) 45 all-released (game numbers)
   (t ö) (t! orderedshift t ö) 45 all-released (game numbers)
-
+|#
   )
 ;; from NUMFIX to BASE
 (defchords exit79 20
@@ -906,7 +862,7 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 ;; F14 = left-Space = symbol layer / lsft+F14 = hold F14 = number layer
 ;; ret hold does ctl via QMK
   esc       F1    @.ff13 @.ff16 F24
-  @.^0      @.1   @.2    @.3   @.4    @.5   @.6     @.7    @.8    @.9     @.0     @.dp1   @.prnt  bspc
+  @.^0      @.1   @.2    @.3   @.4    @.5   @.6     @.7    @.8    @.9     @.0     @.cwd   @.prnt  bspc
   @.tab     @.x{  @.ü˝   @.u◖  @.a◗   @.ä}  @.p&    @.f#   @.l?   @.m\    @.j%    @.q@    @.ß     F24
   @.atx     @.c⌘  @.s^⎇  @.i[  @.e]   @.o'  @.d/    @.t_dk @.n-   @.r_⎇   @.h⌘    @.k     @.ret
   _ @.atm   @.y`  @_:<   @_-~  @_;>   @.ö+  @.b=    @.g*   @.w$   @.z|    @.v!    @.rsf
