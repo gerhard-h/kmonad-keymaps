@@ -11,6 +11,7 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 |#
 
 (defcfg
+   ;;alias-to-trigger-on-load .basen
    chords-v2-min-idle 170
    process-unmapped-keys yes
    ;;yes does not help with japanese keys ; did not help with RDP sticky keys;
@@ -186,7 +187,9 @@ I would have never come up with this, but it is exactly what I wanted from a tim
   tab tab
   ;; misc
   mouselight M-S-f
+  ;;base (layer-while-held base)
   to-base (layer-switch base)
+  ;;to-base (multi (layer-switch symbolsbase) (on-press press-vkey base))
   vcaps   (layer-while-held CAPS)
 
 )
@@ -366,8 +369,8 @@ I would have never come up with this, but it is exactly what I wanted from a tim
   .fkey   (layer-while-held fkeymacro)
   .fkyx   (layer-switch fkeymacro)
   .fkyn   (release-layer numbers)
+  ;;.basen  (multi (layer-switch symbolsbase) (on-press press-vkey base) @.nln)
   .basen  (multi (layer-switch base) @.nln)
-  .base   (layer-while-held base)
   .numfix (multi (layer-switch numfix) @.nly)
 
 ;; *** LEFT_Spacebar = F14 : RETURN *** SYMBOLS *** LEFT_Shift + LEFT_Spacebar_hold == numbers ; Shift + LEFT_Spacebar_tap == CAPS-layer ***
@@ -448,7 +451,7 @@ I would have never come up with this, but it is exactly what I wanted from a tim
       ()  (multi
             (layer-switch typing) ;; causes a P3 issue with Ffj/Eet instead of FJ/ET => use one-shot instead
             ;;(one-shot 295 (layer-while-held typing)) ;; 95 solves P3 only in the FJ/ET case
-            (on-idle  95 tap-vkey to-base )
+            (on-idle  55 tap-vkey to-base )
           ) break
   )
   ;; modded german key aliases
@@ -600,17 +603,17 @@ I would have never come up with this, but it is exactly what I wanted from a tim
   ..a◗  (t! key-hold-repeat $160 $800 a @.◗ XX XX lsft 9 ($off) XX)
   .a◗   (fork @..a◗ (macro a 10 c) (lctl rctl)) ;; do automatic copy C-(ac) after C-a
   .j%   (t! key-hold-repeat $160 $800 j @.% @.% XX lsft 5 ($off) XX)
-  .p&   (t! key-hold-repeat $160 $800 p @.& @.& XX lsft 6 ($off) XX)
+  .w&   (t! key-hold-repeat $160 $800 w @.& @.& XX lsft 6 ($off) XX)
   .l?   (t! key-hold-repeat $140 $800 l @.? @.? XX lsft ß ($off) XX)   ;; ? = S-ß = S-[      i ? ??
-  .m\   (t! key-hold-repeat $140 $800 m @.\ @.\ XX ralt ß ($off) XX)
+  .f\   (t! key-hold-repeat $140 $800 f @.\ @.\ XX ralt ß ($off) XX)
   .ß    (macro (unshift ß))
   .k    (macro k)
-  .f#   (t! key-hold-repeat $200 $800 f # XX XX XX # ($off) XX)
-  .w$   (t! key-hold-repeat $160 $400 w @.$ @.$ XX lsft 2 ($off) XX)
+  .p#   (t! key-hold-repeat $200 $800 p # XX XX XX # ($off) XX)
+  .z$   (t! key-hold-repeat $160 $400 $z @.$ @.$ XX lsft 2 ($off) XX)
   .q@   (t! key-hold-repeat $160 $800 q RA-q XX XX ralt q ($off) XX)
   .o'   (t! key-hold-repeat $160 $800 o S-#  S-# XX lsft # ($off) XX)
   .d/   (t! key-hold-repeat $200 $800 d S-7  S-7 < lsft 7 ($off) XX)
-  .z|   (t! key-hold-repeat $200 $800 $z @.| @.| XX ralt < ($off) XX)
+  .m|   (t! key-hold-repeat $200 $800 m @.| @.| XX ralt < ($off) XX)
   .y`   (tap-hold 1 160 ;; tap=y or hold=` or long=``` hold+tap...=`````` INFO no autorepeat
             (switch
                 ((and (key-history nop5 1)(key-history ´ 3)(key-history spc 2)))  (multi lsft ´ spc nop5) break
@@ -737,7 +740,6 @@ I would have never come up with this, but it is exactly what I wanted from a tim
     I could define a chord, but there is a symetrie problem if done this simple
   |#
   (spc ,) 9 20 all-released (game numbers)
-  
   ;;  Upperchord
 #|
   (e p) (t! orderedshift e p) 45 all-released (game numbers)
@@ -807,6 +809,8 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 )
 ;; defsrc querty laptop + und ß
 ;; (z und y und p und x sind in winiov2 in US-Anordnung aber in deflocalkey vertauscht) führt zu problemen daher
+
+;; QUERTZ keyboards
 #|
 (defsrc
   esc       F1   F13  F16  F24
@@ -822,38 +826,37 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 ;; z and y are FLIPPED, positioning has no meaning but must be consistent with other layers
 ;; F1 unused / F24 declaration is required with process-unmapped-keys no? /   F13 = right-B  / F14 = left-Space
 
+;; QMK keyboards
 (platform (wintercept)
 (defsrc
   esc       F1   F13  F16  F24
   ^         1    2    3    4    5    6    7    8    9    0    +    ´    ⌫
-  tab       x    ü    u    a    ä    p    f    l    m    j    q    ß    #
+  tab       x    ü    u    a    ä    w    p    l    f    j    q    ß    #
   caps      c    s    i    e    o    d    t    n    r    h    k   ret
-  lsft 102d y    .    -    ,    ö    b    g    w    z    v    rsft
+  lsft 102d y    .    -    ,    ö    b    g    z    m    v    rsft
             lmet lalt      F14       spc            F15 ralt
 ))
 (platform (win)
 (defsrc
   esc       F1   F13  F16  F24
   ^         1    2    3    4    5    6    7    8    9    0    +    ´    ⌫
-  tab       -    .    u    a    ,    p    f    l    m    y    q    ß    #
-  caps      c    s    i    e    o    d    t    n    r    h    k    ret
-  lsft 102d x    v    ü    ä    ö    b    g    w    z    j    rsft
+  tab       x    ü    u    a    ä    j    f    l    m    v    q    ß    #
+  caps      c    s    i    e    o    d    t    n    r    h    k   ret
+  lsft 102d y    .    -    ,    ö    b    g    w    z    p    rsft
             lmet lalt      F14       spc            F15 ralt
 ))
 (platform (winiov2)
 (defsrc
   esc       F1   F13  F16  F24
   ^         1    2    3    4    5    6    7    8    9    0    +    ´    ⌫
-  tab       x    ü    u    a    ä    p    f    l    m    j    q    ß    #
+  tab       x    ü    u    a    ä    w    p    l    f    j    q    ß    #
   caps      c    s    i    e    o    d    t    n    r    h    k   ret
-  lsft 102d z    .    -    ,    ö    b    g    w    y    v    rsft
+  lsft 102d z    .    -    ,    ö    b    g    y    m    v    rsft
             lmet lalt      F14       spc            F15 ralt
 ))
-
-
 ;; TODO-Usage rsft +... rspace +... rstf-up = @.sym not used on alice keyboard. INFO rsft must be released before e.g. RAlt-keys like [] work.
 ;; INFO feat: rpt will repeat the unmodified key / rpt-any fails to repeat complex tap-hold sequences
-(deflayer base
+(deflayer (base icon base.ico)
 ;;****************   .BASE.   ********************************************************
 ;; TODO dbl_tap autorepeat
 ;; rsft + rspc = symbols
@@ -863,9 +866,9 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 ;; ret hold does ctl via QMK
   esc       F1    @.ff13 @.ff16 F24
   @.^0      @.1   @.2    @.3   @.4    @.5   @.6     @.7    @.8    @.9     @.0     @.cwd   @.prnt  bspc
-  @.tab     @.x{  @.ü˝   @.u◖  @.a◗   @.ä}  @.p&    @.f#   @.l?   @.m\    @.j%    @.q@    @.ß     F24
+  @.tab     @.x{  @.ü˝   @.u◖  @.a◗   @.ä}  @.w&    @.p#   @.l?   @.f\    @.j%    @.q@    @.ß     F24
   @.atx     @.c⌘  @.s^⎇  @.i[  @.e]   @.o'  @.d/    @.t_dk @.n-   @.r_⎇   @.h⌘    @.k     @.ret
-  _ @.atm   @.y`  @_:<   @_-~  @_;>   @.ö+  @.b=    @.g*   @.w$   @.z|    @.v!    @.rsf
+  _ @.atm   @.y`  @_:<   @_-~  @_;>   @.ö+  @.b=    @.g*   @.z$   @.m|    @.v!    @.rsf
             @.oml @.oal  @.ff14             @.nav         @.ff15 ralt
 #|
  CTRL + SPACE + ESC => Exit KANATA immediatly
@@ -878,17 +881,19 @@ I would have never come up with this, but it is exactly what I wanted from a tim
              ((and (or (key-history lsft 2)(key-history rsft 2)) (key-history e 1))) (tap-hold  0 160 e lsft) break  
              () (unmod e) break
   )
-  .unmodü (tap-hold  0 160 (unmod ü) (macro @.˝))
+  ._ü (tap-hold  0 160 (unmod ü) (macro @.˝))
+  ._e (tap-hold  0 310 e lsft)
+  ._t (tap-hold  0 310 t lsft)
 )
 
 ;;****************   typing   ********************************************************
 ;; TODO define tap holds for tying layer?
-(deflayer typing
+(deflayer (typing icon base.ico)
   esc         F1    XX  XX  XX
   @.^0        XX    XX        XX      XX     XX    XX   XX   XX   XX   XX   XX      prnt    bspc
-  @.tab        x    @.unmodü  u       a      ä     p    f    l    m    j    q       ß       F24
-  XX           c    s         i       e      o     d    t    n    r    h    k       @.ret
-  @.osss  XX        $y        @.:<    @-_~   @,;>  ö    b    g    w   $z    v    @.rsf
+  @.tab        x    @._ü      u       a      ä     w    p    l    f    j    q       ß       F24
+  XX           c    s         i       @._e   o     d    @._t n    r    h    k       @.ret
+  @.osss  XX  $y    @.:<      @-_~    @,;>   ö     b    g   $z    m    v    @.rsf
               XX    XX    @.ff14          @.nav-typing          XX XX
 )
 
@@ -910,18 +915,13 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 (deflayer (CAPS icon caps.ico)
   esc _ _ _ _
   @.^        @.1   @.2    @.3   @.4    @.5   @.6   @.7   @.8   @.9   @.0   -     del  bspc
-  _          @.X{  @.Ü˝   @.U◖  @.A◗   @.Ä}  @.P&  @.F#  @.L?  @.M\  @.J%  @.Q@  @.ß  @.rtw
+  _          @.X{  @.Ü˝   @.U◖  @.A◗   @.Ä}  @.W&  @.P#  @.L?  @.F\  @.J%  @.Q@  @.ß  @.rtw
   _          @.C⌘  @.S    @.I[  @.E]   @.O'  @.D/  @.T   @.N   @.R   @.H⌘  @.K   ret
-  @.scabs _  @.Y`  @DOT   @DSH  @COM  @.Ö+  @.B=  @.G*  @.W$  @.Z|  @.V!  @.rsf
+  @.scabs _  @.Y`  @DOT   @DSH  @COM   @.Ö+  @.B=  @.G*  @.Z$  @.M|  @.V!  @.rsf
              _     _      @.ff14c      _           @.ff15c ralt
 )
 ;; *** UPPER CASE ALIASES for CAPS layer ***
 (defalias
-  .J  (switch
-        (rsft lsft) (unshift j) break
-        (rctl lctl) (unshift j) break
-        ()          (tap-hold 1 $200 (unicode J) (macro @.%)) break
-  )
   .C⌘ (switch
         (rsft lsft) (unshift c) break ;; Shift on caps-layer become lowercase again
         (rctl lctl) (unshift c) break ;; do Ctrl+C instead of Ctrl+Shift+C
@@ -935,32 +935,32 @@ I would have never come up with this, but it is exactly what I wanted from a tim
           (lsft)  (tap-hold 1 $200 (unshift t) (layer-switch base) ) break
           ()  (tap-hold 1 $200 S-t rsft)  break
        )
-  .Z|  (fork (tap-hold 1 $200 (unicode Z) (macro @.|)) (unshift $z) (rsft lsft))
-  .K   (fork (macro S-k)                         (unshift k) (rsft lsft))
-  .V!  (fork (tap-hold 1 $200 S-v (macro @.!))   (unshift v) (rsft lsft))
-  .U◖  (fork (tap-hold 1 $200 S-u (macro @.◖))   (unshift u) (rsft lsft))
-  .A◗  (fork (tap-hold 1 $200 S-a (macro @.◗))   (unshift a) (rsft lsft))
-  .S   (fork (tap-hold 1 $200 S-s (macro @.^))   (unshift s) (rsft lsft))
-  .I[  (fork (tap-hold 1 $200 S-i (macro @.[))   (unshift i) (rsft lsft))
-  .P&  (fork (tap-hold 1 $200 S-p (macro @.&))   (unshift p) (rsft lsft))
-  .F#  (fork (tap-hold 1 $200 S-f (macro #  ))   (unshift f) (rsft lsft))
-  .L?  (fork (tap-hold 1 $200 S-l (macro @.?))   (unshift l) (rsft lsft))
-  .M\  (fork (tap-hold 1 $200 S-m (macro @.\))   (unshift m) (rsft lsft))
-  .W$  (fork (tap-hold 1 $200 S-w (macro @.$))   (unshift w) (rsft lsft))
-  .Q@  (fork (tap-hold 1 $200 S-q (macro @.@))   (unshift q) (rsft lsft))
-  .O'  (fork (tap-hold 1 $200 S-o (macro @.'))   (unshift o) (rsft lsft))
-  .D/  (fork (tap-hold 1 $200 S-d (macro @./))   (unshift d) (rsft lsft))
-  .N   (fork (tap-hold 1 $200 S-n (macro -))     (unshift n) (rsft lsft))
-  .R   (fork (tap-hold 1 $200 S-r (macro @._))   (unshift r) (rsft lsft))
-  .H⌘  (fork (tap-hold 1 $200 S-h (macro S-.))   (unshift h) (rsft lsft))
-  .Y`  (fork (tap-hold 1 $200 (unicode Y) (unicode ´)) (unshift $y) (rsft lsft))
-  .J%  (fork (tap-hold 1 $200 S-j (macro @.%))   (unshift j) (rsft lsft))
-  .Ü˝  (fork (tap-hold 1 $200 S-ü (macro S-2))   (unshift ü) (rsft lsft))
-  .X{  (fork (tap-hold 1 $200 S-x (unicode {))   (unshift x) (rsft lsft))
-  .Ä}  (fork (tap-hold 1 $200 S-ä (macro @.}))   (unshift ä) (rsft lsft))
-  .Ö+  (fork (tap-hold 1 $200 S-ö (macro @.+))   (unshift ö) (rsft lsft))
-  .B=  (fork (tap-hold 1 $200 S-b (macro @.=))   (unshift b) (rsft lsft))
-  .G*  (fork (tap-hold 1 $200 S-g (macro @.*))   (unshift g) (rsft lsft))
+  .Z$  (fork (tap-hold 1 $200 (unicode Z)    (macro @.$))   (unshift $z) (rsft lsft))
+  .K   (fork (multi lsft k)                        (unshift k)  (rsft lsft))
+  .V!  (fork (tap-hold 1 $200 (multi lsft _) (macro @.!))   (unshift v)  (rsft lsft))
+  .U◖  (fork (tap-hold 1 $200 (multi lsft _) (macro @.◖))   (unshift u)  (rsft lsft))
+  .A◗  (fork (tap-hold 1 $200 (multi lsft _) (macro @.◗))   (unshift a)  (rsft lsft))
+  .S   (fork (tap-hold 1 $200 (multi lsft _) (macro @.^))   (unshift s)  (rsft lsft))
+  .I[  (fork (tap-hold 1 $200 (multi lsft _) (macro @.[))   (unshift i)  (rsft lsft))
+  .W&  (fork (tap-hold 1 $200 (multi lsft _) (macro @.&))   (unshift w)  (rsft lsft))
+  .P#  (fork (tap-hold 1 $200 (multi lsft _) (macro #  ))   (unshift p)  (rsft lsft))
+  .L?  (fork (tap-hold 1 $200 (multi lsft _) (macro @.?))   (unshift l)  (rsft lsft))
+  .F\  (fork (tap-hold 1 $200 (multi lsft _) (macro @.\))   (unshift f)  (rsft lsft))
+  .M|  (fork (tap-hold 1 $200 (multi lsft _) (macro @.|))   (unshift m)  (rsft lsft))
+  .Q@  (fork (tap-hold 1 $200 (multi lsft _) (macro @.@))   (unshift q)  (rsft lsft))
+  .O'  (fork (tap-hold 1 $200 (multi lsft _) (macro @.'))   (unshift o)  (rsft lsft))
+  .D/  (fork (tap-hold 1 $200 (multi lsft _) (macro @./))   (unshift d)  (rsft lsft))
+  .N   (fork (tap-hold 1 $200 (multi lsft _) (macro -))     (unshift n)  (rsft lsft))
+  .R   (fork (tap-hold 1 $200 (multi lsft _) (macro @._))   (unshift r)  (rsft lsft))
+  .H⌘  (fork (tap-hold 1 $200 (multi lsft _) (macro S-.))   (unshift h)  (rsft lsft))
+  .Y`  (fork (tap-hold 1 $200 (unicode Y)    (unicode ´))   (unshift $y) (rsft lsft))
+  .J%  (fork (tap-hold 1 $200 (multi lsft _) (macro @.%))   (unshift j)  (rsft lsft))
+  .Ü˝  (fork (tap-hold 1 $200 (multi lsft _) (macro S-2))   (unshift ü)  (rsft lsft))
+  .X{  (fork (tap-hold 1 $200 (multi lsft _) (unicode {))   (unshift x)  (rsft lsft))
+  .Ä}  (fork (tap-hold 1 $200 (multi lsft _) (macro @.}))   (unshift ä)  (rsft lsft))
+  .Ö+  (fork (tap-hold 1 $200 (multi lsft _) (macro @.+))   (unshift ö)  (rsft lsft))
+  .B=  (fork (tap-hold 1 $200 (multi lsft _) (macro @.=))   (unshift b)  (rsft lsft))
+  .G*  (fork (tap-hold 1 $200 (multi lsft _) (macro @.*))   (unshift g)  (rsft lsft))
 )
 
 ;;***  NUMBERS   ***
@@ -1004,7 +1004,7 @@ I would have never come up with this, but it is exactly what I wanted from a tim
   @.^       @.1    @.2    @.3   @.4   @.5     @.6   @.7   @.8   @.9   @.0    @.cmdrld  A-prnt _
   _         @-_:   1      2     3     @.⎈␡    esc   home  ▲     end   pgup   pgdn      _      _
   @.atr     @.⌘c   @.4⎇   @.5⎈  @.6⇧  0       bks    ◀    ▼     ▶     lmet   @.fkyn    _
-  @.atp _   @,:x   @_7v   @_8   @_9   del     Tab   @.⏎⇧  @.␡⎈  @.l🖰⎇ @.r🖰⌘ _
+  @.atp _   @,:x     @_7v   @_8   @_9   del     Tab   @.⏎⇧  @.␡⎈  @.l🖰⎇ @.r🖰⌘ _
             _     _    _         _    _ ralt
 )
 ;; Exit numfix with CAPS or HOLD SPACE or HOLD Null or 7+9
@@ -1067,9 +1067,9 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 ;; TODO-Usage left-Space + right-Space => ESC
   _ _ _ _ _
   _         @.at1  @.at2  @.at3  @.at4   @.at5    @.at6    @.at7    @.at8    @.at9   @.atm   @.cmdrld    A-prnt    _
-  _         @.{    @.˝    @.◖    @.◗     @_}      @.&      @.!      @.?      @.\     @.%     @.@         _         _
+  _         @.{    @.˝    @.◖    @.◗     @_}      @.&      #        @.?      @.\     @.%     @.@         _         _
   @.atr     @.`    #      @..[   @..]    @.'      @./      @.dsk    @..-     @._     esc     @.€         _
-  _    _    ´      @.<    @.~   @.>      @.+      @.=      @.*      @.$      @_|     #       _
+  _    _    ´      @.<    @.~   @.>      @.+      @.=      @.*      @.$      @_|     @.!     _
             _      _             _                esc               _ ralt
 )
 
@@ -1079,7 +1079,7 @@ I would have never come up with this, but it is exactly what I wanted from a tim
   esc      @.dp1 @.dp2  @.dp3 @.dp4  @.dp5 @.dr1 @.dr2 @.dr3 @.dr4 @.dr5 @.dst @.dms bspc
   _        F1    F2     F3    F4     F5    F6    F7    F8    F9    F10   F11   F12   @.rtw
   _        @.k1  @.k2   @.k3  @.k4   @.k5  @.k6  @.k7  @.k8  @.k9  @.k0  esc   ret
-  @.cabs _ @.p&  @.j%   @.v!  @.ä}   @.ö+  @.b=  @.g*  @,;>  @.:<  @-_~  @.rsf
+  @.cabs _ _     _      _     _      _     _     _     _     _     _     @.rsf
            _     _      _     (multi spc @.basen)      @.basen ralt
 )
 
