@@ -187,9 +187,9 @@ I would have never come up with this, but it is exactly what I wanted from a tim
   tab tab
   ;; misc
   mouselight M-S-f
-  ;;base (layer-while-held base)
-  to-base (layer-switch base)
-  ;;to-base (multi (layer-switch symbolsbase) (on-press press-vkey base))
+  base (layer-while-held base)
+  ;;to-base (layer-switch base)
+  
   vcaps   (layer-while-held CAPS)
 
 )
@@ -369,7 +369,6 @@ I would have never come up with this, but it is exactly what I wanted from a tim
   .fkey   (layer-while-held fkeymacro)
   .fkyx   (layer-switch fkeymacro)
   .fkyn   (release-layer numbers)
-  ;;.basen  (multi (layer-switch symbolsbase) (on-press press-vkey base) @.nln)
   .basen  (multi (layer-switch base) @.nln)
   .numfix (multi (layer-switch numfix) @.nly)
 
@@ -449,9 +448,10 @@ I would have never come up with this, but it is exactly what I wanted from a tim
   .tp (switch
       (lsft rsft) XX break ;; this solves FJ/ET Problem by delaying the Flip to the fast typing layer after the Uppercase character
       ()  (multi
+            ;;(on-press release-vkey base)  ;; use this...
             (layer-switch typing) ;; causes a P3 issue with Ffj/Eet instead of FJ/ET => use one-shot instead
-            ;;(one-shot 295 (layer-while-held typing)) ;; 95 solves P3 only in the FJ/ET case
             (on-idle  55 tap-vkey to-base )
+            ;;(on-idle  55 press-vkey base ) ;;... to make typing the new first layer
           ) break
   )
   ;; modded german key aliases
@@ -915,9 +915,9 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 (deflayer (CAPS icon caps.ico)
   esc _ _ _ _
   @.^        @.1   @.2    @.3   @.4    @.5   @.6   @.7   @.8   @.9   @.0   -     del  bspc
-  _          @.X{  @.Ü˝   @.U◖  @.A◗   @.Ä}  @.W&  @.P#  @.L?  @.F\  @.J%  @.Q@  @.ß  @.rtw
-  _          @.C⌘  @.S    @.I[  @.E]   @.O'  @.D/  @.T   @.N   @.R   @.H⌘  @.K   ret
-  @.scabs _  @.Y`  @DOT   @DSH  @COM   @.Ö+  @.B=  @.G*  @.Z$  @.M|  @.V!  @.rsf
+  _          @.C{  @.C˝   @.C◖  @.C◗   @.C}  @.C&  @.C#  @.C?  @.C\  @.C%  @.C@  @.ß  @.rtw
+  _          @.C⌘  @.C^   @.C[  @.E]   @.C'  @.C/  @.T   @.C-  @.C_  @.C:  @.C   ret
+  @.scabs _  @.C`  @DOT   @DSH  @COM   @.C+  @.C=  @.C*  @.C$  @.C|  @.C!  @.rsf
              _     _      @.ff14c      _           @.ff15c ralt
 )
 ;; *** UPPER CASE ALIASES for CAPS layer ***
@@ -935,32 +935,32 @@ I would have never come up with this, but it is exactly what I wanted from a tim
           (lsft)  (tap-hold 1 $200 (unshift t) (layer-switch base) ) break
           ()  (tap-hold 1 $200 S-t rsft)  break
        )
-  .Z$  (fork (tap-hold 1 $200 (unicode Z)    (macro @.$))   (unshift $z) (rsft lsft))
-  .K   (fork (multi lsft k)                        (unshift k)  (rsft lsft))
-  .V!  (fork (tap-hold 1 $200 (multi lsft _) (macro @.!))   (unshift v)  (rsft lsft))
-  .U◖  (fork (tap-hold 1 $200 (multi lsft _) (macro @.◖))   (unshift u)  (rsft lsft))
-  .A◗  (fork (tap-hold 1 $200 (multi lsft _) (macro @.◗))   (unshift a)  (rsft lsft))
-  .S   (fork (tap-hold 1 $200 (multi lsft _) (macro @.^))   (unshift s)  (rsft lsft))
-  .I[  (fork (tap-hold 1 $200 (multi lsft _) (macro @.[))   (unshift i)  (rsft lsft))
-  .W&  (fork (tap-hold 1 $200 (multi lsft _) (macro @.&))   (unshift w)  (rsft lsft))
-  .P#  (fork (tap-hold 1 $200 (multi lsft _) (macro #  ))   (unshift p)  (rsft lsft))
-  .L?  (fork (tap-hold 1 $200 (multi lsft _) (macro @.?))   (unshift l)  (rsft lsft))
-  .F\  (fork (tap-hold 1 $200 (multi lsft _) (macro @.\))   (unshift f)  (rsft lsft))
-  .M|  (fork (tap-hold 1 $200 (multi lsft _) (macro @.|))   (unshift m)  (rsft lsft))
-  .Q@  (fork (tap-hold 1 $200 (multi lsft _) (macro @.@))   (unshift q)  (rsft lsft))
-  .O'  (fork (tap-hold 1 $200 (multi lsft _) (macro @.'))   (unshift o)  (rsft lsft))
-  .D/  (fork (tap-hold 1 $200 (multi lsft _) (macro @./))   (unshift d)  (rsft lsft))
-  .N   (fork (tap-hold 1 $200 (multi lsft _) (macro -))     (unshift n)  (rsft lsft))
-  .R   (fork (tap-hold 1 $200 (multi lsft _) (macro @._))   (unshift r)  (rsft lsft))
-  .H⌘  (fork (tap-hold 1 $200 (multi lsft _) (macro S-.))   (unshift h)  (rsft lsft))
-  .Y`  (fork (tap-hold 1 $200 (unicode Y)    (unicode ´))   (unshift $y) (rsft lsft))
-  .J%  (fork (tap-hold 1 $200 (multi lsft _) (macro @.%))   (unshift j)  (rsft lsft))
-  .Ü˝  (fork (tap-hold 1 $200 (multi lsft _) (macro S-2))   (unshift ü)  (rsft lsft))
-  .X{  (fork (tap-hold 1 $200 (multi lsft _) (unicode {))   (unshift x)  (rsft lsft))
-  .Ä}  (fork (tap-hold 1 $200 (multi lsft _) (macro @.}))   (unshift ä)  (rsft lsft))
-  .Ö+  (fork (tap-hold 1 $200 (multi lsft _) (macro @.+))   (unshift ö)  (rsft lsft))
-  .B=  (fork (tap-hold 1 $200 (multi lsft _) (macro @.=))   (unshift b)  (rsft lsft))
-  .G*  (fork (tap-hold 1 $200 (multi lsft _) (macro @.*))   (unshift g)  (rsft lsft))
+  .C$  (fork (tap-hold 1 $200 (unicode Z)    (macro @.$))   (multi _ (unshift nop0))  (rsft lsft))
+  .C   (fork                  (multi lsft _)                (multi _ (unshift nop0))  (rsft lsft))
+  .C!  (fork (tap-hold 1 $200 (multi lsft _) (macro @.!))   (multi _ (unshift nop0))  (rsft lsft))
+  .C◖  (fork (tap-hold 1 $200 (multi lsft _) (macro @.◖))   (multi _ (unshift nop0))  (rsft lsft))
+  .C◗  (fork (tap-hold 1 $200 (multi lsft _) (macro @.◗))   (multi _ (unshift nop0))  (rsft lsft))
+  .C^  (fork (tap-hold 1 $200 (multi lsft _) (macro @.^))   (multi _ (unshift nop0))  (rsft lsft))
+  .C[  (fork (tap-hold 1 $200 (multi lsft _) (macro @.[))   (multi _ (unshift nop0))  (rsft lsft))
+  .C&  (fork (tap-hold 1 $200 (multi lsft _) (macro @.&))   (multi _ (unshift nop0))  (rsft lsft))
+  .C#  (fork (tap-hold 1 $200 (multi lsft _) (macro #  ))   (multi _ (unshift nop0))  (rsft lsft))
+  .C?  (fork (tap-hold 1 $200 (multi lsft _) (macro @.?))   (multi _ (unshift nop0))  (rsft lsft))
+  .C\  (fork (tap-hold 1 $200 (multi lsft _) (macro @.\))   (multi _ (unshift nop0))  (rsft lsft))
+  .C|  (fork (tap-hold 1 $200 (multi lsft _) (macro @.|))   (multi _ (unshift nop0))  (rsft lsft))
+  .C@  (fork (tap-hold 1 $200 (multi lsft _) (macro @.@))   (multi _ (unshift nop0))  (rsft lsft))
+  .C'  (fork (tap-hold 1 $200 (multi lsft _) (macro @.'))   (multi _ (unshift nop0))  (rsft lsft))
+  .C/  (fork (tap-hold 1 $200 (multi lsft _) (macro @./))   (multi _ (unshift nop0))  (rsft lsft))
+  .C-  (fork (tap-hold 1 $200 (multi lsft _) (macro -))     (multi _ (unshift nop0))  (rsft lsft))
+  .C_  (fork (tap-hold 1 $200 (multi lsft _) (macro @._))   (multi _ (unshift nop0))  (rsft lsft))
+  .C:  (fork (tap-hold 1 $200 (multi lsft _) (macro S-.))   (multi _ (unshift nop0))  (rsft lsft))
+  .C`  (fork (tap-hold 1 $200 (unicode Y)    (unicode ´))   (multi _ (unshift nop0))  (rsft lsft))
+  .C%  (fork (tap-hold 1 $200 (multi lsft _) (macro @.%))   (multi _ (unshift nop0))  (rsft lsft))
+  .C˝  (fork (tap-hold 1 $200 (multi lsft _) (macro S-2))   (multi _ (unshift nop0))  (rsft lsft))
+  .C{  (fork (tap-hold 1 $200 (multi lsft _) (unicode {))   (multi _ (unshift nop0))  (rsft lsft))
+  .C}  (fork (tap-hold 1 $200 (multi lsft _) (macro @.}))   (multi _ (unshift nop0))  (rsft lsft))
+  .C+  (fork (tap-hold 1 $200 (multi lsft _) (macro @.+))   (multi _ (unshift nop0))  (rsft lsft))
+  .C=  (fork (tap-hold 1 $200 (multi lsft _) (macro @.=))   (multi _ (unshift nop0))  (rsft lsft))
+  .C*  (fork (tap-hold 1 $200 (multi lsft _) (macro @.*))   (multi _ (unshift nop0))  (rsft lsft))
 )
 
 ;;***  NUMBERS   ***
@@ -1068,8 +1068,8 @@ I would have never come up with this, but it is exactly what I wanted from a tim
   _ _ _ _ _
   _         @.at1  @.at2  @.at3  @.at4   @.at5    @.at6    @.at7    @.at8    @.at9   @.atm   @.cmdrld    A-prnt    _
   _         @.{    @.˝    @.◖    @.◗     @_}      @.&      #        @.?      @.\     @.%     @.@         _         _
-  @.atr     @.`    #      @..[   @..]    @.'      @./      @.dsk    @..-     @._     esc     @.€         _
-  _    _    ´      @.<    @.~   @.>      @.+      @.=      @.*      @.$      @_|     @.!     _
+  @.atr     @.`    @.^    @..[   @..]    @.'      @./      @.dsk    @..-     @._     esc     @.€         _
+  _    _    ´      @.<    @.~    @.>     @.+      @.=      @.*      @.$      @_|     @.!     _
             _      _             _                esc               _ ralt
 )
 
