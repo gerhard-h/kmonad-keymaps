@@ -112,6 +112,20 @@ I would have never come up with this, but it is exactly what I wanted from a tim
   700 700
   800 800
   900 900 ;;===
+  righthand (
+    x ü u a ä
+    c s i e o
+   $y . - , ö)
+  lefthand (
+    v f l j q ß
+    d t n r h k
+    b g z m w
+  )
+  lefthanddn (
+    v f l j q ß
+    d t n r h k
+    b g z m w  d n
+  )    
 )
 
 (deflocalkeys-wintercept
@@ -168,7 +182,13 @@ I would have never come up with this, but it is exactly what I wanted from a tim
  .nly (cmd AutoHotkey numlockon.ah2)
  ;;.nln (cmd-output-keys powershell.exe -NoProfile -NoLogo -NonInteractive "if ($([console]::NumberLock) -match 'True') { echo '(NumLock)' } else { echo '()' }")
  .nln (cmd AutoHotkey numlockoff.ah2)
- .cwd (caps-word-custom 2000 
+ .cwd   (multi 
+   (unmod (lalt ralt lmet rmet rsft lctl rctl) nop0)
+   (release-key lctl)
+   (release-key lsft)
+   (macro end 5 S-(5 home) 5 S-(5 home) 5 spc 5 bspc 5 del)
+  )
+ .cwd- (caps-word-custom 2000 
 		(a b c d e f g h i j k l m n o p q r s t u v w x y z ä ü ö)
 	    (1 2 3 bspc del up down left rght -) ;; rsft must be exluded as they are used for triggering caps words
   )
@@ -188,7 +208,7 @@ I would have never come up with this, but it is exactly what I wanted from a tim
   ;; misc
   mouselight M-S-f
   base (layer-while-held base)
-  ;;to-base (layer-switch base)
+  to-base (layer-switch base)
   
   vcaps   (layer-while-held CAPS)
 
@@ -358,8 +378,8 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 
 (defalias
   .dsk (multi lmet lalt ß)  ;; AHK desktop switch must use MODS to be active within RDP  SYMBOL+M
-  .CAPSon  (multi (on-press toggle-vkey  vcaps) @.nly) ;;using toggle to be more error redundant
-  .CAPSoff (multi (on-press release-vkey vcaps) @.nln)
+  .CAPSon  (multi (layer-switch typing) (on-press toggle-vkey  vcaps) @.nly) ;;using toggle to be more error redundant
+  .CAPSoff (multi (layer-switch base) (on-press release-vkey vcaps) @.nln)
 ;; *** LAYER-TOGGLE & SWITCH-LAYER(STICKYNESS) ***
   .num    (layer-while-held numbers)
   .numos  (one-shot 400 (layer-while-held numbers))
@@ -553,29 +573,32 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 
 ;; *** HOME ROW MODS ***
 ;; BUG rsft, rsft ,rctl have RDP problems without interception
-      .e]   (t! homerowmodexcept 0 $160 e lsft ($i))
-;;    .e]   (t! homerowmod 0 $140 e lsft)
+;;      .e]   (t! homerowmodexcept 0 $160 e lsft $lefthand)
+  .e]   (t! homerowmodexcept 0 $160 e lsft ($i))
 
-;;  .t_dk (t! homerowmodright 0 $160 t lsft rsft)
+;;    .t_dk (t! homerowmodexcept 0 $140 t rsft $righthand)
   .t_dk (t! homerowmodright 0 $140 t lsft rsft)
   
-    .i[   (t! homerowmodexcept 0 250 i lctl ($e d n))
-;;  .i[   (t! homerowmod 0 250 i lctl)
-  
-  ..i[  (tap-hold $500 $500 i lctl )
-  ..[   (tap-hold $500 $500 @.[ lctl ) ;; used on symbol layer
-  ..-   (tap-hold $500 $500 - lctl )
-  .n-   (t! homerowmod 1 250 n rctl)
-;; Bug in no interception rctl+y  to start ditto, then ditto will not act on keyboard input
-;;  .s^⎇  (t! homerowmodrel 1 $450 s lalt)
-  .s^⎇  (t! homerowmod 1 $450 s lalt)
+;;    .i[   (t! homerowmodexcept 0 250 i lctl $lefthanddn)
+  .i[   (t! homerowmodexcept 0 250 i lctl ($e d n))
 
-;;  .h⌘   (t! homerowmod 1 550 h $rmetwiniov2)
-    .h⌘   (t! homerowmodright 1 550 h lmet rmet)
+    ..[   (tap-hold $500 $500 @.[ lctl ) ;; used on symbol layer
+    ..-   (tap-hold $500 $500 - lctl )
+  
+;;   .n-   (t! homerowmodexcept 1 250 n rctl $righthand)
+ .n-   (t! homerowmod 1 250 n rctl) 
+  
+  .s^⎇  (t! homerowmod 1 $350 s lalt)
+;;    .s^⎇  (t! homerowmodexcept 1 $500 s lalt $lefthand)
+
+  .h⌘   (t! homerowmodright 1 550 h lmet rmet)
+;;    .h⌘   (t! homerowmodexcept 1 550 h rmet $righthand)
   
   .c⌘   (t! homerowmod 1 $450 c lmet)
-;;  .r_⎇  (t! homerowmodrel 1 $450 r lalt)
+;;    .c⌘   (t! homerowmodexcept 1 $450 c lmet $lefthand)
+
   .r_⎇  (t! homerowmod 1 $450 r lalt)
+;;    .r_⎇  (t! homerowmodexcept 1 $500 r lalt $righthand)
 
   .rsf  rsft ;;(tap-hold-release $350 $500 - rsft)
 
@@ -595,7 +618,7 @@ I would have never come up with this, but it is exactly what I wanted from a tim
   ..]   (tap-hold 1 $200 @.] (release-layer symbols)) ;; Go back to number layer TODO remember this
 
   ;; normal keys
-  .v!  (t! key-hold-repeat $140 $800  v S-1  XX XX lsft 1 ($off) XX)
+  .w!  (t! key-hold-repeat $140 $800  w S-1  XX XX lsft 1 ($off) XX)
   .ü˝  (t! key-hold-repeat $140 $800 ü @.˝ @.˝ XX lsft 4 ($off) XX)
   .u◖  (t! key-hold-repeat $150 $400 u @.◖  @.◗ XX lsft 8 ($off) XX)                        ;; (  ()
   ;; TIP a◗ (multi (tap-hold 1 $150  a  S-9) @.tp) this order works with powertoys but causes problems with RDP ua vs au
@@ -603,17 +626,17 @@ I would have never come up with this, but it is exactly what I wanted from a tim
   ..a◗  (t! key-hold-repeat $160 $800 a @.◗ XX XX lsft 9 ($off) XX)
   .a◗   (fork @..a◗ (macro a 10 c) (lctl rctl)) ;; do automatic copy C-(ac) after C-a
   .j%   (t! key-hold-repeat $160 $800 j @.% @.% XX lsft 5 ($off) XX)
-  .w&   (t! key-hold-repeat $160 $800 w @.& @.& XX lsft 6 ($off) XX)
+  .v&   (t! key-hold-repeat $160 $800 v @.& @.& XX lsft 6 ($off) XX)
   .l?   (t! key-hold-repeat $140 $800 l @.? @.? XX lsft ß ($off) XX)   ;; ? = S-ß = S-[      i ? ??
-  .f\   (t! key-hold-repeat $140 $800 f @.\ @.\ XX ralt ß ($off) XX)
+  .p\   (t! key-hold-repeat $140 $800 p @.\ @.\ XX ralt ß ($off) XX)
   .ß    (macro (unshift ß))
   .k    (macro k)
-  .p#   (t! key-hold-repeat $200 $800 p # XX XX XX # ($off) XX)
+  .f#   (t! key-hold-repeat $200 $800 f # XX XX XX # ($off) XX)
   .z$   (t! key-hold-repeat $160 $400 $z @.$ @.$ XX lsft 2 ($off) XX)
   .q@   (t! key-hold-repeat $160 $800 q RA-q XX XX ralt q ($off) XX)
   .o'   (t! key-hold-repeat $160 $800 o S-#  S-# XX lsft # ($off) XX)
   .d/   (t! key-hold-repeat $200 $800 d S-7  S-7 < lsft 7 ($off) XX)
-  .m|   (t! key-hold-repeat $200 $800 m @.| @.| XX ralt < ($off) XX)
+  .b|   (t! key-hold-repeat $200 $800 b @.| @.| XX ralt < ($off) XX)
   .y`   (tap-hold 1 160 ;; tap=y or hold=` or long=``` hold+tap...=`````` INFO no autorepeat
             (switch
                 ((and (key-history nop5 1)(key-history ´ 3)(key-history spc 2)))  (multi lsft ´ spc nop5) break
@@ -627,7 +650,7 @@ I would have never come up with this, but it is exactly what I wanted from a tim
   .ö+   (t! key-hold-repeat $180 $800 ö + + XX XX + ($off) XX)
 
   .g*   (t! key-hold-repeat $160 $800 g S-+ XX  XX lsft + ($off) XX)
-  .b=   (t! key-hold-repeat $160 $600 b S-0 S-0 XX lsft 0 ($off) S-0)
+  .m=   (t! key-hold-repeat $160 $600 m S-0 S-0 XX lsft 0 ($off) S-0)
   ;; TODO layer-toggle,... shoud break key-history - implemented in @nav by multi nop3
   ,;>  (tap-hold  1 $160 (tap-dance $160 (
                             (switch
@@ -831,9 +854,9 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 (defsrc
   esc       F1   F13  F16  F24
   ^         1    2    3    4    5    6    7    8    9    0    +    ´    ⌫
-  tab       x    ü    u    a    ä    w    p    l    f    j    q    ß    #
+  tab       x    ü    u    a    ä    v    f    l    p    j    q    ß    #
   caps      c    s    i    e    o    d    t    n    r    h    k   ret
-  lsft 102d y    .    -    ,    ö    b    g    z    m    v    rsft
+  lsft 102d y    .    -    ,    ö    m    g    z    b    w    rsft
             lmet lalt      F14       spc            F15 ralt
 ))
 (platform (win)
@@ -866,9 +889,9 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 ;; ret hold does ctl via QMK
   esc       F1    @.ff13 @.ff16 F24
   @.^0      @.1   @.2    @.3   @.4    @.5   @.6     @.7    @.8    @.9     @.0     @.cwd   @.prnt  bspc
-  @.tab     @.x{  @.ü˝   @.u◖  @.a◗   @.ä}  @.w&    @.p#   @.l?   @.f\    @.j%    @.q@    @.ß     F24
+  @.tab     @.x{  @.ü˝   @.u◖  @.a◗   @.ä}  @.v&    @.f#   @.l?   @.p\    @.j%    @.q@    @.ß     F24
   @.atx     @.c⌘  @.s^⎇  @.i[  @.e]   @.o'  @.d/    @.t_dk @.n-   @.r_⎇   @.h⌘    @.k     @.ret
-  _ @.atm   @.y`  @_:<   @_-~  @_;>   @.ö+  @.b=    @.g*   @.z$   @.m|    @.v!    @.rsf
+  _ @.atm   @.y`  @_:<   @_-~  @_;>   @.ö+  @.m=    @.g*   @.z$   @.b|    @.w!    @.rsf
             @.oml @.oal  @.ff14             @.nav         @.ff15 ralt
 #|
  CTRL + SPACE + ESC => Exit KANATA immediatly
@@ -891,9 +914,9 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 (deflayer (typing icon base.ico)
   esc         F1    XX  XX  XX
   @.^0        XX    XX        XX      XX     XX    XX   XX   XX   XX   XX   XX      prnt    bspc
-  @.tab        x    @._ü      u       a      ä     w    p    l    f    j    q       ß       F24
+  @.tab        x    @._ü      u       a      ä     v    f    l    p    j    q       ß       F24
   XX           c    s         i       @._e   o     d    @._t n    r    h    k       @.ret
-  @.osss  XX  $y    @.:<      @-_~    @,;>   ö     b    g   $z    m    v    @.rsf
+  @.osss  XX  $y    @.:<      @-_~    @,;>   ö     m    g   $z    b    w    @.rsf
               XX    XX    @.ff14          @.nav-typing          XX XX
 )
 
@@ -935,14 +958,16 @@ I would have never come up with this, but it is exactly what I wanted from a tim
           (lsft)  (tap-hold 1 $200 (unshift t) (layer-switch base) ) break
           ()  (tap-hold 1 $200 S-t rsft)  break
        )
-  .C$  (fork (tap-hold 1 $200 (unicode Z)    (macro @.$))   (multi _ (unshift nop0))  (rsft lsft))
+  .C{  (fork (tap-hold 1 $200 (multi lsft _) (unicode {))   (multi _ (unshift nop0))  (rsft lsft))
+  .C&  (fork (tap-hold 1 $200 (multi lsft _) (macro @.&))   (multi _ (unshift nop0))  (rsft lsft))
   .C   (fork                  (multi lsft _)                (multi _ (unshift nop0))  (rsft lsft))
+  .C`  (fork (tap-hold 1 $200 (unicode Y)    (unicode ´))   (multi _ (unshift nop0))  (rsft lsft))  
+  .C$  (fork (tap-hold 1 $200 (multi lsft _) (macro @.$))   (multi _ (unshift nop0))  (rsft lsft))
   .C!  (fork (tap-hold 1 $200 (multi lsft _) (macro @.!))   (multi _ (unshift nop0))  (rsft lsft))
   .C◖  (fork (tap-hold 1 $200 (multi lsft _) (macro @.◖))   (multi _ (unshift nop0))  (rsft lsft))
   .C◗  (fork (tap-hold 1 $200 (multi lsft _) (macro @.◗))   (multi _ (unshift nop0))  (rsft lsft))
   .C^  (fork (tap-hold 1 $200 (multi lsft _) (macro @.^))   (multi _ (unshift nop0))  (rsft lsft))
   .C[  (fork (tap-hold 1 $200 (multi lsft _) (macro @.[))   (multi _ (unshift nop0))  (rsft lsft))
-  .C&  (fork (tap-hold 1 $200 (multi lsft _) (macro @.&))   (multi _ (unshift nop0))  (rsft lsft))
   .C#  (fork (tap-hold 1 $200 (multi lsft _) (macro #  ))   (multi _ (unshift nop0))  (rsft lsft))
   .C?  (fork (tap-hold 1 $200 (multi lsft _) (macro @.?))   (multi _ (unshift nop0))  (rsft lsft))
   .C\  (fork (tap-hold 1 $200 (multi lsft _) (macro @.\))   (multi _ (unshift nop0))  (rsft lsft))
@@ -953,10 +978,8 @@ I would have never come up with this, but it is exactly what I wanted from a tim
   .C-  (fork (tap-hold 1 $200 (multi lsft _) (macro -))     (multi _ (unshift nop0))  (rsft lsft))
   .C_  (fork (tap-hold 1 $200 (multi lsft _) (macro @._))   (multi _ (unshift nop0))  (rsft lsft))
   .C:  (fork (tap-hold 1 $200 (multi lsft _) (macro S-.))   (multi _ (unshift nop0))  (rsft lsft))
-  .C`  (fork (tap-hold 1 $200 (unicode Y)    (unicode ´))   (multi _ (unshift nop0))  (rsft lsft))
   .C%  (fork (tap-hold 1 $200 (multi lsft _) (macro @.%))   (multi _ (unshift nop0))  (rsft lsft))
   .C˝  (fork (tap-hold 1 $200 (multi lsft _) (macro S-2))   (multi _ (unshift nop0))  (rsft lsft))
-  .C{  (fork (tap-hold 1 $200 (multi lsft _) (unicode {))   (multi _ (unshift nop0))  (rsft lsft))
   .C}  (fork (tap-hold 1 $200 (multi lsft _) (macro @.}))   (multi _ (unshift nop0))  (rsft lsft))
   .C+  (fork (tap-hold 1 $200 (multi lsft _) (macro @.+))   (multi _ (unshift nop0))  (rsft lsft))
   .C=  (fork (tap-hold 1 $200 (multi lsft _) (macro @.=))   (multi _ (unshift nop0))  (rsft lsft))
@@ -1208,7 +1231,7 @@ I would have never come up with this, but it is exactly what I wanted from a tim
   .psiso (cmd-output-keys powershell.exe -NoProfile -NoLogo -NonInteractive -Command r#"echo "(" ((Get-Date -Format "yyyy-MM-dd").toCharArray() -join " ") ")""#)
   .cmdspeak (cmd speak.cmd)
   .saynothing (cmd powershell.exe -NoProfile -NoLogo -NonInteractive -Command r#"Add-Type -AssemblyName System.Speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak('nothing')"#)
-  .cmdrld (multi (cmd test.cmd) lrld-next)
+  .cmdrld lrld-next ;;(multi (cmd test.cmd) lrld-next)
   ;;.cmdiso (cmd-output-keys timek.cmd) ;; shell not needed (cmd-output-keys cmd.exe /C timek.cmd)
   .cmdiso (cmd AutoHotkey dtiso.ah2)
   .cmdde  (cmd-output-keys r#"C:\path\kmonad\timedek.cmd"#)  ;; r#"start "" /MIN C:\path\kmonad\timedek.cmd"#
