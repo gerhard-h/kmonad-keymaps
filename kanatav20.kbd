@@ -749,14 +749,19 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 ;;  (e o) ;; TODO what to do here if no second thumb key
 ;;  (d t) @.atx 45 all-released  (game) 
 
-  (t b) tab 45 all-released  (game) 
-  
-  (n r) del 30 all-released  (game numbers)
-  (t n) bspc 30 all-released  (game numbers)
-  (t n r) C-bspc 30 all-released  (game numbers)
-  (i ü) esc 20 all-released (game numbers)
+  (t b)
+   tab 45 all-released  (game)
+  (n r)
+   del 30 all-released  (game numbers)
+  (t n)
+   bspc 30 all-released  (game numbers)
+  (t n r)
+   C-bspc 30 all-released  (game numbers)
+  (i ü)
+   esc 20 all-released (game numbers)
   ;;(e i) (t! orderedchord e i) 75 first-release (game numbers)    
-  (n g) esc 20 all-released (game numbers)
+  (n g)
+   esc 20 all-released (game numbers)
   ;;(n s) (macro n s) 20 all-released (game numbers)
   #|TODO needed (s n) (macro s n) 20 all-released (game numbers)
     in most cases kanata will do that the right thing anyway but I just realized chording homrow-mod K/Ctrl and S/Alt results in
@@ -764,37 +769,11 @@ I would have never come up with this, but it is exactly what I wanted from a tim
     Maybe I should implement a rule in kanata to only allow combining mods on the same side of the keyboard, but that would not fix fast typing issues.
     I could define a chord, but there is a symetrie problem if done this simple
   |#
-  (spc ,) 9 20 all-released (game numbers)
-  ;;  Upperchord
-#|
-  (e p) (t! orderedshift e p) 45 all-released (game numbers)
-  (e f) (t! orderedshift e f) 45 all-released (game numbers)
-  (e l) (t! orderedshift e l) 45 all-released (game numbers)
-  (e m) (t! orderedshift e m) 45 all-released (game numbers) ;; 45 meinen Minen
-  (e j) (t! orderedshift e j) 45 all-released (game numbers)
-  (e q) (t! orderedshift e q) 45 all-released (game numbers)
-  (e d) (t! orderedshift e d) 45 all-released (game numbers) ;; 45 verschwinDn
-  (e n) (t! orderedshift e n) 45 all-released (game numbers) ;; 35 einen ein.N
-  (e r) (t! orderedshift e r) 45 all-released (game numbers)
-  (e h) (t! orderedshift e h) 45 all-released (game numbers)
-  (e k) (t! orderedshift e k) 45 all-released (game numbers)
-  (e b) (t! orderedshift e b) 45 all-released (game numbers) ;; 45 beiden BeiDn
-  (e g) (t! orderedshift e g) 45 all-released (game numbers)
-  (e w) (t! orderedshift e w) 45 all-released (game numbers)
-  (e z) (t! orderedshift e z) 45 all-released (game numbers)
-  (e v) (t! orderedshift e v) 45 all-released (game numbers)
-  (t x) (t! orderedshift t x) 45 all-released (game numbers)
-  (t ü) (t! orderedshift t ü) 45 all-released (game numbers)
-  (t u) (t! orderedshift t u) 45 all-released (game numbers)
-  (t a) (t! orderedshift t a) 45 all-released (game numbers)
-  (t ä) (t! orderedshift t ä) 45 all-released (game numbers)
-  (t s) (t! orderedshift t s) 45 all-released (game numbers)
-  (t c) (t! orderedshift t c) 45 all-released (game numbers)
-  (t i) (t! orderedshift t i) 45 all-released (game numbers)
-  (t o) (t! orderedshift t o) 45 all-released (game numbers)
-  (t y) (t! orderedshift t y) 45 all-released (game numbers)
-  (t ö) (t! orderedshift t ö) 45 all-released (game numbers)
-|#
+;; (s d)
+;;  ret 20 all-released (game numbers)  
+  (spc v )
+   9 20 all-released (game numbers)
+
   )
 ;; from NUMFIX to BASE
 (defchords exit79 20
@@ -825,7 +804,6 @@ I would have never come up with this, but it is exactly what I wanted from a tim
   (   ü , ) bspc
   (.  ü , ) C-bspc
 )
-
 ;; defsrc querty laptop + und ß
 ;; (z und y und p und x sind in winiov2 in US-Anordnung aber in deflocalkey vertauscht) führt zu problemen daher
 
@@ -868,11 +846,12 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 (defsrc
   esc       F1   F13  F16  F24
   ^         1    2    3    4    5    6    7    8    9    0    +    ´    ⌫
-  tab       x    ü    u    a    ä    w    p    l    f    j    q    ß    #
+  tab       -    y    u    a    ä    x    p    l    f    j    q    ß    #
   caps      c    s    i    e    o    d    t    n    r    h    k   ret
-  lsft 102d z    .    -    ,    ö    b    g    y    m    v    rsft
+  lsft 102d z    .    ü    ,    ö    b    g    w    m    v    rsft
             lmet lalt      F14       spc            F15 ralt
 ))
+
 ;; TODO-Usage rsft +... rspace +... rstf-up = @.sym not used on alice keyboard. INFO rsft must be released before e.g. RAlt-keys like [] work.
 ;; INFO feat: rpt will repeat the unmodified key / rpt-any fails to repeat complex tap-hold sequences
 (deflayer (base icon base.ico)
