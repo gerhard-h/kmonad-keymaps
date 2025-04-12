@@ -603,40 +603,38 @@ I would have never come up with this, but it is exactly what I wanted from a tim
   .rsf  rsft ;;(tap-hold-release $350 $500 - rsft)
 
   ;; chords
-  _-~   (chord vüä -)        ;; sticky numbers
+  _ü{   (chord vüä ü)        ;; sticky numbers
   _:<   (chord vüä .)
   _;>   (chord vüä ,)
   DOT   (chord VÜÄ .)        ;; sticky numbers
   COM   (chord VÜÄ ,)
-  DSH   (chord VÜÄ -)
+  DSH   (chord VÜÄ ü)
   _7    (chord exit79 7)    ;; exit numbers
   _8    (chord exit79 8)
   _9    (chord exit79 9)
   _9ex  (tap-hold 1 $200 (chord exit79 9) @.basen) ;; exit numbersfixed
-  _|    (chord |} <)      ;; mods will be added later in defchord < is | 0 is }
-  _}    (tap-hold 1 $200 (chord |} 0) (release-layer symbols)) ;; tap-hold to exit layer
   ..]   (tap-hold 1 $200 @.] (release-layer symbols)) ;; Go back to number layer TODO remember this
 
   ;; normal keys
-  .w!  (t! key-hold-repeat $140 $800  w S-1  XX XX lsft 1 ($off) XX)
-  .ü˝  (t! key-hold-repeat $140 $800 ü @.˝ @.˝ XX lsft 4 ($off) XX)
+  .v!  (t! key-hold-repeat $140 $800  v S-1  XX XX lsft 1 ($off) XX)
+  .z˝  (t! key-hold-repeat $140 $800 $z @.˝ @.˝ XX lsft 4 ($off) XX)
   .u◖  (t! key-hold-repeat $150 $400 u @.◖  @.◗ XX lsft 8 ($off) XX)                        ;; (  ()
   ;; TIP a◗ (multi (tap-hold 1 $150  a  S-9) @.tp) this order works with powertoys but causes problems with RDP ua vs au
   ;; TIP a◗ LONG HOLD with no Powertoys running (tap-hold 1 $150 (multi a @.tp) (fork (macro-release-cancel S-9 $600 bspc RA-9 ) C-a (lctl rctl)) )                   ;; ) [ todo find a better use
   ..a◗  (t! key-hold-repeat $160 $800 a @.◗ XX XX lsft 9 ($off) XX)
   .a◗   (fork @..a◗ (macro a 10 c) (lctl rctl)) ;; do automatic copy C-(ac) after C-a
   .j%   (t! key-hold-repeat $160 $800 j @.% @.% XX lsft 5 ($off) XX)
-  .v&   (t! key-hold-repeat $160 $800 v @.& @.& XX lsft 6 ($off) XX)
+  .x&   (t! key-hold-repeat $160 $800 x @.& @.& XX lsft 6 ($off) XX)
   .l?   (t! key-hold-repeat $140 $800 l @.? @.? XX lsft ß ($off) XX)   ;; ? = S-ß = S-[      i ? ??
-  .p\   (t! key-hold-repeat $140 $800 p @.\ @.\ XX ralt ß ($off) XX)
+  .f\   (t! key-hold-repeat $140 $800 f @.\ @.\ XX ralt ß ($off) XX)
   .ß    (macro (unshift ß))
   .k    (macro k)
-  .f#   (t! key-hold-repeat $200 $800 f # XX XX XX # ($off) XX)
-  .z$   (t! key-hold-repeat $160 $400 $z @.$ @.$ XX lsft 2 ($off) XX)
+  .p#   (t! key-hold-repeat $200 $800 p # XX XX XX # ($off) XX)
+  .ä$   (t! key-hold-repeat $160 $400 ä @.$ @.$ XX lsft 2 ($off) XX)
   .q@   (t! key-hold-repeat $160 $800 q RA-q XX XX ralt q ($off) XX)
   .o'   (t! key-hold-repeat $160 $800 o S-#  S-# XX lsft # ($off) XX)
   .d/   (t! key-hold-repeat $200 $800 d S-7  S-7 < lsft 7 ($off) XX)
-  .b|   (t! key-hold-repeat $200 $800 b @.| @.| XX ralt < ($off) XX)
+  .m|   (t! key-hold-repeat $200 $800 m @.| @.| XX ralt < ($off) XX)
   .y`   (tap-hold 1 160 ;; tap=y or hold=` or long=``` hold+tap...=`````` INFO no autorepeat
             (switch
                 ((and (key-history nop5 1)(key-history ´ 3)(key-history spc 2)))  (multi lsft ´ spc nop5) break
@@ -644,13 +642,12 @@ I would have never come up with this, but it is exactly what I wanted from a tim
             )
             (fork (multi lsft ´ spc nop5  (tap-hold $200 $800 XX (multi (unicode ` ) (unicode ` )))) (unicode Y) (lsft rsft))
         )
-  .x{   (t! key-hold-repeat $200 $500 x RA-7 RA-0 XX ralt 7 ($off) XX)  ;; { {}
-  ;;INFO ä}  (tap-hold-release-timeout $200 $400 ä @.syvv @.} ) ;; layer activation if ä is comboed;  not needed on V10 bc of second space bar
-  .ä}   (t! key-hold-repeat $140 $800 ä RA-0 XX XX ralt 0 ($off) XX) ;; der v XX scheint überflüssig zu sein
-  .ö+   (t! key-hold-repeat $180 $800 ö + + XX XX + ($off) XX)
+  .ü{   (t! key-hold-repeat $200 $500 ü RA-7 RA-0 XX ralt 7 ($off) XX)  ;; { {}
+  .ö}   (t! key-hold-repeat $140 $800 ö RA-0 XX XX ralt 0 ($off) XX)
+  .w+   (t! key-hold-repeat $180 $800 w + + XX XX + ($off) XX)
 
   .g*   (t! key-hold-repeat $160 $800 g S-+ XX  XX lsft + ($off) XX)
-  .m=   (t! key-hold-repeat $160 $600 m S-0 S-0 XX lsft 0 ($off) S-0)
+  .b=   (t! key-hold-repeat $160 $600 b S-0 S-0 XX lsft 0 ($off) S-0)
   ;; TODO layer-toggle,... shoud break key-history - implemented in @nav by multi nop3
   ,;>  (tap-hold  1 $160 (tap-dance $160 (
                             (switch
@@ -749,10 +746,15 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 
 
 (defchordsv2
+;;  (e o) ;; TODO what to do here if no second thumb key
+;;  (d t) @.atx 45 all-released  (game) 
+
+  (t b) tab 45 all-released  (game) 
+  
   (n r) del 30 all-released  (game numbers)
   (t n) bspc 30 all-released  (game numbers)
   (t n r) C-bspc 30 all-released  (game numbers)
-  (i -) esc 20 all-released (game numbers)
+  (i ü) esc 20 all-released (game numbers)
   ;;(e i) (t! orderedchord e i) 75 first-release (game numbers)    
   (n g) esc 20 all-released (game numbers)
   ;;(n s) (macro n s) 20 all-released (game numbers)
@@ -807,29 +809,23 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 ;; from BASE to NUMFIX  THis seems to be the principal way : put chord in layer and call alias here (it also keeps the aliases clean)
 (defchords vüä 50
   (.      ) @.:<
-  (   -   ) @-_~
-  (.  -   ) del
+  (   ü   ) @.ü{
+  (.  ü   ) del
   (     , ) @,;>
   (.    , ) @.numfix
-  (   - , ) bspc
-  (.  - , ) C-bspc
+  (   ü , ) bspc
+  (.  ü , ) C-bspc
 )
 (defchords VÜÄ 50
   (.      ) @.:<
-  (   -   ) @-_~
-  (.  -   ) del
+  (   ü   ) @.ü{
+  (.  ü   ) del
   (     , ) @,;>
   (.    , ) (multi @.CAPSoff @.numfix)
-  (   - , ) bspc
-  (.  - , ) C-bspc
+  (   ü , ) bspc
+  (.  ü , ) C-bspc
 )
-;; from SYMBOLS to NUMFIX CA(0) = }  CA(<) = | chord must be defined on the not modified keys
-;; not needed anymore
-(defchords |} 140
-  (0      ) @.}
-  (   <   ) @.|
-  (0  <   ) @.numfix
-)
+
 ;; defsrc querty laptop + und ß
 ;; (z und y und p und x sind in winiov2 in US-Anordnung aber in deflocalkey vertauscht) führt zu problemen daher
 
@@ -854,9 +850,9 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 (defsrc
   esc       F1   F13  F16  F24
   ^         1    2    3    4    5    6    7    8    9    0    +    ´    ⌫
-  tab       x    ü    u    a    ä    v    f    l    p    j    q    ß    #
+  tab       -    z    u    a    ä    x    p    l    f    j    q    ß    #
   caps      c    s    i    e    o    d    t    n    r    h    k   ret
-  lsft 102d y    .    -    ,    ö    m    g    z    b    w    rsft
+  lsft 102d y    .    ü    ,    ö    b    g    w    m    v    rsft
             lmet lalt      F14       spc            F15 ralt
 ))
 (platform (win)
@@ -889,9 +885,9 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 ;; ret hold does ctl via QMK
   esc       F1    @.ff13 @.ff16 F24
   @.^0      @.1   @.2    @.3   @.4    @.5   @.6     @.7    @.8    @.9     @.0     @.cwd   @.prnt  bspc
-  @.tab     @.x{  @.ü˝   @.u◖  @.a◗   @.ä}  @.v&    @.f#   @.l?   @.p\    @.j%    @.q@    @.ß     F24
+  @.tab     @-_~  @.z˝   @.u◖  @.a◗   @.ä$  @.x&    @.p#   @.l?   @.f\    @.j%    @.q@    @.ß     F24
   @.atx     @.c⌘  @.s^⎇  @.i[  @.e]   @.o'  @.d/    @.t_dk @.n-   @.r_⎇   @.h⌘    @.k     @.ret
-  _ @.atm   @.y`  @_:<   @_-~  @_;>   @.ö+  @.m=    @.g*   @.z$   @.b|    @.w!    @.rsf
+  _ @.atm   @.y`  @_:<   @_ü{  @_;>   @.ö}  @.b=    @.g*   @.w+   @.m|    @.v!    @.rsf
             @.oml @.oal  @.ff14             @.nav         @.ff15 ralt
 #|
  CTRL + SPACE + ESC => Exit KANATA immediatly
@@ -904,7 +900,7 @@ I would have never come up with this, but it is exactly what I wanted from a tim
              ((and (or (key-history lsft 2)(key-history rsft 2)) (key-history e 1))) (tap-hold  0 160 e lsft) break  
              () (unmod e) break
   )
-  ._ü (tap-hold  0 160 (unmod ü) (macro @.˝))
+  ._z (tap-hold  0 160 (unmod $z) (macro @.˝))
   ._e (tap-hold  0 310 e lsft)
   ._t (tap-hold  0 310 t lsft)
 )
@@ -914,9 +910,9 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 (deflayer (typing icon base.ico)
   esc         F1    XX  XX  XX
   @.^0        XX    XX        XX      XX     XX    XX   XX   XX   XX   XX   XX      prnt    bspc
-  @.tab        x    @._ü      u       a      ä     v    f    l    p    j    q       ß       F24
+  @.tab     @-_~    @._z      u       a      ä     x    p    l    f    j    q       ß       F24
   XX           c    s         i       @._e   o     d    @._t n    r    h    k       @.ret
-  @.osss  XX  $y    @.:<      @-_~    @,;>   ö     m    g   $z    b    w    @.rsf
+  @.osss  XX  $y    @.:<      ü       @,;>   ö     b    g    w    m    v    @.rsf
               XX    XX    @.ff14          @.nav-typing          XX XX
 )
 
@@ -938,9 +934,9 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 (deflayer (CAPS icon caps.ico)
   esc _ _ _ _
   @.^        @.1   @.2    @.3   @.4    @.5   @.6   @.7   @.8   @.9   @.0   -     del  bspc
-  _          @.C{  @.C˝   @.C◖  @.C◗   @.C}  @.C&  @.C#  @.C?  @.C\  @.C%  @.C@  @.ß  @.rtw
+  _          @DSH  @.C˝   @.C◖  @.C◗   @.C$  @.C&  @.C#  @.C?  @.C\  @.C%  @.C@  @.ß  @.rtw
   _          @.C⌘  @.C^   @.C[  @.E]   @.C'  @.C/  @.T   @.C-  @.C_  @.C:  @.C   ret
-  @.scabs _  @.C`  @DOT   @DSH  @COM   @.C+  @.C=  @.C*  @.C$  @.C|  @.C!  @.rsf
+  @.scabs _  @.C`  @DOT   @.C{  @COM   @.C}  @.C=  @.C*  @.C+  @.C|  @.C!  @.rsf
              _     _      @.ff14c      _           @.ff15c ralt
 )
 ;; *** UPPER CASE ALIASES for CAPS layer ***
@@ -1090,9 +1086,9 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 ;; TODO-Usage left-Space + right-Space => ESC
   _ _ _ _ _
   _         @.at1  @.at2  @.at3  @.at4   @.at5    @.at6    @.at7    @.at8    @.at9   @.atm   @.cmdrld    A-prnt    _
-  _         @.{    @.˝    @.◖    @.◗     @_}      @.&      #        @.?      @.\     @.%     @.@         _         _
+  _         @.~    @.˝    @.◖    @.◗     @.$      @.&      #        @.?      @.\     @.%     @.@         _         _
   @.atr     @.`    @.^    @..[   @..]    @.'      @./      @.dsk    @..-     @._     esc     @.€         _
-  _    _    ´      @.<    @.~    @.>     @.+      @.=      @.*      @.$      @_|     @.!     _
+  _    _    ´      @.<    @.{    @.>     @.}      @.=      @.*      @.+      @.|     @.!     _
             _      _             _                esc               _ ralt
 )
 
