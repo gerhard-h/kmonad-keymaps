@@ -809,13 +809,13 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 ;; defsrc querty laptop + und ß 
 ;; (z und y und p und x sind in winiov2 in US-Anordnung aber in deflocalkey vertauscht) führt zu problemen daher  
 
-;; QUERTZ keyboards
+;; QUERTZ keyboards WINIOV2
 (defsrc
   esc       F1   F13  F16  F24
   ^         1    2    3    4    5    6    7    8    9    0    ß    ´    bspc
-  tab       q    w    e    r    t    y    u    i    o    p    ü    +    #
+  tab       q    w    e    r    t    z    u    i    o    p    ü    +    #
   caps      a    s    d    f    g    h    j    k    l    ö    ä    ret
-  lsft  <   z    x    c    v    b    n    m    ,    .    -    rsft
+  lsft  <   y    x    c    v    b    n    m    ,    .    -    rsft
             lmet lalt      F14       spc            F15 ralt                           
 ) 
 
