@@ -1021,12 +1021,12 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 (defalias
 ;;**************** NUMBERSTAB or LEFT HAND COURSOR KEYS by Using aup *********************************************
   .aup  (on-press release-vkey alt)  ;; to exit the alt-tab dialog but stay in the layer
-  .eah (fork home (multi esc @.aup) (lalt))
-  .eae (fork end  (multi esc @.aup) (lalt))
+  .eah (fork home (multi esc @.aup @.aup) (lalt))
+  .eae (fork end  (multi esc @.aup @.aup) (lalt))
   .atxx (multi
             (layer-while-held numberstab)
             (on-press press-vkey alt )
-            (on-press tap-vkey tab )
+            ;;(on-press tap-vkey tab )
             (on-press tap-vkey tab )
             (on-release release-vkey alt )
   )
@@ -1036,14 +1036,14 @@ I would have never come up with this, but it is exactly what I wanted from a tim
   .atp  (tap-dance $300 ( A-pgup (macro A-( 10 pgup 10 pgup )) (macro A-( 10 pgup 100 pgup  100 pgup )) (macro A-( 10 pgup 100 pgup 100 pgup 100 pgup )) )) ;;TODO try on RDP
 
   ;; alt tab number - (multi lalt tab tab ...) does not work anymore
-  .at1 A-tab                                                                        ;;(multi lalt tab)
-  .at2 (macro A-( 10 tab 100 tab ))                                                 ;;(multi lalt tab tab)
-  .at3 (macro A-( 10 tab 100 tab 100 tab         ))                                 ;;(multi lalt tab tab tab)
-  .at4 (macro A-( 10 tab 100 tab 100 tab 100 tab ))                                 ;;(multi lalt tab tab tab tab)
-  .at5 (macro A-( 10 tab 100 tab 100 tab 100 tab  100 tab))                         ;;(multi lalt tab tab tab tab tab)
-  .at6 (macro A-( 10 tab 100 tab 100 tab 100 tab  100 tab 100 tab))                 ;;(multi lalt tab tab tab tab tab tab)
-  .at7 (macro A-( 10 tab 100 tab 100 tab 100 tab  100 tab 100 tab 100 tab))         ;;(multi lalt tab tab tab tab tab tab tab)
-  .at8 (macro A-( 10 tab 100 tab 100 tab 100 tab  100 tab 100 tab 100 tab 100 tab)) ;;(multi lalt tab tab tab tab tab tab tab tab)
+  .at1 A-tab                                                                                ;;(multi lalt tab)
+  .at2 (macro A-( 10 tab 100 tab ))                                                         ;;(multi lalt tab tab)
+  .at3 (macro A-( 10 tab 100 tab 100 tab         ))                                         ;;(multi lalt tab tab tab)
+  .at4 (macro A-( 10 tab 100 tab 100 tab 100 tab ))                                         ;;(multi lalt tab tab tab tab)
+  .at5 (macro A-( 10 tab 100 tab 100 tab 100 tab  100 tab))                                 ;;(multi lalt tab tab tab tab tab)
+  .at6 (macro A-( 10 tab 100 tab 100 tab 100 tab  100 tab 100 tab))                         ;;(multi lalt tab tab tab tab tab tab)
+  .at7 (macro A-( 10 tab 100 tab 100 tab 100 tab  100 tab 100 tab 100 tab))                 ;;(multi lalt tab tab tab tab tab tab tab)
+  .at8 (macro A-( 10 tab 100 tab 100 tab 100 tab  100 tab 100 tab 100 tab 100 tab))         ;;(multi lalt tab tab tab tab tab tab tab tab)
   .at9 (macro A-( 10 tab 100 tab 100 tab 100 tab  100 tab 100 tab 100 tab 100 tab 100 tab)) ;;(multi lalt tab tab tab tab tab tab tab tab tab)
 
 )

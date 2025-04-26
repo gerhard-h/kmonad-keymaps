@@ -1023,12 +1023,12 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 (defalias
 ;;**************** NUMBERSTAB or LEFT HAND COURSOR KEYS by Using aup *********************************************
   .aup  (on-press release-vkey alt)  ;; to exit the alt-tab dialog but stay in the layer 
-  .eah (fork home (multi esc @.aup) (lalt))
-  .eae (fork end  (multi esc @.aup) (lalt))
+  .eah (fork home (multi esc @.aup @.aup) (lalt))
+  .eae (fork end  (multi esc @.aup @.aup) (lalt))
   .atxx (multi
 			(layer-while-held numberstab)
 			(on-press press-vkey alt )
-			(on-press tap-vkey tab )
+            ;;(on-press tap-vkey tab )
 			(on-press tap-vkey tab )
 			(on-release release-vkey alt )   
   ) 
