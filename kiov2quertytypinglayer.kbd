@@ -573,34 +573,17 @@ I would have never come up with this, but it is exactly what I wanted from a tim
   
 ;; *** HOME ROW MODS *** 
 ;; BUG rsft, rsft ,rctl have RDP problems without interception
-;;      .e]   (t! homerowmodexcept 0 $160 e lsft $lefthand)
   .e] (t! homerowmodexcept 0 $160 e lsft ($i))
-
-;;    .t_dk (t! homerowmodexcept 0 $140 t rsft $righthand)
   .t_dk (t! homerowmodright 0 $140 t lsft rsft)
-  
-;;    .i[   (t! homerowmodexcept 0 250 i lctl $lefthanddn)
-  .i[   (t! homerowmodexcept 0 250 i lctl ($e d n))
-
+  .i[   (t! homerowmodexcept 0 250 i lctl ($e d n h))
   ..[   (tap-hold $500 $500 @.[ lctl ) ;; used on symbol layer
-  ..-   (tap-hold $500 $500 - lctl )   
-  
-;;   .n-   (t! homerowmodexcept 1 250 n rctl $righthand)
- .n-   (t! homerowmod 1 250 n rctl) 
-  
+  ..-   (tap-hold $500 $500 - lctl )
+  .n-   (t! homerowmod 1 250 n rctl)
   .s^⎇  (t! homerowmod 1 $350 s lalt)
-;;    .s^⎇  (t! homerowmodexcept 1 $500 s lalt $lefthand)
-
   .h⌘   (t! homerowmodright 1 550 h lmet rmet)
-;;    .h⌘   (t! homerowmodexcept 1 550 h rmet $righthand)
-  
   .c⌘   (t! homerowmod 1 $450 c lmet)
-;;    .c⌘   (t! homerowmodexcept 1 $450 c lmet $lefthand)
-
   .r_⎇  (t! homerowmod 1 $450 r lalt)
-;;    .r_⎇  (t! homerowmodexcept 1 $500 r lalt $righthand)
-
-  .rsf  rsft ;;(tap-hold-release $350 $500 - rsft)
+  .rsf  rsft
 
   ;; chords
   _ü{   (chord vüä ü)        ;; sticky numbers
