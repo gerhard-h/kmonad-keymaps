@@ -466,12 +466,13 @@ I would have never come up with this, but it is exactly what I wanted from a tim
   ;; disalble tap-hold keys if typing rapidly but reenable after a shord idle period
   .tpoff XX
   .tp (switch
-      (lsft rsft) XX break ;; this solves FJ/ET Problem by delaying the Flip to the fast typing layer after the Uppercase character
+      ;; TODO is the  FJ/ET Problem still existing?
+      ;;(lsft rsft) XX break ;; this solves FJ/ET Problem by delaying the Flip to the fast typing layer after the Uppercase character
       ()  (multi
-            ;;(on-press release-vkey base)  ;; use this...
-            (layer-switch typing) ;; causes a P3 issue with Ffj/Eet instead of FJ/ET => use one-shot instead
-            (on-idle  55 tap-vkey to-base )
-            ;;(on-idle  55 press-vkey base ) ;;... to make typing the new first layer
+            ;;(on-press release-vkey base)  ;; IDEA use this...
+            (layer-switch typing)
+            (on-idle 95 tap-vkey to-base )
+            ;;(on-idle 55 press-vkey base ) ;;... to make typing layer the first layer and always stack BASE on top of it
           ) break
   )
   ;; modded german key aliases
@@ -573,16 +574,17 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 
 ;; *** HOME ROW MODS ***
 ;; BUG rsft, rsft ,rctl have RDP problems without interception
-  .e]   (t! homerowmodexcept 0 $160 e lsft ($i))
-  .t_dk (t! homerowmodright 0 $140 t lsft rsft)
-  .i[   (t! homerowmodexcept 0 250 i lctl ($e d n h))
+;; TODO is  homerowmodexcept needed?
+  .e]   (t! homerowmod 150 $160 e lsft) ;;(t! homerowmodexcept 0 $160 e lsft ($i));;
+  .t_dk (t! homerowmodright 150 $140 t lsft rsft)
+  .i[   (t! homerowmod 2000 250 i lctl) ;;(t! homerowmodexcept 0 250 i lctl ($e d n h));;
   ..[   (tap-hold $500 $500 @.[ lctl ) ;; used on symbol layer
   ..-   (tap-hold $500 $500 - lctl )
-  .n-   (t! homerowmod 1 250 n rctl)
-  .s^⎇  (t! homerowmod 1 $350 s lalt)
-  .h⌘   (t! homerowmodright 1 550 h lmet rmet)
-  .c⌘   (t! homerowmod 1 $450 c lmet)
-  .r_⎇  (t! homerowmod 1 $450 r lalt)
+  .n-   (t! homerowmod 200 250 n rctl)
+  .s^⎇  (t! homerowmod 200 $350 s lalt)
+  .h⌘   (t! homerowmodright 200 550 h lmet rmet)
+  .c⌘   (t! homerowmod 200 $450 c lmet)
+  .r_⎇  (t! homerowmod 200 $450 r lalt)
   .rsf  rsft
 
   ;; chords
