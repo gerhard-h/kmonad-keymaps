@@ -1,13 +1,11 @@
 #|
-So after defining a timer as virtual key
+Defining a TIMER as virtual key
 (defvirtualkey my-timer (macro-release-cancel 500 ...
 
     pressing it (multi (on-... release-vkey my-timer)(on-... press-vkey my-timer)) will (re)start the timer
     releasing it (on-... release-vkey my-timer) will stops the timer - only works with macro-release-cancel not with normal macro
-    clean it up: if the timer is not canceled my-timer keeps in the pressed state (wich matters if you also have on-idle functionality). To work around this add (on-... release-vkey my-timer) to some appropriate actions.
-
-I would have never come up with this, but it is exactly what I wanted from a timer system. thanks.
-
+    clean it up: if the timer is not canceled my-timer keeps in the pressed state (wich matters if you also have on-idle functionality).
+                 To work around this add (on-... release-vkey my-timer) to some appropriate actions.
 |#
 
 (defcfg
@@ -17,8 +15,8 @@ I would have never come up with this, but it is exactly what I wanted from a tim
    ;;yes does not help with japanese keys ; did not help with RDP sticky keys;
    ;;needed for WINIOV2 and WIN to have mouse modifiers (naga)
    delegate-to-first-layer yes ;;INFO only for layer-switch; _ to reference to base layer seems correct (TODO simplyfy layers). has no effect on deflayermap.
-   concurrent-tap-hold yes      ;;TODO now yes is working INFO getting early autosymbols if yes eg. Hold-U + Tap-, gives (; instead of (, same for ({ instead of (ü [TODO make a simulation to prove the problem.] problem has gone 1.7.1p
-   sequence-timeout 3000       ;; sequence not used
+   concurrent-tap-hold yes
+   sequence-timeout 3000       ;; sequences are not used
    sequence-input-mode visible-backspaced ;;hidden-suppressed ;; hidden-delay-type ;; BUG the hidden types sometimes have shift issues
    sequence-backtrack-modcancel no  ;; unknown
   ;; windows-interception-mouse-hwid "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0"
@@ -34,7 +32,7 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 
   tray-icon "base.ico" ;; should activate for layers without icons
   icon-match-layer-name     yes    ;;|yes| match layer name to icon files even without an explicit (icon name.ico) config
-  tooltip-layer-changes     no     ;;|false|
+  tooltip-layer-changes     false  ;;|false|true
   tooltip-show-blank        no     ;;|no|
   tooltip-duration          500    ;;|500|
   tooltip-size              24,24  ;;|24 24|
@@ -112,6 +110,7 @@ I would have never come up with this, but it is exactly what I wanted from a tim
   700 700
   800 800
   900 900 ;;===
+  ;; handness is not used / also unclear for quert boards
   righthand (
     x ü u a ä
     c s i e o
@@ -125,7 +124,7 @@ I would have never come up with this, but it is exactly what I wanted from a tim
     v f l j q ß
     d t n r h k
     b g z m w  d n
-  )    
+  )
 )
 
 (deflocalkeys-wintercept
@@ -138,7 +137,7 @@ I would have never come up with this, but it is exactly what I wanted from a tim
   ^    192
   ´    187
   ä    222
-  ;;<    226 ;;in "102d" | "lsgt" | "nubs" | "nonusbslash" | "﹨" | "<"
+  ;;<    226 ;;in "102d" | "lsgt" | "nubs" | "nonusbslash" | "﹨" | "<" ;; since < is amgigeous 102d is prefered
   y    90
   z    89
   ;;- 555 INFO random custom numbers does not work with interception
@@ -182,15 +181,15 @@ I would have never come up with this, but it is exactly what I wanted from a tim
  .nly (cmd AutoHotkey numlockon.ah2)
  ;;.nln (cmd-output-keys powershell.exe -NoProfile -NoLogo -NonInteractive "if ($([console]::NumberLock) -match 'True') { echo '(NumLock)' } else { echo '()' }")
  .nln (cmd AutoHotkey numlockoff.ah2)
- .cwd   (multi 
+ .cwd   (multi
    (unmod (lalt ralt lmet rmet rsft lctl rctl) nop0)
    (release-key lctl)
    (release-key lsft)
    (macro end 5 S-(5 home) 5 S-(5 home) 5 spc 5 bspc 5 del)
   )
- .cwd- (caps-word-custom 2000 
-		(a b c d e f g h i j k l m n o p q r s t u v w x y z ä ü ö)
-	    (1 2 3 bspc del up down left rght -) ;; rsft must be exluded as they are used for triggering caps words
+ .cwd- (caps-word-custom 2000
+        (a b c d e f g h i j k l m n o p q r s t u v w x y z ä ü ö)
+        (1 2 3 bspc del up down left rght -) ;; rsft must be exluded as they are used for triggering caps words
   )
 )
 (defvirtualkeys
@@ -209,11 +208,9 @@ I would have never come up with this, but it is exactly what I wanted from a tim
   mouselight M-S-f
   base (layer-while-held base)
   to-base (layer-switch base)
-  
   vcaps   (layer-while-held CAPS)
-
 )
-;; TODO-Usage E-i -> spc E-s -> End E-c -> Home TODO
+;; UNUSESD E-i -> spc E-s -> End E-c -> Home TODO
 (deftemplate same-side-lshift (defaultaction trigger action)
   (switch
     (rsft lctl rctl ralt lalt lmet rmet) $defaultaction break ;; lshift is missing from the list
@@ -253,7 +250,7 @@ I would have never come up with this, but it is exactly what I wanted from a tim
     )
   )
 )
-
+;; UNUSESED
 (deftemplate orderedchord (first second)
   (switch
     ((input-history real $first 2)) (macro $first $second) break
@@ -261,7 +258,7 @@ I would have never come up with this, but it is exactly what I wanted from a tim
     () XX break
   )
 )
-
+;; UNUSESED
 (deftemplate orderedshift (first second)
   (switch
     ((input-history real $first 2)) (multi lsft $second) break
@@ -276,7 +273,7 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 (deftemplate  key-hold-repeat (timehold time2ndhold keytap keyhold keyrepeat historykey3 historykey2 modlesshistorykey1 combokeylist keyrepeat3)
 ;; sam v| (t! key-hold-repeat  $200      $800         v      @.|      @.|        XX          ralt        <                  (ü 7)        del     )
 ;; TODO using RA- ralt may only work with "process-unmapped-keys yes" and wintercept
-;; $historykey3 is currently only used to disabel symbol repeat for / in </div TODO should then be a list
+;; $historykey3 is currently only used to disabel symbol repeat for / in </div TODO $historykey3 should be a list
 ;; y` ,;> .:< -_~ and homrow mods have there own implementation
 ;; TIP this template can be wraped in (multi ... @.tp) But for some scenarios (non windtercept / no powertoys / windows 11 ) may require calling @.tp from inside this template
  (tap-dance-eager $150 (
@@ -574,7 +571,7 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 
 ;; *** HOME ROW MODS ***
 ;; BUG rsft, rsft ,rctl have RDP problems without interception
-;; TODO is  homerowmodexcept needed?
+;; TODO is homerowmodexcept needed?
   .e]   (t! homerowmod 150 $160 e lsft) ;;(t! homerowmodexcept 0 $160 e lsft ($i));;
   .t_dk (t! homerowmodright 150 $140 t lsft rsft)
   .i[   (t! homerowmod 2000 250 i lctl) ;;(t! homerowmodexcept 0 250 i lctl ($e d n h));;
@@ -744,7 +741,7 @@ I would have never come up with this, but it is exactly what I wanted from a tim
    C-bspc 30 all-released  (game numbers)
   (i ü)
    esc 20 all-released (game numbers)
-  ;;(e i) (t! orderedchord e i) 75 first-release (game numbers)    
+  ;;(e i) (t! orderedchord e i) 75 first-release (game numbers)
   (n g)
    esc 20 all-released (game numbers)
   ;;(n s) (macro n s) 20 all-released (game numbers)
@@ -861,7 +858,7 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 ;; (INFO) unmod seems to solve RDP issues
 (defalias
   .e_type (switch  ;; unused
-             ((and (or (key-history lsft 2)(key-history rsft 2)) (key-history e 1))) (tap-hold  0 160 e lsft) break  
+             ((and (or (key-history lsft 2)(key-history rsft 2)) (key-history e 1))) (tap-hold  0 160 e lsft) break
              () (unmod e) break
   )
   ._z (tap-hold  0 160 (unmod $z) (macro @.˝))
@@ -921,7 +918,7 @@ I would have never come up with this, but it is exactly what I wanted from a tim
   .C{  (fork (tap-hold 1 $200 (multi lsft _) (unicode {))   (multi _ (unshift nop0))  (rsft lsft))
   .C&  (fork (tap-hold 1 $200 (multi lsft _) (macro @.&))   (multi _ (unshift nop0))  (rsft lsft))
   .C   (fork                  (multi lsft _)                (multi _ (unshift nop0))  (rsft lsft))
-  .C`  (fork (tap-hold 1 $200 (unicode Y)    (unicode ´))   (multi _ (unshift nop0))  (rsft lsft))  
+  .C`  (fork (tap-hold 1 $200 (unicode Y)    (unicode ´))   (multi _ (unshift nop0))  (rsft lsft))
   .C$  (fork (tap-hold 1 $200 (multi lsft _) (macro @.$))   (multi _ (unshift nop0))  (rsft lsft))
   .C!  (fork (tap-hold 1 $200 (multi lsft _) (macro @.!))   (multi _ (unshift nop0))  (rsft lsft))
   .C◖  (fork (tap-hold 1 $200 (multi lsft _) (macro @.◖))   (multi _ (unshift nop0))  (rsft lsft))
@@ -985,9 +982,9 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 ;; TODO-Usage: caps to sym / C-bspc = @.⎈␡ or 7+8+9
   esc _ _ _ _
   @.^       @.1    @.2    @.3   @.4   @.5     @.6   @.7   @.8   @.9   @.0    @.cmdrld  A-prnt _
-  _         @-_:   1      2     3     @.⎈␡    esc   home  ▲     end   pgup   pgdn      _      _
+  _         @-_:   1      2     3     @.⎈␡    esc   home  ▲     end   pgup   pgdn      ins    _
   @.atr     @.⌘c   @.4⎇   @.5⎈  @.6⇧  0       bks    ◀    ▼     ▶     lmet   @.fkyn    _
-  @.atp _   @,:x     @_7v   @_8   @_9   del     Tab   @.⏎⇧  @.␡⎈  @.l🖰⎇ @.r🖰⌘ _
+  @.atp _   @,:x   @_7v   @_8   @_9   del     Tab   @.⏎⇧  @.␡⎈  @.l🖰⎇ @.r🖰⌘ _
             _     _    _         _    _ ralt
 )
 ;; Exit numfix with CAPS or HOLD SPACE or HOLD Null or 7+9
@@ -1090,10 +1087,10 @@ I would have never come up with this, but it is exactly what I wanted from a tim
 (deflayer (mouse icon mouse.ico)
 ;;****************   MOUSE   ********************************************************
   esc _ _ _ _
-  ^        1     2     3     4      5     6            7       8     9         0    -    ´    bspc
-  tab      @.%%% @.slw @.sl% @.sl%  @.sl% @.basecm     @.cll    @.🖰↑↑ @.clr     z    q    +    @.mus+
-  caps     XX    @.clm @.clr @.cll  XX    @.set        @.🖰←←    @.🖰↓↓ @.🖰→→     h    k    ret
-  lsft  _  @.msz lalt  lctl  lsft   XX    @.🖰←         @.🖰↑    @.🖰↓  @.🖰→     @-_: rsft
+  ^        1     2     3     4      5     6            7       8     9         0     -    ´  bspc
+  tab      @.%%% @.slw @.sl% @.sl%  @.sl% @.basecm     @.cll    @.🖰↑↑ @.clr     z    q    +  @.mus+
+  caps     XX    @.clm @.clr @.cll  XX    @.set        @.🖰←←    @.🖰↓↓ @.🖰→→    h     k   ret
+  lsft  _  @.msz lalt  lctl  lsft   XX    @.🖰←         @.🖰↑    @.🖰↓   @.🖰→     @-_: rsft
            lmet  lalt  @.clr                         @.cll   _ ralt
 )
 
@@ -1102,8 +1099,8 @@ I would have never come up with this, but it is exactly what I wanted from a tim
   esc _ _ _ _
   ^         1     2      3      4      5     6            7         8       9         0        -    ´    bspc
   tab       @.%%% @.slw+ @.slw+ @.slw+ @.sl% @.basecm     @.cll     @.🖰↑    @.clr     z        q    +    @.mus
-  caps      XX    @.clm  @.clr  @.cll  XX    @.set        @.🖰←      @.🖰↓    @.🖰→      h        k    ret
-  lsft  _   @.msz lalt   lctl   lsft   XX    @.🖰←+        @.🖰↑+     @.🖰↓+    @.🖰→+     @-_:     rsft
+  caps      XX    @.clm  @.clr  @.cll  XX    @.set        @.🖰←      @.🖰↓    @.🖰→      h       k    ret
+  lsft  _   @.msz lalt   lctl   lsft   XX    @.🖰←+        @.🖰↑+     @.🖰↓+   @.🖰→+     @-_:    rsft
             lmet  lalt   @.clr       @.cll                 _ ralt
 )
 
