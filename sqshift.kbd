@@ -1,0 +1,440 @@
+(defcfg
+   ;;alias-to-trigger-on-load .basen
+   chords-v2-min-idle 170
+   process-unmapped-keys yes
+   ;;yes does not help with japanese keys ; did not help with RDP sticky keys;
+   ;;needed for WINIOV2 and WIN to have mouse modifiers (naga)
+   delegate-to-first-layer yes ;;INFO only for layer-switch; _ to reference to base layer seems correct (TODO simplyfy layers). has no effect on deflayermap.
+   concurrent-tap-hold yes
+   sequence-timeout 2002       ;; sequences are not used
+   sequence-input-mode hidden-suppressed ;;hidden-suppressed ;; hidden-delay-type ;; BUG the hidden types sometimes have shift issues
+   sequence-backtrack-modcancel no  ;; unknown
+  ;; windows-interception-mouse-hwid "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0"
+  ;; windows-altgr cancel-lctl-press ;; remove the lctl press that comes as a combo with ralt  with F24 mapping
+  ;; windows-altgr add-lctl-release  ;; add an lctl release when ralt is released           with standard Altgr
+  ;; HINT GH: on windows don't map altgr to avoid both options from above
+  ;; NOTE: even with these workarounds, putting lctl+ralt in your defsrc may
+  ;; not work too well with other applications that use WH_KEYBOARD_LL.
+  ;; Known applications with issues: GWSL/VcXsrv
+  ;; I also fiddled around with my mouse software (Logitech/Razer) and with autohotkey to avoid altgr. And there were rumors on not mapping/using Logitech G-Shitf key.
+
+  log-layer-changes  yes  ;; overhead vs info in console
+
+  tray-icon "base.ico" ;; should activate for layers without icons
+  icon-match-layer-name     yes    ;;|yes| match layer name to icon files even without an explicit (icon name.ico) config
+  tooltip-layer-changes     false  ;;|false|true
+  tooltip-show-blank        no     ;;|no|
+  tooltip-duration          500    ;;|500|
+  tooltip-size              24,24  ;;|24 24|
+  notify-cfg-reload         yes    ;;|yes|
+  notify-cfg-reload-silent  yes    ;;|no|
+  notify-error              yes    ;;|yes|
+
+  ;; Using a binary compiled with the cmd feature enabled - usecases: current date, NUMLOCK status
+  danger-enable-cmd yes
+  rapid-event-delay 5 ;; (5) This configuration applies to
+  ;; a) the release of one-shot-press activation
+  ;; b) the release of the tapped key in a tap-hold activation
+
+  ;; hw Keychron V10 and K15 Pro and Q10 (TODO missing laptop keyboard) - keyboard binding prevents layer influences on the mouse
+  windows-interception-keyboard-hwids (
+  "72, 0, 73, 0, 68, 0, 92, 0, 86, 0, 73, 0, 68, 0, 95, 0, 51, 0, 52, 0, 51, 0, 52, 0, 38, 0, 80, 0, 73, 0, 68, 0, 95, 0, 48, 0, 51, 0, 65, 0, 49, 0, 38, 0, 82, 0, 69, 0, 86, 0, 95, 0, 48, 0, 49, 0, 48, 0, 50, 0, 38, 0, 77, 0, 73, 0, 95, 0, 48, 0, 48, 0, 0, 0, 72, 0, 73, 0, 68, 0, 92, 0, 86, 0, 73, 0, 68, 0, 95, 0, 51, 0, 52, 0, 51, 0, 52, 0, 38, 0, 80, 0, 73, 0, 68, 0, 95, 0, 48, 0, 51, 0, 65, 0, 49, 0, 38, 0, 77, 0, 73, 0, 95, 0, 48, 0, 48, 0, 0, 0, 72, 0, 73, 0, 68, 0, 92, 0, 86, 0, 73, 0, 68, 0, 95, 0, 51, 0, 52, 0, 51, 0, 52, 0, 38, 0, 85, 0, 80, 0, 58, 0, 48, 0, 48, 0, 48, 0, 49, 0, 95, 0, 85, 0, 58, 0, 48, 0, 48, 0, 48, 0, 54, 0, 0, 0, 72, 0, 73, 0, 68, 0, 95, 0, 68, 0, 69, 0, 86, 0, 73, 0, 67, 0, 69, 0, 95, 0, 83, 0, 89, 0, 83, 0, 84, 0, 69, 0, 77, 0, 95, 0, 75, 0, 69, 0, 89, 0, 66, 0, 79, 0, 65, 0, 82, 0, 68, 0, 0, 0, 72, 0, 73, 0, 68, 0, 95, 0, 68, 0, 69, 0, 86, 0, 73, 0, 67, 0, 69, 0, 95, 0, 85, 0, 80, 0, 58, 0, 48, 0, 48, 0, 48, 0, 49, 0, 95, 0, 85, 0, 58, 0, 48, 0, 48, 0, 48, 0, 54, 0, 0, 0, 72, 0, 73, 0, 68, 0, 95, 0, 68, 0, 69, 0, 86, 0, 73, 0, 67, 0, 69, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0"
+  "72, 0, 73, 0, 68, 0, 92, 0, 86, 0, 73, 0, 68, 0, 95, 0, 51, 0, 52, 0, 51, 0, 52, 0, 38, 0, 80, 0, 73, 0, 68, 0, 95, 0, 48, 0, 50, 0, 70, 0, 57, 0, 38, 0, 82, 0, 69, 0, 86, 0, 95, 0, 48, 0, 49, 0, 48, 0, 49, 0, 38, 0, 77, 0, 73, 0, 95, 0, 48, 0, 48, 0, 0, 0, 72, 0, 73, 0, 68, 0, 92, 0, 86, 0, 73, 0, 68, 0, 95, 0, 51, 0, 52, 0, 51, 0, 52, 0, 38, 0, 80, 0, 73, 0, 68, 0, 95, 0, 48, 0, 50, 0, 70, 0, 57, 0, 38, 0, 77, 0, 73, 0, 95, 0, 48, 0, 48, 0, 0, 0, 72, 0, 73, 0, 68, 0, 92, 0, 86, 0, 73, 0, 68, 0, 95, 0, 51, 0, 52, 0, 51, 0, 52, 0, 38, 0, 85, 0, 80, 0, 58, 0, 48, 0, 48, 0, 48, 0, 49, 0, 95, 0, 85, 0, 58, 0, 48, 0, 48, 0, 48, 0, 54, 0, 0, 0, 72, 0, 73, 0, 68, 0, 95, 0, 68, 0, 69, 0, 86, 0, 73, 0, 67, 0, 69, 0, 95, 0, 83, 0, 89, 0, 83, 0, 84, 0, 69, 0, 77, 0, 95, 0, 75, 0, 69, 0, 89, 0, 66, 0, 79, 0, 65, 0, 82, 0, 68, 0, 0, 0, 72, 0, 73, 0, 68, 0, 95, 0, 68, 0, 69, 0, 86, 0, 73, 0, 67, 0, 69, 0, 95, 0, 85, 0, 80, 0, 58, 0, 48, 0, 48, 0, 48, 0, 49, 0, 95, 0, 85, 0, 58, 0, 48, 0, 48, 0, 48, 0, 54, 0, 0, 0, 72, 0, 73, 0, 68, 0, 95, 0, 68, 0, 69, 0, 86, 0, 73, 0, 67, 0, 69, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0"
+  "72, 0, 73, 0, 68, 0, 92, 0, 86, 0, 73, 0, 68, 0, 95, 0, 51, 0, 52, 0, 51, 0, 52, 0, 38, 0, 80, 0, 73, 0, 68, 0, 95, 0, 48, 0, 49, 0, 65, 0, 51, 0, 38, 0, 82, 0, 69, 0, 86, 0, 95, 0, 48, 0, 49, 0, 48, 0, 48, 0, 38, 0, 77, 0, 73, 0, 95, 0, 48, 0, 48, 0, 0, 0, 72, 0, 73, 0, 68, 0, 92, 0, 86, 0, 73, 0, 68, 0, 95, 0, 51, 0, 52, 0, 51, 0, 52, 0, 38, 0, 80, 0, 73, 0, 68, 0, 95, 0, 48, 0, 49, 0, 65, 0, 51, 0, 38, 0, 77, 0, 73, 0, 95, 0, 48, 0, 48, 0, 0, 0, 72, 0, 73, 0, 68, 0, 92, 0, 86, 0, 73, 0, 68, 0, 95, 0, 51, 0, 52, 0, 51, 0, 52, 0, 38, 0, 85, 0, 80, 0, 58, 0, 48, 0, 48, 0, 48, 0, 49, 0, 95, 0, 85, 0, 58, 0, 48, 0, 48, 0, 48, 0, 54, 0, 0, 0, 72, 0, 73, 0, 68, 0, 95, 0, 68, 0, 69, 0, 86, 0, 73, 0, 67, 0, 69, 0, 95, 0, 83, 0, 89, 0, 83, 0, 84, 0, 69, 0, 77, 0, 95, 0, 75, 0, 69, 0, 89, 0, 66, 0, 79, 0, 65, 0, 82, 0, 68, 0, 0, 0, 72, 0, 73, 0, 68, 0, 95, 0, 68, 0, 69, 0, 86, 0, 73, 0, 67, 0, 69, 0, 95, 0, 85, 0, 80, 0, 58, 0, 48, 0, 48, 0, 48, 0, 49, 0, 95, 0, 85, 0, 58, 0, 48, 0, 48, 0, 48, 0, 54, 0, 0, 0, 72, 0, 73, 0, 68, 0, 95, 0, 68, 0, 69, 0, 86, 0, 73, 0, 67, 0, 69, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0"
+  "72, 0, 73, 0, 68, 0, 92, 0, 86, 0, 73, 0, 68, 0, 95, 0, 51, 0, 52, 0, 51, 0, 52, 0, 38, 0, 80, 0, 73, 0, 68, 0, 95, 0, 48, 0, 49, 0, 65, 0, 51, 0, 38, 0, 82, 0, 69, 0, 86, 0, 95, 0, 48, 0, 49, 0, 48, 0, 48, 0, 38, 0, 77, 0, 73, 0, 95, 0, 48, 0, 50, 0, 38, 0, 67, 0, 111, 0, 108, 0, 48, 0, 52, 0, 0, 0, 72, 0, 73, 0, 68, 0, 92, 0, 86, 0, 73, 0, 68, 0, 95, 0, 51, 0, 52, 0, 51, 0, 52, 0, 38, 0, 80, 0, 73, 0, 68, 0, 95, 0, 48, 0, 49, 0, 65, 0, 51, 0, 38, 0, 77, 0, 73, 0, 95, 0, 48, 0, 50, 0, 38, 0, 67, 0, 111, 0, 108, 0, 48, 0, 52, 0, 0, 0, 72, 0, 73, 0, 68, 0, 92, 0, 86, 0, 73, 0, 68, 0, 95, 0, 51, 0, 52, 0, 51, 0, 52, 0, 38, 0, 85, 0, 80, 0, 58, 0, 48, 0, 48, 0, 48, 0, 49, 0, 95, 0, 85, 0, 58, 0, 48, 0, 48, 0, 48, 0, 54, 0, 0, 0, 72, 0, 73, 0, 68, 0, 95, 0, 68, 0, 69, 0, 86, 0, 73, 0, 67, 0, 69, 0, 95, 0, 83, 0, 89, 0, 83, 0, 84, 0, 69, 0, 77, 0, 95, 0, 75, 0, 69, 0, 89, 0, 66, 0, 79, 0, 65, 0, 82, 0, 68, 0, 0, 0, 72, 0, 73, 0, 68, 0, 95, 0, 68, 0, 69, 0, 86, 0, 73, 0, 67, 0, 69, 0, 95, 0, 85, 0, 80, 0, 58, 0, 48, 0, 48, 0, 48, 0, 49, 0, 95, 0, 85, 0, 58, 0, 48, 0, 48, 0, 48, 0, 54, 0, 0, 0, 72, 0, 73, 0, 68, 0, 95, 0, 68, 0, 69, 0, 86, 0, 73, 0, 67, 0, 69, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0"
+  )
+
+  ;; This configuration allows you to customize the length limit on dynamic macros. The default limit is 128 keys.
+  dynamic-macro-max-presses 20
+
+  ;; dynamic-macro-delay-between-replay-actions customizes the number of ticks
+  ;; (approx 1ms) between each replay action of a dynamic macro. The default
+  ;; value is 5. This may need to be increased if some state changes, e.g. a
+  ;; layer change is not happening at the right time.
+  ;; dynamic-macro-delay-between-replay-actions 5
+
+  movemouse-smooth-diagonals yes
+  movemouse-inherit-accel-state yes  ;; not much effect
+)
+(platform (wintercept)
+(defvar
+  y y  ;; INFO wintercept confuses y and z but can be solved with deflocalkeys, vars does not work in defsrc, ( => $z $y can be removed?!)
+  z z
+  )
+)
+(platform (win)
+(defvar
+  y y
+  z z
+  ;; TODO use variables for rsft rctl to handle non interception RDP cases
+  )
+)
+(platform (winiov2)
+(defvar
+  y z ;; the flip is needed on QUERTY keyboards on non QUERTY defsrc also needs to be switched
+  z y
+  )
+)
+(defvar
+  ;;rmetwiniov2 rmet
+  i i
+  e e
+  off nop1 ;; $off used to deactivate template-features
+  ;; timers - this is done to simplyfy adjustment of timing differences on different computers/keyboards
+  100 100 ;; punctuation
+  120 120 ;; j!
+  140 140 ;; 1! " $ ? # % } ; and tap-dance punctuation
+  145 145
+  150 150 ;; ( and )
+  160 160 ;; homerow shift and & \ @ '
+  180 180 ;; template and ö =
+  200 200 ;; layers numbers / | { caps-layer
+  240 240
+  300 300 ;; homerow ctl
+  340 340
+  350 350
+  400 400
+  450 450
+  500 500 ;;==
+  600 600
+  700 700
+  800 800
+  900 900 ;;===
+  ;; handness is not used / also unclear for quert boards
+  righthand (
+    x ü u a ä
+    c s i e o
+   $y . - , ö)
+  lefthand (
+    v f l j q ß
+    d t n r h k
+    b g z m w
+  )
+  lefthanddn (
+    v f l j q ß
+    d t n r h k
+    b g z m w  d n
+  )
+)
+
+(deflocalkeys-wintercept
+  -    191
+  ü    219
+  +    221
+  #    220
+  ö    186
+  ß    189
+  ^    192
+  ´    187
+  ä    222
+  ;;<    226 ;;in "102d" | "lsgt" | "nubs" | "nonusbslash" | "﹨" | "<" ;; since < is amgigeous 102d is prefered
+  y    90
+  z    89
+  ;;- 555 INFO random custom numbers does not work with interception
+)
+
+(deflocalkeys-win ;; https://www.toptal.com/developers/keycode
+  -    189
+  ü    186
+  +    187
+  #    191
+  ö    192
+  ß    219
+  ^    220
+  ´    221
+  ä    222
+  ;;<    226
+  y    89    ;; ( y and z are flipped compared to wintercept)
+  z    90
+)
+;; winiov2 doubles AHK keys in a predictabele manner ::by:: becomes ::bbyy::
+;; winiov2 kills modifiers on Razor Mouse - can be solved by using synapse makros
+;; winiov2 has problems with C+Y = Ditto on the mouse (naga displays C+Z) - can also be solved by using synapse makros
+(deflocalkeys-winiov2 ;; same numbers as wintercept?! z and y are skipped
+  -    191  ;; /
+  ü    219
+  +    221
+  #    220
+  ö    186
+  ß    189
+  ^    192
+  ´    187  ;; = Problems in layer
+  ä    222
+;;  y    90
+;;  z    89
+;;  x    80
+;;  p    88
+)
+(defalias
+;; *** numlock on / off indicator for CAPS or other sticky layers *** BUG code must be doubled
+  ;;.nly (cmd-output-keys powershell.exe -NoProfile -NoLogo -NonInteractive "if ($([console]::NumberLock) -match 'True') { echo '()' } else { echo '(NumLock)' }")
+ .nly (cmd AutoHotkey numlockon.ah2)
+ ;;.nln (cmd-output-keys powershell.exe -NoProfile -NoLogo -NonInteractive "if ($([console]::NumberLock) -match 'True') { echo '(NumLock)' } else { echo '()' }")
+ .nln (cmd AutoHotkey numlockoff.ah2)
+;; TODO-Usage .cwd = delete current row
+ .cwd   (multi      
+   (unmod (lalt ralt lmet rmet rsft lctl rctl) nop1)
+   (release-key lctl)
+   (release-key lsft)
+   (macro end 5 S-(5 home) 5 S-(5 home) 5 spc 5 bspc 5 del)
+  )
+ .cwd- (caps-word-custom 2000
+        (a b c d e f g h i j k l m n o p q r s t u v w x y z ä ü ö)
+        (1 2 3 bspc del up down left rght -) ;; rsft must be exluded as they are used for triggering caps words
+  )
+)
+(defvirtualkeys
+  lshift-start nop1
+  lshift-end nop2
+  lshift-down nop3
+  lshift-pre nop4
+  rshift-start nop5
+  rshift-end nop6
+  rshift-down nop7
+  rshift-pre nop8
+  seq-start sldr
+  no-lshift (macro e)
+  no-rshift (macro t)
+  ;;shift-lshift (macro S-e)
+  ;;shift-rshift (macro S-t)
+  
+ sft-x (macro S-x)
+ sft-p (macro S-p)
+ sft-l (macro S-l)
+ sft-f (macro S-f)
+ sft-j (macro S-j)
+ sft-q (macro S-q)
+ sft-d (macro S-d)
+ sft-n (macro S-n)
+ sft-r (macro S-r)
+ sft-h (macro S-h)
+ sft-k (macro S-k)
+ sft-b (macro S-b)
+ sft-g (macro S-g)
+ sft-w (macro S-w)
+ sft-m (macro S-m)
+ sft-v (macro S-v)
+ sft-z (macro S-z)
+ sft-u (macro S-u)
+ sft-a (macro S-a)
+ sft-ä (macro S-ä)
+ sft-c (macro S-c)
+ sft-s (macro S-s)
+ sft-i (macro S-i)
+ sft-o (macro S-o)
+ sft-y (macro S-y)
+ sft-. (macro S-.)
+ sft-ü (macro S-ü)
+ sft-, (macro S-,)
+ sft-ö (macro S-ö)
+ 
+ nsft-z (macro e z)
+ nsft-u (macro e u)
+ nsft-a (macro e a)
+ nsft-ä (macro e ä)
+ nsft-c (macro e c)
+ nsft-s (macro e s)
+ nsft-i (macro e i)
+ nsft-o (macro e o)
+ nsft-y (macro e y)
+ nsft-. (macro e .)
+ nsft-ü (macro e ü)
+ nsft-, (macro e ,)
+ nsft-ö (macro e ö)
+ 
+ nsft-x (macro t  x )
+ nsft-p (macro t  p )
+ nsft-l (macro t  l )
+ nsft-f (macro t  f )
+ nsft-j (macro t  j )
+ nsft-q (macro t  q )
+ nsft-d (macro t  d )
+ nsft-n (macro t  n )
+ nsft-r (macro t  r )
+ nsft-h (macro t  h )
+ nsft-k (macro t  k )
+ nsft-b (macro t  b )
+ nsft-g (macro t  g )
+ nsft-w (macro t  w )
+ nsft-m (macro t  m )
+ nsft-v (macro t  v )
+)
+
+(defseq
+ no-lshift (nop1 nop3 nop2)
+ no-rshift (nop5 nop7 nop6)
+ 
+ ;;shift-lshift (nop4)
+ ;;shift-rshift (nop8)
+ 
+ ;; right hand sft
+ sft-x (nop1 nop3 x )
+ sft-p (nop1 nop3 p )
+ sft-l (nop1 nop3 l )
+ sft-f (nop1 nop3 f )
+ sft-j (nop1 nop3 j )
+ sft-q (nop1 nop3 q )
+ sft-d (nop1 nop3 d )
+ sft-n (nop1 nop3 n )
+ sft-r (nop1 nop3 r )
+ sft-h (nop1 nop3 h )
+ sft-k (nop1 nop3 k )
+ sft-b (nop1 nop3 b )
+ sft-g (nop1 nop3 g )
+ sft-w (nop1 nop3 w )
+ sft-m (nop1 nop3 m )
+ sft-v (nop1 nop3 v )
+ ;; left hand sft
+ sft-z (nop5 nop7 z )
+ sft-u (nop5 nop7 u )
+ sft-a (nop5 nop7 a )
+ sft-ä (nop5 nop7 ä )
+ sft-c (nop5 nop7 c )
+ sft-s (nop5 nop7 s )
+ sft-i (nop5 nop7 i )
+ sft-o (nop5 nop7 o )
+ sft-y (nop5 nop7 y )
+ sft-. (nop5 nop7 . )
+ sft-ü (nop5 nop7 ü )
+ sft-, (nop5 nop7 , )
+ sft-ö (nop5 nop7 ö )
+ ;; lefthand roles
+ nsft-z (nop1 nop3 z )
+ nsft-u (nop1 nop3 u )
+ nsft-a (nop1 nop3 a )
+ nsft-ä (nop1 nop3 ä )
+ nsft-c (nop1 nop3 c )
+ nsft-s (nop1 nop3 s )
+ nsft-i (nop1 nop3 i )
+ nsft-o (nop1 nop3 o )
+ nsft-y (nop1 nop3 y )
+ nsft-. (nop1 nop3 . )
+ nsft-ü (nop1 nop3 ü )
+ nsft-, (nop1 nop3 , )
+ nsft-ö (nop1 nop3 ö )
+ ;; right hand roles
+ nsft-x (nop5 nop7 x )
+ nsft-p (nop5 nop7 p )
+ nsft-l (nop5 nop7 l )
+ nsft-f (nop5 nop7 f )
+ nsft-j (nop5 nop7 j )
+ nsft-q (nop5 nop7 q )
+ nsft-d (nop5 nop7 d )
+ nsft-n (nop5 nop7 n )
+ nsft-r (nop5 nop7 r )
+ nsft-h (nop5 nop7 h )
+ nsft-k (nop5 nop7 k )
+ nsft-b (nop5 nop7 b )
+ nsft-g (nop5 nop7 g )
+ nsft-w (nop5 nop7 w )
+ nsft-m (nop5 nop7 m )
+ nsft-v (nop5 nop7 v )
+)
+
+;; QMK keyboards
+
+(defsrc
+  esc       F1   F13  F16  F24
+  ^         1    2    3    4    5    6    7    8    9    0    +    ´    ⌫
+  tab       -    z    u    a    ä    x    p    l    f    j    q    ß    #
+  caps      c    s    i    e    o    d    t    n    r    h    k   ret
+  lsft 102d y    .    ü    ,    ö    b    g    w    m    v    rsft
+            lmet lalt      F14       spc            F15 ralt
+)
+
+
+(deflayermap (base icon base.ico)
+ + lrld-next
+ 0 (lrld-num 1)
+
+ e (switch    
+     (nop7)  (multi (unicode E) f17) break ;; there is a BUG preventing me from using S-e (unicode) will not end a sequence therefore f17 
+	 
+
+	((and (key-timing 1 less-than 150) 	(key-history nop2 1))) e break
+		
+	 
+	 ((and (key-timing 1 less-than 150) (key-history x 1))) e break
+     ((and (key-timing 1 less-than 150) (key-history p 1))) e break
+     ((and (key-timing 1 less-than 150) (key-history l 1))) e break
+     ((and (key-timing 1 less-than 150) (key-history f 1))) e break
+     ((and (key-timing 1 less-than 150) (key-history j 1))) e break
+     ((and (key-timing 1 less-than 150) (key-history q 1))) e break
+     ((and (key-timing 1 less-than 150) (key-history d 1))) e break
+     ((and (key-timing 1 less-than 150) (key-history n 1))) e break
+     ((and (key-timing 1 less-than 150) (key-history r 1))) e break
+     ((and (key-timing 1 less-than 150) (key-history h 1))) e break
+     ((and (key-timing 1 less-than 150) (key-history k 1))) e break
+     ((and (key-timing 1 less-than 150) (key-history b 1))) e break
+     ((and (key-timing 1 less-than 150) (key-history g 1))) e break
+     ((and (key-timing 1 less-than 150) (key-history w 1))) e break
+     ((and (key-timing 1 less-than 150) (key-history m 1))) e break
+     ((and (key-timing 1 less-than 150) (key-history v 1))) e break
+     ((and (key-timing 1 less-than 150) (key-history z 1))) e break
+     ((and (key-timing 1 less-than 150) (key-history u 1))) e break
+     ((and (key-timing 1 less-than 150) (key-history a 1))) e break
+     ((and (key-timing 1 less-than 150) (key-history ä 1))) e break
+     ((and (key-timing 1 less-than 150) (key-history c 1))) e break
+     ((and (key-timing 1 less-than 150) (key-history s 1))) e break
+     ((and (key-timing 1 less-than 150) (key-history i 1))) e break
+     ((and (key-timing 1 less-than 150) (key-history o 1))) e break
+     ((and (key-timing 1 less-than 150) (key-history y 1))) e break
+     ((and (key-timing 1 less-than 150) (key-history . 1))) e break
+     ((and (key-timing 1 less-than 150) (key-history ü 1))) e break
+     ((and (key-timing 1 less-than 150) (key-history , 1))) e break
+     ((and (key-timing 1 less-than 150) (key-history ö 1))) e break
+	 
+	 ()      (multi 
+				(on-press tap-vkey lshift-pre) ;;not used
+				(on-press tap-vkey seq-start) 
+				(on-press tap-vkey lshift-start)
+				(on-press press-vkey lshift-down)
+				(on-release release-vkey lshift-down)
+				(on-release tap-vkey lshift-end)
+			) break
+   )
+ t (switch   
+	 (nop3)		(multi (unicode T) f17 ) break
+	 ((and (key-timing 1 less-than 150) (key-history nop6 1))) t break
+	 
+	 ((and (key-timing 1 less-than 150) (key-history x 1))) t break
+     ((and (key-timing 1 less-than 150) (key-history p 1))) t break
+     ((and (key-timing 1 less-than 150) (key-history l 1))) t break
+     ((and (key-timing 1 less-than 150) (key-history f 1))) t break
+     ((and (key-timing 1 less-than 150) (key-history j 1))) t break
+     ((and (key-timing 1 less-than 150) (key-history q 1))) t break
+     ((and (key-timing 1 less-than 150) (key-history d 1))) t break
+     ((and (key-timing 1 less-than 150) (key-history n 1))) t break
+     ((and (key-timing 1 less-than 150) (key-history r 1))) t break
+     ((and (key-timing 1 less-than 150) (key-history h 1))) t break
+     ((and (key-timing 1 less-than 150) (key-history k 1))) t break
+     ((and (key-timing 1 less-than 150) (key-history b 1))) t break
+     ((and (key-timing 1 less-than 150) (key-history g 1))) t break
+     ((and (key-timing 1 less-than 150) (key-history w 1))) t break
+     ((and (key-timing 1 less-than 150) (key-history m 1))) t break
+     ((and (key-timing 1 less-than 150) (key-history v 1))) t break
+     ((and (key-timing 1 less-than 150) (key-history z 1))) t break
+     ((and (key-timing 1 less-than 150) (key-history u 1))) t break
+     ((and (key-timing 1 less-than 150) (key-history a 1))) t break
+     ((and (key-timing 1 less-than 150) (key-history ä 1))) t break
+     ((and (key-timing 1 less-than 150) (key-history c 1))) t break
+     ((and (key-timing 1 less-than 150) (key-history s 1))) t break
+     ((and (key-timing 1 less-than 150) (key-history i 1))) t break
+     ((and (key-timing 1 less-than 150) (key-history o 1))) t break
+     ((and (key-timing 1 less-than 150) (key-history y 1))) t break
+     ((and (key-timing 1 less-than 150) (key-history . 1))) t break
+     ((and (key-timing 1 less-than 150) (key-history ü 1))) t break
+     ((and (key-timing 1 less-than 150) (key-history , 1))) t break
+     ((and (key-timing 1 less-than 150) (key-history ö 1))) t break
+	
+	()  (multi     
+	    (on-press tap-vkey rshift-pre)
+		(on-press tap-vkey seq-start) 
+		(on-press tap-vkey rshift-start)
+		(on-press press-vkey rshift-down)
+		(on-release release-vkey rshift-down)
+		(on-release tap-vkey rshift-end)) break
+   )
+ F14 sldr
+ ;;c nop8
+)
