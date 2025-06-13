@@ -11,7 +11,7 @@ Defining a TIMER as virtual key
 (defcfg
    ;;alias-to-trigger-on-load .basen
    chords-v2-min-idle 170
-   process-unmapped-keys yes
+   process-unmapped-keys yes ;; (all-except lctl ralt) is another option to handle altgr
    ;;yes does not help with japanese keys ; did not help with RDP sticky keys;
    ;;needed for WINIOV2 and WIN to have mouse modifiers (naga)
    delegate-to-first-layer yes ;;INFO only for layer-switch; _ to reference to base layer seems correct (TODO simplyfy layers). has no effect on deflayermap.
@@ -181,7 +181,8 @@ Defining a TIMER as virtual key
  .nly (cmd AutoHotkey numlockon.ah2)
  ;;.nln (cmd-output-keys powershell.exe -NoProfile -NoLogo -NonInteractive "if ($([console]::NumberLock) -match 'True') { echo '(NumLock)' } else { echo '()' }")
  .nln (cmd AutoHotkey numlockoff.ah2)
- .cwd   (multi
+;; TODO-Usage .cwd = delete current row
+ .cwd   (multi      
    (unmod (lalt ralt lmet rmet rsft lctl rctl) nop0)
    (release-key lctl)
    (release-key lsft)
@@ -273,6 +274,7 @@ Defining a TIMER as virtual key
 (deftemplate  key-hold-repeat (timehold time2ndhold keytap keyhold keyrepeat historykey3 historykey2 modlesshistorykey1 combokeylist keyrepeat3)
 ;; sam v| (t! key-hold-repeat  $200      $800         v      @.|      @.|        XX          ralt        <                  (ü 7)        del     )
 ;; TODO using RA- ralt may only work with "process-unmapped-keys yes" and wintercept
+;; BUG pressing Ctl (i) + F at the same time will fail - you have to wait for i to snap in !
 ;; $historykey3 is currently only used to disabel symbol repeat for / in </div TODO $historykey3 should be a list
 ;; y` ,;> .:< -_~ and homrow mods have there own implementation
 ;; TIP this template can be wraped in (multi ... @.tp) But for some scenarios (non windtercept / no powertoys / windows 11 ) may require calling @.tp from inside this template
@@ -330,7 +332,9 @@ Defining a TIMER as virtual key
             (if-not-equal     $keyrepeat3 XX
                 (switch
                         (rsft lsft) (multi (macro $keytap) @.tp) break
-                        ()  (macro-release-cancel-and-cancel-on-press $keyhold $time2ndhold $keyrepeat  $time2ndhold $keyrepeat3  1000 bspc bspc bspc)    break
+                        ;; New 2025-06-09 ifif
+                        (lctl i ) (multi (macro $keytap) @.tp) break
+                        () (macro-release-cancel-and-cancel-on-press $keyhold $time2ndhold $keyrepeat  $time2ndhold $keyrepeat3  1000 bspc bspc bspc)    break
                 )
 
             )
@@ -599,7 +603,10 @@ Defining a TIMER as virtual key
 
   ;; normal keys
   .v!  (t! key-hold-repeat $140 $800  v S-1  XX XX lsft 1 ($off) XX)
-  .z˝  (t! key-hold-repeat $140 $800 $z @.˝ @.˝ XX lsft 4 ($off) XX)
+  .z˝  (switch
+        (lctl rctl) $z break
+        ()          (t! key-hold-repeat $140 $800 $z @.˝ @.˝ XX lsft 4 ($off) XX) break
+       )   
   .u◖  (t! key-hold-repeat $150 $400 u @.◖  @.◗ XX lsft 8 ($off) XX)                        ;; (  ()
   ;; TIP a◗ (multi (tap-hold 1 $150  a  S-9) @.tp) this order works with powertoys but causes problems with RDP ua vs au
   ;; TIP a◗ LONG HOLD with no Powertoys running (tap-hold 1 $150 (multi a @.tp) (fork (macro-release-cancel S-9 $600 bspc RA-9 ) C-a (lctl rctl)) )                   ;; ) [ todo find a better use

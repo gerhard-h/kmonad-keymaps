@@ -13,7 +13,7 @@ Bug rctl+Z releases ctl even thought the key is held down
 (defcfg
    ;;alias-to-trigger-on-load .basen
    chords-v2-min-idle 170
-   process-unmapped-keys yes
+   process-unmapped-keys yes ;; (all-except lctl ralt) is another option to handle altgr
    ;;yes does not help with japanese keys ; did not help with RDP sticky keys;
    ;;needed for WINIOV2 and WIN to have mouse modifiers (naga)
    delegate-to-first-layer yes ;;INFO only for layer-switch; _ to reference to base layer seems correct (TODO simplyfy layers). has no effect on deflayermap.
@@ -276,6 +276,7 @@ Bug rctl+Z releases ctl even thought the key is held down
 (deftemplate  key-hold-repeat (timehold time2ndhold keytap keyhold keyrepeat historykey3 historykey2 modlesshistorykey1 combokeylist keyrepeat3)
 ;; sam v| (t! key-hold-repeat  $200      $800         v      @.|      @.|        XX          ralt        <                  (ü 7)        del     )
 ;; TODO using RA- ralt may only work with "process-unmapped-keys yes" and wintercept
+;; BUG pressing Ctl (i) + F at the same time will fail - you have to wait for i to snap in !
 ;; $historykey3 is currently only used to disabel symbol repeat for / in </div TODO $historykey3 should be a list
 ;; y` ,;> .:< -_~ and homrow mods have there own implementation
 ;; TIP this template can be wraped in (multi ... @.tp) But for some scenarios (non windtercept / no powertoys / windows 11 ) may require calling @.tp from inside this template
@@ -333,7 +334,9 @@ Bug rctl+Z releases ctl even thought the key is held down
             (if-not-equal     $keyrepeat3 XX
                 (switch
                         (rsft lsft) (multi (macro $keytap) @.tp) break
-                        ()  (macro-release-cancel-and-cancel-on-press $keyhold $time2ndhold $keyrepeat  $time2ndhold $keyrepeat3  1000 bspc bspc bspc)    break
+                        ;; New 2025-06-09 ifif
+                        (lctl i ) (multi (macro $keytap) @.tp) break
+                        () (macro-release-cancel-and-cancel-on-press $keyhold $time2ndhold $keyrepeat  $time2ndhold $keyrepeat3  1000 bspc bspc bspc)    break
                 )
 
             )
@@ -614,7 +617,7 @@ Bug rctl+Z releases ctl even thought the key is held down
   .j%   (t! key-hold-repeat $160 $800 j @.% @.% XX lsft 5 ($off) XX)
   .x&   (t! key-hold-repeat $160 $800 x @.& @.& XX lsft 6 ($off) XX)
   .l?   (t! key-hold-repeat $140 $800 l @.? @.? XX lsft ß ($off) XX)   ;; ? = S-ß = S-[      i ? ??
-  .f\   (t! key-hold-repeat $140 $800 f @.\ @.\ XX ralt ß ($off) XX)
+  .f\   (t! key-hold-repeat $140 $800 f @.\ @.\ XX lalt ß ($off) XX)
   .ß    (macro (unshift ß))
   .k    (macro k)
   .p#   (t! key-hold-repeat $200 $800 p # XX XX XX # ($off) XX)
@@ -736,7 +739,7 @@ Bug rctl+Z releases ctl even thought the key is held down
 (defchordsv2
 ;;  (e o) ;; TODO what to do here if no second thumb key
 ;;  (d t) @.atx 45 all-released  (game) 
-
+;;  (f14 f15) a 154 all-released  (game)
   (t b)
    tab 45 all-released  (game)
   (n r)
