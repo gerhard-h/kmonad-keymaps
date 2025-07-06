@@ -6,6 +6,8 @@ Defining a TIMER as virtual key
     releasing it (on-... release-vkey my-timer) will stops the timer - only works with macro-release-cancel not with normal macro
     clean it up: if the timer is not canceled my-timer keeps in the pressed state (wich matters if you also have on-idle functionality).
                  To work around this add (on-... release-vkey my-timer) to some appropriate actions.
+                 
+Bug rctl+Z releases ctl even thought the key is held down
 |#
 
 (defcfg
@@ -207,9 +209,10 @@ Defining a TIMER as virtual key
   tab tab
   ;; misc
   mouselight M-S-f
-  base (layer-while-held base)
+  basee (layer-while-held base)
   to-base (layer-switch base)
   vcaps   (layer-while-held CAPS)
+  fast (layer-while-held typing)
 )
 ;; UNUSESD E-i -> spc E-s -> End E-c -> Home TODO
 (deftemplate same-side-lshift (defaultaction trigger action)
@@ -227,6 +230,12 @@ Defining a TIMER as virtual key
   )
 )
 (deftemplate homerowmodexcept (timeouttap timeouthold keytap keyhold typinglist)
+  ;;(tap-hold $tap-timeout $hold-timeout (t! type $tap-action) ;; nesting tap-hold* might fix issues with held-for-duration. Watch out for concurrent-tap-hold yes.
+  ;;(tap-hold-release-keys 0 1
+  ;;  (t! type $tap-action)
+  ;;  $hold-action
+  ;;  $tap-keys)))
+
   (tap-hold-release-keys $timeouttap $timeouthold
     (multi $keytap  @.tp)
     $keyhold
@@ -390,7 +399,7 @@ Defining a TIMER as virtual key
   .fkey   (layer-while-held fkeymacro)
   .fkyx   (layer-switch fkeymacro)
   .fkyn   (release-layer numbers)
-  .basen  (multi (layer-switch base) @.nln)
+  .basen  (multi (on-press release-vkey fast) (layer-switch base) @.nln)
   .numfix (multi (layer-switch numfix) @.nly)
 
 ;; *** LEFT_Spacebar = F14 : RETURN *** SYMBOLS *** LEFT_Shift + LEFT_Spacebar_hold == numbers ; Shift + LEFT_Spacebar_tap == CAPS-layer ***
@@ -466,6 +475,7 @@ Defining a TIMER as virtual key
 
   ;; disalble tap-hold keys if typing rapidly but reenable after a shord idle period
   .tpoff XX
+#|
   .tp (switch
       (lsft rsft) XX break ;; TODO remove on querty? this solves FJ/ET Problem by delaying the Flip to the fast typing layer after the Uppercase character
       ()  (multi
@@ -475,6 +485,9 @@ Defining a TIMER as virtual key
             ;;(on-idle 55 press-vkey base ) ;;... to make typing layer the first layer and always stack BASE on top of it
           ) break
   )
+|#
+  .tp (hold-for-duration  95 fast)
+
   ;; modded german key aliases
   .' S-#
   .+ +
@@ -575,17 +588,16 @@ Defining a TIMER as virtual key
 ;; *** HOME ROW MODS ***
 ;; BUG rsft, rsft ,rctl have RDP problems without interception
 ;; TODO is homerowmodexcept needed?
-  .e]   (t! homerowmodexcept 0 $160 e lsft ($i))
-  .t_dk (t! homerowmodright 0 $140 t lsft rsft)
-  .i[   (t! homerowmodexcept 0 250 i lctl ($e d n h))
+  .e]   (t! homerowmod 150 $160 e lsft) ;;(t! homerowmodexcept 0 $160 e lsft ($i));;
+  .t_dk (t! homerowmodright 150 $140 t lsft rsft)
+  .i[   (t! homerowmod 2000 250 i lctl) ;;(t! homerowmodexcept 0 250 i lctl ($e d n h));;
   ..[   (tap-hold $500 $500 @.[ lctl ) ;; used on symbol layer
   ..-   (tap-hold $500 $500 - lctl )
-;; TODO is autorepeat timing 1 needed?
-  .n-   (t! homerowmod 1 250 n rctl)
-  .s^⎇  (t! homerowmod 1 $350 s lalt)
-  .h⌘   (t! homerowmodright 1 550 h lmet rmet)
-  .c⌘   (t! homerowmod 1 $450 c lmet)
-  .r_⎇  (t! homerowmod 1 $450 r lalt)
+  .n-   (t! homerowmod 200 250 n rctl)
+  .s^⎇  (t! homerowmod 200 $350 s lalt)
+  .h⌘   (t! homerowmodright 200 550 h lmet rmet)
+  .c⌘   (t! homerowmod 200 $450 c lmet)
+  .r_⎇  (t! homerowmod 200 $450 r lalt)
   .rsf  rsft
 
   ;; chords
@@ -880,8 +892,8 @@ Defining a TIMER as virtual key
 (deflayer (typing icon base.ico)
   esc         F1    XX  XX  XX
   @.^0        XX    XX        XX      XX     XX    XX   XX   XX   XX   XX   XX      prnt    bspc
-  @.tab     @-_~    @._z      u       a      ä     x    p    l    f    j    q       ß       F24
-  XX           c    s         i       @._e   o     d    @._t n    r    h    k       @.ret
+  @.tab     @-_~    @._z (unshift u)  a      ä     x    p    l    f    j    q       ß       F24
+  XX           c    s    (unshift i)  @._e   o     d    @._t n    r    h    k       @.ret
   @.osss  XX  $y    @.:<      ü       @,;>   ö     b    g    w    m    v    @.rsf
               XX    XX    @.ff14          @.nav-typing          XX XX
 )

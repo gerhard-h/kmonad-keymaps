@@ -6,8 +6,6 @@ Defining a TIMER as virtual key
     releasing it (on-... release-vkey my-timer) will stops the timer - only works with macro-release-cancel not with normal macro
     clean it up: if the timer is not canceled my-timer keeps in the pressed state (wich matters if you also have on-idle functionality).
                  To work around this add (on-... release-vkey my-timer) to some appropriate actions.
-                 
-Bug rctl+Z releases ctl even thought the key is held down
 |#
 
 (defcfg
