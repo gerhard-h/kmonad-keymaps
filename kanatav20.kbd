@@ -209,9 +209,10 @@ Bug rctl+Z releases ctl even thought the key is held down
   tab tab
   ;; misc
   mouselight M-S-f
-  base (layer-while-held base)
+  basee (layer-while-held base)
   to-base (layer-switch base)
   vcaps   (layer-while-held CAPS)
+  fast (layer-while-held typing)
 )
 ;; UNUSESD E-i -> spc E-s -> End E-c -> Home TODO
 (deftemplate same-side-lshift (defaultaction trigger action)
@@ -229,6 +230,12 @@ Bug rctl+Z releases ctl even thought the key is held down
   )
 )
 (deftemplate homerowmodexcept (timeouttap timeouthold keytap keyhold typinglist)
+  ;;(tap-hold $tap-timeout $hold-timeout (t! type $tap-action) ;; nesting tap-hold* might fix issues with held-for-duration. Watch out for concurrent-tap-hold yes.
+  ;;(tap-hold-release-keys 0 1
+  ;;  (t! type $tap-action)
+  ;;  $hold-action
+  ;;  $tap-keys)))
+
   (tap-hold-release-keys $timeouttap $timeouthold
     (multi $keytap  @.tp)
     $keyhold
@@ -392,7 +399,7 @@ Bug rctl+Z releases ctl even thought the key is held down
   .fkey   (layer-while-held fkeymacro)
   .fkyx   (layer-switch fkeymacro)
   .fkyn   (release-layer numbers)
-  .basen  (multi (layer-switch base) @.nln)
+  .basen  (multi (on-press release-vkey fast) (layer-switch base) @.nln)
   .numfix (multi (layer-switch numfix) @.nly)
 
 ;; *** LEFT_Spacebar = F14 : RETURN *** SYMBOLS *** LEFT_Shift + LEFT_Spacebar_hold == numbers ; Shift + LEFT_Spacebar_tap == CAPS-layer ***
@@ -468,6 +475,7 @@ Bug rctl+Z releases ctl even thought the key is held down
 
   ;; disalble tap-hold keys if typing rapidly but reenable after a shord idle period
   .tpoff XX
+#|
   .tp (switch
       ;; TODO is the  FJ/ET Problem still existing?
       ;;(lsft rsft) XX break ;; this solves FJ/ET Problem by delaying the Flip to the fast typing layer after the Uppercase character
@@ -478,6 +486,9 @@ Bug rctl+Z releases ctl even thought the key is held down
             ;;(on-idle 55 press-vkey base ) ;;... to make typing layer the first layer and always stack BASE on top of it
           ) break
   )
+|#
+  .tp (hold-for-duration  95 fast)
+
   ;; modded german key aliases
   .' S-#
   .+ +
