@@ -1,0 +1,66 @@
+(defcfg
+ concurrent-tap-hold no
+ process-unmapped-keys yes 
+)
+
+(defsrc
+)
+
+(defvar
+  tot 220  ;; tot=time out tap
+)
+
+(defvirtualkeys typingmode nop1)
+
+(defalias
+ .tp (hold-for-duration  355 typingmode)
+)
+
+(deflayermap (base)
+ ;; define home row mods (they act as typing-layer triggers, too )
+ e (t! homerowmod $tot 160 e lsft)
+ t (t! homerowmod $tot 160 t rsft)
+ i (t! homerowmod $tot 300 i lctl)
+ n (t! homerowmod $tot 300 n rctl)
+ s (t! homerowmod $tot 400 s lalt)
+ r (t! homerowmod $tot 400 r ralt)
+ c (t! homerowmod $tot 450 c lmet)
+ h (t! homerowmod $tot 450 h rmet)
+ ;; define each letter as typing-layer trigger
+ q lrld
+ w ( t! letter 200 200 w)
+ f ( t! letter 200 200 f)
+ l ( t! letter 200 200 l)
+ j ( t! letter 200 200 j)
+ y ( t! letter 200 200 y)
+ u ( t! letter 200 200 u)
+ d ( t! letter 200 200 d)
+ o ( t! letter 200 200 o)
+ p ( t! letter 200 200 p)
+ g ( t! letter 200 200 g)
+ ; ( t! letter 200 200 ;)
+ z ( t! letter 200 200 z)
+ x ( t! letter 200 200 x)
+ a ( t! letter 200 200 a)
+ v ( t! letter 200 200 v)
+ b ( t! letter 200 200 b)
+ k ( t! letter 200 200 k)
+ m ( t! letter 200 200 m)
+ 
+)
+
+(deftemplate homerowmod (timeouttap timeouthold keytap keyhold)
+   (switch
+   (nop1) $keytap break ;;check for typing mode
+  () (tap-hold $timeouttap $timeouthold
+      (multi $keytap  @.tp)
+      $keyhold
+  ) break
+))
+
+(deftemplate letter (timeouttap timeouthold keytap)
+      (switch 
+            (nop1) (multi (unmod $keytap)  @.tp) break  ;;check for typing mode
+            () (multi                $keytap  @.tp) break
+    )
+)

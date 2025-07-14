@@ -1,7 +1,14 @@
 dy	day
+7y	dayy
+ßy	say
+ky	⌘kay
 dy 1	Monday
 dy 2	Tuesday
+7y 1	Monday
+7y 2	Tuesday
+
 abc	alphabet
+
 gi	git
 gi f p	git fetch -p
 gi s	git status
@@ -9,3 +16,10 @@ gi c	git checkout
 gi c b	git checkout -b
 gi p	git push
 gi l	git pull
++i	git
++i f p	git fetch -p
++i s	git status
++i c	git checkout
++i c b	git checkout -b
++i p	git push
++i l	git pull

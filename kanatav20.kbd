@@ -205,6 +205,7 @@ Defining a TIMER as virtual key
   met lmet
   alt lalt
   tab tab
+  letterk k ;; (multi lsft k)
   ;; misc
   mouselight M-S-f
   basee (layer-while-held base)
@@ -258,6 +259,8 @@ Defining a TIMER as virtual key
     )
   )
 )
+;; TODO retest 3-timeing because of https://github.com/jtroo/kanata/issues/1588#event-18607477505
+
 ;; UNUSESED
 (deftemplate orderedchord (first second)
   (switch
@@ -317,7 +320,7 @@ Defining a TIMER as virtual key
                             (multi (macro $keytap) @.tp)
                         )
                     break
-                    ()  (macro-release-cancel-and-cancel-on-press $keyhold 1000 bspc)            break
+                    () (macro-release-cancel-and-cancel-on-press $keyhold 1000 bspc)            break ;; keys like a ö 
                 )
         )
         (if-not-equal $keyrepeat XX
@@ -334,6 +337,7 @@ Defining a TIMER as virtual key
 
                     ;;(rsft lsft) (multi (macro $keytap) @.tp) break ;; Shift Prefer / Shift protection - shifting will disable the hold feature TODO this will not work fine with ctrl+sft+#
                     ()  (macro-release-cancel-and-cancel-on-press $keyhold $time2ndhold $keyrepeat 1000 bspc bspc)    break
+;; TODO zippy chord triggers here
                 )
             )
             (if-not-equal     $keyrepeat3 XX
@@ -485,7 +489,7 @@ Defining a TIMER as virtual key
           ) break
   )
 |#
-  .tp (hold-for-duration  95 fast)
+  .tp  (hold-for-duration  95 fast)
 
   ;; modded german key aliases
   .' S-#
@@ -628,7 +632,7 @@ Defining a TIMER as virtual key
   .l?   (t! key-hold-repeat $140 $800 l @.? @.? XX lsft ß ($off) XX)   ;; ? = S-ß = S-[      i ? ??
   .f\   (t! key-hold-repeat $140 $800 f @.\ @.\ XX lalt ß ($off) XX)
   .ß    (macro (unshift ß))
-  .k    (macro k)
+  .k    (macro (hold-for-duration 200 letterk)) 
   .p#   (t! key-hold-repeat $200 $800 p # XX XX XX # ($off) XX)
   .ä$   (t! key-hold-repeat $160 $400 ä @.$ @.$ XX lsft 2 ($off) XX)
   .q@   (t! key-hold-repeat $160 $800 q RA-q XX XX ralt q ($off) XX)
@@ -1211,3 +1215,25 @@ Defining a TIMER as virtual key
   .cmdiso (cmd AutoHotkey dtiso.ah2)
   .cmdde  (cmd-output-keys r#"C:\path\kmonad\timedek.cmd"#)  ;; r#"start "" /MIN C:\path\kmonad\timedek.cmd"#
  )
+ 
+(defzippy
+  zippy.txt
+  on-first-press-chord-deadline 500
+  idle-reactivate-time          500
+  smart-space-punctuation (? ! . , ; :)
+  output-character-mappings (
+    ⌘ RA-p
+    ! S-1
+    ? S-ß
+    % S-5
+    "(" S-8
+    ")" S-9
+    : S-.
+    > S-<
+    r#"""# S-2
+    | AG-<
+    _ S--
+    ’ (no-erase `)
+    é (single-output ´ e)
+  )
+)
