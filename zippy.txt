@@ -9,17 +9,27 @@ dy 2	Tuesday
 
 abc	alphabet
 
-gi	git
-gi f p	git fetch -p
-gi s	git status
-gi c	git checkout
-gi c b	git checkout -b
-gi p	git push
-gi l	git pull
-+i	git
-+i f p	git fetch -p
-+i s	git status
-+i c	git checkout
-+i c b	git checkout -b
-+i p	git push
-+i l	git pull
+gi	git 
++i	git 
+gi f p	git fetch -p#
++i f p	git fetch -p#
+gi s	git status#
++i s	git status#
+gi c	git checkout 
++i c	git checkout 
+gi c b	git checkout -b 
++i c b	git checkout -b 
+gi p	git push 
++i p	git push 
+gi l	git pull 
++i l	git pull 
+gi b	git branch 
++i b	git branch 
+gi b r	git branch -r
++i b r	git branch -r
+gi m	git merge --no-ff 
++i m	git merge --no-ff
+
+by	bye#Gerhard Heide 
+
+

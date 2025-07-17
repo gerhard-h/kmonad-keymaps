@@ -125,6 +125,13 @@ Defining a TIMER as virtual key
     d t n r h k
     b g z m w  d n
   )
+  
+  ;; Mouse
+  up-key    l
+  left-key  t  
+  down-key  n
+  right-key r
+  
 )
 
 (deflocalkeys-wintercept
@@ -212,6 +219,23 @@ Defining a TIMER as virtual key
   to-base (layer-switch base)
   vcaps   (layer-while-held CAPS)
   fast (layer-while-held typing)
+  
+  mouse-up    (movemouse-up    1 1)
+  mouse-down  (movemouse-down  1 1)
+  mouse-left  (movemouse-left  1 1)
+  mouse-right (movemouse-right 1 1)
+  
+  ;; State tracking mouse layer
+  up-held nop0
+  left-held nop1
+  down-held nop2
+  right-held nop3
+  
+  ;; Mouse release handlers
+  up-mouse-rel (multi (on-press release-vkey up-held) (on-press release-vkey mouse-up) (switch ((input virtual down-held)) (on-press press-vkey mouse-down) break () XX break))
+  left-mouse-rel (multi (on-press release-vkey left-held) (on-press release-vkey mouse-left) (switch ((input virtual right-held)) (on-press press-vkey mouse-right) break () XX break))
+  down-mouse-rel (multi (on-press release-vkey down-held) (on-press release-vkey mouse-down) (switch ((input virtual up-held)) (on-press press-vkey mouse-up) break () XX break))
+  right-mouse-rel (multi (on-press release-vkey right-held) (on-press release-vkey mouse-right) (switch ((input virtual left-held)) (on-press press-vkey mouse-left) break () XX break))
 )
 ;; UNUSESD E-i -> spc E-s -> End E-c -> Home TODO
 (deftemplate same-side-lshift (defaultaction trigger action)
@@ -259,7 +283,7 @@ Defining a TIMER as virtual key
     )
   )
 )
-;; TODO retest 3-timeing because of https://github.com/jtroo/kanata/issues/1588#event-18607477505
+;; DONE retest 3-timeing because of https://github.com/jtroo/kanata/issues/1588#event-18607477505
 
 ;; UNUSESED
 (deftemplate orderedchord (first second)
@@ -593,14 +617,14 @@ Defining a TIMER as virtual key
 ;; TODO is homerowmodexcept needed?
   .e]   (t! homerowmod 150 $160 e lsft) ;;(t! homerowmodexcept 0 $160 e lsft ($i));;
   .t_dk (t! homerowmodright 150 $140 t lsft rsft)
-  .i[   (t! homerowmod 2000 250 i lctl) ;;(t! homerowmodexcept 0 250 i lctl ($e d n h));;
+  .i[   (t! homerowmod 2000 160 i lctl) ;;(t! homerowmodexcept 0 250 i lctl ($e d n h));;
   ..[   (tap-hold $500 $500 @.[ lctl ) ;; used on symbol layer
   ..-   (tap-hold $500 $500 - lctl )
-  .n-   (t! homerowmod 200 250 n rctl)
-  .s^⎇  (t! homerowmod 200 $350 s lalt)
-  .h⌘   (t! homerowmodright 200 550 h lmet rmet)
-  .c⌘   (t! homerowmod 200 $450 c lmet)
-  .r_⎇  (t! homerowmod 200 $450 r lalt)
+  .n-   (t! homerowmod 200 160 n rctl)
+  .s^⎇  (t! homerowmod 200 160 s lalt)
+  .h⌘   (t! homerowmodright 200 160 h lmet rmet)
+  .c⌘   (t! homerowmod 200 160 c lmet)
+  .r_⎇  (t! homerowmod 200 160 r lalt)
   .rsf  rsft
 
   ;; chords
@@ -756,11 +780,11 @@ Defining a TIMER as virtual key
   (t b)
    tab 45 all-released  (game)
   (n r)
-   del 30 all-released  (game numbers)
+   del 30 all-released  (game numbers mouse mousefast mouseslow mouseextraslow)
   (t n)
-   bspc 30 all-released  (game numbers)
+   bspc 30 all-released  (game numbers mouse mousefast mouseslow mouseextraslow)
   (t n r)
-   C-bspc 30 all-released  (game numbers)
+   C-bspc 30 all-released  (game numbers mouse mousefast mouseslow mouseextraslow)
   (i ü)
    esc 20 all-released (game numbers)
   ;;(e i) (t! orderedchord e i) 75 first-release (game numbers)
@@ -1116,6 +1140,16 @@ Defining a TIMER as virtual key
            lmet  lalt  @.clr                         @.cll   _ ralt
 )
 
+(deflayermap (mousesoc icon mouse.ico)
+  $up-key (multi (on-press press-vkey up-held) (on-press release-vkey mouse-down) (on-press press-vkey mouse-up) (on-release tap-vkey up-mouse-rel))
+  $left-key (multi (on-press press-vkey left-held) (on-press release-vkey mouse-right) (on-press press-vkey mouse-left) (on-release tap-vkey left-mouse-rel))
+  $down-key (multi (on-press press-vkey down-held) (on-press release-vkey mouse-up) (on-press press-vkey mouse-down) (on-release tap-vkey down-mouse-rel))
+  $right-key (multi (on-press press-vkey right-held) (on-press release-vkey mouse-left) (on-press press-vkey mouse-right) (on-release tap-vkey right-mouse-rel))
+  
+  p @.cll
+  f @.clr
+)
+
 (deflayer (mouseslow icon mouseslow.ico)
 ;;****************   MOUSE SLOW  ********************************************************
   esc _ _ _ _
@@ -1222,6 +1256,7 @@ Defining a TIMER as virtual key
   idle-reactivate-time          500
   smart-space-punctuation (? ! . , ; :)
   output-character-mappings (
+    # ret
     ⌘ RA-p
     ! S-1
     ? S-ß

@@ -6,8 +6,6 @@ Defining a TIMER as virtual key
     releasing it (on-... release-vkey my-timer) will stops the timer - only works with macro-release-cancel not with normal macro
     clean it up: if the timer is not canceled my-timer keeps in the pressed state (wich matters if you also have on-idle functionality).
                  To work around this add (on-... release-vkey my-timer) to some appropriate actions.
-                 
-Bug rctl+Z releases ctl even thought the key is held down
 |#
 
 (defcfg
@@ -207,6 +205,7 @@ Bug rctl+Z releases ctl even thought the key is held down
   met lmet
   alt lalt
   tab tab
+  letterk k ;; (multi lsft k)
   ;; misc
   mouselight M-S-f
   basee (layer-while-held base)
@@ -260,6 +259,8 @@ Bug rctl+Z releases ctl even thought the key is held down
     )
   )
 )
+;; DONE retest 3-timeing because of https://github.com/jtroo/kanata/issues/1588#event-18607477505
+
 ;; UNUSESED
 (deftemplate orderedchord (first second)
   (switch
@@ -319,7 +320,7 @@ Bug rctl+Z releases ctl even thought the key is held down
                             (multi (macro $keytap) @.tp)
                         )
                     break
-                    ()  (macro-release-cancel-and-cancel-on-press $keyhold 1000 bspc)            break
+                    () (macro-release-cancel-and-cancel-on-press $keyhold 1000 bspc)            break ;; keys like a ö 
                 )
         )
         (if-not-equal $keyrepeat XX
@@ -477,7 +478,8 @@ Bug rctl+Z releases ctl even thought the key is held down
   .tpoff XX
 #|
   .tp (switch
-      (lsft rsft) XX break ;; TODO remove on querty? this solves FJ/ET Problem by delaying the Flip to the fast typing layer after the Uppercase character
+      ;; TODO is the  FJ/ET Problem still existing?
+      ;;(lsft rsft) XX break ;; this solves FJ/ET Problem by delaying the Flip to the fast typing layer after the Uppercase character
       ()  (multi
             ;;(on-press release-vkey base)  ;; IDEA use this...
             (layer-switch typing)
@@ -629,7 +631,7 @@ Bug rctl+Z releases ctl even thought the key is held down
   .l?   (t! key-hold-repeat $140 $800 l @.? @.? XX lsft ß ($off) XX)   ;; ? = S-ß = S-[      i ? ??
   .f\   (t! key-hold-repeat $140 $800 f @.\ @.\ XX ralt ß ($off) XX)
   .ß    (macro (unshift ß))
-  .k    (macro k)
+  .k    (macro (hold-for-duration 200 letterk)) 
   .p#   (t! key-hold-repeat $200 $800 p # XX XX XX # ($off) XX)
   .ä$   (t! key-hold-repeat $160 $400 ä @.$ @.$ XX lsft 2 ($off) XX)
   .q@   (t! key-hold-repeat $160 $800 q RA-q XX XX ralt q ($off) XX)
@@ -1213,4 +1215,26 @@ Bug rctl+Z releases ctl even thought the key is held down
   ;;.cmdiso (cmd-output-keys timek.cmd) ;; shell not needed (cmd-output-keys cmd.exe /C timek.cmd)
   .cmdiso (cmd AutoHotkey dtiso.ah2)
   .cmdde  (cmd-output-keys r#"C:\path\kmonad\timedek.cmd"#)  ;; r#"start "" /MIN C:\path\kmonad\timedek.cmd"#
+ )
+ 
+(defzippy
+  zippy.txt
+  on-first-press-chord-deadline 500
+  idle-reactivate-time          500
+  smart-space-punctuation (? ! . , ; :)
+  output-character-mappings (
+    ⌘ RA-p
+    ! S-1
+    ? S-ß
+    % S-5
+    "(" S-8
+    ")" S-9
+    : S-.
+    > S-<
+    r#"""# S-2
+    | AG-<
+    _ S--
+    ’ (no-erase `)
+    é (single-output ´ e)
+  )
  )
