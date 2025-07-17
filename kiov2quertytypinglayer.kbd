@@ -749,7 +749,7 @@ Defining a TIMER as virtual key
 
 
 (defchordsv2
-;;  (e o) ;; TODO what to do here if no second thumb key
+ (f g) @.ff13 45 all-released  (game) ;;  (e o) ;; TODO what to do here if no second thumb key
 ;;  (d t) @.atx 45 all-released  (game) 
 
   (j m)
