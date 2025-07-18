@@ -15,7 +15,7 @@ Defining a TIMER as virtual key
    ;;yes does not help with japanese keys ; did not help with RDP sticky keys; 
    ;;needed for WINIOV2 and WIN to have mouse modifiers (naga)
    delegate-to-first-layer yes ;;INFO only for layer-switch; _ to reference to base layer seems correct (TODO simplyfy layers). has no effect on deflayermap.
-   concurrent-tap-hold yes      ;;TODO now yes is working INFO getting early autosymbols if yes eg. Hold-U + Tap-, gives (; instead of (, same for ({ instead of (ü [TODO make a simulation to prove the problem.] problem has gone 1.7.1p 
+   concurrent-tap-hold yes
    sequence-timeout 3000       ;; sequences are not used
    sequence-input-mode visible-backspaced ;;hidden-suppressed ;; hidden-delay-type ;; BUG the hidden types sometimes have shift issues
    sequence-backtrack-modcancel no  ;; unknown
@@ -125,6 +125,13 @@ Defining a TIMER as virtual key
     d t n r h k
     b g z m w  d n
   )    
+  
+  ;; Mouse
+  up-key    l
+  left-key  t  
+  down-key  n
+  right-key r
+  
 )
 
 (deflocalkeys-wintercept
@@ -210,9 +217,25 @@ Defining a TIMER as virtual key
   mouselight M-S-f
   base (layer-while-held base)
   to-base (layer-switch base)
-  
   vcaps   (layer-while-held CAPS)
   fast (layer-while-held typing)
+  
+  mouse-up    (movemouse-up    1 1)
+  mouse-down  (movemouse-down  1 1)
+  mouse-left  (movemouse-left  1 1)
+  mouse-right (movemouse-right 1 1)
+  
+  ;; State tracking mouse layer
+  up-held nop0
+  left-held nop1
+  down-held nop2
+  right-held nop3
+  
+  ;; Mouse release handlers
+  up-mouse-rel (multi (on-press release-vkey up-held) (on-press release-vkey mouse-up) (switch ((input virtual down-held)) (on-press press-vkey mouse-down) break () XX break))
+  left-mouse-rel (multi (on-press release-vkey left-held) (on-press release-vkey mouse-left) (switch ((input virtual right-held)) (on-press press-vkey mouse-right) break () XX break))
+  down-mouse-rel (multi (on-press release-vkey down-held) (on-press release-vkey mouse-down) (switch ((input virtual up-held)) (on-press press-vkey mouse-up) break () XX break))
+  right-mouse-rel (multi (on-press release-vkey right-held) (on-press release-vkey mouse-right) (switch ((input virtual left-held)) (on-press press-vkey mouse-left) break () XX break))
 )
 ;; UNUSESD E-i -> spc E-s -> End E-c -> Home TODO
 (deftemplate same-side-lshift (defaultaction trigger action)
@@ -338,6 +361,7 @@ Defining a TIMER as virtual key
 				
 					;;(rsft lsft) (multi (macro $keytap) @.tp) break ;; Shift Prefer / Shift protection - shifting will disable the hold feature TODO this will not work fine with ctrl+sft+#
 					()  (macro-release-cancel-and-cancel-on-press $keyhold $time2ndhold $keyrepeat 1000 bspc bspc)	break
+;; TODO zippy chord triggers here
 				)
 			)
 			(if-not-equal     $keyrepeat3 XX
@@ -482,7 +506,7 @@ Defining a TIMER as virtual key
       ;;(lsft rsft) XX break ;; this solves FJ/ET Problem by delaying the Flip to the fast typing layer after the Uppercase character
       ()  (multi
             ;;(on-press release-vkey base)  ;; IDEA use this...
-            (layer-switch typing) ;; causes a P3 issue with Ffj/Eet instead of FJ/ET => use one-shot instead
+            (layer-switch typing)
             (on-idle  55 tap-vkey to-base )
             ;;(on-idle  55 press-vkey base ) ;;... to make typing the new first layer
           ) break
@@ -586,13 +610,13 @@ Defining a TIMER as virtual key
   
 ;; *** HOME ROW MODS *** 
 ;; BUG rsft, rsft ,rctl have RDP problems without interception
+;; TODO is homerowmodexcept needed?
   .e] (t! homerowmodexcept 0 $160 e lsft ($i))
   .t_dk (t! homerowmodright 0 $140 t lsft rsft)
   .i[   (t! homerowmodexcept 0 250 i lctl ($e d n h))
-  ..[   (tap-hold $500 $500 @.[ lctl ) ;; used on symbol layer
+    ..[   (tap-hold $500 $500 @.[ lctl ) ;; used on symbol layer
   ..-   (tap-hold $500 $500 - lctl )   
  .n-   (t! homerowmod 1 250 n rctl) 
-  
   .s^⎇  (t! homerowmod 1 $350 s lalt)
   .h⌘   (t! homerowmodright 1 550 h lmet rmet)
   .c⌘   (t! homerowmod 1 $450 c lmet)
@@ -614,7 +638,10 @@ Defining a TIMER as virtual key
   
   ;; normal keys
   .v!  (t! key-hold-repeat $140 $800  v S-1  XX XX lsft 1 ($off) XX)
-  .z˝  (t! key-hold-repeat $140 $800 $z @.˝ @.˝ XX lsft 4 ($off) XX)
+  .z˝  (switch
+        (lctl rctl) $z break
+        ()          (t! key-hold-repeat $140 $800 $z @.˝ @.˝ XX lsft 4 ($off) XX) break
+       )
   .u◖  (t! key-hold-repeat $150 $400 u @.◖  @.◗ XX lsft 8 ($off) XX)                        ;; (  ()
   ;; TIP a◗ (multi (tap-hold 1 $150  a  S-9) @.tp) this order works with powertoys but causes problems with RDP ua vs au
   ;; TIP a◗ LONG HOLD with no Powertoys running (tap-hold 1 $150 (multi a @.tp) (fork (macro-release-cancel S-9 $600 bspc RA-9 ) C-a (lctl rctl)) )                   ;; ) [ todo find a better use
@@ -770,7 +797,7 @@ Defining a TIMER as virtual key
   |#  
   (s d)
    ret 20 all-released (game numbers)
-  (spc ,)
+  (spc v)
    9 20 all-released (game numbers)
 
 )
@@ -888,8 +915,8 @@ Defining a TIMER as virtual key
 (deflayer (typing icon base.ico)
   esc         F1    XX  XX  XX
   @.^0        XX    XX        XX      XX     XX    XX   XX   XX   XX   XX   XX      prnt    bspc
-  @.tab     @-_~    @._z      u       a      ä     x    p    l    f    j    q       ß       F24
-  XX           c    s         i       @._e   o     d    @._t n    r    h    k       @.ret
+  @.tab     @-_~    @._z (unshift u)  a      ä     x    p    l    f    j    q       ß       F24
+  XX           c    s    (unshift i)  @._e   o     d    @._t n    r    h    k       @.ret
   @.osss  XX  $y    @.:<      ü       @,;>   ö     b    g    w    m    v    @.rsf
               XX    XX    @.ff14          @.nav-typing          XX XX
 )
@@ -1090,6 +1117,7 @@ Defining a TIMER as virtual key
   _    _    ´         F7   F8   F9   F12    b        lctl   lalt    C-S-f   ^    _            
             _         _    _         _               _ ralt
 )
+
 (deflayer (mousefast icon mousefast.ico)
 ;;****************   MOUSE FAST  ********************************************************
   esc _ _ _ _
@@ -1099,6 +1127,7 @@ Defining a TIMER as virtual key
   lsft  _  @.msz lalt  lctl  lsft   XX    @.setd   @.🖰←     @.🖰↑   @.🖰→	 @-_: rsft
            lmet  lalt  @.clr                       @.cll     _ ralt                           
 )
+
 (deflayer (mouse icon mouse.ico)
 ;;****************   MOUSE   ********************************************************
   esc _ _ _ _
@@ -1108,6 +1137,17 @@ Defining a TIMER as virtual key
   lsft  _  @.msz lalt  lctl  lsft   XX    @.🖰←     	@.🖰↑	@.🖰↓  @.🖰→	 @-_: rsft
            lmet  lalt  @.clr                     	@.cll   _ ralt                           
 )
+
+(deflayermap (mousesoc icon mouse.ico)
+  $up-key (multi (on-press press-vkey up-held) (on-press release-vkey mouse-down) (on-press press-vkey mouse-up) (on-release tap-vkey up-mouse-rel))
+  $left-key (multi (on-press press-vkey left-held) (on-press release-vkey mouse-right) (on-press press-vkey mouse-left) (on-release tap-vkey left-mouse-rel))
+  $down-key (multi (on-press press-vkey down-held) (on-press release-vkey mouse-up) (on-press press-vkey mouse-down) (on-release tap-vkey down-mouse-rel))
+  $right-key (multi (on-press press-vkey right-held) (on-press release-vkey mouse-left) (on-press press-vkey mouse-right) (on-release tap-vkey right-mouse-rel))
+  
+  p @.cll
+  f @.clr
+)
+
 (deflayer (mouseslow icon mouseslow.ico)
 ;;****************   MOUSE SLOW  ********************************************************
   esc _ _ _ _
@@ -1117,6 +1157,7 @@ Defining a TIMER as virtual key
   lsft  _   @.msz lalt   lctl   lsft   XX    @.🖰←+    	@.🖰↑+ 	@.🖰↓+	@.🖰→+ 	@-_: 	rsft
             lmet  lalt   @.clr       @.cll             	_ ralt
 )
+
 (deflayer (mouseextraslow icon mouseextraslow.ico)
 ;;****************   MOUSE EXTRA SLOW  ********************************************************
   esc _ _ _ _
