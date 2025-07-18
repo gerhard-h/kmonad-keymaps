@@ -1,0 +1,1 @@
+copy for kanata-tray C:\Users\heideg\AppData\Roaming\kanata-tray\icons
