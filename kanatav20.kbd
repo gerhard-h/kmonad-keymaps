@@ -1,4 +1,10 @@
 #|
+Having double tap autorepeat enables Powertoys Quick Accent
+(macro S-(100 A-(100)))
+TODO entgl ent ent ent net ent is ent a problem?
+cd "[kanata.exe-root-folder-full-path]" START /MIN C:\Windows\System32\conhost.exe --headless kanata.exe <flags-and-other-config>
+
+
 Defining a TIMER as virtual key
 (defvirtualkey my-timer (macro-release-cancel 500 ...
 
@@ -617,14 +623,14 @@ Defining a TIMER as virtual key
 ;; TODO is homerowmodexcept needed?
   .e]   (t! homerowmod 150 $160 e lsft) ;;(t! homerowmodexcept 0 $160 e lsft ($i));;
   .t_dk (t! homerowmodright 150 $140 t lsft rsft)
-  .i[   (t! homerowmod 2000 160 i lctl) ;;(t! homerowmodexcept 0 250 i lctl ($e d n h));;
+  .i[   (t! homerowmod 2000 200 i lctl) ;;(t! homerowmodexcept 0 250 i lctl ($e d n h));;
   ..[   (tap-hold $500 $500 @.[ lctl ) ;; used on symbol layer
   ..-   (tap-hold $500 $500 - lctl )
-  .n-   (t! homerowmod 200 160 n rctl)
-  .s^⎇  (t! homerowmod 200 160 s lalt)
-  .h⌘   (t! homerowmodright 200 160 h lmet rmet)
-  .c⌘   (t! homerowmod 200 160 c lmet)
-  .r_⎇  (t! homerowmod 200 160 r lalt)
+  .n-   (t! homerowmod 200 200 n rctl)
+  .s^⎇  (t! homerowmod 200 250 s lalt)
+  .h⌘   (t! homerowmodright 200 250 h lmet rmet)
+  .c⌘   (t! homerowmod 200 250 c lmet)
+  .r_⎇  (t! homerowmod 200 250 r lalt)
   .rsf  rsft
 
   ;; chords
@@ -1257,7 +1263,8 @@ Defining a TIMER as virtual key
   smart-space-punctuation (? ! . , ; :)
   output-character-mappings (
     # ret
-    ⌘ RA-p
+    ⌘ RA-y
+    ⇚ RA-z
     ! S-1
     ? S-ß
     % S-5

@@ -8,28 +8,57 @@ dy 2	Tuesday
 7y 2	Tuesday
 
 abc	alphabet
+// ⌫ is the build in backspace
+gt	git 
++i	⇚git 
++i g	git
+gt f p	git fetch -p⏎
++i f p	⇚git fetch -p⏎
+gt s	git status⏎
++i s	⇚git status⏎
+gt c	git checkout 
++i c	⇚git checkout 
+gt c b	git checkout -b 
++i c b	⇚git checkout -b 
+gt p	git push 
++i p	⇚git push 
+gt l	git log --oneline --decorate --graph -n25⏎ 
++i l	⇚git log --oneline --decorate --graph -n25⏎ 
+gt b	git branch 
++i b	⇚git branch 
+gt b r	git branch -r
++i b r	⇚git branch -r
+gt m	git merge --no-ff 
++i m	⇚git merge --no-ff
+gt q	gitqueue 
+gt q d	gitqueue diff⏎
++i q	⇚gitqueue 
++i q d	⇚gitqueue diff⏎
 
-gi	git 
-+i	git 
-gi f p	git fetch -p#
-+i f p	git fetch -p#
-gi s	git status#
-+i s	git status#
-gi c	git checkout 
-+i c	git checkout 
-gi c b	git checkout -b 
-+i c b	git checkout -b 
-gi p	git push 
-+i p	git push 
-gi l	git pull 
-+i l	git pull 
-gi b	git branch 
-+i b	git branch 
-gi b r	git branch -r
-+i b r	git branch -r
-gi m	git merge --no-ff 
-+i m	git merge --no-ff
+g,	⇚git 
+g, f p	⇚git fetch -p⏎
+g, s	⇚git status⏎
+g, c	⇚git checkout 
+g, c b	⇚git checkout -b 
+g, p	⇚git push 
+g, l	⇚git log --oneline --decorate --graph -n25⏎ 
+g, b	⇚git branch 
+g, b r	⇚git branch -r
+g, m	⇚git merge --no-ff
+g, q	⇚gitqueue 
+g, q d	⇚gitqueue diff⏎
 
-by	bye#Gerhard Heide 
+gt m c	git merge --no-commit --no-ff
++i m c	⇚git merge --no-commit --no-ff
+g, m c	⇚git merge --no-commit --no-ff
+
+
+by	bye⏎Gerhard Heide
+ 
+dm	DMB-Rechtsschutz
+db	DMB-Rechtsschutz
+dm e	dmb-rechtsschutz.de
+db e	dmb-rechtsschutz.de
+
 
 
