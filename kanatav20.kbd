@@ -1,6 +1,25 @@
 #|
-Having double tap autorepeat enables Powertoys Quick Accent
+instant layer activation
+(defsrc)
+(defcfg process-unmapped-keys yes)
+(deflayermap (base)
+ v (tap-hold-press 200 200 v (layer-while-held nav))
+)
+(deflayermap (nav)
+ ___ (switch
+  ((input-history real v 2)) (multi v _) break
+  () _ break
+ )
+ h left
+ j down
+ k up
+ l right
+)
+Having double tap autorepeat enables Powertoys Quick Accent is not working correct
+better to activate a special layer [wü gi .m yv zf je jz fz] where each letter hold/doubletap  does (multi _ left) doubletap to handle homerow shift and leave it
+
 (macro S-(100 A-(100)))
+
 TODO entgl ent ent ent net ent is ent a problem?
 cd "[kanata.exe-root-folder-full-path]" START /MIN C:\Windows\System32\conhost.exe --headless kanata.exe <flags-and-other-config>
 
@@ -195,18 +214,23 @@ Defining a TIMER as virtual key
  ;;.nln (cmd-output-keys powershell.exe -NoProfile -NoLogo -NonInteractive "if ($([console]::NumberLock) -match 'True') { echo '(NumLock)' } else { echo '()' }")
  .nln (cmd AutoHotkey numlockoff.ah2)
 ;; TODO-Usage .cwd = delete current row
- .cwd   (multi      
+ .cwd-delrow   (multi      
    (unmod (lalt ralt lmet rmet rsft lctl rctl) nop0)
    (release-key lctl)
    (release-key lsft)
    (macro end 5 S-(5 home) 5 S-(5 home) 5 spc 5 bspc 5 del)
   )
+ .cwd (layer-switch accent)
+ ;;(multi (on-press press-vkey a)(on-release release-vkey a) (on-press tap-vkey left)) a â
  .cwd- (caps-word-custom 2000
         (a b c d e f g h i j k l m n o p q r s t u v w x y z ä ü ö)
         (1 2 3 bspc del up down left rght -) ;; rsft must be exluded as they are used for triggering caps words
   )
 )
 (defvirtualkeys
+  a     a 
+  left  left
+  right right
   ;;nlockon/off is used over .nly/n in while-held scenarios
   ;;nlockon  (cmd-output-keys powershell.exe "if ($([console]::NumberLock) -match 'True') { echo '()' } else { echo '(NumLock)' }")
   ;;nlockoff (cmd-output-keys powershell.exe "if ($([console]::NumberLock) -match 'True') { echo '(NumLock)' } else { echo '()' }")
@@ -941,6 +965,12 @@ Defining a TIMER as virtual key
   F14 spc
   F15 (layer-switch base)
 )
+(deflayermap (accent)
+  ___ (multi use-defsrc (layer-while-held numbers) (on-release tap-vkey to-base)) ;;(on-press tap-vkey right) would require define every letter as vkey and map 
+  spc right
+  F14 (layer-switch base)
+  F15 (layer-switch base)
+)
 
 ;; *** UPPER CASE LAYER - use spc to exit -  hold spc to exit w/o spc TODO shift into lower case does not work ***
 ;; scabs Shift cabs and QMK lsft Home interfere
@@ -1030,7 +1060,7 @@ Defining a TIMER as virtual key
   .r🖰⌘ (tap-hold-release $200 5000 @.🖰r lmet) ;; mouse rclick (TODO not used anymore) or win
 )
 (deflayer (numbers icon numbers.ico)
-;;****************   NUMBERS   ****************************************************
+;;****************   .NUMBERS.   ****************************************************
 ;; TODO-Usage: caps to sym / C-bspc = @.⎈␡ or 7+8+9
   esc _ _ _ _
   @.^       @.1    @.2    @.3   @.4   @.5     @.6   @.7   @.8   @.9   @.0    @.cmdrld  A-prnt _
@@ -1251,7 +1281,7 @@ Defining a TIMER as virtual key
   .cmdspeak (cmd speak.cmd)
   .saynothing (cmd powershell.exe -NoProfile -NoLogo -NonInteractive -Command r#"Add-Type -AssemblyName System.Speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak('nothing')"#)
   .cmdrld lrld-next ;;(multi (cmd test.cmd) lrld-next)
-  ;;.cmdiso (cmd-output-keys timek.cmd) ;; shell not needed (cmd-output-keys cmd.exe /C timek.cmd)
+  ;; .cmdiso (cmd-output-keys timek.cmd) ;; shell not needed (cmd-output-keys cmd.exe /C timek.cmd)
   .cmdiso (cmd AutoHotkey dtiso.ah2)
   .cmdde  (cmd-output-keys r#"C:\path\kmonad\timedek.cmd"#)  ;; r#"start "" /MIN C:\path\kmonad\timedek.cmd"#
  )
@@ -1262,6 +1292,9 @@ Defining a TIMER as virtual key
   idle-reactivate-time          500
   smart-space-punctuation (? ! . , ; :)
   output-character-mappings (
+    ← left
+    = S-0
+    * S-+
     # ret
     ⌘ RA-y
     ⇚ RA-z

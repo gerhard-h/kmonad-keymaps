@@ -20,16 +20,18 @@ gt c	git checkout
 +i c	⇚git checkout 
 gt c b	git checkout -b 
 +i c b	⇚git checkout -b 
+gt c o	⇚git commit -m ""←
++i c o	⇚git commit -m ""←
 gt p	git push 
 +i p	⇚git push 
-gt l	git log --oneline --decorate --graph -n25⏎ 
-+i l	⇚git log --oneline --decorate --graph -n25⏎ 
+gt l	git log --oneline --decorate --graph -n25⏎
++i l	⇚git log --oneline --decorate --graph -n25⏎
 gt b	git branch 
 +i b	⇚git branch 
 gt b r	git branch -r
 +i b r	⇚git branch -r
-gt m	git merge --no-ff 
-+i m	⇚git merge --no-ff
+gt m	git merge --no-edit 
++i m	⇚git merge --no-edit
 gt q	gitqueue 
 gt q d	gitqueue diff⏎
 +i q	⇚gitqueue 
@@ -40,17 +42,21 @@ g, f p	⇚git fetch -p⏎
 g, s	⇚git status⏎
 g, c	⇚git checkout 
 g, c b	⇚git checkout -b 
+g, c o	⇚git commit -m ""←
 g, p	⇚git push 
-g, l	⇚git log --oneline --decorate --graph -n25⏎ 
+g, l	⇚git log --oneline --decorate --graph -n25⏎
 g, b	⇚git branch 
 g, b r	⇚git branch -r
-g, m	⇚git merge --no-ff
+g, m	⇚git merge --no-edit
 g, q	⇚gitqueue 
 g, q d	⇚gitqueue diff⏎
 
 gt m c	git merge --no-commit --no-ff
 +i m c	⇚git merge --no-commit --no-ff
 g, m c	⇚git merge --no-commit --no-ff
+gt a	git  add *⏎git status⏎
++i a	⇚git add *⏎git status⏎
+g, a	⇚git add *⏎git status⏎
 
 
 by	bye⏎Gerhard Heide
