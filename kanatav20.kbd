@@ -278,7 +278,7 @@ Defining a TIMER as virtual key
 
 (deftemplate homerowmod (timeouttap timeouthold keytap keyhold)
   (tap-hold $timeouttap $timeouthold
-    (multi $keytap  @.tp)
+    (multi $keytap @.tp)
     $keyhold
   )
 )

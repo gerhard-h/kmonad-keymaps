@@ -1,0 +1,61 @@
+(defcfg
+process-unmapped-keys yes 
+)
+
+(defvirtualkeys
+  fasttypingstate XX
+  fasttypingtoggle (on-press toggle-virtualkey fasttypingstate)
+)
+
+(defvar
+  tot 220  ;; time out tap
+)
+
+(deftemplate type (action)
+  (multi
+    (fork
+      (hold-for-duration 55 fasttypingtoggle) ;; short timeouts seem to work best 
+      XX
+      (lctl rctl lalt ralt lmet rmet)
+    )
+    $action
+  )
+)
+
+(deftemplate homerowmod (timeouttap timeouthold keytap keyhold)
+  (switch
+    ((input virtual fasttypingstate)) (t! type $keytap) break
+    () (tap-hold $timeouttap $timeouthold
+         (t! type $keytap)
+         $keyhold
+       ) break
+  )
+)
+
+(defsrc )
+
+(deflayermap (base)
+ ;; define home row mods
+ e (t! homerowmod $tot 160 e lsft)
+ t (t! homerowmod $tot 160 t rsft)
+ i (t! homerowmod $tot 300 i lctl)
+ n (t! homerowmod $tot 300 n rctl)
+ s (t! homerowmod $tot 400 s lalt)
+ r (t! homerowmod $tot 400 r ralt)
+ c (t! homerowmod $tot 450 c lmet)
+ h (t! homerowmod $tot 450 h rmet)
+ ;; define each letter
+ q (t! type q) w (t! type w)
+;; e (t! type e) r (t! type r) t (t! type t)
+ y (t! type y) u (t! type u)
+;; i (t! type i)
+ o (t! type o) p (t! type p) g (t! type g)
+;; h (t! type h)
+ z (t! type z) x (t! type x)
+;; c (t! type c)
+ v (t! type v) b (t! type b)
+;; n (t! type n)
+ m (t! type m) 
+ a (t! type a) d (t! type d) f (t! type f) j (t! type j) 
+)
+;; fix ei statt I

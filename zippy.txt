@@ -66,5 +66,11 @@ db	DMB-Rechtsschutz
 dm e	dmb-rechtsschutz.de
 db e	dmb-rechtsschutz.de
 
+//st	Storyblok
+//fr	Frontify
+vm	Vermittler
+mr	Makler
+mr p Maklerportal
+
 
 
