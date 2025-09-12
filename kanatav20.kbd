@@ -220,14 +220,17 @@ Defining a TIMER as virtual key
    (release-key lsft)
    (macro end 5 S-(5 home) 5 S-(5 home) 5 spc 5 bspc 5 del)
   )
- .cwd (layer-switch accent)
+ .cwd- (layer-switch accent)
  ;;(multi (on-press press-vkey a)(on-release release-vkey a) (on-press tap-vkey left)) a â
- .cwd- (caps-word-custom 2000
+ .cwd (caps-word-custom 2000
         (a b c d e f g h i j k l m n o p q r s t u v w x y z ä ü ö)
         (1 2 3 bspc del up down left rght -) ;; rsft must be exluded as they are used for triggering caps words
   )
 )
 (defvirtualkeys
+  fasttypingstate XX
+  fasttypingtoggle (on-press toggle-virtualkey fasttypingstate)
+  
   a     a 
   left  left
   right right
@@ -276,10 +279,23 @@ Defining a TIMER as virtual key
   )
 )
 
+(deftemplate type (action)
+  (multi
+    (fork
+      (hold-for-duration 55 fasttypingtoggle)
+      XX
+      (lctl rctl lalt ralt lmet rmet)
+    )
+    $action
+  )
+)
 (deftemplate homerowmod (timeouttap timeouthold keytap keyhold)
-  (tap-hold $timeouttap $timeouthold
-    (multi $keytap @.tp)
-    $keyhold
+  (switch
+    ((input virtual fasttypingstate)) (t! type $keytap) break
+    () (tap-hold $timeouttap $timeouthold
+         (t! type $keytap)
+         $keyhold
+       ) break
   )
 )
 (deftemplate homerowmodexcept (timeouttap timeouthold keytap keyhold typinglist)
@@ -298,9 +314,12 @@ Defining a TIMER as virtual key
 
 (platform (wintercept)
   (deftemplate homerowmodright (timeouttap timeouthold keytap keyhold keyhold2)
-    (tap-hold $timeouttap $timeouthold
-      (multi $keytap  @.tp)
-      $keyhold2
+    (switch
+      ((input virtual fasttypingstate)) (t! type $keytap) break
+      () (tap-hold $timeouttap $timeouthold
+           (t! type $keytap)
+           $keyhold2
+         ) break
     )
   )
 )
@@ -361,7 +380,7 @@ Defining a TIMER as virtual key
                 ((key-history $modlesshistorykey1 1))  $keyhold break
             )
 
-        () (multi $keytap @.tp) break
+        () (t! type $keytap) break
         )
         ;; I.b hold of first tap of TAP-DANCE - manual Shift overwrites hold / no autorepeat / long-hold for (), {},...
         (if-equal     $keyrepeat XX
@@ -371,7 +390,7 @@ Defining a TIMER as virtual key
                             (multi ralt lctl (macro(unshift 9))) ;; hardcoded S+Hold(a)=]
                         )
                         (if-not-equal $keytap a
-                            (multi (macro $keytap) @.tp)
+                            (t! type (macro $keytap)) ;; (multi (macro $keytap) @.tp)
                         )
                     break
                     () (macro-release-cancel-and-cancel-on-press $keyhold 1000 bspc)            break ;; keys like a ö 
@@ -380,12 +399,13 @@ Defining a TIMER as virtual key
         (if-not-equal $keyrepeat XX
             (if-equal     $keyrepeat3 XX  ;; for ===
                 (switch
+                    (a) (t! type (macro $keytap)) break ;; au role
                     (rsft lsft)
                         (if-equal $keytap u
                             (multi ralt lctl (macro(unshift 8))) ;; hardcoded S+Hold(u)=[
                         )
                         (if-not-equal $keytap u
-                            (multi (macro $keytap) @.tp)
+                            (t! type (macro $keytap)) ;; (multi (macro $keytap) @.tp)
                         )
                     break
 
@@ -396,9 +416,9 @@ Defining a TIMER as virtual key
             )
             (if-not-equal     $keyrepeat3 XX
                 (switch
-                        (rsft lsft) (multi (macro $keytap) @.tp) break
+                        (rsft lsft) (t! type (macro $keytap)) break
                         ;; New 2025-06-09 ifif
-                        (lctl i ) (multi (macro $keytap) @.tp) break
+                        (lctl i ) (t! type (macro $keytap)) break
                         () (macro-release-cancel-and-cancel-on-press $keyhold $time2ndhold $keyrepeat  $time2ndhold $keyrepeat3  1000 bspc bspc bspc)    break
                 )
 
@@ -423,7 +443,7 @@ Defining a TIMER as virtual key
             (if-equal $historykey2 XX
                 ((key-history $modlesshistorykey1 1))  $keyhold break
             )
-            () (multi $keytap @.tp) break
+            () (t! type $keytap) break
         )
         ;; II.b no need for manual Shift protection / autorepeat enabled
         (switch
@@ -445,7 +465,7 @@ Defining a TIMER as virtual key
 (defalias
   .dsk (multi lmet lalt ß)  ;; AHK desktop switch must use MODS to be active within RDP  SYMBOL+M
   .CAPSon  (multi (layer-switch typing) (on-press toggle-vkey  vcaps) @.nly) ;;using toggle to be more error redundant
-  .CAPSoff (multi (layer-switch base) (on-press release-vkey vcaps) @.nln)
+  .CAPSoff (multi (layer-switch base)   (on-press release-vkey vcaps) @.nln)
 ;; *** LAYER-TOGGLE & SWITCH-LAYER(STICKYNESS) ***
   .num    (layer-while-held numbers)
   .numos  (one-shot 400 (layer-while-held numbers))
@@ -515,7 +535,10 @@ Defining a TIMER as virtual key
             )
         )
   .nav  (tap-hold  $240 $240
-            spc
+            (switch
+              ((input virtual fasttypingstate)) (multi a spc (on-press tap-vkey fasttypingtoggle)) break
+              () spc break
+            )
             (fork (multi (macro nop3) @.fkey @.num) (multi @.num @.sym) (rsft))
             ;;(fork (multi (macro nop3) @.fkey @.numos (one-shot-pause-processing 5)) (multi @.num @.sym) (rsft));; causes troubles in mixes like h8a1
         ) ;; RIGHT sft + RIGHT spc == symbols ; nop3 signals layer switch
@@ -530,7 +553,7 @@ Defining a TIMER as virtual key
   .oml   (one-shot 2000 lmet) ;; TODO-Usage
 
   ;; disalble tap-hold keys if typing rapidly but reenable after a shord idle period
-  .tpoff XX
+  .tp XX
 #|
   .tp (switch
       ;; TODO is the  FJ/ET Problem still existing?
@@ -543,7 +566,7 @@ Defining a TIMER as virtual key
           ) break
   )
 |#
-  .tp  (hold-for-duration  95 fast)
+  .tpoff  (hold-for-duration  95 fast)
 
   ;; modded german key aliases
   .' S-#
@@ -937,7 +960,7 @@ Defining a TIMER as virtual key
              ((and (or (key-history lsft 2)(key-history rsft 2)) (key-history e 1))) (tap-hold  0 160 e lsft) break
              () (unmod e) break
   )
-  ._z (tap-hold  0 160 (unmod $z) (macro @.˝))
+  ._z (tap-hold  0 160 $z (macro @.˝))
   ._e (tap-hold  0 310 e lsft)
   ._t (tap-hold  0 310 t lsft)
 )
@@ -947,8 +970,8 @@ Defining a TIMER as virtual key
 (deflayer (typing icon base.ico)
   esc         F1    XX  XX  XX
   @.^0        XX    XX        XX      XX     XX    XX   XX   XX   XX   XX   XX      prnt    bspc
-  @.tab     @-_~    @._z (unshift u)  a      ä     x    p    l    f    j    q       ß       F24
-  XX           c    s    (unshift i)  @._e   o     d    @._t n    r    h    k       @.ret
+  @.tab       @-_~  @._z      u       a      ä     x    p    l    f    j    q       ß       F24
+  XX           c    s         i       @._e   o     d    @._t n    r    h    k       @.ret
   @.osss  XX  $y    @.:<      ü       @,;>   ö     b    g    w    m    v    @.rsf
               XX    XX    @.ff14          @.nav-typing          XX XX
 )
@@ -971,13 +994,16 @@ Defining a TIMER as virtual key
   F14 (layer-switch base)
   F15 (layer-switch base)
 )
+(deflayermap (dummy) ;; map chord stuff to avoid error messages
+  - @DSH
+)
 
 ;; *** UPPER CASE LAYER - use spc to exit -  hold spc to exit w/o spc TODO shift into lower case does not work ***
 ;; scabs Shift cabs and QMK lsft Home interfere
 (deflayer (CAPS icon caps.ico)
   esc _ _ _ _
   @.^        @.1   @.2    @.3   @.4    @.5   @.6   @.7   @.8   @.9   @.0   -     del  bspc
-  _          @DSH  @.C˝   @.C◖  @.C◗   @.C$  @.C&  @.C#  @.C?  @.C\  @.C%  @.C@  @.ß  @.rtw
+  _          _     @.C˝   @.C◖  @.C◗   @.C$  @.C&  @.C#  @.C?  @.C\  @.C%  @.C@  @.ß  @.rtw
   _          @.C⌘  @.C^   @.C[  @.E]   @.C'  @.C/  @.T   @.C-  @.C_  @.C:  @.C   ret
   @.scabs _  @.C`  @DOT   @.C{  @COM   @.C}  @.C=  @.C*  @.C+  @.C|  @.C!  @.rsf
              _     _      @.ff14c      _           @.ff15c ralt
