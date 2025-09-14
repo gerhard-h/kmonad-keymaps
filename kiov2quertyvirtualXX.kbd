@@ -229,7 +229,6 @@ Defining a TIMER as virtual key
 )
 (defvirtualkeys
   fasttypingstate XX
-  fasttypingtoggle (on-press toggle-virtualkey fasttypingstate)
   
   a     a 
   left  left
@@ -282,7 +281,7 @@ Defining a TIMER as virtual key
 (deftemplate type (action)
   (multi
     (fork
-      (hold-for-duration 55 fasttypingtoggle)
+      (hold-for-duration 55 fasttypingstate)
       XX
       (lctl rctl lalt ralt lmet rmet)
     )
@@ -536,7 +535,7 @@ Defining a TIMER as virtual key
         )
   .nav  (tap-hold  $240 $240
             (switch
-              ((input virtual fasttypingstate)) (multi a spc (on-press tap-vkey fasttypingtoggle)) break
+              ((input virtual fasttypingstate)) (multi spc (on-press release-vkey fasttypingstate)) break
               () spc break
             )
             (fork (multi (macro nop3) @.fkey @.num) (multi @.num @.sym) (rsft))
@@ -828,16 +827,16 @@ Defining a TIMER as virtual key
 
 (defchordsv2
  (f g) @.ff13 45 all-released  (game) ;;  (e o) ;; TODO what to do here if no second thumb key
-;;  (d t) @.atx 45 all-released  (game) 
-
+;;  (d t) @.atx 45 all-released  (game)
+;;  (f14 f15) a 154 all-released  (game)
   (j m)
    tab 45 all-released  (game)
   (k l)
-   del 30 all-released  (game numbers)
+   del 30 all-released  (game numbers mouse mousefast mouseslow mouseextraslow)
   (j k)
-   bspc 30 all-released  (game numbers)
+   bspc 30 all-released  (game numbers mouse mousefast mouseslow mouseextraslow)
   (j k l)
-   C-bspc 30 all-released  (game numbers)
+   C-bspc 30 all-released  (game numbers mouse mousefast mouseslow mouseextraslow)
   (j l)
    esc 20 all-released (game numbers)
   (d f)
@@ -853,8 +852,8 @@ Defining a TIMER as virtual key
     I could define a chord, but there is a symetrie problem if done this simple
   |#
   (s d)
-   ret 20 all-released (game numbers)
-  (spc ,)
+  ret 20 all-released (game numbers)
+  (spc v)
    9 20 all-released (game numbers)
 
   )

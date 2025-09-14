@@ -229,7 +229,6 @@ Defining a TIMER as virtual key
 )
 (defvirtualkeys
   fasttypingstate XX
-  fasttypingtoggle (on-press toggle-virtualkey fasttypingstate)
   
   a     a 
   left  left
@@ -282,7 +281,7 @@ Defining a TIMER as virtual key
 (deftemplate type (action)
   (multi
     (fork
-      (hold-for-duration 55 fasttypingtoggle)
+      (hold-for-duration 55 fasttypingstate)
       XX
       (lctl rctl lalt ralt lmet rmet)
     )
@@ -536,7 +535,7 @@ Defining a TIMER as virtual key
         )
   .nav  (tap-hold  $240 $240
             (switch
-              ((input virtual fasttypingstate)) (multi a spc (on-press tap-vkey fasttypingtoggle)) break
+              ((input virtual fasttypingstate)) (multi spc (on-press release-vkey fasttypingstate)) break
               () spc break
             )
             (fork (multi (macro nop3) @.fkey @.num) (multi @.num @.sym) (rsft))
@@ -668,8 +667,8 @@ Defining a TIMER as virtual key
 ;; *** HOME ROW MODS ***
 ;; BUG rsft, rsft ,rctl have RDP problems without interception
 ;; TODO is homerowmodexcept needed?
-  .e]   (t! homerowmod 150 $160 e lsft) ;;(t! homerowmodexcept 0 $160 e lsft ($i));;
-  .t_dk (t! homerowmodright 150 $140 t lsft rsft)
+  .e]   (t! homerowmod 150 130 e lsft) ;;(t! homerowmodexcept 0 $160 e lsft ($i));;
+  .t_dk (t! homerowmodright 150 130 t lsft rsft)
   .i[   (t! homerowmod 2000 200 i lctl) ;;(t! homerowmodexcept 0 250 i lctl ($e d n h));;
   ..[   (tap-hold $500 $500 @.[ lctl ) ;; used on symbol layer
   ..-   (tap-hold $500 $500 - lctl )
@@ -828,7 +827,7 @@ Defining a TIMER as virtual key
 
 (defchordsv2
  (e o) @.ff13 45 all-released  (game) ;;  (e o) ;; TODO what to do here if no second thumb key
-;;  (d t) @.atx 45 all-released  (game) 
+;;  (d t) @.atx 45 all-released  (game)
 ;;  (f14 f15) a 154 all-released  (game)
   (t b)
    tab 45 all-released  (game)
@@ -851,8 +850,8 @@ Defining a TIMER as virtual key
     I could define a chord, but there is a symetrie problem if done this simple
   |#
 ;; (s d)
-;;  ret 20 all-released (game numbers)  
-  (spc , )
+;;  ret 20 all-released (game numbers)
+  (spc ,)
    9 20 all-released (game numbers)
 
   )
