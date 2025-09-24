@@ -1,11 +1,11 @@
-dy	day
-7y	dayy
-ßy	say
-ky	⌘kay
-dy 1	Monday
-dy 2	Tuesday
-7y 1	Monday
-7y 2	Tuesday
+// dy	day
+// 7y	dayy
+// ßy	say
+// ky	⌘kay
+// dy 1	Monday
+// dy 2	Tuesday
+// 7y 1	Monday
+// 7y 2	Tuesday
 
 abc	alphabet
 // ⌫ is the build in backspace
@@ -47,7 +47,7 @@ g, p	⇚git push
 g, l	⇚git log --oneline --decorate --graph -n25⏎
 g, b	⇚git branch 
 g, b r	⇚git branch -r
-g, m	⇚git merge --no-edit
+g, m	⇚git merge --no-edit 
 g, q	⇚gitqueue 
 g, q d	⇚gitqueue diff⏎
 
@@ -58,8 +58,12 @@ gt a	git  add *⏎git status⏎
 +i a	⇚git add *⏎git status⏎
 g, a	⇚git add *⏎git status⏎
 
+gt p l	git  pull⏎
++i p l	⇚git pull⏎
+g, p l	⇚git pull⏎
 
-by	bye⏎Gerhard Heide
+
+by	bye⏎Gerhard 
  
 dm	DMB-Rechtsschutz
 db	DMB-Rechtsschutz
