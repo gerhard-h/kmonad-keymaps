@@ -329,7 +329,7 @@ Defining a TIMER as virtual key
       ((input virtual fasttypingstate)) (t! type $keytap) break
       () (tap-hold $timeouttap $timeouthold
            (t! type $keytap)
-           $keyhold2
+           (multi $keyhold $keyhold2)
          ) break
     )
   )
@@ -679,7 +679,7 @@ Defining a TIMER as virtual key
   .s^⎇  (t! homerowmod 200 250 s lalt)
   .h⌘   (t! homerowmodright 200 250 h lmet rmet)
   .c⌘   (t! homerowmod 200 250 c lmet)
-  .r_⎇  (t! homerowmod 200 250 r lalt)
+  .r_⎇  (t! homerowmod 200 250 r ralt)
   .rsf  rsft
 
   ;; chords
@@ -925,6 +925,7 @@ Defining a TIMER as virtual key
   lsft 102d y    .    -    ,    ö    b    g    w    z    p    rsft
             lmet lalt      F14       spc            F15 ralt
 ))
+;; WINIOV2 requires the Z/Y flipp remember defzippy
 (platform (winiov2)
 (defsrc
   esc       F1   F13  F16  F24
@@ -1313,30 +1314,60 @@ Defining a TIMER as virtual key
   .cmdiso (cmd AutoHotkey dtiso.ah2)
   .cmdde  (cmd-output-keys r#"C:\path\kmonad\timedek.cmd"#)  ;; r#"start "" /MIN C:\path\kmonad\timedek.cmd"#
  )
- 
-(defzippy
-  zippy.txt
-  on-first-press-chord-deadline 500
-  idle-reactivate-time          500
-  smart-space-punctuation (? ! . , ; :)
-  output-character-mappings (
-    ← left
-    = S-0
-    * S-+
-    # ret
-    ⌘ RA-y
-    ⇚ RA-z
-    ! S-1
-    ? S-ß
-    % S-5
-    "(" S-8
-    ")" S-9
-    : S-.
-    > S-<
-    r#"""# S-2
-    | AG-<
-    _ S--
-    ’ (no-erase `)
-    é (single-output ´ e)
+;; defzippy needs Y Z flipp in WINIOV2 but using nop6 might solve the issue on both plattforms
+(platform (wintercept)
+  (defzippy
+    zippy.txt
+    on-first-press-chord-deadline 500
+    idle-reactivate-time          500
+    smart-space-punctuation (? ! . , ; :)
+    output-character-mappings (
+      ← left
+      = S-0
+      * S-+
+      # ret
+      ⌘ RA-y
+      ⇚ RA-z
+      ! S-1
+      ? S-ß
+      % S-5
+      "(" S-8
+      ")" S-9
+      : S-.
+      > S-<
+      r#"""# S-2
+      | AG-<
+      _ S--
+      ’ (no-erase `)
+      é (single-output ´ e)
+    )
+  )
+)
+(platform (winiov2 win) 
+  (defzippy
+    zippy.txt
+    on-first-press-chord-deadline 500
+    idle-reactivate-time          500
+    smart-space-punctuation (? ! . , ; :)
+    output-character-mappings (
+      ← left
+      = S-0
+      * S-+
+      # ret
+      ⌘ RA-y
+      ⇚ nop6
+      ! S-1
+      ? S-ß
+      % S-5
+      "(" S-8
+      ")" S-9
+      : S-.
+      > S-<
+      r#"""# S-2
+      | AG-<
+      _ S--
+      ’ (no-erase `)
+      é (single-output ´ e)
+    )
   )
 )

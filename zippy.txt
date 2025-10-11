@@ -37,30 +37,30 @@ gt q d	gitqueue diff⏎
 +i q	⇚gitqueue 
 +i q d	⇚gitqueue diff⏎
 
-g,	⇚git 
-g, f p	⇚git fetch -p⏎
-g, s	⇚git status⏎
-g, c	⇚git checkout 
-g, c b	⇚git checkout -b 
-g, c o	⇚git commit -m ""←
-g, p	⇚git push 
-g, l	⇚git log --oneline --decorate --graph -n25⏎
-g, b	⇚git branch 
-g, b r	⇚git branch -r
-g, m	⇚git merge --no-edit 
-g, q	⇚gitqueue 
-g, q d	⇚gitqueue diff⏎
+g,	git 
+g, f p	git fetch -p⏎
+g, s	git status⏎
+g, c	git checkout 
+g, c b	git checkout -b 
+g, c o	git commit -m ""←
+g, p	git push 
+g, l	git log --oneline --decorate --graph -n25⏎
+g, b	git branch 
+g, b r	git branch -r
+g, m	git merge --no-edit 
+g, q	gitqueue 
+g, q d	gitqueue diff⏎
 
 gt m c	git merge --no-commit --no-ff
 +i m c	⇚git merge --no-commit --no-ff
-g, m c	⇚git merge --no-commit --no-ff
+g, m c	git merge --no-commit --no-ff
 gt a	git  add *⏎git status⏎
 +i a	⇚git add *⏎git status⏎
-g, a	⇚git add *⏎git status⏎
+g, a	git add *⏎git status⏎
 
 gt p l	git  pull⏎
 +i p l	⇚git pull⏎
-g, p l	⇚git pull⏎
+g, p l	git pull⏎
 
 
 by	bye⏎Gerhard 
