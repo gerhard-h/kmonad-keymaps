@@ -1355,7 +1355,7 @@ Defining a TIMER as virtual key
       * S-+
       # ret
       ⌘ RA-y
-      ⇚ nop6
+      ⇚ nop5
       ! S-1
       ? S-ß
       % S-5
