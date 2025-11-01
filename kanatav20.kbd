@@ -202,6 +202,8 @@ Defining a TIMER as virtual key
   ^    192
   ´    187  ;; = Problems in layer
   ä    222
+;;  θ    500
+;;  ℝ    193 ;; rho
 ;;  y    90
 ;;  z    89
 ;;  x    80
