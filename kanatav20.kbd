@@ -511,7 +511,7 @@ Defining a TIMER as virtual key
             )
   )
   ;; *** Numberline(unused) + dynamic-macro (unused) ***
-  .ff15 (tap-hold 1 $200  (tap-dance $300 ((on-release tap-vkey  nlockoff) (multi @.nly (layer-switch numberline)))) (multi (layer-while-held numberline) (on-press tap-vkey  nlockon) (on-release tap-vkey  nlockoff) )) ;; no numlock warning when using keypad numbers possible
+  .ff15 (tap-hold 1 $200  (tap-dance $300 ((on-release tap-vkey  nlockoff) (multi @.nly (layer-switch numberline)))) (multi (layer-while-held numberline) (on-press tap-vkey  nlockon) (on-release tap-vkey  nlockoff) )) 
   .ff15c (tap-hold 1 $200  @.CAPSoff (layer-while-held numberline))
 
 ;; *** MACRO + F-Keys layer *** TIP removing one-shot solves problems with hitting the key by accident
@@ -583,7 +583,7 @@ Defining a TIMER as virtual key
   .{ RA-7 ;; (multi lctl ralt 7)
   .] RA-9
   .[ RA-8
-  .\ RA-ß         ;;(unicode \) INFO has been better in some environments in the past
+  .\ (unicode \)         ;;RA-ß for wintercept C-A-ß for WINIOV2 (unicode \) INFO has been better in some environments in the past
   .ẞ RA-S-ß
   .€ (unicode r#"€"# ) ;; (macro RA-e )
   .@ RA-q         ;; INFO (unicode @ ) will mess up keyhistory but may be better on non wintercept
@@ -708,8 +708,8 @@ Defining a TIMER as virtual key
   ;; TIP a◗ LONG HOLD with no Powertoys running (tap-hold 1 $150 (multi a @.tp) (fork (macro-release-cancel S-9 $600 bspc RA-9 ) C-a (lctl rctl)) )                   ;; ) [ todo find a better use
   ..a◗  (t! key-hold-repeat $160 $800 a @.◗ XX XX lsft 9 ($off) XX)
   .a◗   (fork @..a◗ (macro a 10 c) (lctl rctl)) ;; do automatic copy C-(ac) after C-a
-  .j%   (t! key-hold-repeat $160 $800 j @.% @.% XX lsft 5 ($off) XX)
-  .x&   (t! key-hold-repeat $160 $800 x @.& @.& XX lsft 6 ($off) XX)
+  .x%   (t! key-hold-repeat $160 $800 x @.% @.% XX lsft 5 ($off) XX)
+  .j&   (t! key-hold-repeat $160 $800 j @.& @.& XX lsft 6 ($off) XX)
   .l?   (t! key-hold-repeat $140 $800 l @.? @.? XX lsft ß ($off) XX)   ;; ? = S-ß = S-[      i ? ??
   .f\   (t! key-hold-repeat $140 $800 f @.\ @.\ XX lalt ß ($off) XX)
   .ß    (macro (unshift ß))
@@ -913,7 +913,7 @@ Defining a TIMER as virtual key
 (defsrc
   esc       F1   F13  F16  F24
   ^         1    2    3    4    5    6    7    8    9    0    +    ´    ⌫
-  tab       -    z    u    a    ä    x    p    l    f    j    q    ß    #
+  tab       -    z    u    a    ä    j    p    l    f    x    q    ß    #
   caps      c    s    i    e    o    d    t    n    r    h    k   ret
   lsft 102d y    .    ü    ,    ö    b    g    w    m    v    rsft
             lmet lalt      F14       spc            F15 ralt
@@ -932,7 +932,7 @@ Defining a TIMER as virtual key
 (defsrc
   esc       F1   F13  F16  F24
   ^         1    2    3    4    5    6    7    8    9    0    +    ´    ⌫
-  tab       -    y    u    a    ä    x    p    l    f    j    q    ß    #
+  tab       -    y    u    a    ä    j    p    l    f    x    q    ß    #
   caps      c    s    i    e    o    d    t    n    r    h    k   ret
   lsft 102d z    .    ü    ,    ö    b    g    w    m    v    rsft
             lmet lalt      F14       spc            F15 ralt
@@ -950,7 +950,7 @@ Defining a TIMER as virtual key
 ;; ret hold does ctl via QMK
   esc       F1    @.ff13 @.ff16 F24
   @.^0      @.1   @.2    @.3   @.4    @.5   @.6     @.7    @.8    @.9     @.0     @.cwd   @.prnt  bspc
-  @.tab     @-_~  @.z˝   @.u◖  @.a◗   @.ä$  @.x&    @.p#   @.l?   @.f\    @.j%    @.q@    @.ß     F24
+  @.tab     @-_~  @.z˝   @.u◖  @.a◗   @.ä$  @.j&    @.p#   @.l?   @.f\    @.x%    @.q@    @.ß     F24
   @.atx     @.c⌘  @.s^⎇  @.i[  @.e]   @.o'  @.d/    @.t_dk @.n-   @.r_⎇   @.h⌘    @.k     @.ret
   _ @.atm   @.y`  @_:<   @_ü{  @_;>   @.ö}  @.b=    @.g*   @.w+   @.m|    @.v!    @.rsf
             @.oml @.oal  @.ff14             @.nav         @.ff15 ralt
@@ -971,11 +971,11 @@ Defining a TIMER as virtual key
 )
 
 ;;****************   typing   ********************************************************
-;; TODO define tap holds for tying layer?
+;; TODO define tap holds for tying layer? also used for CAPS layer
 (deflayer (typing icon base.ico)
   esc         F1    XX  XX  XX
   @.^0        XX    XX        XX      XX     XX    XX   XX   XX   XX   XX   XX      prnt    bspc
-  @.tab       @-_~  @._z      u       a      ä     x    p    l    f    j    q       ß       F24
+  @.tab       @-_~  @._z      u       a      ä     j    p    l    f    x    q       ß       F24
   XX           c    s         i       @._e   o     d    @._t n    r    h    k       @.ret
   @.osss  XX  $y    @.:<      ü       @,;>   ö     b    g    w    m    v    @.rsf
               XX    XX    @.ff14          @.nav-typing          XX XX

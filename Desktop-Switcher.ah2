@@ -30,7 +30,7 @@ ownerGui.Show("Hide")
 
 ; Hauptfenster erstellen mit Besitzerbindung
 mainGui := Gui("+Owner" ownerGui.Hwnd " -Caption -Border", "Desktop")
-;mainGui.Add("Picture", "x0 y0 w1650 h1080", "c:\path\kmonad\Desktop.jpg")
+mainGui.Add("Picture", "x0 y0 w1650 h1080", "c:\path\kmonad\Desktop.jpg")
 
 mainGui.Show("w1650 h900")
 WinMinimize(mainGui.Hwnd)
