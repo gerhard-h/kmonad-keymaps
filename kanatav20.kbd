@@ -210,6 +210,16 @@ Defining a TIMER as virtual key
 ;;  x    80
 ;;  p    88
 )
+(deftemplate seq (vk-name input-keys output-action) (defvirtualkeys $vk-name $output-action) (defseq $vk-name $input-keys) )
+(t! seq laugh ( h h ) (macro (unicode 😂)))
+(t! seq happy ( h a ) (macro (unicode 😄)))
+(platform (wintercept)
+(t! seq tsclient ( t s c ) (macro RA-ß RA-ß t s c l i e n t RA-ß c RA-ß ))
+)
+(platform (winiov2)
+(t! seq tsclient ( t s c ) (macro C-A-ß C-A-ß t s c l i e n t C-A-ß c C-A-ß ))
+)
+
 (defalias
 ;; *** numlock on / off indicator for CAPS or other sticky layers *** BUG code must be doubled
   ;;.nly (cmd-output-keys powershell.exe -NoProfile -NoLogo -NonInteractive "if ($([console]::NumberLock) -match 'True') { echo '()' } else { echo '(NumLock)' }")
@@ -530,6 +540,7 @@ Defining a TIMER as virtual key
                (release-key ralt)
                (release-key lmet)
                (release-key rmet)
+               sldr
             )
             (multi
                F21  ;; F21 is not used in ahk it just consumes a key press TODO why?
@@ -537,6 +548,7 @@ Defining a TIMER as virtual key
                (layer-switch base)
                @.nln
                (layer-while-held fkeymacro)
+               sldr
             )
         )
   .nav  (tap-hold  $240 $240
@@ -832,7 +844,7 @@ Defining a TIMER as virtual key
 
 
 (defchordsv2
- (e o) @.ff13 45 all-released  (game) ;;  (e o) ;; TODO what to do here if no second thumb key
+ (e o) @.ff13 45 all-released  (game) ;;  (e o) macro layer for laptop keyboard
 ;;  (d t) @.atx 45 all-released  (game)
 ;;  (f14 f15) a 154 all-released  (game)
   (t b)
@@ -1325,6 +1337,8 @@ Defining a TIMER as virtual key
     idle-reactivate-time          500
     smart-space-punctuation (? ! . , ; :)
     output-character-mappings (
+      \ RA-ß
+      € RA-e
       ← left
       = S-0
       * S-+
@@ -1353,6 +1367,7 @@ Defining a TIMER as virtual key
     idle-reactivate-time          500
     smart-space-punctuation (? ! . , ; :)
     output-character-mappings (
+      \ C-A-ß
       ← left
       = S-0
       * S-+

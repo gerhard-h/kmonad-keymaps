@@ -62,7 +62,9 @@ gt p l	git  pull⏎
 +i p l	⇚git pull⏎
 g, p l	git pull⏎
 
-
+g, e	€
+g, t s c	\\tsclient\c\
+si si	⏎
 by	bye⏎Gerhard 
  
 dm	DMB-Rechtsschutz
