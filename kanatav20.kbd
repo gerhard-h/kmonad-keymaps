@@ -210,6 +210,7 @@ Defining a TIMER as virtual key
 ;;  x    80
 ;;  p    88
 )
+;; Hint Sequence definitions are so much nicer with this template
 (deftemplate seq (vk-name input-keys output-action) (defvirtualkeys $vk-name $output-action) (defseq $vk-name $input-keys) )
 (t! seq laugh ( h h ) (macro (unicode 😂)))
 (t! seq happy ( h a ) (macro (unicode 😄)))
@@ -1104,8 +1105,8 @@ Defining a TIMER as virtual key
   .r🖰⌘ (tap-hold-release $200 5000 @.🖰r lmet) ;; mouse rclick (TODO not used anymore) or win
 )
 (deflayer (numbers icon numbers.ico)
-;;****************   .NUMBERS.   ****************************************************
-;; TODO-Usage: caps to sym / C-bspc = @.⎈␡ or 7+8+9
+;;****************   .NUMBERS.   **************************************************** 
+;; TODO-Usage: C-bspc = @.⎈␡ or 7+8+9 / tab / bks 
   esc _ _ _ _
   @.^       @.1    @.2    @.3   @.4   @.5     @.6   @.7   @.8   @.9   @.0    @.cmdrld  A-prnt _
   _         @-_:   1      2     3     @.⎈␡    esc   home  ▲     end   pgup   pgdn      ins    _
@@ -1166,17 +1167,19 @@ Defining a TIMER as virtual key
             _     _    _      _            _ ralt
 )
 (deflayer (symbols icon symbols.ico)
-;;****************   SYSMBOLS (start typing fast or it will get switched to numbers)  ********************************************************
-;; get to @.numfix by tapping <7> + <9> or <|> + <}>
+;;****************   .SYSMBOLS. (start typing fast or it will get switched to numbers)  ********************************************************
 ;; t = Desktop switch
-;; ´ (S-´) as dead keys for é, è,... not working with winiov2 or 1.8
-;; TODO-Usage left-Space + right-Space => ESC
+;; ´ (S-´) as dead keys for é, è,... not working with winiov2 or 1.8 and è not possible with wintercept
+;; TODO-Usage left-Space + right-Space => ESC or menu CHANGE to Space or mouse,  left-Space + h => ESC, - _ for autorepeat
+;;  ~  "  (  )  $    &  #  ?  \  %  @
+;;  `  ^  [  ]  '    / dsk -  _ esc €
+;;  ´  <  {  >  }    =  *  +  |  !
   _ _ _ _ _
   _         @.at1  @.at2  @.at3  @.at4   @.at5    @.at6    @.at7    @.at8    @.at9   @.atm   @.cmdrld    A-prnt    _
   _         @.~    @.˝    @.◖    @.◗     @.$      @.&      #        @.?      @.\     @.%     @.@         _         _
   @.atr     @.`    @.^    @..[   @..]    @.'      @./      @.dsk    @..-     @._     esc     @.€         _
   _    _    ´      @.<    @.{    @.>     @.}      @.=      @.*      @.+      @.|     @.!     _
-            _      _             _                esc               menu   ralt
+            _      _             _                @.mus+            menu   ralt
 )
 
 (deflayer (numberline icon numberline.ico)
