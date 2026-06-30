@@ -989,7 +989,7 @@ Defining a TIMER as virtual key
 (deflayer (typing icon base.ico)
   esc         F1    XX  XX  XX
   @.^0        XX    XX        XX      XX     XX    XX   XX   XX   XX   XX   XX      prnt    bspc
-  @.tab       @-_~  @._z      u       a      ä     j    p    l    f    x    q       ß       F24
+  @.tab       @-_~  @._z      u       a      ä     x    p    l    f    j    q       ß       F24
   XX           c    s         i       @._e   o     d    @._t n    r    h    k       @.ret
   @.osss  XX  $y    @.:<      ü       @,;>   ö     b    g    w    m    v    @.rsf
               XX    XX    @.ff14          @.nav-typing          XX XX
