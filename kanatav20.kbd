@@ -312,12 +312,7 @@ Defining a TIMER as virtual key
   )
 )
 (deftemplate homerowmodexcept (timeouttap timeouthold keytap keyhold typinglist)
-  ;;(tap-hold $tap-timeout $hold-timeout (t! type $tap-action) ;; nesting tap-hold* might fix issues with held-for-duration. Watch out for concurrent-tap-hold yes.
-  ;;(tap-hold-release-keys 0 1
-  ;;  (t! type $tap-action)
-  ;;  $hold-action
-  ;;  $tap-keys)))
-
+  ;;unused and maybe broken bc of keyheld for duration usage
   (tap-hold-release-keys $timeouttap $timeouthold
     (multi $keytap  @.tp)
     $keyhold
@@ -685,7 +680,6 @@ Defining a TIMER as virtual key
 
 ;; *** HOME ROW MODS ***
 ;; BUG rsft, rsft ,rctl have RDP problems without interception
-;; TODO is homerowmodexcept needed?
   .e]   (t! homerowmod 150 130 e lsft) ;;(t! homerowmodexcept 0 $160 e lsft ($i));;
   .t_dk (t! homerowmodright 150 130 t lsft rsft)
   .i[   (t! homerowmod 2000 200 i lctl) ;;(t! homerowmodexcept 0 250 i lctl ($e d n h));;
@@ -989,7 +983,7 @@ Defining a TIMER as virtual key
 (deflayer (typing icon base.ico)
   esc         F1    XX  XX  XX
   @.^0        XX    XX        XX      XX     XX    XX   XX   XX   XX   XX   XX      prnt    bspc
-  @.tab       @-_~  @._z      u       a      ä     x    p    l    f    j    q       ß       F24
+  @.tab       @-_~  @._z      u       a      ä     j    p    l    f    x    q       ß       F24
   XX           c    s         i       @._e   o     d    @._t n    r    h    k       @.ret
   @.osss  XX  $y    @.:<      ü       @,;>   ö     b    g    w    m    v    @.rsf
               XX    XX    @.ff14          @.nav-typing          XX XX
@@ -1114,17 +1108,17 @@ Defining a TIMER as virtual key
   @.atp _   @,:x   @_7v   @_8   @_9   del     Tab   @.⏎⇧  @.␡⎈  @.l🖰⎇ @.r🖰⌘ _
             _     _    _         _    _ ralt
 )
-;; Exit numfix with CAPS or HOLD SPACE or HOLD Null or 7+9
+;; Exit numfix with CAPS or HOLD SPACE or 7+9
 (deflayer (numfix icon numfix.ico)
 ;;****************   NUMBERS(fix)   ********************************************************
 ;; Exit numfix with HOLD SPACE or HOLD Null or 7+9 or F13
-;; INFO grv as dead key for â ô, LEFT_Spacebar = 0
+;; INFO grv as dead key for â ô
   esc       F1   @.ff13 _   F24
   grv       @.1   @.2   @.3   @.4   @.5    @.6  @.7   @.8    @.9   @.0     (layer-switch game) A-prnt _
   _         @-_:  1     2     3     @.⎈␡   home home  ▲      end   pgup    pgdn      _       _
   @.sy1     @.⌘c  @.4⎇  @.5⎈  @.6⇧  0      bspc  ◀    ▼      ▶     esc     @.fkyx    _
   _    _    @,:x  @_7   @_8   @_9ex del    tab  @.⏎⇧  @.␡⎈   @.l🖰⎇ @.r🖰⌘  _
-            _     _   (tap-hold  $200 $200 Digit0 @.basen)    (tap-hold  $200 $200 spc @.basen)  _ ralt
+            _     _   (tap-hold  $200 $200 ret @.basen)    (tap-hold  $200 $200 spc @.basen)  _ ralt
 )
 
 (defalias
